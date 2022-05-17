@@ -11,13 +11,11 @@
     <ClCompile Include="Bag.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="PokemonMenu.cpp" />
-    <ClCompile Include="UITestLevel.cpp" />
-    <ClCompile Include="WorldMapLevel.cpp">
-      <Filter>Level</Filter>
+    <ClCompile Include="UITestLevel.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="WorldMapBackground.cpp">
-      <Filter>WorldMap</Filter>
+    <ClCompile Include="PokemonMenu.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -31,13 +29,11 @@
     <ClInclude Include="Bag.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="PokemonMenu.h" />
-    <ClInclude Include="UITestLevel.h" />
-    <ClInclude Include="WorldMapLevel.h">
-      <Filter>Level</Filter>
+    <ClInclude Include="UITestLevel.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="WorldMapBackground.h">
-      <Filter>WorldMap</Filter>
+    <ClInclude Include="PokemonMenu.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

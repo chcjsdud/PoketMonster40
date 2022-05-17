@@ -1,7 +1,8 @@
 #pragma once
+#include <GameEngine/GameEngineActor.h>
 
 // Ό³Έν :
-class Bag
+class Bag : public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -15,6 +16,11 @@ public:
 	Bag& operator=(Bag&& _Other) noexcept = delete;
 
 protected:
+	virtual void Start();
+	virtual void Update();
+
+	virtual void LevelChangeStart(GameEngineLevel* _PrevLevel);
+	virtual void LevelChangeEnd(GameEngineLevel* _NextLevel);
 
 private:
 

@@ -18,6 +18,9 @@ public:
 	void GameLoop() override;
 	void GameEnd() override;
 
+	void InitUI();
+	void InitKey();
+
 protected:
 
 private:

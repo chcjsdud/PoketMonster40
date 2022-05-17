@@ -1,12 +1,12 @@
 #include "PokemonEngine.h"
 #include <GameEngineBase/GameEngineWindow.h>
 #include <GameEngineBase/GameEngineDirectory.h>
-#include <GameEngine/GameEngineImageManager.h>
 #include <GameEngineBase/GameEngineFile.h>
 #include <GameEngineBase/GameEngineInput.h>
-
+#include <GameEngine/GameEngineImageManager.h>
 #include "TitleLevel.h"
-#include "WorldMapLevel.h"
+#include "UITestLevel.h"
+
 
 PokemonEngine::PokemonEngine() 
 {
@@ -19,30 +19,20 @@ PokemonEngine::~PokemonEngine()
 void PokemonEngine::GameInit() 
 {
 	GameEngineWindow::GetInst().SetWindowScaleAndPosition({ 100, 100 }, { 960, 640 });
-	ResourcesLoad();
-	ImageCut();
+
+	InitUI();
+	InitKey();
 
 	CreateLevel<TitleLevel>("Title");
-	CreateLevel<WorldMapLevel>("WorldMap");
+	CreateLevel<UITestLevel>("UITestLevel");
 	ChangeLevel("Title");
-
-	if (false == GameEngineInput::GetInst()->IsKey("Exit"))
-	{
-		GameEngineInput::GetInst()->CreateKey("Exit", VK_ESCAPE);
-		GameEngineInput::GetInst()->CreateKey("ChangeLevelTitle", 'Z');
-		GameEngineInput::GetInst()->CreateKey("ChangeLevelWorld", 'X');
-	}
 }
 
 void PokemonEngine::GameLoop() 
 {
-	if (true == GameEngineInput::GetInst()->IsDown("ChangeLevelTitle"))
+	if (GameEngineInput::GetInst()->IsDown("8") == true)
 	{
-		ChangeLevel("Title");
-	}
-	if (true == GameEngineInput::GetInst()->IsDown("ChangeLevelWorld"))
-	{
-		ChangeLevel("WorldMap");
+		ChangeLevel("UITestLevel");
 	}
 }
 void PokemonEngine::GameEnd() 
@@ -50,21 +40,33 @@ void PokemonEngine::GameEnd()
 
 }
 
-void PokemonEngine::ResourcesLoad()
+void PokemonEngine::InitUI()
 {
 	{
-		GameEngineDirectory ResourcesDirectory;
-		ResourcesDirectory.MoveParent("Pokemon");
-		ResourcesDirectory.Move("Resources");
-		ResourcesDirectory.Move("WorldMapBackground");
-		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
-		for (int i = 0; i < AllFileVec.size(); i++)
+		GameEngineDirectory ResourecesDir;
+		ResourecesDir.MoveParent("Pokemon");
+		ResourecesDir.Move("Resources");
+		ResourecesDir.Move("UI");
+		ResourecesDir.Move("X4");
+
+		std::vector<GameEngineFile> AllImageFileList = ResourecesDir.GetAllFile("Bmp");
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
 		{
-			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
-		}
+			GameEngineImageManager::GetInst()->Load(AllImageFileList[i].GetFullPath());
+		};
 	}
 }
 
-void PokemonEngine::ImageCut()
+void PokemonEngine::InitKey()
 {
+	GameEngineInput::GetInst()->CreateKey("Up", 0x26);
+	GameEngineInput::GetInst()->CreateKey("Down", 0x28);
+	GameEngineInput::GetInst()->CreateKey("Left", 0x25);
+	GameEngineInput::GetInst()->CreateKey("Right", 0x27);
+
+	GameEngineInput::GetInst()->CreateKey("Z", 'Z');
+	GameEngineInput::GetInst()->CreateKey("X", 'X');
+
+	GameEngineInput::GetInst()->CreateKey("8", 0x38); //UI테스트레벨로 텔포용 키
 }
