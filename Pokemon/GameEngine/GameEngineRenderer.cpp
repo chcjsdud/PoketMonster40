@@ -97,6 +97,22 @@ void GameEngineRenderer::Render()
 
 	switch (PivotType_)
 	{
+	case RenderPivot::LeftTop:
+		if (Alpha_ != 255)
+		{
+			GameEngine::BackBufferImage()->AlphaCopy(Image_, RenderPos, RenderScale_, RenderImagePivot_, RenderImageScale_, Alpha_);
+		}
+		else if (RotZ_ != 0.0f)
+		{
+
+			GameEngine::BackBufferImage()->PlgCopy(Image_, RenderPos, RenderScale_, RenderImagePivot_, RenderImageScale_, RotZ_, RotationFilterImage_);
+		}
+		else
+		{
+			GameEngine::BackBufferImage()->TransCopy(Image_, RenderPos, RenderScale_, RenderImagePivot_, RenderImageScale_, TransColor_);
+		}
+
+		break;
 	case RenderPivot::CENTER:
 		if (Alpha_ != 255)
 		{

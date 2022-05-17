@@ -16,7 +16,7 @@ PokemonEngine::~PokemonEngine()
 
 void PokemonEngine::GameInit() 
 {
-	GameEngineWindow::GetInst().SetWindowScaleAndPosition({ 100, 100 }, { 1280, 720 });
+	GameEngineWindow::GetInst().SetWindowScaleAndPosition({ 100, 100 }, { 960, 640 });
 
 	InitUI();
 
