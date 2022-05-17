@@ -41,7 +41,7 @@ protected:
 
 private:
 	std::map<std::string, Pokemon> AllPokemonList_;
-	std::map<std::string, PokemonSkill> AllPokemonList_;
+	std::map<std::string, PokemonSkill> AllPokemonSkillList_;
 	std::map<std::string, Item> AllItemList_;
 
 	Pokemon* CreatePokemon();

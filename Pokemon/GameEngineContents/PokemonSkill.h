@@ -17,6 +17,6 @@ public:
 protected:
 
 private:
-
+	int Value_; //공격 스킬이나 버프 스킬 계산 때 사용할 수치
 };
 

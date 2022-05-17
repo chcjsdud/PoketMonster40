@@ -17,13 +17,14 @@ public:
 protected:
 
 private:
+	std::string Name_;
+	PokemonType Type_;
+	StatusEffect Effect_; //상태이상
+
 	int Lv_;
 	int MaxLv_;
 	int Exp_;
 	int MaxExp_;
-	std::string Name_;
-	PokemonType Type_;
-	StatusEffect Effect_; //상태이상
 	int Att_;
 	int Def_;
 	int SpAtt_;
