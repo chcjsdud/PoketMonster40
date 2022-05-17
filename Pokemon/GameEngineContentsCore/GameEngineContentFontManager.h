@@ -1,6 +1,7 @@
 #pragma once
 
 // Ό³Έν :
+enum class Fonts;
 class GameEngineContentFontManager
 {
 public:
@@ -19,4 +20,10 @@ protected:
 private:
 
 };
+
+enum class Fonts
+{
+
+};
+
 
