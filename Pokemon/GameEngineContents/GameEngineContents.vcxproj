@@ -162,6 +162,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Inventory.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PokemonEngine.h">
       <SubType>
       </SubType>
@@ -176,6 +180,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Inventory.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="PokemonEngine.cpp">
       <SubType>
       </SubType>
