@@ -5,9 +5,6 @@
     <ClCompile Include="TitleLevel.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="PokemonInfoManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Bag.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -17,23 +14,13 @@
     <ClCompile Include="PokemonMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Pokemon.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="PokemonSkill.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
+    <ClCompile Include="WorldMapBackground.cpp" />
+    <ClCompile Include="WorldMapLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
     <ClInclude Include="TitleLevel.h">
       <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="PokemonInfoManager.h">
-      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Bag.h">
       <Filter>UI</Filter>
@@ -44,18 +31,11 @@
     <ClInclude Include="PokemonMenu.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Pokemon.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="PokemonSkill.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="ContentEnum.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="WorldMapBackground.h" />
+    <ClInclude Include="WorldMapLevel.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Level">
