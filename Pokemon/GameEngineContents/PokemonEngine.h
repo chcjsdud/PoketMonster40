@@ -21,6 +21,7 @@ public:
 	void GameEnd() override;
 
 	void InitUI();
+	void InitKey();
 
 protected:
 
