@@ -11,6 +11,6 @@ WorldMapBackground::~WorldMapBackground()
 void WorldMapBackground::Start()
 {
 	CreateRenderer("test.bmp");
-	//CreateRenderer("test.bmp");
+	CreateRenderer("test2.bmp");
 }
 
