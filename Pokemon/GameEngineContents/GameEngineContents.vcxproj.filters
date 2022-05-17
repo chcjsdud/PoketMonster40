@@ -17,6 +17,15 @@
     <ClCompile Include="PokemonMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Pokemon.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonSkill.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -35,6 +44,18 @@
     <ClInclude Include="PokemonMenu.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Pokemon.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonSkill.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentEnum.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Level">
@@ -51,6 +72,9 @@
     </Filter>
     <Filter Include="Battle">
       <UniqueIdentifier>{2826af0c-7c2e-4f2a-b4b8-3c8fcbf4c38f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{e85c6594-5431-4b86-878a-5ad361660bb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

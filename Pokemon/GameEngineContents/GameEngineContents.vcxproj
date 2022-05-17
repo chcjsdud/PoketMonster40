@@ -166,6 +166,18 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ContentEnum.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Pokemon.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PokemonEngine.h">
       <SubType>
       </SubType>
@@ -175,6 +187,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PokemonMenu.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PokemonSkill.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -192,6 +208,14 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Pokemon.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="PokemonEngine.cpp">
       <SubType>
       </SubType>
@@ -201,6 +225,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="PokemonMenu.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PokemonSkill.cpp">
       <SubType>
       </SubType>
     </ClCompile>
