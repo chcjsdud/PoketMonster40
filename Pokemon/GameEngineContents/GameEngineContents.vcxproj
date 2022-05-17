@@ -202,6 +202,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="WorldMapBackground.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="WorldMapLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bag.cpp">
@@ -237,6 +245,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="UITestLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="WorldMapBackground.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="WorldMapLevel.cpp">
       <SubType>
       </SubType>
     </ClCompile>
