@@ -170,7 +170,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="PokemonMenu.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TitleLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="UITestLevel.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -184,7 +192,15 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="PokemonMenu.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TitleLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="UITestLevel.cpp">
       <SubType>
       </SubType>
     </ClCompile>
