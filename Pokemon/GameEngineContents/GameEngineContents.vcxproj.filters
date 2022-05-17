@@ -35,6 +35,15 @@
     <ClCompile Include="TitleBackground.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="BattleBackground.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleLevel.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="BattlePlayer.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -74,6 +83,15 @@
     </ClInclude>
     <ClInclude Include="TitleBackground.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleBackground.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleLevel.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BattlePlayer.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

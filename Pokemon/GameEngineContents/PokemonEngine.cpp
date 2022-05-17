@@ -7,6 +7,7 @@
 #include "TitleLevel.h"
 #include "UITestLevel.h"
 #include "WorldMapLevel.h"
+#include "BattleLevel.h"
 
 PokemonEngine::PokemonEngine() 
 {
@@ -28,6 +29,7 @@ void PokemonEngine::GameInit()
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
 	CreateLevel<WorldMapLevel>("WorldMap");
+	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
 }
 
@@ -41,6 +43,12 @@ void PokemonEngine::GameLoop()
 	if (GameEngineInput::GetInst()->IsDown("WoldMapTest") == true)
 	{
 		ChangeLevel("WorldMap");
+	}
+
+
+	if (GameEngineInput::GetInst()->IsDown("Battle") == true)
+	{
+		ChangeLevel("Battle");
 	}
 }
 void PokemonEngine::GameEnd() 
@@ -79,6 +87,8 @@ void PokemonEngine::InitKey()
 	GameEngineInput::GetInst()->CreateKey("8", 0x38); //UI테스트레벨로 텔포용 키
 
 	GameEngineInput::GetInst()->CreateKey("WoldMapTest", VK_NUMPAD0); //월드맵 레벨로 텔포용 키
+
+	GameEngineInput::GetInst()->CreateKey("Battle", VK_RETURN);
 }
 
 
@@ -89,6 +99,19 @@ void PokemonEngine::ResourcesLoad()
 		ResourcesDirectory.MoveParent("Pokemon");
 		ResourcesDirectory.Move("Resources");
 		ResourcesDirectory.Move("WorldMapBackground");
+		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
+		for (int i = 0; i < AllFileVec.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
+		}
+	}
+
+	{
+		GameEngineDirectory ResourcesDirectory;
+		ResourcesDirectory.MoveParent("Pokemon");
+		ResourcesDirectory.Move("Resources");
+		ResourcesDirectory.Move("KYN-AllResources");
+		ResourcesDirectory.Move("Battle_X4");//경로에 같은 이름 이미지 파일있으면 터지네용
 		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
 		for (int i = 0; i < AllFileVec.size(); i++)
 		{

@@ -166,6 +166,18 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="BattleBackground.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="BattleLevel.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="BattlePlayer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentEnum.h">
       <SubType>
       </SubType>
@@ -218,6 +230,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bag.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BattleBackground.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BattleLevel.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="BattlePlayer.cpp">
       <SubType>
       </SubType>
     </ClCompile>
