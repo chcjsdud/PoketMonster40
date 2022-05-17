@@ -8,11 +8,8 @@
     <ClCompile Include="PokemonInfoManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="UITestLevel.cpp">
-      <Filter>UI\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="PokemonMenu.cpp">
-      <Filter>UI\Actor</Filter>
+    <ClCompile Include="Bag.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -23,11 +20,8 @@
     <ClInclude Include="PokemonInfoManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="UITestLevel.h">
-      <Filter>UI\Level</Filter>
-    </ClInclude>
-    <ClInclude Include="PokemonMenu.h">
-      <Filter>UI\Actor</Filter>
+    <ClInclude Include="Bag.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,13 +32,13 @@
       <UniqueIdentifier>{ff7cbee0-024f-43ba-97c4-96c516318f39}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
-      <UniqueIdentifier>{b93dd3ad-708b-4b36-8ae4-5dc71dba2c0f}</UniqueIdentifier>
+      <UniqueIdentifier>{594d67e0-fb8c-410d-9fbf-e8215cb13704}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\Level">
-      <UniqueIdentifier>{72edebe8-e444-4883-b4db-273fe35d7e84}</UniqueIdentifier>
+    <Filter Include="WorldMap">
+      <UniqueIdentifier>{dd173667-69e0-43c3-a02a-195762faa323}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\Actor">
-      <UniqueIdentifier>{f45b0f0e-3686-48fc-b439-f4a55fb28588}</UniqueIdentifier>
+    <Filter Include="Battle">
+      <UniqueIdentifier>{2826af0c-7c2e-4f2a-b4b8-3c8fcbf4c38f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
