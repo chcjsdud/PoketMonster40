@@ -8,8 +8,8 @@
     <ClCompile Include="PokemonInfoManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Inventory.cpp">
-      <Filter>Actor\UI</Filter>
+    <ClCompile Include="Bag.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -20,8 +20,8 @@
     <ClInclude Include="PokemonInfoManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Inventory.h">
-      <Filter>Actor\UI</Filter>
+    <ClInclude Include="Bag.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -31,11 +31,14 @@
     <Filter Include="Manager">
       <UniqueIdentifier>{ff7cbee0-024f-43ba-97c4-96c516318f39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Actor">
-      <UniqueIdentifier>{b887818f-00e4-4e9e-a345-00fc096d3927}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Actor\UI">
+    <Filter Include="UI">
       <UniqueIdentifier>{594d67e0-fb8c-410d-9fbf-e8215cb13704}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldMap">
+      <UniqueIdentifier>{dd173667-69e0-43c3-a02a-195762faa323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Battle">
+      <UniqueIdentifier>{2826af0c-7c2e-4f2a-b4b8-3c8fcbf4c38f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
