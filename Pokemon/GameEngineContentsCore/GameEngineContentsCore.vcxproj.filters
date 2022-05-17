@@ -1,13 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="GameEngineFont.h">
+    <ClInclude Include="GameEngineContentFont.h">
       <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngineContentFontManager.h">
+      <Filter>Font\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngineFont.cpp">
+    <ClCompile Include="GameEngineContentFont.cpp">
       <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngineContentFontManager.cpp">
+      <Filter>Font\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -16,6 +22,9 @@
     </Filter>
     <Filter Include="InterFace">
       <UniqueIdentifier>{c9daa30e-bcc2-4dc7-8901-11714f7bd2a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Font\Manager">
+      <UniqueIdentifier>{c89066f3-2f0a-4e4d-b5b7-b9b5f28c0239}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

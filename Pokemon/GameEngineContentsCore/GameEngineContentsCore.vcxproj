@@ -149,13 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="GameEngineFont.h">
+    <ClInclude Include="GameEngineContentFont.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="GameEngineContentFontManager.h">
       <SubType>
       </SubType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngineFont.cpp">
+    <ClCompile Include="GameEngineContentFont.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngineContentFontManager.cpp">
       <SubType>
       </SubType>
     </ClCompile>
