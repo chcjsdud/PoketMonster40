@@ -17,5 +17,11 @@ protected:
 	void Start() override;
 	void Update() override;
 	void Render() override;
+
+private:
+	GameEngineRenderer* BackgroundRenderer_;
+
+
+	GameEngineRenderer* BoxRenderer_[6];
 };
 
