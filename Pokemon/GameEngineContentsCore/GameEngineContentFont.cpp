@@ -5,7 +5,7 @@ GameEngineContentFont::GameEngineContentFont()
 	: CurrentPivot_(float4::ZERO)
 	, OriginalWaitTime_(0)
 	, CurrentWaitTime_(0)
-	, StringRow_(0)
+	, CurrentStringRow_(0)
 	, WatingKeyPush_(false)
 {
 }
@@ -17,7 +17,7 @@ GameEngineContentFont::~GameEngineContentFont()
 
 void GameEngineContentFont::Start()
 {
-	GameEngineContentFont::AllFonts_.push_back(this);
+	//std::list<GameEngineContentFont*> GameEngineContentFont::AllFonts_.push_back(this);
 	Off();
 }
 
@@ -28,31 +28,34 @@ void GameEngineContentFont::Update()
 		CurrentWaitTime_ -= GameEngineTime::GetDeltaTime(3);
 		if (CurrentWaitTime_ < 0)
 		{
-			std::string CurrentWord = CurrentString_.erase();
-			GameEngineRenderer* CurrentRenderer = CreateRenderer(CurrentWord, 10, RenderPivot::LeftTop, CurrentPivot_);
-			CurrentPivot_ = {CurrentRenderer->GetImageScale().x, 30 * StringRow_};
+			std::string CurrentWord = CurrentString_.substr(0, 1);
+			CurrentString_.erase(0, 1);
+			GameEngineRenderer* CurrentRenderer = CreateRenderer(CurrentWord + ".bmp", 10, RenderPivot::LeftTop, CurrentPivot_);
+			CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(60 * CurrentStringRow_)};
 			CurrentWaitTime_ = OriginalWaitTime_;
 		}
 
 		// 아래는 예외처리
 
 		// 줄 바꿈
-		if (CurrentString_.front() == '\\' || CurrentString_.empty() == true)
+		if (CurrentString_.empty() == true || CurrentString_.front() == '\\')
 		{
-			if (StringRow_ > 1)
+			if (CurrentStringRow_ > 1)
 			{
 				// 입력 대기
 				WatingKeyPush_ = true;
-				
 			}
-			++StringRow_;
+			++CurrentStringRow_;
 			StringQueue_.pop();
-			CurrentString_ = StringQueue_.front();
-		}
-		// 입력된 대화 모두 출력완료
-		else if (CurrentString_.front() == 0)
-		{
-			WatingKeyPush_ = true;
+			// 입력된 대화 모두 출력완료
+			if (StringQueue_.empty())
+			{
+				WatingKeyPush_ = true;
+			}
+			else
+			{
+				CurrentString_ = StringQueue_.front();
+			}
 		}
 	}
 }
@@ -71,7 +74,8 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 	}
 
 
-	StringRow_ = 0;
+	CurrentString_.clear();
+	CurrentStringRow_ = 0;
 	OriginalWaitTime_ = _WaitTime;
 	CurrentWaitTime_ = 0;
 	std::string GetString = _String;
@@ -100,20 +104,20 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 			++IdxCount;
 		}
 	}
-	CurrentString_.clear();
-
-	On;
+	CurrentString_ = StringQueue_.front();
+	On();
+	return true;
 }
 
 
 void GameEngineContentFont::Destroy()
 {
-	for (auto Font : AllFonts_)
-	{
-		if (Font != nullptr)
-		{
-			delete Font;
-			Font = nullptr;
-		}
-	}
+	//for (auto Font : AllFonts_)
+	//{
+	//	if (Font != nullptr)
+	//	{
+	//		delete Font;
+	//		Font = nullptr;
+	//	}
+	//}
 }

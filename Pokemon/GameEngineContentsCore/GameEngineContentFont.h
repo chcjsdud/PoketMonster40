@@ -28,10 +28,8 @@ public:
 	// 
 	// True  : 다음 문장이 있고 출력 중 (혹은 예정)
 	// False : 다음 문장이 없음
-	bool NextString()
-	{
+	bool NextString() {}
 
-	}
 protected:
 	void Update() override;
 	void Start() override;
@@ -41,7 +39,8 @@ private:
 	float4 CurrentPivot_;
 	float OriginalWaitTime_;
 	float CurrentWaitTime_;
-	int StringRow_;
+	// 현재 줄
+	int CurrentStringRow_;
 
 	// 키 푸시 대기
 	bool WatingKeyPush_;

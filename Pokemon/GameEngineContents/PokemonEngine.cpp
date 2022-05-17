@@ -25,6 +25,7 @@ void PokemonEngine::GameInit()
 
 	InitUI();
 	InitKey();
+	InitFont();
 
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
@@ -123,4 +124,77 @@ void PokemonEngine::ResourcesLoad()
 void PokemonEngine::ImageCut()
 {
 
+}
+
+void PokemonEngine::InitFont()
+{
+	{
+		GameEngineDirectory ResourecesDir;
+		ResourecesDir.MoveParent("Pokemon");
+		ResourecesDir.Move("Resources");
+		ResourecesDir.Move("UI");
+		ResourecesDir.Move("Fonts");
+		ResourecesDir.Move("Index");
+		ResourecesDir.Move("Upper");
+
+
+		std::vector<GameEngineFile> AllImageFileList = ResourecesDir.GetAllFile("Bmp");
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllImageFileList[i].GetFullPath());
+		};
+	}
+
+	{
+		GameEngineDirectory ResourecesDir;
+		ResourecesDir.MoveParent("Pokemon");
+		ResourecesDir.Move("Resources");
+		ResourecesDir.Move("UI");
+		ResourecesDir.Move("Fonts");
+		ResourecesDir.Move("Index");
+		ResourecesDir.Move("Number");
+
+
+		std::vector<GameEngineFile> AllImageFileList = ResourecesDir.GetAllFile("Bmp");
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllImageFileList[i].GetFullPath());
+		};
+	}
+	{
+		GameEngineDirectory ResourecesDir;
+		ResourecesDir.MoveParent("Pokemon");
+		ResourecesDir.Move("Resources");
+		ResourecesDir.Move("UI");
+		ResourecesDir.Move("Fonts");
+		ResourecesDir.Move("Index");
+		ResourecesDir.Move("Lower");
+
+
+		std::vector<GameEngineFile> AllImageFileList = ResourecesDir.GetAllFile("Bmp");
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllImageFileList[i].GetFullPath());
+		};
+	}
+	{
+		GameEngineDirectory ResourecesDir;
+		ResourecesDir.MoveParent("Pokemon");
+		ResourecesDir.Move("Resources");
+		ResourecesDir.Move("UI");
+		ResourecesDir.Move("Fonts");
+		ResourecesDir.Move("Index");
+		ResourecesDir.Move("Other");
+
+
+		std::vector<GameEngineFile> AllImageFileList = ResourecesDir.GetAllFile("Bmp");
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllImageFileList[i].GetFullPath());
+		};
+	}
 }

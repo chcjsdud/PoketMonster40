@@ -26,5 +26,9 @@ protected:
 private:
 	void ResourcesLoad();
 	void ImageCut();
+
+public:
+	// 폰트 로딩
+	void InitFont();
 };
 
