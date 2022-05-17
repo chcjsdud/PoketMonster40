@@ -11,6 +11,12 @@
     <ClCompile Include="Bag.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="UITestLevel.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonMenu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -21,6 +27,12 @@
       <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Bag.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UITestLevel.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonMenu.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
