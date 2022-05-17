@@ -182,6 +182,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="UIEnum.h" />
     <ClInclude Include="UITestLevel.h">
       <SubType>
       </SubType>
