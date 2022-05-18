@@ -28,6 +28,8 @@ public:
 
 
 protected:
+	GameEngineRenderer* BackgroundRender;
+	GameEngineRenderer* TextRender;
 
 private:
 	void Start() override;
