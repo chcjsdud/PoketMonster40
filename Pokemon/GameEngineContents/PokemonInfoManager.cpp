@@ -1,6 +1,7 @@
 #include "PokemonInfoManager.h"
 #include "Pokemon.h"
 #include "PokemonSkill.h"
+#include "Item.h"
 #include <GameEngineBase/GameEngineString.h>
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
@@ -29,6 +30,20 @@ PokemonInfoManager::~PokemonInfoManager()
 	{
 		std::map<std::string, PokemonSkill*>::iterator StartIter = AllPokemonSkillList_.begin();
 		std::map<std::string, PokemonSkill*>::iterator EndIter = AllPokemonSkillList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if (nullptr != StartIter->second)
+			{
+				delete StartIter->second;
+				StartIter->second = nullptr;
+			}
+		}
+	}
+
+	{
+		std::map<std::string, Item*>::iterator StartIter = AllItemList_.begin();
+		std::map<std::string, Item*>::iterator EndIter = AllItemList_.end();
 
 		for (; StartIter != EndIter; ++StartIter)
 		{
@@ -125,7 +140,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _
 	NewPokemon->SetSpeed(_Speed);
 	NewPokemon->SetIsPlayer(false);
 	NewPokemon->SetIsGender(false);
-	NewPokemon->SetRenderer(_Key);
+	NewPokemon->SetPokemonImage(_Key);
 
 	AllPokemonList_.insert(std::make_pair(Key, NewPokemon));
 
@@ -147,8 +162,14 @@ PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value
 	return NewSkill;
 }
 
-Item* PokemonInfoManager::CreateItem()
+Item* PokemonInfoManager::CreateItem(const std::string _Key, int _Value)
 {
-	return nullptr;
+	Item* NewItem = new Item();
+	std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+	NewItem->SetName(Key);
+	NewItem->SetValue(_Value);
+
+	return NewItem;
 }
 
