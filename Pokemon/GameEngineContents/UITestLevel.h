@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
 
+class PokemonMenu;
 class UITestLevel : public GameEngineLevel
 {
 public:
@@ -18,5 +19,6 @@ protected:
 	void Update() override;
 
 private:
+	PokemonMenu* PokemonMenu_;
 };
 
