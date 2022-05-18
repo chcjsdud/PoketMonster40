@@ -92,6 +92,7 @@ void GameEngineContentFont::Update()
 						{
 							// 입력 대기
 							WatingKeyPush_ = true;
+							CurrentStringRow_ = 0;
 							ShowAllText_ = false;
 						}
 						CurrentPivot_ = { 10, static_cast<float>(60 * CurrentStringRow_) };
@@ -102,6 +103,7 @@ void GameEngineContentFont::Update()
 							WatingKeyPush_ = true;
 							ShowAllText_ = false;
 						}
+						// 아니면 다음 문장 출력
 						else
 						{
 							CurrentString_ = StringQueue_.front();
@@ -182,6 +184,8 @@ void GameEngineContentFont::Update()
 				{
 					// 입력 대기
 					WatingKeyPush_ = true;
+					CurrentStringRow_ = 0;
+					ShowAllText_ = false;
 				}
 				CurrentPivot_ = { 10, static_cast<float>(60 * CurrentStringRow_)};
 				StringQueue_.pop();
@@ -189,6 +193,7 @@ void GameEngineContentFont::Update()
 				if (StringQueue_.empty())
 				{
 					WatingKeyPush_ = true;
+					ShowAllText_ = false;
 				}
 				else
 				{

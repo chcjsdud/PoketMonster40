@@ -2,6 +2,7 @@
 #include "TitleBackground.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <string>
+#include <GameEngineBase/GameEngineInput.h>
 
 TitleLevel::TitleLevel() 
 {
@@ -19,12 +20,27 @@ void TitleLevel::Loading()
 	////폰트 출력 테스트
 	{
 		Fonts = CreateActor<GameEngineContentFont>();
-		Fonts->SetPosition({ 500, 500 });
-		Fonts->ShowString("Very Very S1212trong!?\\And Too Fast12");
+		Fonts->SetPosition({ 200, 200 });
+		// \\ 시 문장 한 줄 뛰우기
+		Fonts->ShowString("Very Very Strong\\And Too Fast\\AAAADVSVDSDWE\\Great AR40\\Kind Of Mask");
 	}
 }
 
 void TitleLevel::Update()
 {
-	
+	// 폰트 출력이 완료되고 키입력 대기
+	if (Fonts->IsWait())
+	{
+		// Z 키 입력시 다음 문장 출력
+		if (GameEngineInput::GetInst()->IsDown("Z") == true)
+		{
+			Fonts->NextString();
+		}
+		// 다음 문장이 없을 때 == 끝났을 때
+		if (Fonts->IsEnd())
+		{
+			int a = 0;
+		}
+	}
+
 }
