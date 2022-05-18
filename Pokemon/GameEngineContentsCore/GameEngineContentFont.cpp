@@ -28,9 +28,22 @@ void GameEngineContentFont::Update()
 		CurrentWaitTime_ -= GameEngineTime::GetDeltaTime(3);
 		if (CurrentWaitTime_ < 0)
 		{
-			std::string CurrentWord = CurrentString_.substr(0, 1);
+			std::string StringForRendererName = "";
+			char CurrentWord = CurrentString_[0];
+
+			if (65 <= CurrentWord && CurrentWord <= 90)
+			{
+				StringForRendererName = CurrentWord;
+				StringForRendererName += "_Upper.bmp";
+			}
+			else if (97 <= CurrentWord && CurrentWord <= 122)
+			{
+				StringForRendererName = CurrentWord;
+				StringForRendererName += "_Lower.bmp";
+			}
+
 			CurrentString_.erase(0, 1);
-			GameEngineRenderer* CurrentRenderer = CreateRenderer(CurrentWord + ".bmp", 10, RenderPivot::LeftTop, CurrentPivot_);
+			GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, 10, RenderPivot::LeftTop, CurrentPivot_);
 			CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(60 * CurrentStringRow_)};
 			CurrentWaitTime_ = OriginalWaitTime_;
 		}
@@ -46,6 +59,7 @@ void GameEngineContentFont::Update()
 				WatingKeyPush_ = true;
 			}
 			++CurrentStringRow_;
+			CurrentPivot_ = { 10, static_cast<float>(60 * CurrentStringRow_)};
 			StringQueue_.pop();
 			// 입력된 대화 모두 출력완료
 			if (StringQueue_.empty())
@@ -60,7 +74,7 @@ void GameEngineContentFont::Update()
 	}
 }
 
-bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTime /* = 0.01f*/)
+bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTime /* = 0.02f*/)
 {
 	if (GetPosition().CompareInt2D(float4::ZERO))
 	{
@@ -96,7 +110,9 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 		}
 		if (GetString[IdxCount] == '\\')
 		{
-			StringQueue_.push(GetString.erase(0, IdxCount));
+			++IdxCount;
+			StringQueue_.push(GetString.substr(0, IdxCount));
+			GetString.erase(0, IdxCount);
 			IdxCount = 0;
 		}
 		else
@@ -110,14 +126,14 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 }
 
 
-void GameEngineContentFont::Destroy()
-{
-	//for (auto Font : AllFonts_)
-	//{
-	//	if (Font != nullptr)
-	//	{
-	//		delete Font;
-	//		Font = nullptr;
-	//	}
-	//}
-}
+//void GameEngineContentFont::Destroy()
+//{
+//	//for (auto Font : AllFonts_)
+//	//{
+//	//	if (Font != nullptr)
+//	//	{
+//	//		delete Font;
+//	//		Font = nullptr;
+//	//	}
+//	//}
+//}

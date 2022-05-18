@@ -21,8 +21,13 @@ public:
 	GameEngineContentFont& operator=(const GameEngineContentFont& _Other) = delete;
 	GameEngineContentFont& operator=(GameEngineContentFont&& _Other) noexcept = delete;
 
-	void Destroy();
-	bool ShowString(const std::string& _String, float _WaitTime = 0.01f);
+	//void Destroy();
+
+	// 텍스트 출력 명령 함수
+	//
+	// True  : 출력 예약 성공적으로 완료
+	// False : 이미 등록된 출력 명령이 있음
+	bool ShowString(const std::string& _String, float _WaitTime = 0.02f);
 	
 	// 다음 문장 출력 함수
 	// 
@@ -39,9 +44,11 @@ private:
 	float4 CurrentPivot_;
 	float OriginalWaitTime_;
 	float CurrentWaitTime_;
+
 	// 현재 줄
 	int CurrentStringRow_;
-
+	//
+	// 
 	// 키 푸시 대기
 	bool WatingKeyPush_;
 	//
@@ -51,5 +58,5 @@ private:
 
 	std::string CurrentString_;
 	std::string CurrentWord_;
-	static std::list<GameEngineContentFont*> AllFonts_;
+	// static std::list<GameEngineContentFont*> AllFonts_;
 };

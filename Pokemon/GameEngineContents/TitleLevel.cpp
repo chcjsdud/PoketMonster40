@@ -21,7 +21,7 @@ void TitleLevel::Loading()
 	//{
 	//	GameEngineContentFont* Fonts = CreateActor<GameEngineContentFont>();
 	//	Fonts->SetPosition({ 500, 500 });
-	//	Fonts->ShowString("ABCDEFG");
+	//	Fonts->ShowString("ABCDEFG\\ZBBABAB");
 	//}
 }
 
