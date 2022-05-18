@@ -16,10 +16,10 @@ Pokemon::Pokemon()
 	, SpDef_(0)
 	, IsPlayer_(false)
 	, IsGender_(false)
-	, BattleBack_(nullptr)
-	, BattleFront_(nullptr)
-	, MyProfile_(nullptr)
-	, MyIcon_(nullptr)
+	, BattleBack_()
+	, BattleFront_()
+	, MyProfile_()
+	, MyIcon_()
 	, MySkills_{nullptr}
 {
 
@@ -42,8 +42,7 @@ void Pokemon::Update()
 
 void Pokemon::SetPokemonImage(const std::string _Name)
 {
-	//BattleBack_ = GameEngineImageManager::GetInst()->Find("");
-	//BattleBack_ = CreateRenderer(_Name + "B.bmp");
-	//BattleFront_ = CreateRenderer(_Name + "F.bmp"); //전투 앞모습(적 혹은 야생 포켓몬
-	//MyIcon_ = CreateRenderer(_Name + "_mini.bmp"); //지닌 포켓몬 아이콘
+	BattleBack_ = _Name + "B.bmp";
+	BattleFront_ = _Name + "F.bmp";//전투 앞모습(적 혹은 야생 포켓몬
+	MyIcon_ = _Name + "_mini.bmp"; //지닌 포켓몬 아이콘
 }
