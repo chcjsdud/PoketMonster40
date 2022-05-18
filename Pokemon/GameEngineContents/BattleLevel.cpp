@@ -20,7 +20,7 @@ void BattleLevel::Loading()
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
 	GameEngineInput::GetInst()->CreateKey("SDown", VK_DOWN);
-	
+	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
 	
 	CreateActor<BattleBackground>();
 	
@@ -33,9 +33,39 @@ void BattleLevel::Loading()
 
 void BattleLevel::Update()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("SDown"))
-	{
+	if ((Select->GetPosition().x == 530.0f && Select->GetPosition().y == 522.0f) &&true == GameEngineInput::GetInst()->IsDown("SDown"))
+	{	//Fight에서 Pokemon으로
 		Select->SetPosition({ 530.0f,585.0f });
+	}
+
+	if ((Select->GetPosition().x == 530.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+	{	//Pokemon에서 Fight로
+		Select->SetPosition({ 530.0f,522.0f });
+	}
+
+	if ((Select->GetPosition().x == 530.0f && Select->GetPosition().y == 522.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+	{	//Fight에서 Bag으로
+		Select->SetPosition({ 750.0f,522.0f });
+	}
+
+	if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 522.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+	{	//Bag에서 Fight로
+		Select->SetPosition({ 530.0f,522.0f });
+	}
+
+	if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 522.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+	{	//Bag에서 Run으로
+		Select->SetPosition({ 750.0f,585.0f });
+	}
+
+	if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+	{	//Run에서 Bag으로
+		Select->SetPosition({ 750.0f,522.0f });
+	}
+
+	if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+	{	//Run에서 Pokemon으로
+		Select->SetPosition({ 750.0f,522.0f });
 	}
 }
 
