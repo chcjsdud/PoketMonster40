@@ -125,7 +125,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _
 	NewPokemon->SetSpeed(_Speed);
 	NewPokemon->SetIsPlayer(false);
 	NewPokemon->SetIsGender(false);
-	NewPokemon->SetRenderer(_Key);
+	NewPokemon->SetPokemonImage(_Key);
 
 	AllPokemonList_.insert(std::make_pair(Key, NewPokemon));
 
