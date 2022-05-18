@@ -4,6 +4,7 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include "Pokemon.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "PokemonInfoManager.h"
 
 
 PokemonMenu::PokemonMenu():
@@ -33,6 +34,13 @@ void PokemonMenu::Start()
 		Fonts->ShowString("Please choose a pokemon",true);
 	}
 
+	//파이리 이미지 가지고오기 테스트
+	{
+		Pokemon* Charmander = PokemonInfoManager::GetInst().FindPokemon("Charmander");
+		GameEngineRenderer* tempRenderer = CreateRenderer(Charmander->GetMyBattleBack());
+		
+
+	}
 }
 
 void PokemonMenu::Update()

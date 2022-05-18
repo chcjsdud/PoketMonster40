@@ -27,6 +27,7 @@ void PokemonEngine::GameInit()
 	InitUI();
 	InitKey();
 	InitFont();
+	PokemonInfoManager::GetInst().Reset();
 
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
@@ -34,7 +35,7 @@ void PokemonEngine::GameInit()
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
 
-	PokemonInfoManager::GetInst().Reset();
+
 }
 
 void PokemonEngine::GameLoop() 

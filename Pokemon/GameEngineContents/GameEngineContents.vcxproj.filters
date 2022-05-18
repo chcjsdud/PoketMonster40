@@ -63,6 +63,12 @@
     <ClCompile Include="MonsterBall.cpp">
       <Filter>UI\Item</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerRedState.cpp" />
+    <ClCompile Include="WorldMapTileMap.cpp" />
+    <ClCompile Include="WorldTileMap1.cpp" />
+    <ClCompile Include="BattlePokemon.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -129,6 +135,11 @@
     </ClInclude>
     <ClInclude Include="MonsterBall.h">
       <Filter>UI\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapTileMap.h" />
+    <ClInclude Include="WorldTileMap1.h" />
+    <ClInclude Include="BattlePokemon.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

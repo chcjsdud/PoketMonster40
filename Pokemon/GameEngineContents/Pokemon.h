@@ -178,22 +178,22 @@ public:
 
 
 	//렌더러 관련 함수
-	inline GameEngineImage* GetMyBattleBack()
+	inline std::string& GetMyBattleBack()
 	{
 		return BattleBack_;
 	}
 
-	inline GameEngineImage* GetMyBattleFront()
+	inline std::string& GetMyBattleFront()
 	{
 		return BattleFront_;
 	}
 
-	inline GameEngineImage* GetMyMyProfile()
+	inline std::string& GetMyMyProfile()
 	{
 		return MyProfile_;
 	}
 
-	inline GameEngineImage* GetMyIcon()
+	inline std::string& GetMyIcon()
 	{
 		return MyIcon_;
 	}
@@ -223,10 +223,10 @@ private:
 	bool IsPlayer_; //플레이어 포켓몬인지 아닌지
 	bool IsGender_; //true: 수컷, false: 암컷
 
-	GameEngineImage* BattleBack_; //전투 뒷모습(플레이어 포켓몬
-	GameEngineImage* BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
-	GameEngineImage* MyProfile_; //도감 혹은 상세메뉴 이미지
-	GameEngineImage* MyIcon_; //지닌 포켓몬 아이콘
+	std::string BattleBack_; //전투 뒷모습(플레이어 포켓몬
+	std::string BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
+	std::string MyProfile_; //도감 혹은 상세메뉴 이미지
+	std::string MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
 };
