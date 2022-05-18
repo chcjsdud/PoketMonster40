@@ -16,6 +16,9 @@ public:
 	PokemonSkill& operator=(const PokemonSkill& _Other) = delete;
 	PokemonSkill& operator=(PokemonSkill&& _Other) noexcept = delete;
 
+	void Start() override;
+	void Update() override;
+
 	inline int GetValue()
 	{
 		return Value_;

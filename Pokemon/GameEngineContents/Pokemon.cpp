@@ -17,3 +17,9 @@ void Pokemon::Update()
 {
 }
 
+
+
+void Pokemon::SetRenderer(const std::string _Name)
+{
+
+}
