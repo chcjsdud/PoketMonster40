@@ -16,7 +16,6 @@ void BattleBackground::Start()
 	BackgroundRender = CreateRenderer("Battle_Back.bmp", 0, RenderPivot::CENTER, { 480.0f, 225.0f});
 	//SetPosition({ 480.0f, 225.0f });//이미지 위치 노가다 수작업..
 	TextRender = CreateRenderer("Combat_TextFrame1.bmp", 0 ,RenderPivot::CENTER, {480.0f, 548.0f});
-	//BattleSelect = CreateRenderer("Battle_Select.bmp", 1, RenderPivot::CENTER, { 800.0f, 546.0f });
 }
 
 void BattleBackground::Update()

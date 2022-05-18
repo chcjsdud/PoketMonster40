@@ -18,7 +18,7 @@ void BattleLevel::Loading()
 	
 
 	BattleInerface* Interface = CreateActor<BattleInerface>(3);
-	Interface->SetPosition({ 797.0f, 548.0f });
+	Interface->SetPosition({ 720.0f, 548.0f });
 }
 
 void BattleLevel::Update()
