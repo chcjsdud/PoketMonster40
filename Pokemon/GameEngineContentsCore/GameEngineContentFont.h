@@ -32,14 +32,16 @@ public:
 	// _Order : Renderer Order
 	bool ShowString(const std::string& _String, float _LineHeight = 60.0f, float _DelayTime = 0.02f, int _Order = 10);
 
+
 	// 출력 완료 후 키 입력 대기 중인지 확인하는 함수
 	//
 	// True  : 입력 대기 중
 	// False : 출력 중이거나 입력 대기중이 아님
-	inline bool IsWattingKeyPush()
+	inline bool IsWattingKeyPush() const
 	{
 		return WatingKeyPush_;
 	}
+
 
 	// 화면 내 해당 인터페이스가 가지고있는 폰트 제거
 	inline void ClearFonts()

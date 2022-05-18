@@ -19,5 +19,5 @@ protected:
 	void Update() override;
 
 private:
-
+	class GameEngineContentFont* Fonts;
 };

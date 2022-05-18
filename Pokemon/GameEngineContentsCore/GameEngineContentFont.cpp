@@ -43,11 +43,16 @@ void GameEngineContentFont::Update()
 				StringForRendererName = CurrentWord;
 				StringForRendererName += "_Lower.bmp";
 			}
+			else if (48 <= CurrentWord && CurrentWord <= 57)
+			{
+				StringForRendererName = CurrentWord;
+				StringForRendererName += "_Number.bmp";
+			}
 			else
 			{
 				switch (CurrentWord)
 				{
-				case ' ' :
+				case ' ':
 					StringForRendererName = "LineJamp.bmp";
 					break;
 				case '?' :
@@ -56,7 +61,7 @@ void GameEngineContentFont::Update()
 				case '!' :
 					StringForRendererName = "ExclamationMark.bmp";
 					break;
-				case '\.':
+				case 46:
 					StringForRendererName = "Period.bmp";
 					break;
 				case '/':
