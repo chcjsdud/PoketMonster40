@@ -8,3 +8,11 @@ Item::~Item()
 {
 }
 
+void Item::Start()
+{
+}
+
+void Item::Update()
+{
+}
+

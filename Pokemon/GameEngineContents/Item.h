@@ -1,7 +1,8 @@
 #pragma once
+#include <GameEngine/GameEngineActor.h>
 
 // 설명 :
-class Item
+class Item : public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -15,8 +16,11 @@ public:
 	Item& operator=(Item&& _Other) noexcept = delete;
 
 protected:
+	void Start() override;
+	void Update() override;
 
 private:
+	int Value; //상처약일 때 회복될 수치
 
 };
 

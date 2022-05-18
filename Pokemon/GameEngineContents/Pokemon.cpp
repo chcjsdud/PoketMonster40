@@ -8,3 +8,11 @@ Pokemon::~Pokemon()
 {
 }
 
+void Pokemon::Start()
+{
+}
+
+void Pokemon::Update()
+{
+}
+

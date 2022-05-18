@@ -1,7 +1,8 @@
 #pragma once
+#include <GameEngine/GameEngineActor.h>
 
-// 설명 :
-class PokemonSkill
+class GameEngineRenderer;
+class PokemonSkill : public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -14,10 +15,31 @@ public:
 	PokemonSkill& operator=(const PokemonSkill& _Other) = delete;
 	PokemonSkill& operator=(PokemonSkill&& _Other) noexcept = delete;
 
+	inline int GetValue()
+	{
+		return Value_;
+	}
+
+	inline void SetValue(int _Value)
+	{
+		Value_ = _Value;
+	}
+
+	inline GameEngineRenderer* GetMyEffect()
+	{
+		return MyEffect_;
+	}
+
+	inline void SetMyEffect(GameEngineRenderer* _Image)
+	{
+		MyEffect_ = _Image;
+	}
+
 protected:
 
 private:
 	int Value_; //공격 스킬 혹은 방어나 버프 계산에 쓰일 값
 
+	GameEngineRenderer* MyEffect_;
 };
 
