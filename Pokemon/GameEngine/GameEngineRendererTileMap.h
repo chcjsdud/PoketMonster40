@@ -3,7 +3,6 @@
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngine/GameEngineImage.h>
 
-
 struct TileIndex
 {
 public:
@@ -20,9 +19,18 @@ private:
 	GameEngineRenderer* Renderer;
 
 public:
-	virtual ~Tile() = 0
+	virtual ~Tile()
 	{
 
+	}
+
+	GameEngineRenderer* GetRenderer()
+	{
+		return Renderer;
+	}
+	void SetRenderer(GameEngineRenderer* _Renderer)
+	{
+		Renderer = _Renderer;
 	}
 };
 
@@ -37,6 +45,11 @@ class GameEngineRendererTileMap
 	GameEngineActor* Master_;
 
 public:
+	void SetPivot(float4 _Pivot)
+	{
+
+	}
+
 	// Å¸ÀÏ¸ÊÀ» ¸Ê ÀüÃ¼¿¡ »ý¼º
 	void TileRangeSetting(int _X, int _Y, float4 _TileSize)
 	{
@@ -116,7 +129,8 @@ public:
 			FindTile = new TileType();
 			FindTile->Renderer = Master_->CreateRenderer(_Image, _Order);
 		}
-		else {
+		else 
+		{
 			FindTile->Renderer->SetImage(_Image);
 		}
 		FindTile->Renderer->SetPivot(GetWorldPostion(_X, _Y));
