@@ -1,6 +1,6 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
-#include "BattleSelect.h"
+#include "BattleInerface.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
@@ -36,6 +36,6 @@ protected:
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override {}
 
 private:
-	BattleSelect* Select;
+	BattleInerface* Interface;
 };
 

@@ -183,10 +183,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="BattleSelect.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="ContentEnum.h">
       <SubType>
       </SubType>
@@ -260,10 +256,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="BattlePlayer.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="BattleSelect.cpp">
       <SubType>
       </SubType>
     </ClCompile>
