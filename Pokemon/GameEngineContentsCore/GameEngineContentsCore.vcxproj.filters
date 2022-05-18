@@ -26,5 +26,8 @@
     <Filter Include="Font\Manager">
       <UniqueIdentifier>{c89066f3-2f0a-4e4d-b5b7-b9b5f28c0239}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BattleEngine">
+      <UniqueIdentifier>{e1d4ec96-4d7a-4e0b-bb85-b90941ab6e64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
