@@ -84,6 +84,12 @@ void PlayerRed::DirAnimationCheck()
 		CheckDir_ = RedDir::Left;
 		ChangeDirText_ = "Left";
 	}
+
+	if (CheckDir_ != CurrentDir_)
+	{
+		RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+		CurrentDir_ = CheckDir_;
+	}
 }
 
 
