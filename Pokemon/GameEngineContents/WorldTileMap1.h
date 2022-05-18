@@ -5,15 +5,17 @@
 // Ό³Έν :
 class WorldTileMap1 : public GameEngineActor
 {
-private: 
-	static WorldTileMap1* Inst_;
+//private: 
+//	static WorldTileMap1* Inst_;
+//
+//public:
+//	static WorldTileMap1* GetInst()
+//	{
+//		return Inst_;
+//	}
+//
 
 public:
-	static WorldTileMap1* GetInst()
-	{
-		return Inst_;
-	}
-
 	// constrcuter destructer
 	WorldTileMap1();
 	~WorldTileMap1();

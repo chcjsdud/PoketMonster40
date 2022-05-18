@@ -11,7 +11,7 @@ RoomTileMap1::~RoomTileMap1()
 
 void RoomTileMap1::Start()
 {
-	Inst_ = this;
+	//Inst_ = this;
 	SetPosition({ -1769, -358 });
 	TileMap_.TileRangeSetting(11, 7, { 64, 64 });
 

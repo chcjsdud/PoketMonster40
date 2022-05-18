@@ -5,15 +5,16 @@
 // Ό³Έν :
 class RoomTileMap1 : public GameEngineActor
 {
-private:
-	static RoomTileMap1* Inst_;
+//private:
+//	static RoomTileMap1* Inst_;
+//
+//public:
+//	static RoomTileMap1* GetInst()
+//	{
+//		return Inst_;
+//	}
 
 public:
-	static RoomTileMap1* GetInst()
-	{
-		return Inst_;
-	}
-
 	// constrcuter destructer
 	RoomTileMap1();
 	~RoomTileMap1();

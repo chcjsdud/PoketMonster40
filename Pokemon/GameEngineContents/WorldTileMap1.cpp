@@ -11,7 +11,7 @@ WorldTileMap1::~WorldTileMap1()
 
 void WorldTileMap1::Start()
 {
-	Inst_ = this;
+	//Inst_ = this;
 	SetPosition({-471, -6157});
 	TileMap_.TileRangeSetting(70, 111, { 64, 64 });
 
