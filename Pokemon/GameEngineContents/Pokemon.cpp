@@ -1,4 +1,5 @@
 #include "Pokemon.h"
+#include <GameEngine/GameEngineImageManager.h>
 
 Pokemon::Pokemon() 
 	: Type_(PokemonType::NORMAL)
@@ -15,10 +16,10 @@ Pokemon::Pokemon()
 	, SpDef_(0)
 	, IsPlayer_(false)
 	, IsGender_(false)
-	, BattleBack_(nullptr)
-	, BattleFront_(nullptr)
-	, MyProfile_(nullptr)
-	, MyIcon_(nullptr)
+	, BattleBack_()
+	, BattleFront_()
+	, MyProfile_()
+	, MyIcon_()
 	, MySkills_{nullptr}
 {
 
@@ -39,7 +40,9 @@ void Pokemon::Update()
 
 
 
-void Pokemon::SetRenderer(const std::string _Name)
+void Pokemon::SetPokemonImage(const std::string _Name)
 {
-
+	BattleBack_ = _Name + "B.bmp";
+	BattleFront_ = _Name + "F.bmp";//전투 앞모습(적 혹은 야생 포켓몬
+	MyIcon_ = _Name + "_mini.bmp"; //지닌 포켓몬 아이콘
 }

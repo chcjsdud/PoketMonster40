@@ -9,7 +9,7 @@ BattleEngine::~BattleEngine()
 }
 
 
-void BattleEngine::BattlePokemon(Pokemon* _HitPokemon, Pokemon* _TargetPokemon, const PokemonSkill* _Skill)
+void BattleEngine::BattleTurn(Pokemon* _HitPokemon, Pokemon* _TargetPokemon, const PokemonSkill* _Skill)
 {
 	
 }

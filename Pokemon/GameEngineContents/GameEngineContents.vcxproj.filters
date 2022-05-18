@@ -51,8 +51,20 @@
     <ClCompile Include="BattleEngine.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
-    <ClCompile Include="PokemonRenderer.cpp">
-      <Filter>Global</Filter>
+    <ClCompile Include="PlayerRedState.cpp" />
+    <ClCompile Include="WorldMapTileMap.cpp" />
+    <ClCompile Include="WorldTileMap1.cpp" />
+    <ClCompile Include="Potion.cpp">
+      <Filter>UI\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterBall.cpp">
+      <Filter>UI\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerRedState.cpp" />
+    <ClCompile Include="WorldMapTileMap.cpp" />
+    <ClCompile Include="WorldTileMap1.cpp" />
+    <ClCompile Include="BattlePokemon.cpp">
+      <Filter>Battle</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
   </ItemGroup>
@@ -111,6 +123,19 @@
     <ClInclude Include="BattleEngine.h">
       <Filter>Battle</Filter>
     </ClInclude>
+    <ClInclude Include="WorldMapTileMap.h" />
+    <ClInclude Include="WorldTileMap1.h" />
+    <ClInclude Include="Potion.h">
+      <Filter>UI\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterBall.h">
+      <Filter>UI\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapTileMap.h" />
+    <ClInclude Include="WorldTileMap1.h" />
+    <ClInclude Include="BattlePokemon.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Level">
@@ -130,6 +155,9 @@
     </Filter>
     <Filter Include="Global">
       <UniqueIdentifier>{e85c6594-5431-4b86-878a-5ad361660bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Item">
+      <UniqueIdentifier>{21f0c16f-8281-4f3d-a865-09acf02914fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

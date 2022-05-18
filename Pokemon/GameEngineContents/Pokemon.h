@@ -3,6 +3,7 @@
 #include <vector>
 #include "ContentEnum.h"
 #include <GameEngine/GameEngineActor.h>
+#include <GameEngine/GameEngineImage.h>
 
 class PokemonSkill;
 class Pokemon : public GameEngineActor
@@ -71,6 +72,11 @@ public:
 		Hp_ = _Hp;
 	}
 
+	inline void PlusHp(int _Value) //Hp 증가
+	{
+		Hp_ = _Value;
+	}
+
 	inline int GetMaxHp()
 	{
 		return MaxHp_;
@@ -94,6 +100,11 @@ public:
 	inline int GetMaxExp()
 	{
 		return MaxExp_;
+	}
+
+	inline void PlusExp(int _Value) //Exp 증가
+	{
+		Exp_ = _Value;
 	}
 
 	inline void SetMaxExp(int _MaxExp)
@@ -177,47 +188,27 @@ public:
 
 
 	//렌더러 관련 함수
-	inline GameEngineRenderer* GetMyBattleBack()
+	inline std::string& GetMyBattleBack()
 	{
 		return BattleBack_;
 	}
 
-	inline void SetMyBattleBack(GameEngineRenderer* _Image)
-	{
-		BattleBack_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyBattleFront()
+	inline std::string& GetMyBattleFront()
 	{
 		return BattleFront_;
 	}
 
-	inline void SetMyBattleFront(GameEngineRenderer* _Image)
-	{
-		BattleFront_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyMyProfile()
+	inline std::string& GetMyMyProfile()
 	{
 		return MyProfile_;
 	}
 
-	inline void SetMyMyProfile(GameEngineRenderer* _Image)
-	{
-		MyProfile_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyIcon()
+	inline std::string& GetMyIcon()
 	{
 		return MyIcon_;
 	}
 
-	inline void SetMyIcon(GameEngineRenderer* _Image)
-	{
-		MyIcon_ = _Image;
-	}
-
-	void SetRenderer(const std::string _Name);
+	void SetPokemonImage(const std::string _Name);
 
 protected:
 	void Start() override;
@@ -242,10 +233,10 @@ private:
 	bool IsPlayer_; //플레이어 포켓몬인지 아닌지
 	bool IsGender_; //true: 수컷, false: 암컷
 
-	GameEngineRenderer* BattleBack_; //전투 뒷모습(플레이어 포켓몬
-	GameEngineRenderer* BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
-	GameEngineRenderer* MyProfile_; //도감 혹은 상세메뉴 이미지
-	GameEngineRenderer* MyIcon_; //지닌 포켓몬 아이콘
+	std::string BattleBack_; //전투 뒷모습(플레이어 포켓몬
+	std::string BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
+	std::string MyProfile_; //도감 혹은 상세메뉴 이미지
+	std::string MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
 };

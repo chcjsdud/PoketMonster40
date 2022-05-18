@@ -1,5 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
+#include "BattleSelect.h"
+#include "BattlePokemon.h"
 #include "BattleInerface.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다

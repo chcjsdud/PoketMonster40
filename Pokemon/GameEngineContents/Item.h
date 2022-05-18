@@ -1,7 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 
-// 설명 :
+class GameEngineRenderer;
 class Item : public GameEngineActor
 {
 public:
@@ -15,12 +15,34 @@ public:
 	Item& operator=(const Item& _Other) = delete;
 	Item& operator=(Item&& _Other) noexcept = delete;
 
+	inline void SetValue(int _Value)
+	{
+		Value_ = _Value;
+	}
+
+	inline int GetValue()
+	{
+		return Value_;
+	}
+
+	inline void SetIcon(GameEngineRenderer* _Image)
+	{
+		Icon_ = _Image;
+	}
+
+	inline GameEngineRenderer* GetIcon()
+	{
+		return Icon_;
+	}
+
 protected:
-	void Start() override;
-	void Update() override;
 
 private:
-	int Value; //상처약일 때 회복될 수치
+	int Value_; //상처약일 때 회복될 수치
+	GameEngineRenderer* Icon_;
+
+	void Start() override;
+	void Update() override;
 
 };
 

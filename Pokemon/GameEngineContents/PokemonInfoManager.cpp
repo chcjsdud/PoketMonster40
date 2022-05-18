@@ -1,7 +1,8 @@
 #include "PokemonInfoManager.h"
 #include "Pokemon.h"
 #include "PokemonSkill.h"
-#include <GameEngineBase/GameEngineString.h>
+#include "MonsterBall.h"
+#include "Potion.h"
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
 
@@ -39,6 +40,20 @@ PokemonInfoManager::~PokemonInfoManager()
 			}
 		}
 	}
+
+	{
+		std::map<std::string, Item*>::iterator StartIter = AllItemList_.begin();
+		std::map<std::string, Item*>::iterator EndIter = AllItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if (nullptr != StartIter->second)
+			{
+				delete StartIter->second;
+				StartIter->second = nullptr;
+			}
+		}
+	}
 }
 
 void PokemonInfoManager::Reset()
@@ -66,8 +81,11 @@ void PokemonInfoManager::Reset()
 		//Scratch: 울음소리 
 		CreateSkill("Growl", 10, PokemonType::NORMAL, SkillType::Debuff);
 	}
-
-	PokemonSkill* PokemonSkill_ = FindSkill("Growl");
+		
+	{
+		CreateItem<MonsterBall>("MonsterBall", 10);
+		CreateItem<Potion>("Potion", 10);
+	}
 }
 
 void PokemonInfoManager::Update()
@@ -103,6 +121,20 @@ PokemonSkill* PokemonInfoManager::FindSkill(std::string _Key)
 	return FindIter->second;
 }
 
+Item* PokemonInfoManager::FindItem(std::string _Key)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+	std::map<std::string, Item*>::iterator FindIter = AllItemList_.find(Key);
+
+	if (FindIter == AllItemList_.end())
+	{
+		return nullptr;
+	}
+
+	return FindIter->second;
+}
+
 Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
 	Pokemon* NewPokemon = new Pokemon();
@@ -125,7 +157,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _
 	NewPokemon->SetSpeed(_Speed);
 	NewPokemon->SetIsPlayer(false);
 	NewPokemon->SetIsGender(false);
-	NewPokemon->SetRenderer(_Key);
+	NewPokemon->SetPokemonImage(_Key);
 
 	AllPokemonList_.insert(std::make_pair(Key, NewPokemon));
 
@@ -145,10 +177,5 @@ PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value
 	AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
 
 	return NewSkill;
-}
-
-Item* PokemonInfoManager::CreateItem()
-{
-	return nullptr;
 }
 
