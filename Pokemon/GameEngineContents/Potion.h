@@ -1,7 +1,7 @@
 #pragma once
 #include "Item.h"
 
-// 설명 :
+// 상처약	
 class Potion : public Item
 {
 public:

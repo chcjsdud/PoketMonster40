@@ -1,7 +1,6 @@
 #include "PokemonInfoManager.h"
 #include "Pokemon.h"
 #include "PokemonSkill.h"
-#include <GameEngineBase/GameEngineString.h>
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
 
@@ -80,8 +79,6 @@ void PokemonInfoManager::Reset()
 		//Scratch: 울음소리 
 		CreateSkill("Growl", 10, PokemonType::NORMAL, SkillType::Debuff);
 	}
-
-	PokemonSkill* PokemonSkill_ = FindSkill("Growl");
 }
 
 void PokemonInfoManager::Update()

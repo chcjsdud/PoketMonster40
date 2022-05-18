@@ -72,6 +72,11 @@ public:
 		Hp_ = _Hp;
 	}
 
+	inline void PlusHp(int _Value) //Hp 증가
+	{
+		Hp_ = _Value;
+	}
+
 	inline int GetMaxHp()
 	{
 		return MaxHp_;
@@ -95,6 +100,11 @@ public:
 	inline int GetMaxExp()
 	{
 		return MaxExp_;
+	}
+
+	inline void PlusExp(int _Value) //Exp 증가
+	{
+		Exp_ = _Value;
 	}
 
 	inline void SetMaxExp(int _MaxExp)

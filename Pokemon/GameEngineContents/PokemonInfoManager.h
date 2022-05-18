@@ -2,8 +2,9 @@
 #include <map>
 #include <string>
 #include "ContentEnum.h"
-#include "Item.h"
+#include <GameEngineBase/GameEngineString.h>
 
+class Item;
 class Pokemon;
 class PokemonSkill;
 class PokemonInfoManager
@@ -41,6 +42,19 @@ public:
 	Pokemon* FindPokemon(std::string _Key);
 	PokemonSkill* FindSkill(std::string _Key);
 
+	template<typename ItemType>
+	Item* CreateItem(const std::string _Key, int _Value)
+	{
+		Item* NewItem = new ItemType();
+		std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+		NewItem->SetName(Key);
+		NewItem->SetValue(_Value);
+
+		AllItemList_.insert(std::make_pair(Key, NewItem));
+		return NewItem;
+	}
+
 protected:
 
 private:
@@ -51,13 +65,6 @@ private:
 	Pokemon* CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill(const std::string _Key, int Value, PokemonType _Type, SkillType _SkillType);
 
-	template<typename ItemType>
-	ItemType* CreateItem(const std::string _Key, int _Value)
-	{
-		ItemType* NewItem = new Item();
 
-		AllItemList_.insert(std::make_pair(_Key, NewItem));
-		return NewItem;
-	}
 };
 

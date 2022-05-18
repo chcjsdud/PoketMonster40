@@ -9,6 +9,8 @@
 #include "UITestLevel.h"
 #include "WorldMapLevel.h"
 #include "BattleLevel.h"
+#include "MonsterBall.h"
+#include "Potion.h"
 
 PokemonEngine::PokemonEngine() 
 {
@@ -27,6 +29,7 @@ void PokemonEngine::GameInit()
 	InitUI();
 	InitKey();
 	InitFont();
+
 	PokemonInfoManager::GetInst().Reset();
 
 	CreateLevel<TitleLevel>("Title");
@@ -35,7 +38,8 @@ void PokemonEngine::GameInit()
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
 
-
+	PokemonInfoManager::GetInst().CreateItem<MonsterBall>("MonsterBall", 10);
+	PokemonInfoManager::GetInst().CreateItem<Potion>("Potion", 10);
 }
 
 void PokemonEngine::GameLoop() 
