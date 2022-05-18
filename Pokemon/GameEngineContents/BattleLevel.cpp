@@ -67,5 +67,5 @@ void BattleLevel::Update()
 	{	//Run에서 Pokemon으로
 		Select->SetPosition({ 750.0f,522.0f });
 	}
-}
+} 
 
