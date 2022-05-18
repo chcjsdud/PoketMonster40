@@ -45,4 +45,8 @@ void Pokemon::SetPokemonImage(const std::string _Name)
 	BattleBack_ = _Name + "B.bmp";
 	BattleFront_ = _Name + "F.bmp";//전투 앞모습(적 혹은 야생 포켓몬
 	MyIcon_ = _Name + "_mini.bmp"; //지닌 포켓몬 아이콘
+
+	//MyIcon_ Cut
+	GameEngineImage* MyIconImage = GameEngineImageManager::GetInst()->Find(MyIcon_);
+	MyIconImage->Cut({ MyIconImage->GetScale().Half().x,MyIconImage->GetScale().y });
 }

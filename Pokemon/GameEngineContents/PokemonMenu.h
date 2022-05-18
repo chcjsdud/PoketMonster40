@@ -33,6 +33,7 @@ private:
 	GameEngineRenderer* BoxRenderer_[6];
 	GameEngineRenderer* DialogRenderer_;
 	GameEngineRenderer* CancelRenderer_;
+	GameEngineRenderer* PokemonRenderer_[6];
 
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
 	//가지고 있는 포켓몬 수
