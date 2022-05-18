@@ -11,7 +11,8 @@ PokemonMenu::PokemonMenu():
 	PokemonNumber_(0),
 	DialogRenderer_(nullptr),
 	CancelRenderer_(nullptr),
-	CurrentOrder_(0)
+	CurrentOrder_(0),
+	RememberOrder_(0)
 {
 }
 
@@ -22,21 +23,96 @@ PokemonMenu::~PokemonMenu()
 void PokemonMenu::Start()
 {
 	InitRenderer();
-	PokemonNumber_ = 3;
+	PokemonNumber_ = 5;
 	OnUI();
 
 }
 
 void PokemonMenu::Update()
 {
-	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
-		
+		if (CurrentOrder_ >= PokemonNumber_)
+		{
+			CurrentOrder_ = 0;
+		}
+		else
+		{
+			CurrentOrder_++;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (CurrentOrder_ <= 0)
+		{
+			CurrentOrder_ = PokemonNumber_;
+		}
+		else
+		{
+			CurrentOrder_--;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Left") == true)
+	{
+		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
+		{
+			RememberOrder_ = CurrentOrder_;
+			CurrentOrder_ = 0;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Right") == true)
+	{
+		if (CurrentOrder_== 0)
+		{
+			if (RememberOrder_ == 0)
+			{
+				RememberOrder_ = 1;
+			}
+			CurrentOrder_ = RememberOrder_;
+		}
 	}
 }
 
 void PokemonMenu::Render()
 {
+	//포켓몬 박스 이미지 선택 렌더링
+	if (CurrentOrder_ == 0)
+	{
+		BoxRenderer_[0]->SetPivot({ 8,72 });
+		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스
+	}
+	else
+	{
+		BoxRenderer_[0]->SetPivot({ 8,80 });
+		BoxRenderer_[0]->SetImage("PoketmonMenu_14.bmp"); //커다란 박스
+	}
+
+	for (int i = 1; i < 6; i++)
+	{
+		if (CurrentOrder_ == i)
+		{
+			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-60 + 96 * i) });
+			BoxRenderer_[i]->SetImage("PoketmonMenu_13.bmp"); //작은 박스
+		}
+		else
+		{
+			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-56 + 96 * i) });
+			BoxRenderer_[i]->SetImage("PoketmonMenu_12.bmp"); //작은 박스
+		}	
+	}
+	if (CurrentOrder_ == PokemonNumber_)
+	{
+		CancelRenderer_->SetPivot({ 732,522 });
+		CancelRenderer_->SetImage("PoketmonMenu_11.bmp");
+	}
+	else
+	{
+		CancelRenderer_->SetPivot({ 732,530 });
+		CancelRenderer_->SetImage("PoketmonMenu_10.bmp");
+	}
 }
 
 void PokemonMenu::InitRenderer()
