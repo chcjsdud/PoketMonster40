@@ -30,7 +30,7 @@ void PokemonMenu::Start()
 	{
 		Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
 		Fonts->SetPosition({ 16,540 });
-		Fonts->ShowString("Please choose a pokemon");
+		Fonts->ShowString("Please choose a pokemon",true);
 	}
 
 }
