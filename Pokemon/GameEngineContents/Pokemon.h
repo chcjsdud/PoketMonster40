@@ -3,6 +3,7 @@
 #include <vector>
 #include "ContentEnum.h"
 #include <GameEngine/GameEngineActor.h>
+#include <GameEngine/GameEngineImage.h>
 
 class PokemonSkill;
 class Pokemon : public GameEngineActor
@@ -177,47 +178,27 @@ public:
 
 
 	//렌더러 관련 함수
-	inline GameEngineRenderer* GetMyBattleBack()
+	inline GameEngineImage* GetMyBattleBack()
 	{
 		return BattleBack_;
 	}
 
-	inline void SetMyBattleBack(GameEngineRenderer* _Image)
-	{
-		BattleBack_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyBattleFront()
+	inline GameEngineImage* GetMyBattleFront()
 	{
 		return BattleFront_;
 	}
 
-	inline void SetMyBattleFront(GameEngineRenderer* _Image)
-	{
-		BattleFront_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyMyProfile()
+	inline GameEngineImage* GetMyMyProfile()
 	{
 		return MyProfile_;
 	}
 
-	inline void SetMyMyProfile(GameEngineRenderer* _Image)
-	{
-		MyProfile_ = _Image;
-	}
-
-	inline GameEngineRenderer* GetMyIcon()
+	inline GameEngineImage* GetMyIcon()
 	{
 		return MyIcon_;
 	}
 
-	inline void SetMyIcon(GameEngineRenderer* _Image)
-	{
-		MyIcon_ = _Image;
-	}
-
-	void SetRenderer(const std::string _Name);
+	void SetPokemonImage(const std::string _Name);
 
 protected:
 	void Start() override;
@@ -242,10 +223,10 @@ private:
 	bool IsPlayer_; //플레이어 포켓몬인지 아닌지
 	bool IsGender_; //true: 수컷, false: 암컷
 
-	GameEngineRenderer* BattleBack_; //전투 뒷모습(플레이어 포켓몬
-	GameEngineRenderer* BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
-	GameEngineRenderer* MyProfile_; //도감 혹은 상세메뉴 이미지
-	GameEngineRenderer* MyIcon_; //지닌 포켓몬 아이콘
+	GameEngineImage* BattleBack_; //전투 뒷모습(플레이어 포켓몬
+	GameEngineImage* BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
+	GameEngineImage* MyProfile_; //도감 혹은 상세메뉴 이미지
+	GameEngineImage* MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
 };

@@ -54,9 +54,6 @@
     <ClCompile Include="BattleEngine.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
-    <ClCompile Include="PokemonRenderer.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />

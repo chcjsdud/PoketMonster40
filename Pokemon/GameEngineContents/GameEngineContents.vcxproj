@@ -240,6 +240,8 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="WorldMapTileMap.h" />
+    <ClInclude Include="WorldTileMap1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bag.cpp">
@@ -292,7 +294,6 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="PokemonRenderer.cpp" />
     <ClCompile Include="PokemonSkill.cpp">
       <SubType>
       </SubType>
@@ -317,6 +318,8 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="WorldMapTileMap.cpp" />
+    <ClCompile Include="WorldTileMap1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameEngineBase\GameEngineBase.vcxproj">

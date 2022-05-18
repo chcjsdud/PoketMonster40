@@ -1,4 +1,5 @@
 #include "Pokemon.h"
+#include <GameEngine/GameEngineImageManager.h>
 
 Pokemon::Pokemon() 
 	: Type_(PokemonType::NORMAL)
@@ -39,7 +40,10 @@ void Pokemon::Update()
 
 
 
-void Pokemon::SetRenderer(const std::string _Name)
+void Pokemon::SetPokemonImage(const std::string _Name)
 {
-
+	//BattleBack_ = GameEngineImageManager::GetInst()->Find("");
+	//BattleBack_ = CreateRenderer(_Name + "B.bmp");
+	//BattleFront_ = CreateRenderer(_Name + "F.bmp"); //전투 앞모습(적 혹은 야생 포켓몬
+	//MyIcon_ = CreateRenderer(_Name + "_mini.bmp"); //지닌 포켓몬 아이콘
 }

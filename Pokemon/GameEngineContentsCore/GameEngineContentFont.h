@@ -32,7 +32,12 @@ public:
 	// _Order : Renderer Order
 	bool ShowString(const std::string& _String, bool _ShowAllText = false, float _LineHeight = 60.0f, float _DelayTime = 0.02f, int _Order = 10);
 
-
+	//
+	// 
+	inline void SkipCharAnimation()
+	{
+		ShowAllText_ = true;
+	}
 	// 출력 완료 후 키 입력 대기 중인지 확인하는 함수
 	//
 	// True  : 입력 대기 중
