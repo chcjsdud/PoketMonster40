@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
+#include <vector>
 #include "ContentEnum.h"
 #include <GameEngine/GameEngineActor.h>
 
+class PokemonSkill;
 class Pokemon : public GameEngineActor
 {
 public:
@@ -210,5 +212,7 @@ private:
 	GameEngineRenderer* BattleFront_; //전투 앞모습(적 혹은 야생 포켓몬
 	GameEngineRenderer* MyProfile_; //도감 혹은 상세메뉴 이미지
 	GameEngineRenderer* MyIcon_; //지닌 포켓몬 아이콘
+
+	std::vector<PokemonSkill> MySkills_;
 };
 
