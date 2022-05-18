@@ -39,6 +39,17 @@ public:
 		Type_ = _Type;
 	}
 
+	inline SkillType GetSkillType()
+	{
+		return SkillType_;
+	}
+
+	inline void SetSkillType(SkillType _SkillType)
+	{
+		SkillType_ = _SkillType;
+	}
+
+
 	inline GameEngineRenderer* GetMyEffect()
 	{
 		return MyEffect_;
@@ -53,7 +64,8 @@ protected:
 
 private:
 	int Value_; //공격 스킬 혹은 방어나 버프 계산에 쓰일 값
-	PokemonType Type_;
+	SkillType SkillType_; //스킬 종류 (공격, 방어 등
+	PokemonType Type_; //스킬 자체 속성 (노말, 불 등
 
 	GameEngineRenderer* MyEffect_;
 };

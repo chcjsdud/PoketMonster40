@@ -19,7 +19,7 @@ enum class PokemonType
 	DRAGON //드래곤
 };
 
-
+//상태 이상
 enum class StatusEffect
 {
 	NONE,
@@ -28,4 +28,13 @@ enum class StatusEffect
 	PAR, //마비
 	SLP, //잠듦
 	FRZ, //얼음
+};
+
+//스킬 종류
+enum class SkillType
+{
+	Attack, 
+	Defence,
+	Debuff,
+	buff
 };
