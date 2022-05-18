@@ -27,13 +27,17 @@ public:
 	BattleInerface& operator=(BattleInerface&& _Other) noexcept = delete;
 
 
-	GameEngineRenderer* Select;
 
+	GameEngineRenderer* GetSelect()
+	{
+		return Select;
+	}
 
 protected:
 	GameEngineRenderer* InterfaceImage;
 
 private:
+	GameEngineRenderer* Select;
 
 	BattleInerface* MainInterface;
 
