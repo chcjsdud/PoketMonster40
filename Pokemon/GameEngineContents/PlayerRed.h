@@ -18,6 +18,8 @@ public:
 protected:
 
 private:
+	float4 CameraPos_;
+
 	GameEngineRenderer* RedRender_;
 	
 	void Start() override;
