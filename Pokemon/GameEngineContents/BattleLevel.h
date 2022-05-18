@@ -1,6 +1,5 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
-#include "BattleSelect.h"
 #include "BattlePokemon.h"
 #include "BattleInerface.h"
 

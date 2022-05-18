@@ -10,7 +10,7 @@ public:
 	BattlePokemon();
 	~BattlePokemon();
 
-	// delete Function
+	// delete Function,
 	BattlePokemon(const BattlePokemon& _Other) = delete;
 	BattlePokemon(BattlePokemon&& _Other) noexcept = delete;
 	BattlePokemon& operator=(const BattlePokemon& _Other) = delete;
