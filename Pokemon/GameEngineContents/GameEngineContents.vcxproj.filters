@@ -54,6 +54,12 @@
     <ClCompile Include="BattleEngine.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerRedState.cpp" />
+    <ClCompile Include="WorldMapTileMap.cpp" />
+    <ClCompile Include="WorldTileMap1.cpp" />
+    <ClCompile Include="BattlePokemon.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -111,6 +117,11 @@
       <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="BattleEngine.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapTileMap.h" />
+    <ClInclude Include="WorldTileMap1.h" />
+    <ClInclude Include="BattlePokemon.h">
       <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
