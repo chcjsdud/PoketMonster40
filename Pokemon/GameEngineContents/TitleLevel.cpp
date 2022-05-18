@@ -42,12 +42,13 @@ void TitleLevel::Update()
 			// 다음 문장이 없을 때 == 끝났을 때
 			if (Fonts->IsEnd())
 			{
-				int a = 0;
+				// 모든 대화가 끝났을 때 z 키누르면 다음 대화 시작
 				if (GameEngineInput::GetInst()->IsDown("Z") == true)
 				{
 					// 출력된 함수 삭제
 					Fonts->ShowString("String Is Hard\\ABCDEFGHIJ \\VeryHard \\Red Is Red? \\Blue Is Red! ");
 				}
+				// 모든 대화가 끝났을 때 x 키누르면 종료
 				else if (GameEngineInput::GetInst()->IsDown("X") == true)
 				{
 					Fonts->EndFont();
