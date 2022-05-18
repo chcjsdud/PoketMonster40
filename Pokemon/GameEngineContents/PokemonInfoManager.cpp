@@ -22,6 +22,8 @@ Pokemon* PokemonInfoManager::CreatePokemon(std::string _Key, PokemonType _Type, 
 {
 	Pokemon* NewPokemon = new Pokemon();
 	//NewPokemon->SetName
+
+	return NewPokemon;
 }
 
 PokemonSkill* PokemonInfoManager::CreateSkill()
