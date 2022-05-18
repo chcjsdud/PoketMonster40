@@ -21,7 +21,7 @@ void TitleLevel::Loading()
 	//{
 	//	GameEngineContentFont* Fonts = CreateActor<GameEngineContentFont>();
 	//	Fonts->SetPosition({ 500, 500 });
-	//	Fonts->ShowString("A BC DEFG!\\ZBBABAB!..!!?   ?");
+	//	Fonts->ShowString("A BC uhDiEFiG!\\ZXYRIMNnasdpo!..!!?   ?");
 	//}
 }
 
