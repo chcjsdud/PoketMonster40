@@ -148,7 +148,7 @@ void PlayerRed::Start()
 	CurrentDir_ = RedDir::Down;
 	CurrentState_ = RedState::Idle;
 
-	SetPosition(RoomTileMap1::GetInst().);
+	//SetPosition(RoomTileMap1::GetInst().);
 }
 
 void PlayerRed::Update()
