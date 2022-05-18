@@ -30,7 +30,7 @@ public:
 	// _LineHeight : 줄 간 간격
 	// _DelayTime : 문자 간 출력 딜레이
 	// _Order : Renderer Order
-	bool ShowString(const std::string& _String, float _LineHeight = 60.0f, float _DelayTime = 0.02f, int _Order = 10);
+	bool ShowString(const std::string& _String, bool _ShowAllText = false, float _LineHeight = 60.0f, float _DelayTime = 0.02f, int _Order = 10);
 
 
 	// 출력 완료 후 키 입력 대기 중인지 확인하는 함수
@@ -77,7 +77,8 @@ private:
 
 	// 키 푸시 대기
 	bool WatingKeyPush_;
-	//
+	// 한번에 출력
+	bool ShowAllText_;
 
 
 	std::queue<std::string> StringQueue_;

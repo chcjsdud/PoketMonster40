@@ -51,6 +51,9 @@
     <ClCompile Include="BattleSelect.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="BattleEngine.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -105,6 +108,9 @@
       <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="BattleSelect.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleEngine.h">
       <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
