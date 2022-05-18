@@ -212,9 +212,14 @@ bool GameEngineContentFont::ShowString(const std::string& _String, bool _ShowAll
 		return false;
 	}
 
-	if (AllFontRenderer_.empty() == false || StringQueue_.empty() == false)
+	if (StringQueue_.empty() == false)
 	{
 		return false;
+	}
+	if (AllFontRenderer_.empty() == false)
+	{
+		ClearCurrentFonts();
+
 	}
 
 	ShowAllText_ = _ShowAllText;

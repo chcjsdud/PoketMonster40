@@ -21,8 +21,8 @@ void TitleLevel::Loading()
 	{
 		Fonts = CreateActor<GameEngineContentFont>();
 		Fonts->SetPosition({ 200, 200 });
+		Fonts->ShowString("Very Very \\ABCDEFGHIJ \\IntotheStage \\Red Is Red \\Blue Is Red! ");
 		// \\ 시 문장 한 줄 뛰우기
-		Fonts->ShowString("Very Very \\ ABCDEFGHIJ \\ IntotheStage \\ Red Is Red \\ Blue Is Red! ");
 	}
 }
 
@@ -43,6 +43,15 @@ void TitleLevel::Update()
 			if (Fonts->IsEnd())
 			{
 				int a = 0;
+				if (GameEngineInput::GetInst()->IsDown("Z") == true)
+				{
+					// 출력된 함수 삭제
+					Fonts->ShowString("String Is Hard\\ABCDEFGHIJ \\VeryHard \\Red Is Red? \\Blue Is Red! ");
+				}
+				else if (GameEngineInput::GetInst()->IsDown("X") == true)
+				{
+					Fonts->EndFont();
+				}
 			}
 		}
 	}

@@ -59,7 +59,7 @@ public:
 	// False : 아직 대기열에 있는 문장이 있음
 	inline bool IsEnd() const
 	{
-		return StringQueue_.empty();
+		return (StringQueue_.empty() && WatingKeyPush_);
 	}
 
 	// 화면에 출력된 폰트 삭제 후 다음 문장 재생
@@ -107,11 +107,9 @@ public:
 		AllFontRenderer_.clear();
 	}
 
-
-
 	// 출력 중이거나 대기중인 모든 문장들을 삭제
 	// 묻지도, 따지지도 않고 모든 문장을 제거합니다
-	void ClearAllFont()
+	void EndFont()
 	{
 		for (auto Iter : AllFontRenderer_)
 		{
@@ -124,6 +122,8 @@ public:
 		StringQueue_ = std::queue<std::string>();
 		CurrentString_.clear();
 		ShowAllText_ = false;
+		WatingKeyPush_ = false;
+		Off();
 	}
 
 protected:
