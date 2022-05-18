@@ -16,8 +16,7 @@ void TitleLevel::Loading()
 	CreateActor<TitleBackground>();
 
 
-
-	 //폰트 출력 테스트
+	//폰트 출력 테스트
 	//{
 	//	GameEngineContentFont* Fonts = CreateActor<GameEngineContentFont>();
 	//	Fonts->SetPosition({ 500, 500 });

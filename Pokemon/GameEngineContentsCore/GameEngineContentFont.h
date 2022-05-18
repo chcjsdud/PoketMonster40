@@ -41,12 +41,6 @@ public:
 		return WatingKeyPush_;
 	}
 
-	// 키 눌렀다고 알리는 함수
-	void PushAnyKey()
-	{
-		WatingKeyPush_ = false;
-	}
-
 	// 화면 내 해당 인터페이스가 가지고있는 폰트 제거
 	inline void ClearFonts()
 	{
