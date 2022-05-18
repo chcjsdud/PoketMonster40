@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
+#include "ContentEnum.h"
 
 class GameEngineRenderer;
 class PokemonSkill : public GameEngineActor
@@ -39,6 +40,7 @@ protected:
 
 private:
 	int Value_; //공격 스킬 혹은 방어나 버프 계산에 쓰일 값
+	PokemonType Type_;
 
 	GameEngineRenderer* MyEffect_;
 };

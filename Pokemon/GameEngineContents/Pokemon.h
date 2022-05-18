@@ -61,6 +61,26 @@ public:
 		MaxLv_ = _MaxLv;
 	}
 
+	inline int GetHp()
+	{
+		return Hp_;
+	}
+
+	inline void SetHp(int _Hp)
+	{
+		Hp_ = _Hp;
+	}
+
+	inline int GetMaxHp()
+	{
+		return MaxHp_;
+	}
+
+	inline void SetMaxHp(int _MaxHp)
+	{
+		MaxHp_ = _MaxHp;
+	}
+
 	inline int GetExp()
 	{
 		return Exp_;
@@ -139,9 +159,19 @@ public:
 		return IsPlayer_;
 	}
 
-	inline bool SetIsPlayer(bool _IsPlayer)
+	inline void SetIsPlayer(bool _IsPlayer)
 	{
 		IsPlayer_ = _IsPlayer;
+	}
+
+	inline bool GetGender()
+	{
+		return IsGender_;
+	}
+
+	inline void SetIsGender(bool _IsGender)
+	{
+		IsGender_ = _IsGender;
 	}
 
 
@@ -197,6 +227,8 @@ private:
 
 	int Lv_;
 	int MaxLv_;
+	int Hp_;
+	int MaxHp_;
 	int Exp_;
 	int MaxExp_;
 	int Att_;

@@ -37,6 +37,8 @@ public:
 
 	void Reset();
 	void Update();
+	
+	Pokemon* FindPokemon(std::string _Key);
 
 protected:
 
@@ -45,7 +47,7 @@ private:
 	std::map<std::string, PokemonSkill*> AllPokemonSkillList_;
 	std::map<std::string, Item*> AllItemList_;
 
-	Pokemon* CreatePokemon(std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
+	Pokemon* CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill();
 	Item* CreateItem();
 };
