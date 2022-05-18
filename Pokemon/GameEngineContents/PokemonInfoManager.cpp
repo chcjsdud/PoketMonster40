@@ -1,7 +1,6 @@
 #include "PokemonInfoManager.h"
 #include "Pokemon.h"
 #include "PokemonSkill.h"
-#include "Item.h"
 #include <GameEngineBase/GameEngineString.h>
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
@@ -160,16 +159,5 @@ PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value
 	AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
 
 	return NewSkill;
-}
-
-Item* PokemonInfoManager::CreateItem(const std::string _Key, int _Value)
-{
-	Item* NewItem = new Item();
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-	NewItem->SetName(Key);
-	NewItem->SetValue(_Value);
-
-	return NewItem;
 }
 

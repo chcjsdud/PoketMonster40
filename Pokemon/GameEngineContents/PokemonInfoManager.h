@@ -2,8 +2,8 @@
 #include <map>
 #include <string>
 #include "ContentEnum.h"
+#include "Item.h"
 
-class Item;
 class Pokemon;
 class PokemonSkill;
 class PokemonInfoManager
@@ -50,6 +50,14 @@ private:
 
 	Pokemon* CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill(const std::string _Key, int Value, PokemonType _Type, SkillType _SkillType);
-	Item* CreateItem(const std::string _Key, int _Value);
+
+	template<typename ItemType>
+	ItemType* CreateItem(const std::string _Key, int _Value)
+	{
+		ItemType* NewItem = new Item();
+
+		AllItemList_.insert(std::make_pair(_Key, NewItem));
+		return NewItem;
+	}
 };
 
