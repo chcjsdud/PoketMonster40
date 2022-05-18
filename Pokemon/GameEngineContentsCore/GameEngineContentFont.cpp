@@ -7,6 +7,7 @@ GameEngineContentFont::GameEngineContentFont()
 	, CurrentWaitTime_(0)
 	, CurrentStringRow_(0)
 	, WatingKeyPush_(false)
+	, LineHeight_(60.0f)
 {
 }
 
@@ -28,8 +29,8 @@ void GameEngineContentFont::Update()
 		CurrentWaitTime_ -= GameEngineTime::GetDeltaTime(3);
 		if (CurrentWaitTime_ < 0)
 		{
-			std::string StringForRendererName = "";
 			char CurrentWord = CurrentString_[0];
+			std::string StringForRendererName = "";
 
 			if (65 <= CurrentWord && CurrentWord <= 90)
 			{
@@ -41,10 +42,38 @@ void GameEngineContentFont::Update()
 				StringForRendererName = CurrentWord;
 				StringForRendererName += "_Lower.bmp";
 			}
+			else
+			{
+				switch (CurrentWord)
+				{
+				case ' ' :
+					StringForRendererName = "LineJamp.bmp";
+					break;
+				case '?' :
+					StringForRendererName = "QuestionMark.bmp";
+					break;
+				case '!' :
+					StringForRendererName = "ExclamationMark.bmp";
+					break;
+				case '\.':
+					StringForRendererName = "Period.bmp";
+					break;
+				case '/':
+					StringForRendererName = "Slash.bmp";
+					break;
+				case '\'':
+					break;
+				case '\"':
+					break;
+				default:
+					MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
+					break;
+				}
+			}
 
 			CurrentString_.erase(0, 1);
 			GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, 10, RenderPivot::LeftTop, CurrentPivot_);
-			CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(60 * CurrentStringRow_)};
+			CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_)};
 			CurrentWaitTime_ = OriginalWaitTime_;
 		}
 
@@ -74,7 +103,7 @@ void GameEngineContentFont::Update()
 	}
 }
 
-bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTime /* = 0.02f*/)
+bool GameEngineContentFont::ShowString(const std::string& _String, float _LineHeight /*= 60.0f*/, float _WaitTime /* = 0.02f*/)
 {
 	if (GetPosition().CompareInt2D(float4::ZERO))
 	{
@@ -90,6 +119,7 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 
 	CurrentString_.clear();
 	CurrentStringRow_ = 0;
+	LineHeight_ = _LineHeight;
 	OriginalWaitTime_ = _WaitTime;
 	CurrentWaitTime_ = 0;
 	std::string GetString = _String;
@@ -110,9 +140,9 @@ bool GameEngineContentFont::ShowString(const std::string& _String, float _WaitTi
 		}
 		if (GetString[IdxCount] == '\\')
 		{
-			++IdxCount;
+			
 			StringQueue_.push(GetString.substr(0, IdxCount));
-			GetString.erase(0, IdxCount);
+			GetString.erase(0, IdxCount + 1);
 			IdxCount = 0;
 		}
 		else

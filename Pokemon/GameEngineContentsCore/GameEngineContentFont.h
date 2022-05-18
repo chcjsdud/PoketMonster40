@@ -27,13 +27,16 @@ public:
 	//
 	// True  : 출력 예약 성공적으로 완료
 	// False : 이미 등록된 출력 명령이 있음
-	bool ShowString(const std::string& _String, float _WaitTime = 0.02f);
+	bool ShowString(const std::string& _String, float _LineHeight = 60.0f, float _WaitTime = 0.02f);
 	
 	// 다음 문장 출력 함수
 	// 
-	// True  : 다음 문장이 있고 출력 중 (혹은 예정)
+	// True  : 출력 중 (혹은 예정)
 	// False : 다음 문장이 없음
-	bool NextString() {}
+	inline bool NextString() 
+	{ 
+		return WatingKeyPush_; 
+	}
 
 protected:
 	void Update() override;
@@ -47,6 +50,7 @@ private:
 
 	// 현재 줄
 	int CurrentStringRow_;
+	float LineHeight_;
 	//
 	// 
 	// 키 푸시 대기

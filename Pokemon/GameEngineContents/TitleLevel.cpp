@@ -17,11 +17,11 @@ void TitleLevel::Loading()
 
 
 
-	// 폰트 출력 테스트
+	 //폰트 출력 테스트
 	//{
 	//	GameEngineContentFont* Fonts = CreateActor<GameEngineContentFont>();
 	//	Fonts->SetPosition({ 500, 500 });
-	//	Fonts->ShowString("ABCDEFG\\ZBBABAB");
+	//	Fonts->ShowString("A BC DEFG!\\ZBBABAB!..!!?   ?");
 	//}
 }
 
