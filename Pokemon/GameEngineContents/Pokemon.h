@@ -217,6 +217,8 @@ public:
 		MyIcon_ = _Image;
 	}
 
+	void SetRenderer(const std::string _Name);
+
 protected:
 	void Start() override;
 	void Update() override;
