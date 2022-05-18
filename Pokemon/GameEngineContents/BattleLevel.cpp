@@ -65,7 +65,12 @@ void BattleLevel::Update()
 
 	if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
 	{	//Run에서 Pokemon으로
-		Select->SetPosition({ 750.0f,522.0f });
+		Select->SetPosition({ 530.0f,585.0f });
+	}
+
+	if ((Select->GetPosition().x == 530.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+	{	//Pokemon에서 Run으로
+		Select->SetPosition({ 750.0f,585.0f });
 	}
 } 
 
