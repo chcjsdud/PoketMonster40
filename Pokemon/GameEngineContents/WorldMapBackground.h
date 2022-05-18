@@ -20,5 +20,6 @@ protected:
 private:
 	void Start() override;
 
+	GameEngineRenderer* WorldMap1_;
 };
 
