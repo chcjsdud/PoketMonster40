@@ -18,7 +18,7 @@ public:
 
 
 	//타입 및 상태 관련 함수
-	inline PokemonType SetMyType(PokemonType _Type)
+	inline void SetMyType(PokemonType _Type)
 	{
 		Type_ = _Type;
 	}

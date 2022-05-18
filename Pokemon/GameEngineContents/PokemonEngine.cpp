@@ -4,6 +4,7 @@
 #include <GameEngineBase/GameEngineFile.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngine/GameEngineImageManager.h>
+#include "PokemonInfoManager.h"
 #include "TitleLevel.h"
 #include "UITestLevel.h"
 #include "WorldMapLevel.h"
@@ -32,6 +33,8 @@ void PokemonEngine::GameInit()
 	CreateLevel<WorldMapLevel>("WorldMap");
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
+
+	PokemonInfoManager::GetInst().Reset();
 }
 
 void PokemonEngine::GameLoop() 
