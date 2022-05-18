@@ -50,7 +50,7 @@ public:
 	// False : 출력 중이거나 입력 대기중이 아님
 	inline bool IsWait() const
 	{
-		return WatingKeyPush_;
+		return (WatingKeyPush_ && !StringQueue_.empty());
 	}
 
 	// 모든 문장이 출력이 되었는지 확인하는 함수
