@@ -10,6 +10,18 @@ PokemonInfoManager::PokemonInfoManager()
 
 PokemonInfoManager::~PokemonInfoManager() 
 {
+	std::map<std::string, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
+	std::map<std::string, Pokemon*>::iterator EndIter = AllPokemonList_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != StartIter->second)
+		{
+			delete StartIter->second;
+			StartIter->second = nullptr;
+		}
+	}
+
 }
 
 void PokemonInfoManager::Reset()

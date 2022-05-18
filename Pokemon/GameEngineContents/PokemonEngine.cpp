@@ -57,7 +57,7 @@ void PokemonEngine::GameLoop()
 }
 void PokemonEngine::GameEnd() 
 {
-
+	PokemonInfoManager::Destroy();
 }
 
 void PokemonEngine::InitUI()
