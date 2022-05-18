@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include "Pokemon.h"
 
 // Ό³Έν :
 class BattlePokemon : public GameEngineActor
@@ -24,6 +25,8 @@ private:
 
 	GameEngineRenderer* PlayerPokemon_;
 	GameEngineRenderer* OpponentPokemon_;
-	
+
+	float4 PlayerPokemonPos_;
+	float4 OpponentPokemonPos_;
 };
 

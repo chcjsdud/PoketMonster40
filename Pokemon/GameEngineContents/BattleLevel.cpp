@@ -2,6 +2,7 @@
 #include <GameEngine/GameEngine.h>
 
 #include "BattleLevel.h"
+#include "BattlePokemon.h"
 #include "BattleBackground.h"
 
 
@@ -25,7 +26,8 @@ void BattleLevel::Loading()
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'A');
 	
 	CreateActor<BattleBackground>();
-	
+	CreateActor<BattlePokemon>();
+
 	Interface = CreateActor<BattleInerface>(3);
 	Interface->SetPosition({ 720.0f, 548.0f });
 
