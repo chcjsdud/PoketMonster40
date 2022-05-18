@@ -213,6 +213,6 @@ private:
 	GameEngineRenderer* MyProfile_; //도감 혹은 상세메뉴 이미지
 	GameEngineRenderer* MyIcon_; //지닌 포켓몬 아이콘
 
-	std::vector<PokemonSkill> MySkills_;
+	std::vector<PokemonSkill*> MySkills_;
 };
 

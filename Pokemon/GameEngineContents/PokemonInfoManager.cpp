@@ -1,5 +1,5 @@
 #include "PokemonInfoManager.h"
-#include "ContentEnum.h"
+#include "Pokemon.h"
 
 PokemonInfoManager::PokemonInfoManager() 
 {
@@ -18,9 +18,10 @@ void PokemonInfoManager::Update()
 {
 }
 
-Pokemon* PokemonInfoManager::CreatePokemon()
+Pokemon* PokemonInfoManager::CreatePokemon(std::string _Key, PokemonType _Type, StatusEffect _Effect, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
-	return nullptr;
+	Pokemon* NewPokemon = new Pokemon();
+	//NewPokemon->SetName
 }
 
 PokemonSkill* PokemonInfoManager::CreateSkill()

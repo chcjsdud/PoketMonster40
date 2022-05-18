@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <string>
+#include "ContentEnum.h"
 
 class Item;
 class Pokemon;
@@ -44,7 +45,7 @@ private:
 	std::map<std::string, PokemonSkill*> AllPokemonSkillList_;
 	std::map<std::string, Item*> AllItemList_;
 
-	Pokemon* CreatePokemon();
+	Pokemon* CreatePokemon(std::string _Key, PokemonType _Type, StatusEffect _Effect, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill();
 	Item* CreateItem();
 };
