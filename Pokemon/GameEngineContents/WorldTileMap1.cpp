@@ -11,9 +11,12 @@ WorldTileMap1::~WorldTileMap1()
 
 void WorldTileMap1::Start()
 {
-	SetPosition({-1470 + 1000, -3885 - 1800});
+	Inst_ = this;
+	SetPosition({-471, -6157});
+	TileMap_.TileRangeSetting(70, 111, { 64, 64 });
 
-	TileMap_.TileRangeSetting(70, 111, { 70, 70 });
+	//SetPosition({-3000 + 1000 -25, -3885 - 1800 - 10 });
+	//TileMap_.TileRangeSetting(111, 111, { 64, 64 });
 
 	for (int y = 0; y < 111; y++)
 	{
@@ -32,11 +35,5 @@ void WorldTileMap1::Start()
 	TileMap_.CreateTile<Tile>(0, 0, "White.bmp", 10);
 	TileMap_.CreateTile<Tile>(1, 1, "White.bmp", 10);
 	TileMap_.CreateTile<Tile>(2, 2, "White.bmp", 10);
-
-	//Tile* TmpTile = TileMap_.GetTile<Tile>(0, 0);
-	//TmpTile->SetRenderer(CreateRenderer("White.bmp", 100, RenderPivot::CENTER, TileMap_.GetWorldPostion(0, 0)));
-	//TmpTile->SetRenderer(CreateRenderer("White.bmp", 100, RenderPivot::CENTER, TileMap_.GetWorldPostion(1, 1)));
-	//TmpTile->SetRenderer(CreateRenderer("White.bmp", 100, RenderPivot::CENTER, TileMap_.GetWorldPostion(2, 2)));
-	//CreateRenderer("White.bmp", 100, RenderPivot::CENTER, { 0, 0 });
 }
 

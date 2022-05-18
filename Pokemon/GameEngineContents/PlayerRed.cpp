@@ -5,6 +5,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include "RoomTileMap1.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 
@@ -146,6 +147,8 @@ void PlayerRed::Start()
 	AnimationName_ = "Idle";
 	CurrentDir_ = RedDir::Down;
 	CurrentState_ = RedState::Idle;
+
+	SetPosition(RoomTileMap1::GetInst().);
 }
 
 void PlayerRed::Update()

@@ -2,6 +2,8 @@
 #include <GameEngine/GameEngineLevel.h>
 
 // Ό³Έν :
+class WorldTileMap1;
+class RoomTileMap1;
 class WorldMapLevel : public GameEngineLevel
 {
 public:
@@ -20,6 +22,7 @@ protected:
 	void Update() override;
 
 private:
-
+	WorldTileMap1* WorldTileMap1Ptr;
+	RoomTileMap1* RoomTileMap1Ptr;
 };
 
