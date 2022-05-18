@@ -1,4 +1,5 @@
 #include "WorldMapBackground.h"
+#include <GameEngine/GameEngineRenderer.h>
 
 WorldMapBackground::WorldMapBackground() 
 {
@@ -10,7 +11,8 @@ WorldMapBackground::~WorldMapBackground()
 
 void WorldMapBackground::Start()
 {
-	CreateRenderer("test.bmp");
+	WorldMap1_ = CreateRenderer("test3.bmp");
+	WorldMap1_->SetPivot({1000, -1800});
 	CreateRenderer("test2.bmp");
 }
 
