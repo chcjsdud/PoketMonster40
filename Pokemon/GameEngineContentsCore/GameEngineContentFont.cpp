@@ -92,6 +92,7 @@ void GameEngineContentFont::Update()
 						{
 							// 입력 대기
 							WatingKeyPush_ = true;
+							ShowAllText_ = false;
 						}
 						CurrentPivot_ = { 10, static_cast<float>(60 * CurrentStringRow_) };
 						StringQueue_.pop();
@@ -99,6 +100,7 @@ void GameEngineContentFont::Update()
 						if (StringQueue_.empty())
 						{
 							WatingKeyPush_ = true;
+							ShowAllText_ = false;
 						}
 						else
 						{
