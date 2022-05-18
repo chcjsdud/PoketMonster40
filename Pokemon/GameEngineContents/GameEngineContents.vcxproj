@@ -291,6 +291,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="PokemonRenderer.cpp" />
     <ClCompile Include="PokemonSkill.cpp">
       <SubType>
       </SubType>

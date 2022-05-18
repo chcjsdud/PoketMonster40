@@ -3,7 +3,7 @@
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include "Pokemon.h"
-
+#include <GameEngineContentsCore/GameEngineContentFont.h>
 
 
 PokemonMenu::PokemonMenu():
@@ -25,6 +25,13 @@ void PokemonMenu::Start()
 	InitRenderer();
 	PokemonNumber_ = 5;
 	OnUI();
+
+	////폰트 출력 테스트
+	{
+		Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
+		Fonts->SetPosition({ 16,540 });
+		Fonts->ShowString("Please choose a pokemon");
+	}
 
 }
 

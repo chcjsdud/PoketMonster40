@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 
+
 class Pokemon;
 class PokemonMenu : public GameEngineActor
 {
@@ -23,6 +24,9 @@ private:
 	void InitRenderer();
 	void GetPlayerPokemon();
 	void OnUI(); //UI가 켜질경우
+
+	//폰트 
+	class GameEngineContentFont* Fonts;
 
 	//렌더러
 	GameEngineRenderer* BackgroundRenderer_;
