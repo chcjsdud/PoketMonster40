@@ -45,6 +45,9 @@
       <Filter>Battle</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRed.cpp" />
+    <ClCompile Include="BattleInerface.cpp">
+      <Filter>Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -95,6 +98,9 @@
       <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="PlayerRed.h" />
+    <ClInclude Include="BattleInerface.h">
+      <Filter>Battle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Level">

@@ -170,6 +170,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="BattleInerface.h" />
     <ClInclude Include="BattleLevel.h">
       <SubType>
       </SubType>
@@ -241,6 +242,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="BattleInerface.cpp" />
     <ClCompile Include="BattleLevel.cpp">
       <SubType>
       </SubType>
