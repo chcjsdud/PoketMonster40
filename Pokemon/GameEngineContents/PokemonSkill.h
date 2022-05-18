@@ -29,6 +29,16 @@ public:
 		Value_ = _Value;
 	}
 
+	inline PokemonType GetType()
+	{
+		return Type_;
+	}
+
+	inline void SetType(PokemonType _Type)
+	{
+		Type_ = _Type;
+	}
+
 	inline GameEngineRenderer* GetMyEffect()
 	{
 		return MyEffect_;
