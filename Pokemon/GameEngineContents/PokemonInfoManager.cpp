@@ -1,4 +1,5 @@
 #include "PokemonInfoManager.h"
+#include "ContentEnum.h"
 
 PokemonInfoManager::PokemonInfoManager() 
 {
@@ -10,6 +11,7 @@ PokemonInfoManager::~PokemonInfoManager()
 
 void PokemonInfoManager::Reset()
 {
+	
 }
 
 void PokemonInfoManager::Update()

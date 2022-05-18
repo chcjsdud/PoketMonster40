@@ -10,7 +10,7 @@ Pokemon::~Pokemon()
 
 void Pokemon::Start()
 {
-	MySkills_.reserve(4);
+	//MySkills_.reserve(4);
 }
 
 void Pokemon::Update()
