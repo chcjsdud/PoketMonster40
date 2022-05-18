@@ -55,25 +55,25 @@ void BattleLevel::Update()
 		Interface->Select->SetPivot({ -190.0f,-25.0f });
 	}
 
-	//if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 522.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-	//{	//Bag에서 Run으로
-	//	Select->SetPosition({ 750.0f,585.0f });
-	//}
+	if ((Interface->Select->GetPivot().x == 30.0f && Interface->Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+	{	//Bag에서 Run으로
+		Interface->Select->SetPivot({ 30.0f,35.0f });
+	}
 
-	//if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-	//{	//Run에서 Bag으로
-	//	Select->SetPosition({ 750.0f,522.0f });
-	//}
+	if ((Interface->Select->GetPivot().x == 30.0f && Interface->Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+	{	//Run에서 Bag으로
+		Interface->Select->SetPivot({ 30.0f,-25.0f });
+	}
 
-	//if ((Select->GetPosition().x == 750.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-	//{	//Run에서 Pokemon으로
-	//	Select->SetPosition({ 530.0f,585.0f });
-	//}
+	if ((Interface->Select->GetPivot().x == -190.0f && Interface->Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+	{	//Pokemon에서 Run으로
+		Interface->Select->SetPivot({ 30.0f,35.0f });
+	}
 
-	//if ((Select->GetPosition().x == 530.0f && Select->GetPosition().y == 585.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-	//{	//Pokemon에서 Run으로
-	//	Select->SetPosition({ 750.0f,585.0f });
-	//}
+	if ((Interface->Select->GetPivot().x == 30.0f && Interface->Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+	{	//Run에서 Pokemon으로
+		Interface->Select->SetPivot({ -190.0f,35.0f });
+	}
 
 } 
 
