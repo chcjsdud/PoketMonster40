@@ -41,6 +41,7 @@ public:
 	
 	Pokemon* FindPokemon(std::string _Key);
 	PokemonSkill* FindSkill(std::string _Key);
+	Item* FindItem(std::string _Key);
 
 	template<typename ItemType>
 	Item* CreateItem(const std::string _Key, int _Value)

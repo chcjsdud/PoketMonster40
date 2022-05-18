@@ -82,8 +82,10 @@ void PokemonInfoManager::Reset()
 		CreateSkill("Growl", 10, PokemonType::NORMAL, SkillType::Debuff);
 	}
 		
-	CreateItem<MonsterBall>("MonsterBall", 10);
-	CreateItem<Potion>("Potion", 10);
+	{
+		CreateItem<MonsterBall>("MonsterBall", 10);
+		CreateItem<Potion>("Potion", 10);
+	}
 }
 
 void PokemonInfoManager::Update()
@@ -112,6 +114,20 @@ PokemonSkill* PokemonInfoManager::FindSkill(std::string _Key)
 	std::map<std::string, PokemonSkill*>::iterator FindIter = AllPokemonSkillList_.find(Key);
 
 	if (FindIter == AllPokemonSkillList_.end())
+	{
+		return nullptr;
+	}
+
+	return FindIter->second;
+}
+
+Item* PokemonInfoManager::FindItem(std::string _Key)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+	std::map<std::string, Item*>::iterator FindIter = AllItemList_.find(Key);
+
+	if (FindIter == AllItemList_.end())
 	{
 		return nullptr;
 	}
