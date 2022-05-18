@@ -173,6 +173,7 @@ PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value
 	NewSkill->SetValue(_Value);
 	NewSkill->SetType(_Type);
 	NewSkill->SetSkillType(_SkillType);
+	//NewSkill->SetMyEffect(NewSkill->CreateRenderer("Tackle.bmp"));
 
 	AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
 

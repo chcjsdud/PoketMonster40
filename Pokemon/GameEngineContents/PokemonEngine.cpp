@@ -124,6 +124,7 @@ void PokemonEngine::ResourcesLoad()
 			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
 		}
 	}
+
 }
 
 void PokemonEngine::ImageCut()
