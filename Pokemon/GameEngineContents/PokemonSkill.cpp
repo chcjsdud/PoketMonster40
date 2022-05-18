@@ -8,3 +8,11 @@ PokemonSkill::~PokemonSkill()
 {
 }
 
+void PokemonSkill::Start()
+{
+}
+
+void PokemonSkill::Update()
+{
+}
+
