@@ -30,6 +30,7 @@ public:
 protected:
 	GameEngineRenderer* BackgroundRender;
 	GameEngineRenderer* TextRender;
+	GameEngineRenderer* BattleSelect;
 
 private:
 	void Start() override;
