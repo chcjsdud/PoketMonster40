@@ -8,7 +8,6 @@ GameEngineContentFont::GameEngineContentFont()
 	, CurrentStringRow_(0)
 	, WatingKeyPush_(false)
 	, LineHeight_(60.0f)
-	, Order_(10)
 	, ShowAllText_(false)
 {
 }
@@ -81,7 +80,7 @@ void GameEngineContentFont::Update()
 						}
 					}
 
-					GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, Order_, RenderPivot::LeftTop, CurrentPivot_);
+					GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, GetOrder(), RenderPivot::LeftTop, CurrentPivot_);
 					CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_) };
 					AllFontRenderer_.push_back(CurrentRenderer);
 
@@ -167,7 +166,7 @@ void GameEngineContentFont::Update()
 				}
 
 				CurrentString_.erase(0, 1);
-				GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, Order_, RenderPivot::LeftTop, CurrentPivot_);
+				GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, GetOrder(), RenderPivot::LeftTop, CurrentPivot_);
 				CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_)};
 				AllFontRenderer_.push_back(CurrentRenderer);
 				CurrentWaitTime_ = OriginalWaitTime_;
@@ -205,7 +204,7 @@ void GameEngineContentFont::Update()
 	}
 }
 
-bool GameEngineContentFont::ShowString(const std::string& _String, bool _ShowAllText, float _LineHeight /*= 60.0f*/, float _DelayTime /* = 0.02f*/, int _Order /* = 10*/)
+bool GameEngineContentFont::ShowString(const std::string& _String, bool _ShowAllText, float _LineHeight /*= 60.0f*/, float _DelayTime /* = 0.02f*/)
 {
 	if (GetPosition().CompareInt2D(float4::ZERO))
 	{
@@ -222,7 +221,6 @@ bool GameEngineContentFont::ShowString(const std::string& _String, bool _ShowAll
 	CurrentString_.clear();
 	CurrentStringRow_ = 0;
 	LineHeight_ = _LineHeight;
-	Order_ = _Order;
 	OriginalWaitTime_ = _DelayTime;
 	CurrentWaitTime_ = 0;
 	std::string GetString = _String;

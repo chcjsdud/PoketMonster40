@@ -33,7 +33,7 @@ public:
 	// _LineHeight : 줄 간 간격
 	// _DelayTime : 문자 간 출력 딜레이
 	// _Order : Renderer Order
-	bool ShowString(const std::string& _String, bool _ShowAllText = false, float _LineHeight = 60.0f, float _DelayTime = 0.02f, int _Order = 10);
+	bool ShowString(const std::string& _String, bool _ShowAllText = false, float _LineHeight = 60.0f, float _DelayTime = 0.02f);
 
 
 	// 텍스트 출력 애니메이션을 생략시키고 싶을때 이용하는 함수
@@ -142,9 +142,6 @@ private:
 	// 줄 높이
 	float LineHeight_;
 	
-	// Order
-	int Order_;
-
 	// 키 푸시 대기
 	bool WatingKeyPush_;
 
