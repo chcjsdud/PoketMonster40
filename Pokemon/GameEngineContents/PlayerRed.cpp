@@ -219,6 +219,11 @@ void PlayerRed::WMenuUISelect()
 {
 	if (false == WMenuUICheck_)
 	{
+		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Up"))
+		{
+			WMenuArrowRender_->SetPivot({ 240,100 });
+			return;
+		}
 		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Down"))
 		{
 			WMenuArrowRender_->SetPivot({ 240,-200 });
@@ -283,6 +288,11 @@ void PlayerRed::WMenuUISelect()
 		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
 			WMenuArrowRender_->SetPivot({ 240,40 });
+			return;
+		}
+		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Down"))
+		{
+			WMenuArrowRender_->SetPivot({ 240,-260 });
 			return;
 		}
 	}
