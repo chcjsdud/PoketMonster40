@@ -275,6 +275,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="PlayerRedState.cpp" />
     <ClCompile Include="Pokemon.cpp">
       <SubType>
       </SubType>
