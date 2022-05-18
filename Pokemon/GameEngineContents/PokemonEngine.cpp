@@ -37,9 +37,6 @@ void PokemonEngine::GameInit()
 	CreateLevel<WorldMapLevel>("WorldMap");
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
-
-	PokemonInfoManager::GetInst().CreateItem<MonsterBall>("MonsterBall", 10);
-	PokemonInfoManager::GetInst().CreateItem<Potion>("Potion", 10);
 }
 
 void PokemonEngine::GameLoop() 
