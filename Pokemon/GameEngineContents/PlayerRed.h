@@ -41,10 +41,13 @@ protected:
 private:
 	float4			CameraPos_;
 	RedDir			CurrentDir_;
+	bool			WMenuUICheck_;
 	std::string		AnimationName_;
 	std::string		ChangeDirText_;
 
 	GameEngineRenderer* RedRender_;
+	GameEngineRenderer* WMenuUIRender_;
+	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
 
 	void Start() override;
@@ -52,8 +55,10 @@ private:
 	void Render() override;
 
 	void Camera();
+	void WMenuUISelect();
 
 	bool IsMoveKey();
+	void IsWMenuKey();
 
 	void IdleUpdate();
 	void WalkUpdate();

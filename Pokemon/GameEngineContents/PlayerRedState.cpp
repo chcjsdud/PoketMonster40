@@ -8,6 +8,12 @@
 
 void PlayerRed::IdleUpdate()
 {
+	if (false == WMenuUICheck_)
+	{
+		float4 MoveDir_ = float4::ZERO;
+		return;
+	}
+
 	if (true == IsMoveKey())
 	{
 		ChangeState(RedState::Walk);
@@ -17,6 +23,12 @@ void PlayerRed::IdleUpdate()
 
 void PlayerRed::WalkUpdate()
 {
+	if (false == WMenuUICheck_)
+	{
+		float4 MoveDir_ = float4::ZERO;
+		return;
+	}
+	
 	float4 MoveDir_ = float4::ZERO;
 	if (true == GameEngineInput::GetInst()->IsPress("Up"))
 	{
