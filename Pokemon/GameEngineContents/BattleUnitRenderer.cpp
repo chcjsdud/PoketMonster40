@@ -8,7 +8,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerRenderer_(nullptr)
 	, PlayerPokemonPos_({ -220, 60 })
 	, OpponentPokemonPos_({ 200, -105 })
-	, PlayerRendererPos_()
+	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
 {
 }
@@ -23,9 +23,9 @@ void BattleUnitRenderer::Start()
 	PlayerPokemon_ = CreateRenderer("SquirtleB.bmp", 3, RenderPivot::CENTER, PlayerPokemonPos_);
 	OpponentPokemon_ = CreateRenderer("BulbasaurF.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
 
+	PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
 }
 
 void BattleUnitRenderer::Update()
 {
-
 }

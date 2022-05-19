@@ -62,6 +62,7 @@ private:
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
+	
 
 	BattleInerface* MainInterface;
 

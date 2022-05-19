@@ -25,16 +25,17 @@ void BattleInerface::Start()
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 
 
-	InterfaceImage = CreateRenderer("Battle_Select.bmp",0);
+	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
 	
-	Select = CreateRenderer("Select.bmp", 1);
+	Select = CreateRenderer("Select.bmp", 3);
 
-	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",1);
-	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",1);
-	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 2);
-	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 2);
-	EXP = CreateRenderer("FriendlyHPExp4.bmp", 2);
-	BattleCommend = CreateRenderer("BattleCommend4.bmp", 3);
+	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",2);
+	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",2);
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3);
+	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3);
+	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
+	BattleCommend = CreateRenderer("BattleCommend4.bmp", 4);
+	//Player = CreateRenderer("Player.bmp",0);
 
 	//=========랜더러 위치 설정==========//
 	Select->SetPivot({ -190.0f, -25.0f });
@@ -45,7 +46,8 @@ void BattleInerface::Start()
 	MyHP->SetPivot({ 80.0f, -170.0f });
 	EXP->SetPivot({48.0f,-170.0f});
 	BattleCommend->SetPivot({-240.0f,0.0f});
-	BattleCommend->Off();
+	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
+	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
 }
 
 void BattleInerface::Render()
