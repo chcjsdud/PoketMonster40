@@ -13,3 +13,13 @@ void BattleEngine::BattleTurn(PokemonInfo* _HitPokemon, PokemonInfo* _TargetPoke
 {
 	
 }
+
+void BattleEngine::Update()
+{
+
+}
+
+void BattleEngine::Start()
+{
+
+}

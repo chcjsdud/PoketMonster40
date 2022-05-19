@@ -28,6 +28,12 @@ public:
 	BattleLevel& operator=(const BattleLevel& _Other) = delete;
 	BattleLevel& operator=(BattleLevel&& _Other) noexcept = delete;
 
+	inline BattleState GetBattleState() const
+	{
+		return BState_;
+	}
+	
+
 public:
 	inline void OpenningEnd()
 	{
