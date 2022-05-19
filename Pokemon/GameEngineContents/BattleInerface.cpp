@@ -22,6 +22,7 @@ void BattleInerface::Start()
 	GameEngineInput::GetInst()->CreateKey("SDown", VK_DOWN);
 	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
+	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",0);
@@ -162,4 +163,9 @@ void BattleInerface::SelectOrder()
 		CurOrder = BattleOrder::Run;
 	}
 
+	if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
+	{
+		BattleCommend->Off();
+		CurOrder = BattleOrder::None;
+	}
 }
