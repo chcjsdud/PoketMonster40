@@ -20,6 +20,6 @@ protected:
 	virtual void LevelChangeEnd(GameEngineLevel* _NextLevel);
 
 private:
-
+	class GameEngineRenderer* BagRedrerer_;
 };
 
