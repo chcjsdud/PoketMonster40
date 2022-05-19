@@ -1,4 +1,5 @@
 #include "PlayerRed.h"
+#include <GameEngineBase/GameEngineMath.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineWindow.h>
 #include <GameEngine/GameEngine.h>
@@ -21,6 +22,7 @@ PlayerRed::PlayerRed()
 	, WMenuArrowRender_()
 	, WMenuUIRender_()
 	, WMenuUICheck_(true)
+	, LerpTime_(0)
 {
 }
 
@@ -190,12 +192,25 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
+	StartPos_ = GetPosition();
+	LerpTime_ = 0;
 	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 
 	if (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y) == true)
 	{
-		SetPosition(CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y));
+		float4 MovePos = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+		//SetPosition(MovePos);
+		while (1 > LerpTime_)
+		{
+			LerpTime_ += GameEngineTime::GetDeltaTime();
+			LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, MovePos.x, LerpTime_);
+			LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, MovePos.y, LerpTime_);
+
+ 			SetPosition({ LerpX_,LerpY_ });
+		}
+		
+		//SetPosition({LerpX_,LerpY_});
 		PlayerMoveTile(NextIndex.X, NextIndex.Y);
 	}
 }
