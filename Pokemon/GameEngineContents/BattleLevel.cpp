@@ -4,6 +4,7 @@
 #include "BattleLevel.h"
 #include "BattleUnitRenderer.h"
 #include "BattleBackground.h"
+#include "BattleEngine.h"
 
 
 
@@ -12,6 +13,8 @@ BattleLevel::BattleLevel()
 	, BState_(BattleState::Openning)
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
+	, PlayerRed_(nullptr)
+	, BEngine_(nullptr)
 {
 
 }
@@ -25,6 +28,7 @@ void BattleLevel::Loading()
 {
 	CreateActor<BattleBackground>();
 	CreateActor<BattleUnitRenderer>();
+	BEngine_ = CreateActor<BattleEngine>();
 
 	Interface = CreateActor<BattleInerface>(3);
 	Interface->SetPosition({ 720.0f, 548.0f });
@@ -60,6 +64,10 @@ void BattleLevel::Update()
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
+	if (PlayerRed_ == nullptr)
+	{
+		PlayerRed_  = PlayerRed::MainRed_;
+	}
 	//BState_ = BattleState::Openning
 	BState_ = BattleState::Selecet;
 	OpenningEnd_ = false;

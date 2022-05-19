@@ -18,13 +18,13 @@ public:
 	BattleEngine& operator=(const BattleEngine& _Other) = delete;
 	BattleEngine& operator=(BattleEngine&& _Other) noexcept = delete;
 
-	void BattleTurn(PokemonInfo* _HitPokemon, PokemonInfo* _TargetPokemon, const PokemonSkill* _Skill);
+	void BattlePage(Pokemon* _PlayerPokemon, Pokemon* _OpponentPokemon, const std::string& _PlayerSkill, const std::string& _OpponentSkill);
 
 protected:
 	void Update() override;
 	void Start() override;
 
 private:
-
+	
 };
 

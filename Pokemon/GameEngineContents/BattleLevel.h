@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
+#include "PlayerRed.h"
 #include "BattleInerface.h"
 #include "BattleEnum.h"
 
@@ -7,8 +8,10 @@
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
 
 //설명 : 
+class BattleEngine;
 class BattleLevel : public GameEngineLevel
 {
+	friend BattleEngine;
 public:
 	//디폴트 생성자
 	BattleLevel();
@@ -32,6 +35,11 @@ public:
 	{
 		return BState_;
 	}
+
+	inline PlayerRed* GetRed()
+	{
+		return PlayerRed_;
+	}
 	
 
 public:
@@ -51,6 +59,8 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
+
+
 private:
 	BattleInerface* Interface;
 	BattleState BState_;
@@ -63,4 +73,7 @@ private:
 	void ShowEndding();
 	bool EnddingEnd_;
 
+	BattleEngine* BEngine_;
+	// 플레이어
+	PlayerRed* PlayerRed_;
 };
