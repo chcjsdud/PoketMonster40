@@ -23,7 +23,10 @@ PlayerRed::PlayerRed()
 	, WMenuUIRender_()
 	, WMenuUICheck_(true)
 	, LerpTime_(0)
+	, MyPokemonList_{nullptr}
+	, MyItemList_{}
 {
+	MyPokemonList_.resize(6);
 }
 
 PlayerRed::~PlayerRed() 

@@ -7,6 +7,7 @@
 #include "PokemonInfoManager.h"
 #include "TitleLevel.h"
 #include "UITestLevel.h"
+#include "BagTestLevel.h"
 #include "WorldMapLevel.h"
 #include "BattleLevel.h"
 #include "MonsterBall.h"
@@ -34,7 +35,7 @@ void PokemonEngine::GameInit()
 
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
-	CreateLevel<UITestLevel>("BagTestLevel");
+	CreateLevel<BagTestLevel>("BagTestLevel");
 	CreateLevel<WorldMapLevel>("WorldMap");
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");

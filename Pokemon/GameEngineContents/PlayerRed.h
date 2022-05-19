@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineImage.h>
+#include <vector>
 
 enum class RedState
 {
@@ -18,7 +19,8 @@ enum class RedDir
 	Left,
 	Right,
 };
-// 설명 :
+
+class Pokemon;
 class PokemonTileMap;
 class PlayerRed : public GameEngineActor
 {
@@ -63,6 +65,10 @@ private:
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
+
+	//레드의 포켓몬과 아이템
+	std::vector<Pokemon*> MyPokemonList_;
+	std::vector<std::string> MyItemList_;
 
 	void Start() override;
 	void Update() override;
