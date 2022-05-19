@@ -41,7 +41,7 @@ void PokemonEngine::GameInit()
 
 }
 
-void PokemonEngine::GameLoop() 
+void PokemonEngine::GameLoop()
 {
 	if (GameEngineInput::GetInst()->IsDown("8") == true)
 	{
@@ -63,7 +63,8 @@ void PokemonEngine::GameLoop()
 	{
 		ChangeLevel("Battle");
 	}
-}dlk
+}
+
 void PokemonEngine::GameEnd() 
 {
 	PokemonInfoManager::Destroy();
