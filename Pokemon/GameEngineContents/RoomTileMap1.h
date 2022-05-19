@@ -1,18 +1,17 @@
 #pragma once
-#include <GameEngine/GameEngineActor.h>
-#include <GameEngine/GameEngineRendererTileMap.h>
+#include "PokemonTileMap.h"
 
-// 설명 :
-class RoomTileMap1 : public GameEngineActor
+// 설명 : 지우집 2층
+class RoomTileMap1 : public PokemonTileMap
 {
-//private:
-//	static RoomTileMap1* Inst_;
-//
-//public:
-//	static RoomTileMap1* GetInst()
-//	{
-//		return Inst_;
-//	}
+private:
+	static RoomTileMap1* Inst_;
+
+public:
+	static RoomTileMap1* GetInst()
+	{
+		return Inst_;
+	}
 
 public:
 	// constrcuter destructer
@@ -28,8 +27,6 @@ public:
 protected:
 
 private:
-	GameEngineRendererTileMap TileMap_;
-
 	void Start() override;
 };
 

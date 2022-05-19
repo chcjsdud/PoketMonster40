@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
+#include <GameEngine/GameEngineImage.h>
 
 enum class RedState
 {
@@ -17,6 +18,7 @@ enum class RedDir
 	Right,
 };
 // 설명 :
+class PokemonTileMap;
 class PlayerRed : public GameEngineActor
 {
 public:
@@ -46,6 +48,11 @@ private:
 	std::string		ChangeDirText_;
 
 	GameEngineRenderer* RedRender_;
+
+	// 타일맵 및 이동관련
+	PokemonTileMap* CurrentTileMap_;
+	float4 CurrentTilePos_;
+
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
@@ -54,11 +61,18 @@ private:
 	void Update() override;
 	void Render() override;
 
+	void PlayerSetMove(float4 _Value);
+	void PlayerMoveTile(int _X, int _Y);
+
 	void Camera();
 	void WMenuUISelect();
 
 	bool IsMoveKey();
 	void IsWMenuKey();
+
+
+	// FSM
+	float AnimTimer_;
 
 	void IdleUpdate();
 	void WalkUpdate();
@@ -68,4 +82,3 @@ private:
 	void WalkStart();
 	void RunStart();
 };
-

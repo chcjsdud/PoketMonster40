@@ -45,11 +45,6 @@ class GameEngineRendererTileMap
 	GameEngineActor* Master_;
 
 public:
-	void SetPivot(float4 _Pivot)
-	{
-
-	}
-
 	// Å¸ÀÏ¸ÊÀ» ¸Ê ÀüÃ¼¿¡ »ý¼º
 	void TileRangeSetting(int _X, int _Y, float4 _TileSize)
 	{
@@ -134,6 +129,7 @@ public:
 			FindTile->Renderer->SetImage(_Image);
 		}
 		FindTile->Renderer->SetPivot(GetWorldPostion(_X, _Y));
+		FindTile->Renderer->SetAlpha(150);
 
 		Tiles_[_Y][_X] = FindTile;
 

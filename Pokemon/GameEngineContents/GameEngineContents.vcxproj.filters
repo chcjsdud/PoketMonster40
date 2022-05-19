@@ -59,17 +59,24 @@
       <Filter>UI\Item</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
-    <ClCompile Include="WorldMapTileMap.cpp" />
-    <ClCompile Include="WorldTileMap1.cpp" />
     <ClCompile Include="BattlePokemon.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
-    <ClCompile Include="RoomTileMap1.cpp">
-      <Filter>WorldMap</Filter>
-    </ClCompile>
     <ClCompile Include="WorldTileMap1.cpp">
       <Filter>WorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonTileMap.cpp">
+      <Filter>WorldMap\TileMap\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap1.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap2.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldTileMap1.cpp">
+      <Filter>WorldMap\TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,16 +140,23 @@
     <ClInclude Include="MonsterBall.h">
       <Filter>UI\Item</Filter>
     </ClInclude>
-    <ClInclude Include="WorldMapTileMap.h" />
-    <ClInclude Include="WorldTileMap1.h" />
     <ClInclude Include="BattlePokemon.h">
       <Filter>Battle</Filter>
     </ClInclude>
-    <ClInclude Include="RoomTileMap1.h">
-      <Filter>WorldMap</Filter>
-    </ClInclude>
     <ClInclude Include="WorldTileMap1.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonTileMap.h">
+      <Filter>WorldMap\TileMap\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap1.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap2.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTileMap1.h">
+      <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +180,12 @@
     </Filter>
     <Filter Include="UI\Item">
       <UniqueIdentifier>{21f0c16f-8281-4f3d-a865-09acf02914fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldMap\TileMap">
+      <UniqueIdentifier>{3e57aee8-ddb6-4cdf-abf0-050d2545142d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldMap\TileMap\Base">
+      <UniqueIdentifier>{0e063a61-ecff-4cac-921d-6054f0319a62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

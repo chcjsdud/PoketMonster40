@@ -1,19 +1,17 @@
 #pragma once
-#include <GameEngine/GameEngineActor.h>
-#include <GameEngine/GameEngineRendererTileMap.h>
+#include "PokemonTileMap.h"
 
 // Ό³Έν :
-class WorldTileMap1 : public GameEngineActor
+class WorldTileMap1 : public PokemonTileMap
 {
-//private: 
-//	static WorldTileMap1* Inst_;
-//
-//public:
-//	static WorldTileMap1* GetInst()
-//	{
-//		return Inst_;
-//	}
-//
+private: 
+	static WorldTileMap1* Inst_;
+
+public:
+	static WorldTileMap1* GetInst()
+	{
+		return Inst_;
+	}
 
 public:
 	// constrcuter destructer
@@ -29,8 +27,6 @@ public:
 protected:
 
 private:
-	GameEngineRendererTileMap TileMap_;
-
 	void Start() override;
 };
 

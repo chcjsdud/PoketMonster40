@@ -5,12 +5,22 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+
 #include "RoomTileMap1.h"
+#include "RoomTileMap2.h"
+#include "WorldTileMap1.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 
 PlayerRed::PlayerRed()
-	: WMenuUICheck_(true)
+	: CurrentDir_()
+	, CurrentState_()
+	, CurrentTileMap_()
+	, RedRender_()
+	, AnimTimer_()
+	, WMenuArrowRender_()
+	, WMenuUIRender_()
+	, WMenuUICheck_(true)
 {
 }
 
@@ -39,6 +49,7 @@ void PlayerRed::ChangeState(RedState _State)
 			break;
 		}
 	}
+	AnimTimer_ = 0.0f;
 	CurrentState_ = _State;
 }
 
@@ -160,7 +171,8 @@ void PlayerRed::Start()
 	CurrentDir_ = RedDir::Down;
 	CurrentState_ = RedState::Idle;
 
-	//SetPosition(RoomTileMap1::GetInst().);
+	CurrentTileMap_ = RoomTileMap1::GetInst();
+	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
 }
 
 void PlayerRed::Update()
@@ -174,6 +186,38 @@ void PlayerRed::Update()
 
 void PlayerRed::Render()
 {
+}
+
+void PlayerRed::PlayerSetMove(float4 _Value)
+{
+	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
+	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
+
+	if (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y) == true)
+	{
+		SetPosition(CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y));
+		PlayerMoveTile(NextIndex.X, NextIndex.Y);
+	}
+}
+
+void PlayerRed::PlayerMoveTile(int _X, int _Y)
+{
+	if (RoomTileMap1::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 8 && _Y == 0)
+		{
+			CurrentTileMap_ = RoomTileMap2::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(10, 0));
+		}
+	} 
+	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
+	{
+
+	}
+	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
+	{
+
+	}
 }
 
 void PlayerRed::Camera()

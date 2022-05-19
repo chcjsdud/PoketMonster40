@@ -223,11 +223,19 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="PokemonTileMap.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Potion.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="RoomTileMap1.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap2.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -313,11 +321,19 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="PokemonTileMap.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Potion.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="RoomTileMap1.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap2.cpp">
       <SubType>
       </SubType>
     </ClCompile>
