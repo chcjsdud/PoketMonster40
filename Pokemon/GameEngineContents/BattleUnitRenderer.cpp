@@ -1,5 +1,6 @@
 #include "BattleUnitRenderer.h"
 #include "GameEngineBase/GameEngineWindow.h"
+#include "GameEngineBase/GameEngineTime.h"
 
 BattleUnitRenderer::BattleUnitRenderer() 
 	: PlayerPokemon_(nullptr)
@@ -10,6 +11,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, OpponentPokemonPos_({ 200, -105 })
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
+	, MoveSpeed(100.0f)
 {
 }
 
@@ -28,4 +30,10 @@ void BattleUnitRenderer::Start()
 
 void BattleUnitRenderer::Update()
 {
+	PlayerTime_ += GameEngineTime::GetDeltaTime()*MoveSpeed;
+	PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
+	if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
+	{
+		MoveSpeed = 0.0f;
+	}
 }

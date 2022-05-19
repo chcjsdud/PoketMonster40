@@ -34,5 +34,8 @@ private:
 	float4 OpponentPokemonPos_;
 	float4 PlayerRendererPos_;
 	float4 OpponentRenderer_Pos_;
+
+	float PlayerTime_;
+	float MoveSpeed;
 };
 
