@@ -42,7 +42,7 @@ void BattleLevel::Update()
 		return;
 		break;
 	case BattleState::Selecet:
-		// interface->KeyCheck();
+		Interface->MoveKey();
 		break;
 	case BattleState::Battle:
 		return;
@@ -55,7 +55,8 @@ void BattleLevel::Update()
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
-	BState_ = BattleState::Openning;
+	//BState_ = BattleState::Openning
+	BState_ = BattleState::Selecet;
 	OpenningEnd_ = false;
 	ShowOpenning();
 }
