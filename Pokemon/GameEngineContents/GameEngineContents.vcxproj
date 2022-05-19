@@ -179,11 +179,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="BattlePlayer.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="BattlePokemon.h">
+    <ClInclude Include="BattleUnitRenderer.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -280,11 +276,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="BattlePlayer.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="BattlePokemon.cpp">
+    <ClCompile Include="BattleUnitRenderer.cpp">
       <SubType>
       </SubType>
     </ClCompile>
