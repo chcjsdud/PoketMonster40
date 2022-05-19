@@ -27,14 +27,14 @@ public:
 	inline PokemonType GetMyType()
 	{
 		return Type_;
-	}
+	}	
 
 	inline void SetStatusEffect(StatusEffect _Status)
 	{
 		Effect_ = _Status;
 	}
 
-	inline StatusEffect SetStatusEffect()
+	inline StatusEffect GetStatusEffect()
 	{
 		return Effect_;
 	}
@@ -52,7 +52,7 @@ public:
 		Lv_ = _Lv;
 	}
 
-	inline int GetMyMaxLevel(int _MaxLv)
+	inline int GetMyMaxLevel()
 	{
 		return MaxLv_;
 	}
