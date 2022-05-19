@@ -1,7 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 
-
+class GameEngineContentFont;
 class PokemonInfo;
 class PokemonMenu : public GameEngineActor
 {
@@ -45,7 +45,8 @@ private:
 	void OnUI(); //UI가 켜질경우
 
 	//폰트 
-	class GameEngineContentFont* Fonts;
+	std::vector<GameEngineContentFont*> AllFonts_; //나중에 OffUI일때 모든 폰트 삭제하기
+	void InitFont();
 
 	//렌더러
 	GameEngineRenderer* BackgroundRenderer_;
@@ -69,5 +70,6 @@ private:
 	int RememberOrder_;
 	//임시 포켓몬 리스트
 	std::vector<PokemonInfo*> PokemonList_;
+
 };
 

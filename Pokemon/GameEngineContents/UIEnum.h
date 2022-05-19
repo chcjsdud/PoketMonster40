@@ -4,6 +4,6 @@ enum class UIRenderType
 {
 	Background,
 	Box,
-	Object,
-	Font
+	Font,
+	Object
 };

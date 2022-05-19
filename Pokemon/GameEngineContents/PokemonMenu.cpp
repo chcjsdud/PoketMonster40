@@ -6,6 +6,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "PokemonInfoManager.h"
 #include <GameEngine/GameEngineImageManager.h>
+#include <GameEngine/GameEngine.h>
 
 
 PokemonMenu::PokemonMenu():
@@ -36,9 +37,10 @@ void PokemonMenu::Start()
 
 	////폰트 출력 테스트
 	{
-		Fonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 		Fonts->SetPosition({ 16,540 });
 		Fonts->ShowString("Please choose a pokemon",true);
+		AllFonts_.push_back(Fonts);
 	}
 
 
@@ -47,6 +49,8 @@ void PokemonMenu::Start()
 void PokemonMenu::Update()
 {
 	UpdateState();	
+
+
 }
 
 void PokemonMenu::Render()
@@ -91,6 +95,13 @@ void PokemonMenu::Render()
 		CancelRenderer_->SetPivot({ 732,530 });
 		CancelRenderer_->SetImage("PoketmonMenu_10.bmp");
 	}
+
+	//LPPOINT mousePos; // 마우스 좌표를 저장할 변수 생성. POINT 자료형의 포인터형임.
+	//mousePos = new POINT;
+	//GetCursorPos(mousePos); // 바탕화면에서의 마우스 좌표를 가져옴
+	//ScreenToClient(nullptr, mousePos);
+	//int x = mousePos->x;
+	//TextOut(GameEngine::BackBufferDC(), 100, 100, std::to_string(x).c_str(), std::to_string(x).length());
 }
 
 
@@ -275,19 +286,84 @@ void PokemonMenu::GetPlayerPokemon()
 		{
 			PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
 			PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
+
+
 		}
-		
 	}
 }
 
 void PokemonMenu::OnUI()
 {
 	GetPlayerPokemon();
+	InitFont();
 	for (int i = 0; i < PokemonNumber_; i++)
 	{
 		BoxRenderer_[i]->On();
 		PokemonRenderer_[i]->On();
 	}
+
+}
+
+void PokemonMenu::InitFont()
+{
+	//첫번째 포켓몬 폰트
+	{
+		//이름
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 75,126 });
+			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//레벨
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 190,175 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMyLevel()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//현재 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 150,248 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//최대 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 260,248 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMaxHp()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+	}
+	
+	//2째 ~ 그뒤 포켓몬
+	for (int i = 1; i < PokemonList_.size(); i++)
+	{
+		//PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
+		//이름
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 416,static_cast<float>(-60 + 96 * i )});
+			NewFonts->ShowString(PokemonList_[i]->GetNameCopy(), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//레벨
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+	}
+
 
 }
 
