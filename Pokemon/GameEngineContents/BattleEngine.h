@@ -17,7 +17,7 @@ public:
 	BattleEngine& operator=(const BattleEngine& _Other) = delete;
 	BattleEngine& operator=(BattleEngine&& _Other) noexcept = delete;
 
-	void BattleTurn(Pokemon* _HitPokemon, Pokemon* _TargetPokemon, const PokemonSkill* _Skill);
+	void BattleTurn(PokemonInfo* _HitPokemon, PokemonInfo* _TargetPokemon, const PokemonSkill* _Skill);
 
 protected:
 

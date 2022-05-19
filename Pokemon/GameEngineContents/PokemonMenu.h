@@ -2,7 +2,7 @@
 #include <GameEngine/GameEngineActor.h>
 
 
-class Pokemon;
+class PokemonInfo;
 class PokemonMenu : public GameEngineActor
 {
 public:
@@ -43,6 +43,6 @@ private:
 	//왼쪽 오른쪽 버튼을 눌렀을 때 기억하는 키 내용
 	int RememberOrder_;
 	//임시 포켓몬 리스트
-	std::vector<Pokemon*> PokemonList_;
+	std::vector<PokemonInfo*> PokemonList_;
 };
 

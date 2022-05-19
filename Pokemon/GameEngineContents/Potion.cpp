@@ -9,7 +9,7 @@ Potion::~Potion()
 {
 }
 
-void Potion::Recovery(Pokemon* _MyPokemon)
+void Potion::Recovery(PokemonInfo* _MyPokemon)
 {
 	_MyPokemon->PlusHp(GetValue());
 }

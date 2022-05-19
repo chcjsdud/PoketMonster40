@@ -7,3 +7,17 @@ enum class BattleOrderMenu
 	Pokemon,
 	Run
 };
+
+enum class BattleState
+{
+	Openning,
+	Battle,
+	Selecet,
+	Endding
+};
+
+enum class BattleTrun
+{
+	Player,
+	Opponent
+};

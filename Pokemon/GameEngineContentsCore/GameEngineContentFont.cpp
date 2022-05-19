@@ -29,7 +29,7 @@ void GameEngineContentFont::Update()
 	{
 		if (ShowAllText_ == true)
 		{
-			while (!StringQueue_.empty())
+			while (!StringQueue_.empty() && ShowAllText_ == true)
 			{
 				for (size_t i = 0; i < CurrentString_.size(); i++)
 				{
@@ -107,6 +107,7 @@ void GameEngineContentFont::Update()
 						{
 							CurrentString_ = StringQueue_.front();
 						}
+						break;
 					}
 				}
 
