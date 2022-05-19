@@ -5,7 +5,7 @@
 #include <GameEngineBase/GameEngineString.h>
 
 class Item;
-class Pokemon;
+class PokemonInfo;
 class PokemonSkill;
 class PokemonInfoManager
 {
@@ -39,7 +39,7 @@ public:
 	void Reset();
 	void Update();
 	
-	Pokemon* FindPokemon(std::string _Key);
+	PokemonInfo* FindPokemonInfo(std::string _Key);
 	PokemonSkill* FindSkill(std::string _Key);
 	Item* FindItem(std::string _Key);
 
@@ -60,11 +60,11 @@ public:
 protected:
 
 private:
-	std::map<std::string, Pokemon*> AllPokemonList_;
+	std::map<std::string, PokemonInfo*> AllPokemonInfoList_;
 	std::map<std::string, PokemonSkill*> AllPokemonSkillList_;
 	std::map<std::string, Item*> AllItemList_;
 
-	Pokemon* CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
+	PokemonInfo* CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill(const std::string _Key, int Value, PokemonType _Type, SkillType _SkillType);
 
 

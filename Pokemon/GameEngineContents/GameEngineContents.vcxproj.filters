@@ -17,7 +17,7 @@
     <ClCompile Include="PokemonInfoManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Pokemon.cpp">
+    <ClCompile Include="PokemonInfo.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="Item.cpp">
@@ -72,6 +72,9 @@
     <ClCompile Include="WorldTileMap1.cpp">
       <Filter>WorldMap\TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="Pokemon.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
     <ClCompile Include="BattleUnitRenderer.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
@@ -97,7 +100,7 @@
     <ClInclude Include="PokemonInfoManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Pokemon.h">
+    <ClInclude Include="PokemonInfo.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
@@ -148,12 +151,6 @@
     </ClInclude>
     <ClInclude Include="WorldTileMap1.h">
       <Filter>WorldMap\TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleUnitRenderer.h">
-      <Filter>Battle</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleEnum.h">
-      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

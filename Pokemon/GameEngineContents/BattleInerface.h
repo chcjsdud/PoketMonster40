@@ -34,10 +34,12 @@ public:
 	}
 
 protected:
-	GameEngineRenderer* InterfaceImage;
 
 private:
+	GameEngineRenderer* InterfaceImage;
 	GameEngineRenderer* Select;
+	GameEngineRenderer* MyHPUI;
+	GameEngineRenderer* EnemyHPUI;
 
 	BattleInerface* MainInterface;
 
@@ -46,5 +48,6 @@ public:
 	void Render() override;
 	void Update() override;
 
+	void MoveKey();
 };
 
