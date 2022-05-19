@@ -1,7 +1,10 @@
 #include "BattleInerface.h"
 #include <GameEngineBase/GameEngineInput.h>
+#include <GameEngineBase/GameEngineTime.h>
+
 
 BattleInerface::BattleInerface()
+	:TimeCheck(0.0f)
 {
 
 }
@@ -26,6 +29,18 @@ void BattleInerface::Start()
 
 	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",1);
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",1);
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 2);
+	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 2);
+	EXP = CreateRenderer("FriendlyHPExp4.bmp", 2);
+
+	//=========랜더러 위치 설정==========//
+	Select->SetPivot({ -190.0f, -25.0f });
+
+	MyHPUI->SetPivot({ 0.0f,-170.0f });
+	EnemyHPUI->SetPivot({ -450.0f,-430.0f });
+	EnemyHP->SetPivot({ -406.0f,-430.0f });
+	MyHP->SetPivot({ 80.0f, -170.0f });
+	EXP->SetPivot({48.0f,-170.0f});
 }
 
 void BattleInerface::Render()
@@ -35,6 +50,8 @@ void BattleInerface::Render()
 void BattleInerface::Update()
 {
 	MoveKey();
+	DoomChit();
+	TimeCheck += GameEngineTime::GetDeltaTime();
 }
 
 
@@ -78,5 +95,26 @@ void BattleInerface::MoveKey()
 	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
 	{	//Run에서 Pokemon으로
 		GetSelect()->SetPivot({ -190.0f,35.0f });
+	}
+}
+
+void BattleInerface::DoomChit()
+{
+	if ((int)TimeCheck % 2 == 0)
+	{
+		MyHPUI->SetPivot({ 0.0f,-174.0f });
+		EnemyHPUI->SetPivot({ -450.0f,-434.0f });
+		EnemyHP->SetPivot({ -406.0f,-434.0f });
+		MyHP->SetPivot({ 80.0f, -174.0f });
+		EXP->SetPivot({ 48.0f,-174.0f });
+	}
+
+	if ((int)TimeCheck % 2 == 1)
+	{
+		MyHPUI->SetPivot({ 0.0f,-170.0f });
+		EnemyHPUI->SetPivot({ -450.0f,-430.0f });
+		EnemyHP->SetPivot({ -406.0f,-430.0f });
+		MyHP->SetPivot({ 80.0f, -170.0f });
+		EXP->SetPivot({ 48.0f,-170.0f });
 	}
 }

@@ -48,8 +48,13 @@ private:
 	GameEngineRenderer* Select;
 	GameEngineRenderer* MyHPUI;
 	GameEngineRenderer* EnemyHPUI;
+	GameEngineRenderer* MyHP;
+	GameEngineRenderer* EnemyHP;
+	GameEngineRenderer* EXP;
 
 	BattleInerface* MainInterface;
+
+	float TimeCheck;
 
 public:
 	void Start() override;
@@ -57,5 +62,6 @@ public:
 	void Update() override;
 
 	void MoveKey();
+	void DoomChit();
 };
 
