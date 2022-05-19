@@ -21,7 +21,7 @@ void TitleLevel::Loading()
 	{
 		Fonts = CreateActor<GameEngineContentFont>();
 		Fonts->SetPosition({ 200, 200 });
-		Fonts->ShowString("Very Very \\ABCDEFGHIJ \\IntotheStage \\Red Is Red \\Blue Is Red! ");
+		Fonts->ShowString("Very Very \\ABCDEFGHIJ \\IntotheStage \\Red Is Red \\Blue Is Red! ", true);
 		// \\ 시 문장 한 줄 뛰우기
 	}
 }
