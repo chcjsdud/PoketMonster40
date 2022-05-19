@@ -5,6 +5,12 @@
 class PokemonInfo;
 class PokemonMenu : public GameEngineActor
 {
+	enum class PokemonMenuType
+	{
+		SelectPokemon,
+		SelectAction,
+		Max
+	};
 public:
 	PokemonMenu();
 	~PokemonMenu();
@@ -21,6 +27,19 @@ protected:
 	void Render() override;
 
 private:
+
+	//Fsm
+	void ChangeState(PokemonMenuType _Type);
+	void UpdateState();
+
+	void SelectPokemonStart();
+	void SelectPokemonUpdate();
+	
+	void SelectActionStart();
+	void SelectActionUpdate();
+
+	PokemonMenuType CurState_;
+
 	void InitRenderer();
 	void GetPlayerPokemon();
 	void OnUI(); //UI가 켜질경우
@@ -34,6 +53,12 @@ private:
 	GameEngineRenderer* DialogRenderer_;
 	GameEngineRenderer* CancelRenderer_;
 	GameEngineRenderer* PokemonRenderer_[6];
+
+	//포켓몬 아이콘 관련
+	float CurTickTime_;
+	bool IsJump_;
+	void IconJump(GameEngineRenderer* _Render);
+	void ResetJump();
 
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
 	//가지고 있는 포켓몬 수

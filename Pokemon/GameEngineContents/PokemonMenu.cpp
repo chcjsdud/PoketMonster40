@@ -5,6 +5,7 @@
 #include "Pokemon.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "PokemonInfoManager.h"
+#include <GameEngine/GameEngineImageManager.h>
 
 
 PokemonMenu::PokemonMenu():
@@ -13,7 +14,10 @@ PokemonMenu::PokemonMenu():
 	DialogRenderer_(nullptr),
 	CancelRenderer_(nullptr),
 	CurrentOrder_(0),
-	RememberOrder_(0)
+	RememberOrder_(0),
+	CurState_(PokemonMenuType::SelectPokemon),
+	CurTickTime_(0),
+	IsJump_(0)
 {
 }
 
@@ -23,12 +27,16 @@ PokemonMenu::~PokemonMenu()
 
 void PokemonMenu::Start()
 {
+	//NullImage_Ani 슬라이스
+	GameEngineImage* NullImage = GameEngineImageManager::GetInst()->Find("NullImage_Ani.bmp");
+	NullImage->Cut({ 32,32 });
+
 	InitRenderer();
 	OnUI();
 
 	////폰트 출력 테스트
 	{
-		Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
+		Fonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 		Fonts->SetPosition({ 16,540 });
 		Fonts->ShowString("Please choose a pokemon",true);
 	}
@@ -38,81 +46,39 @@ void PokemonMenu::Start()
 
 void PokemonMenu::Update()
 {
-	if (GameEngineInput::GetInst()->IsDown("Down") == true)
-	{
-		if (CurrentOrder_ >= PokemonNumber_)
-		{
-			CurrentOrder_ = 0;
-		}
-		else
-		{
-			CurrentOrder_++;
-		}
-	}
-
-	if (GameEngineInput::GetInst()->IsDown("Up") == true)
-	{
-		if (CurrentOrder_ <= 0)
-		{
-			CurrentOrder_ = PokemonNumber_;
-		}
-		else
-		{
-			CurrentOrder_--;
-		}
-	}
-
-	if (GameEngineInput::GetInst()->IsDown("Left") == true)
-	{
-		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
-		{
-			RememberOrder_ = CurrentOrder_;
-			CurrentOrder_ = 0;
-		}
-	}
-
-	if (GameEngineInput::GetInst()->IsDown("Right") == true)
-	{
-		if (CurrentOrder_== 0)
-		{
-			if (RememberOrder_ == 0)
-			{
-				RememberOrder_ = 1;
-			}
-			CurrentOrder_ = RememberOrder_;
-		}
-	}
+	UpdateState();	
 }
 
 void PokemonMenu::Render()
 {
 	//포켓몬 이미지 선택 렌더링
-	if (CurrentOrder_ == 0)
+	if (CurrentOrder_ == 0) //선택된 경우
 	{
 		BoxRenderer_[0]->SetPivot({ 8,72 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스
-		PokemonRenderer_[0]->SetImage(PokemonList_[0]->GetMyIcon());
-		PokemonRenderer_[0]->SetIndex(0);
+		IconJump(PokemonRenderer_[0]);
 	}
+	
 	else
 	{
 		BoxRenderer_[0]->SetPivot({ 8,80 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_14.bmp"); //커다란 박스
-		PokemonRenderer_[0]->SetImage(PokemonList_[0]->GetMyIcon());
-		PokemonRenderer_[0]->SetIndex(0);
+		PokemonRenderer_[0]->SetPivot({ 65,200 });
 	}
 
 	for (int i = 1; i < 6; i++)
 	{
-		if (CurrentOrder_ == i)
+		if (CurrentOrder_ == i) //선택된 경우
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-60 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_13.bmp"); //작은 박스
+			IconJump(PokemonRenderer_[i]);
 		}
-		else
+		else //선택 안된 경우
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-56 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_12.bmp"); //작은 박스
+			PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
 		}	
 	}
 	if (CurrentOrder_ == PokemonNumber_)
@@ -126,6 +92,112 @@ void PokemonMenu::Render()
 		CancelRenderer_->SetImage("PoketmonMenu_10.bmp");
 	}
 }
+
+
+
+void PokemonMenu::ChangeState(PokemonMenuType _Type)
+{
+	if (CurState_ == _Type)
+	{
+		return;
+	}
+
+	switch (_Type)
+	{
+	case PokemonMenu::PokemonMenuType::SelectPokemon:
+		SelectPokemonStart();
+		break;
+	case PokemonMenu::PokemonMenuType::SelectAction:
+		SelectActionStart();
+		break;
+	default:
+		break;
+	}
+	CurState_ = _Type;
+}
+
+void PokemonMenu::UpdateState()
+{
+	switch (CurState_)
+	{
+	case PokemonMenu::PokemonMenuType::SelectPokemon:
+		SelectPokemonUpdate();
+		break;
+	case PokemonMenu::PokemonMenuType::SelectAction:
+		SelectActionUpdate();
+		break;
+	default:
+		break;
+	}
+}
+
+void PokemonMenu::SelectPokemonStart()
+{
+	DialogRenderer_->On();
+}
+
+void PokemonMenu::SelectPokemonUpdate()
+{
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
+	{
+		if (CurrentOrder_ >= PokemonNumber_)
+		{
+			CurrentOrder_ = 0;
+		}
+		else
+		{
+			ResetJump();
+			CurrentOrder_++;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (CurrentOrder_ <= 0)
+		{
+			CurrentOrder_ = PokemonNumber_;
+		}
+		else
+		{
+			ResetJump();
+			CurrentOrder_--;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Left") == true)
+	{
+		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
+		{
+			ResetJump();
+			RememberOrder_ = CurrentOrder_;
+			CurrentOrder_ = 0;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Right") == true)
+	{
+		if (CurrentOrder_ == 0)
+		{
+			if (RememberOrder_ == 0)
+			{
+				ResetJump();
+				RememberOrder_ = 1;
+			}
+			ResetJump();
+			CurrentOrder_ = RememberOrder_;
+		}
+	}
+}
+
+void PokemonMenu::SelectActionStart()
+{
+}
+
+void PokemonMenu::SelectActionUpdate()
+{
+}
+
+
 
 void PokemonMenu::InitRenderer()
 {
@@ -168,15 +240,17 @@ void PokemonMenu::InitRenderer()
 	CancelRenderer_->SetTransColor(RGB(255, 0, 255));
 
 	//포켓몬 아이콘
-	PokemonRenderer_[0] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::BOT, { 50,80 });
-	PokemonRenderer_[0]->SetImage("Nullimage.bmp");
+	PokemonRenderer_[0] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::BOT, { 65,200 });
+	PokemonRenderer_[0]->CreateAnimation("Nullimage_Ani.bmp", "Null", 0, 1,0.1f,false);
+	PokemonRenderer_[0]->ChangeAnimation("Null");
 	PokemonRenderer_[0]->SetTransColor(RGB(255, 0, 255));
 	PokemonRenderer_[0]->Off();
 
 	for (int i = 1; i < 6; i++)
 	{
-		PokemonRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::BOT, { 352,static_cast<float>(-56 + 96 * i) });
-		PokemonRenderer_[i]->SetImage("Nullimage.bmp");
+		PokemonRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::BOT, { 406,static_cast<float>(40 + 96 * i) });
+		PokemonRenderer_[i]->CreateAnimation("Nullimage_Ani.bmp", "Null", 0, 1, 0.1f, false);
+		PokemonRenderer_[i]->ChangeAnimation("Null");
 		PokemonRenderer_[i]->SetTransColor(RGB(255, 0, 255));
 		PokemonRenderer_[i]->Off();
 	}
@@ -195,6 +269,14 @@ void PokemonMenu::GetPlayerPokemon()
 		PokemonList_.push_back(Squirtle);
 		PokemonList_.push_back(Bulbasaur);
 		PokemonNumber_ = 3;
+
+		//포켓몬 이름의 아이콘 애니메이션을 추가해 준다
+		for (int i = 0; i < PokemonList_.size(); i++)
+		{
+			PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
+			PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
+		}
+		
 	}
 }
 
@@ -207,6 +289,31 @@ void PokemonMenu::OnUI()
 		PokemonRenderer_[i]->On();
 	}
 
+}
+
+void PokemonMenu::IconJump(GameEngineRenderer* _Render)
+{
+	CurTickTime_ += GameEngineTime::GetDeltaTime();
+	if (CurTickTime_ > 0.15f)
+	{
+		CurTickTime_ = 0;
+		if (IsJump_ == true)
+		{
+			_Render->SetPivot({ _Render->GetPivot().x,_Render->GetPivot().y + 30});
+			IsJump_ = false;	
+		}
+		else
+		{
+			_Render->SetPivot({ _Render->GetPivot().x,_Render->GetPivot().y - 30 });
+			IsJump_ = true;
+		}
+	}
+}
+
+void PokemonMenu::ResetJump()
+{
+	IsJump_ = false;
+	CurTickTime_ = 0;
 }
 
 
