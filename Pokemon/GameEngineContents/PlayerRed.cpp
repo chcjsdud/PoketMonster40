@@ -29,6 +29,7 @@ PlayerRed::PlayerRed()
 	, MyItemList_{}
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
+	, IsMoveCamera_(false)
 {
 	MyPokemonList_.resize(6);
 }
@@ -138,6 +139,7 @@ void PlayerRed::FadeIn()
 			Alpha_ = 255;
 			FadeRender_->Off();
 			IsFadeIn_ = false;
+			IsMoveCamera_ = true;
 		}
 	}
 }
@@ -231,13 +233,14 @@ void PlayerRed::Start()
 void PlayerRed::Update()
 {
 	DirAnimationCheck();
+	Camera();
 	StateUpdate();
 	IsWMenuKey();
 	WMenuUISelect();
 	MoveAnim();
 	FadeIn();
 	FadeOut();
-	Camera();
+	//Camera();
 }
 
 void PlayerRed::Render()
@@ -267,8 +270,9 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 		{
 			IsFadeIn_ = true;
 			Alpha_ = 0;
-			//CurrentTileMap_ = RoomTileMap2::GetInst();
-			//SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+			CurrentTileMap_ = RoomTileMap2::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+			//MoveCamera(9, 0);
 		}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
@@ -359,6 +363,14 @@ void PlayerRed::Camera()
 		float4 CurrentCameraPos = GetLevel()->GetCameraPos();
 		CurrentCameraPos.y = GetLevel()->GetCameraPos().y - (GetLevel()->GetCameraPos().y + CameraRectY - WorldMapScaleY);
 		GetLevel()->SetCameraPos(CurrentCameraPos);
+	}
+}
+
+void PlayerRed::MoveCamera(int _X, int _Y)
+{
+	if (true == IsMoveCamera_)
+	{
+		SetPosition(CurrentTileMap_->GetWorldPostion(_X, _Y));
 	}
 }
 
@@ -488,8 +500,8 @@ void PlayerRed::MoveAnim()
 	}
 
 	LerpTime_ += GameEngineTime::GetDeltaTime();
-	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_ * 5);
-	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_ * 5);
+	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_ );
+	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_ );
 
 	SetPosition({ LerpX_,LerpY_ });
 }

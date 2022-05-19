@@ -59,6 +59,7 @@ private:
 	GameEngineRenderer* FadeRender_;
 	bool IsFadeIn_;
 	bool IsFadeOut_;
+	bool IsMoveCamera_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;
@@ -85,6 +86,7 @@ private:
 	void PlayerMoveTile(int _X, int _Y);
 
 	void Camera();
+	void MoveCamera(int _X, int _Y);
 	void WMenuUISelect();
 
 	bool IsMoveKey();
