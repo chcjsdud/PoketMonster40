@@ -5,6 +5,7 @@
 #include <GameEngineBase/GameEngineString.h>
 
 class Item;
+class Pokemon;
 class PokemonInfo;
 class PokemonSkill;
 class PokemonInfoManager
@@ -64,9 +65,8 @@ private:
 	std::map<std::string, PokemonSkill*> AllPokemonSkillList_;
 	std::map<std::string, Item*> AllItemList_;
 
+	Pokemon* CreatePokemon(const std::string _Name);
 	PokemonInfo* CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
 	PokemonSkill* CreateSkill(const std::string _Key, int Value, PokemonType _Type, SkillType _SkillType);
-
-
 };
 

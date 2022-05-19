@@ -1,5 +1,6 @@
 #include "PokemonInfoManager.h"
 #include "Pokemon.h"
+#include "PokemonInfo.h"
 #include "PokemonSkill.h"
 #include "MonsterBall.h"
 #include "Potion.h"
@@ -89,7 +90,7 @@ void PokemonInfoManager::Reset()
 
 void PokemonInfoManager::Update()
 {
-
+	
 }
 
 PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string _Key)
@@ -134,33 +135,61 @@ Item* PokemonInfoManager::FindItem(std::string _Key)
 	return FindIter->second;
 }
 
+Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Name)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Name);
+
+	Pokemon* NewPokemon = new Pokemon();
+	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
+
+	NewPokemon->GetInfo()->SetName(Key);
+	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
+	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
+	NewPokemon->GetInfo()->SetMyLevel(MyInfo->GetMyLevel());
+	NewPokemon->GetInfo()->SetMyMaxLevel(MyInfo->GetMyMaxLevel());
+	NewPokemon->GetInfo()->SetHp(MyInfo->GetHp());
+	NewPokemon->GetInfo()->SetMaxHp(MyInfo->GetMaxHp());
+	NewPokemon->GetInfo()->SetExp(MyInfo->GetExp());
+	NewPokemon->GetInfo()->SetMaxExp(MyInfo->GetMaxExp());
+	NewPokemon->GetInfo()->SetAtt(MyInfo->GetAtt());
+	NewPokemon->GetInfo()->SetDef(MyInfo->GetDef());
+	NewPokemon->GetInfo()->SetSpAtt(MyInfo->GetSpAtt());
+	NewPokemon->GetInfo()->SetSpDef(MyInfo->GetSpDef());
+	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
+	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
+	NewPokemon->GetInfo()->SetIsGender(MyInfo->GetGender());
+	NewPokemon->GetInfo()->SetPokemonImage(Key);
+
+	return NewPokemon;
+}
+
 PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
-	PokemonInfo* NewPokemon = new PokemonInfo();
+	PokemonInfo* NewPokemonInfo = new PokemonInfo();
 
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
-	NewPokemon->SetName(Key);
-	NewPokemon->SetMyType(_Type);
-	NewPokemon->SetStatusEffect(StatusEffect::NONE);
-	NewPokemon->SetMyLevel(_Lv);
-	NewPokemon->SetMyMaxLevel(100);
-	NewPokemon->SetHp(100);
-	NewPokemon->SetMaxHp(100);
-	NewPokemon->SetExp(0);
-	NewPokemon->SetMaxExp(100);
-	NewPokemon->SetAtt(_Att);
-	NewPokemon->SetDef(_Def);
-	NewPokemon->SetSpAtt(_SpAtt);
-	NewPokemon->SetSpDef(_SpDef);
-	NewPokemon->SetSpeed(_Speed);
-	NewPokemon->SetIsPlayer(false);
-	NewPokemon->SetIsGender(false);
-	NewPokemon->SetPokemonImage(_Key);
+	NewPokemonInfo->SetName(Key);
+	NewPokemonInfo->SetMyType(_Type);
+	NewPokemonInfo->SetStatusEffect(StatusEffect::NONE);
+	NewPokemonInfo->SetMyLevel(_Lv);
+	NewPokemonInfo->SetMyMaxLevel(100);
+	NewPokemonInfo->SetHp(100);
+	NewPokemonInfo->SetMaxHp(100);
+	NewPokemonInfo->SetExp(0);
+	NewPokemonInfo->SetMaxExp(100);
+	NewPokemonInfo->SetAtt(_Att);
+	NewPokemonInfo->SetDef(_Def);
+	NewPokemonInfo->SetSpAtt(_SpAtt);
+	NewPokemonInfo->SetSpDef(_SpDef);
+	NewPokemonInfo->SetSpeed(_Speed);
+	NewPokemonInfo->SetIsPlayer(false);
+	NewPokemonInfo->SetIsGender(false);
+	NewPokemonInfo->SetPokemonImage(_Key);
 
-	AllPokemonInfoList_.insert(std::make_pair(Key, NewPokemon));
+	AllPokemonInfoList_.insert(std::make_pair(Key, NewPokemonInfo));
 
-	return NewPokemon;
+	return NewPokemonInfo;
 }
 
 PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value, PokemonType _Type, SkillType _SkillType)

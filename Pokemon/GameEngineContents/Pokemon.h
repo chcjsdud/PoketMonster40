@@ -18,9 +18,14 @@ public:
 	void Start() override;
 	void Update() override;
 
+	inline PokemonInfo* GetInfo()
+	{
+		return MyInfo_;
+	}
+
 protected:
 
 private:
-	PokemonInfo MyInfo_;
+	PokemonInfo* MyInfo_;
 };
 

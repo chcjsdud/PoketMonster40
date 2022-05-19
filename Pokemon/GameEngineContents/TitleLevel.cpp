@@ -3,6 +3,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <string>
 #include <GameEngineBase/GameEngineInput.h>
+#include "Pokemon.h"
 
 TitleLevel::TitleLevel() 
 {
