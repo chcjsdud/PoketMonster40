@@ -32,6 +32,14 @@ public:
 	{
 		return Select;
 	}
+	GameEngineRenderer* GetEnemyHPUI()
+	{
+		return EnemyHPUI;
+	}
+	GameEngineRenderer* GetMyHPUI()
+	{
+		return MyHPUI;
+	}
 
 protected:
 
