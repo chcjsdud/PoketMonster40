@@ -207,6 +207,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="PokemonInfo.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PokemonEngine.h">
       <SubType>
       </SubType>
@@ -302,6 +306,10 @@
     </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
     <ClCompile Include="Pokemon.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PokemonInfo.cpp">
       <SubType>
       </SubType>
     </ClCompile>

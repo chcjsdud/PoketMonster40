@@ -15,7 +15,7 @@ public:
 	Potion& operator=(const Potion& _Other) = delete;
 	Potion& operator=(Potion&& _Other) noexcept = delete;
 	
-	void Recovery(class Pokemon* _MyPokemon);
+	void Recovery(class PokemonInfo* _MyPokemon);
 
 protected:
 

@@ -13,8 +13,8 @@ PokemonInfoManager::PokemonInfoManager()
 PokemonInfoManager::~PokemonInfoManager() 
 {
 	{
-		std::map<std::string, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
-		std::map<std::string, Pokemon*>::iterator EndIter = AllPokemonList_.end();
+		std::map<std::string, PokemonInfo*>::iterator StartIter = AllPokemonInfoList_.begin();
+		std::map<std::string, PokemonInfo*>::iterator EndIter = AllPokemonInfoList_.end();
 
 		for (; StartIter != EndIter; ++StartIter)
 		{
@@ -24,7 +24,6 @@ PokemonInfoManager::~PokemonInfoManager()
 				StartIter->second = nullptr;
 			}
 		}
-
 	}
 
 	{
@@ -60,15 +59,15 @@ void PokemonInfoManager::Reset()
 {
 	{
 		//Charmander: 颇捞府
-		CreatePokemon("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
+		CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
 		//Squirtle: 部何扁
-		CreatePokemon("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
+		CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
 		//Bulbasaur: 捞惑秦揪
-		CreatePokemon("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
+		CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
 		//Pidgey: 备备
-		CreatePokemon("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
+		CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
 		//Rattata: 部房
-		CreatePokemon("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
+		CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
 	}
 
 	{
@@ -93,13 +92,13 @@ void PokemonInfoManager::Update()
 
 }
 
-Pokemon* PokemonInfoManager::FindPokemon(const std::string _Key)
+PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string _Key)
 {
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
-	std::map<std::string, Pokemon*>::iterator FindIter = AllPokemonList_.find(Key);
+	std::map<std::string, PokemonInfo*>::iterator FindIter = AllPokemonInfoList_.find(Key);
 
-	if (FindIter == AllPokemonList_.end())
+	if (FindIter == AllPokemonInfoList_.end())
 	{
 		return nullptr;
 	}
@@ -135,9 +134,9 @@ Item* PokemonInfoManager::FindItem(std::string _Key)
 	return FindIter->second;
 }
 
-Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
+PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
-	Pokemon* NewPokemon = new Pokemon();
+	PokemonInfo* NewPokemon = new PokemonInfo();
 
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
@@ -159,7 +158,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Key, PokemonType _
 	NewPokemon->SetIsGender(false);
 	NewPokemon->SetPokemonImage(_Key);
 
-	AllPokemonList_.insert(std::make_pair(Key, NewPokemon));
+	AllPokemonInfoList_.insert(std::make_pair(Key, NewPokemon));
 
 	return NewPokemon;
 }

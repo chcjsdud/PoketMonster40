@@ -187,9 +187,9 @@ void PokemonMenu::GetPlayerPokemon()
 
 	//여기서 플레이어 리스트를 분해하고 포캐몬 개수만큼 PokemonNumber을 올려준다.
 	{
-		Pokemon* Charmander = PokemonInfoManager::GetInst().FindPokemon("Charmander");
-		Pokemon* Squirtle = PokemonInfoManager::GetInst().FindPokemon("Squirtle"); //Bulbasaur
-		Pokemon* Bulbasaur = PokemonInfoManager::GetInst().FindPokemon("Bulbasaur");
+		PokemonInfo* Charmander = PokemonInfoManager::GetInst().FindPokemonInfo("Charmander");
+		PokemonInfo* Squirtle = PokemonInfoManager::GetInst().FindPokemonInfo("Squirtle"); //Bulbasaur
+		PokemonInfo* Bulbasaur = PokemonInfoManager::GetInst().FindPokemonInfo("Bulbasaur");
 
 		PokemonList_.push_back(Charmander);
 		PokemonList_.push_back(Squirtle);
