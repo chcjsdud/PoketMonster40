@@ -107,11 +107,9 @@ void PokemonInfoManager::Update()
 	
 }
 
-PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string _Key)
+PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string& _Key)
 {
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-	std::map<std::string, PokemonInfo*>::iterator FindIter = AllPokemonInfoList_.find(Key);
+	std::map<std::string, PokemonInfo*>::iterator FindIter = AllPokemonInfoList_.find(_Key);
 
 	if (FindIter == AllPokemonInfoList_.end())
 	{
@@ -121,7 +119,7 @@ PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string _Key)
 	return FindIter->second;
 }
 
-PokemonSkill* PokemonInfoManager::FindSkill(std::string _Key)
+PokemonSkill* PokemonInfoManager::FindSkill(const std::string& _Key)
 {
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
@@ -135,7 +133,7 @@ PokemonSkill* PokemonInfoManager::FindSkill(std::string _Key)
 	return FindIter->second;
 }
 
-Item* PokemonInfoManager::FindItem(std::string _Key)
+Item* PokemonInfoManager::FindItem(const std::string& _Key)
 {
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
@@ -149,14 +147,12 @@ Item* PokemonInfoManager::FindItem(std::string _Key)
 	return FindIter->second;
 }
 
-Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Name)
+Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 {
-	std::string Key = GameEngineString::ToUpperReturn(_Name);
-
 	Pokemon* NewPokemon = new Pokemon();
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
-	NewPokemon->GetInfo()->SetName(Key);
+	NewPokemon->GetInfo()->SetName(_Name);
 	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
 	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
 	NewPokemon->GetInfo()->SetMyLevel(MyInfo->GetMyLevel());
@@ -172,18 +168,16 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string _Name)
 	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
 	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
 	NewPokemon->GetInfo()->SetIsGender(MyInfo->GetGender());
-	NewPokemon->GetInfo()->SetPokemonImage(Key);
+	NewPokemon->GetInfo()->SetPokemonImage(_Name);
 
 	return NewPokemon;
 }
 
-PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
+PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
 	PokemonInfo* NewPokemonInfo = new PokemonInfo();
 
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-	NewPokemonInfo->SetName(Key);
+	NewPokemonInfo->SetName(_Key);
 	NewPokemonInfo->SetMyType(_Type);
 	NewPokemonInfo->SetStatusEffect(StatusEffect::NONE);
 	NewPokemonInfo->SetMyLevel(_Lv);
@@ -201,12 +195,12 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string _Key, Pokem
 	NewPokemonInfo->SetIsGender(false);
 	NewPokemonInfo->SetPokemonImage(_Key);
 
-	AllPokemonInfoList_.insert(std::make_pair(Key, NewPokemonInfo));
+	AllPokemonInfoList_.insert(std::make_pair(_Key, NewPokemonInfo));
 
 	return NewPokemonInfo;
 }
 
-PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
+PokemonSkill* PokemonInfoManager::CreateSkill(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
 {
 	PokemonSkill* NewSkill = new PokemonSkill();
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
