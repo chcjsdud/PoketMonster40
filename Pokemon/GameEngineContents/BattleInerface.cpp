@@ -51,7 +51,7 @@ void BattleInerface::Update()
 {
 	MoveKey();
 	DoomChit();
-	TimeCheck += GameEngineTime::GetDeltaTime();
+	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 }
 
 
