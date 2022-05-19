@@ -41,9 +41,6 @@
     <ClCompile Include="BattleLevel.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
-    <ClCompile Include="BattlePlayer.cpp">
-      <Filter>Battle</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerRed.cpp" />
     <ClCompile Include="BattleInerface.cpp">
       <Filter>Battle</Filter>
@@ -59,9 +56,6 @@
       <Filter>UI\Item</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
-    <ClCompile Include="BattlePokemon.cpp">
-      <Filter>Battle</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerRedState.cpp" />
     <ClCompile Include="WorldTileMap1.cpp">
       <Filter>WorldMap</Filter>
@@ -80,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="Pokemon.cpp">
       <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleUnitRenderer.cpp">
+      <Filter>Battle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,9 +124,6 @@
     <ClInclude Include="BattleLevel.h">
       <Filter>Battle</Filter>
     </ClInclude>
-    <ClInclude Include="BattlePlayer.h">
-      <Filter>Battle</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerRed.h" />
     <ClInclude Include="BattleInerface.h">
       <Filter>Battle</Filter>
@@ -142,9 +136,6 @@
     </ClInclude>
     <ClInclude Include="MonsterBall.h">
       <Filter>UI\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="BattlePokemon.h">
-      <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="WorldTileMap1.h">
       <Filter>WorldMap</Filter>
@@ -160,9 +151,6 @@
     </ClInclude>
     <ClInclude Include="WorldTileMap1.h">
       <Filter>WorldMap\TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="Pokemon.h">
-      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
