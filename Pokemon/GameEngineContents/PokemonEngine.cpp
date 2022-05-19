@@ -48,7 +48,7 @@ void PokemonEngine::GameLoop()
 		ChangeLevel("UITestLevel");
 	}
 
-	if (GameEngineInput::GetInst()->IsDown("2") == true)
+	if (GameEngineInput::GetInst()->IsDown("Bag") == true)
 	{
 		ChangeLevel("BagTestLevel");
 	}
@@ -63,7 +63,7 @@ void PokemonEngine::GameLoop()
 	{
 		ChangeLevel("Battle");
 	}
-}
+}dlk
 void PokemonEngine::GameEnd() 
 {
 	PokemonInfoManager::Destroy();
@@ -98,6 +98,7 @@ void PokemonEngine::InitKey()
 	GameEngineInput::GetInst()->CreateKey("X", 'X');
 
 	GameEngineInput::GetInst()->CreateKey("8", 0x38); //UI테스트레벨로 텔포용 키
+	GameEngineInput::GetInst()->CreateKey("Bag", VK_LSHIFT); //UI테스트레벨로 텔포용 키
 
 	GameEngineInput::GetInst()->CreateKey("WoldMapTest", VK_NUMPAD0); //월드맵 레벨로 텔포용 키
 
