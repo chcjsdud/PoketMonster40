@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
 #include "BattleInerface.h"
+#include "BattleEnum.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
@@ -27,15 +28,33 @@ public:
 	BattleLevel& operator=(const BattleLevel& _Other) = delete;
 	BattleLevel& operator=(BattleLevel&& _Other) noexcept = delete;
 
+public:
+	inline void OpenningEnd()
+	{
+		OpenningEnd_ = true;
+	}
+	inline void EnddingEnd()
+	{
+		EnddingEnd_ = true;
+	}
 
 protected:
 	void Loading() override;
 	void Update() override;
 
-	void LevelChangeStart(GameEngineLevel* _PrevLevel) override {}
-	void LevelChangeEnd(GameEngineLevel* _NextLevel) override {}
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
 private:
 	BattleInerface* Interface;
-};
+	BattleState BState_;
 
+	// 오프닝 관련
+	void ShowOpenning();
+	bool OpenningEnd_;
+
+	// 엔딩 관련
+	void ShowEndding();
+	bool EnddingEnd_;
+
+};

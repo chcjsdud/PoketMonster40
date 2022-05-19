@@ -8,6 +8,10 @@
 
 
 BattleLevel::BattleLevel()
+	: Interface(nullptr)
+	, BState_(BattleState::Openning)
+	, OpenningEnd_(false)
+	, EnddingEnd_(false)
 {
 
 }
@@ -28,5 +32,41 @@ void BattleLevel::Loading()
 
 void BattleLevel::Update()
 {
+	switch (BState_)
+	{
+	case BattleState::Openning:
+		if (OpenningEnd_ == true)
+		{
+			BState_ = BattleState::Selecet;
+		}
+		return;
+		break;
+	case BattleState::Selecet:
+		// interface->KeyCheck();
+		break;
+	case BattleState::Battle:
+		return;
+		break;
+	case BattleState::Endding:
+		break;
+	}
 } 
 
+
+void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
+{
+	BState_ = BattleState::Openning;
+	OpenningEnd_ = false;
+	ShowOpenning();
+}
+
+void BattleLevel::ShowOpenning()
+{
+
+}
+
+
+void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+	EnddingEnd_ = false;
+}
