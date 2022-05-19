@@ -41,6 +41,9 @@ public:
 	void StateUpdate();
 	void DirAnimationCheck();
 
+	void FadeIn();
+	void FadeOut();
+
 protected:
 
 private:
@@ -53,9 +56,13 @@ private:
 	std::string		ChangeDirText_;
 
 	GameEngineRenderer* RedRender_;
+	GameEngineRenderer* FadeRender_;
+	bool IsFadeIn_;
+	bool IsFadeOut_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;
+	UINT Alpha_;
 	
 	// 타일맵 및 이동관련
 	PokemonTileMap* CurrentTileMap_;

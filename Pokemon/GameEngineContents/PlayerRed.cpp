@@ -27,6 +27,8 @@ PlayerRed::PlayerRed()
 	, LerpTime_(0)
 	, MyPokemonList_{nullptr}
 	, MyItemList_{}
+	, IsFadeIn_(false)
+	, IsFadeOut_(false)
 {
 	MyPokemonList_.resize(6);
 }
@@ -117,6 +119,47 @@ void PlayerRed::DirAnimationCheck()
 	}
 }
 
+void PlayerRed::FadeIn()
+{
+	if (false == IsFadeIn_)
+	{
+		return;
+	}
+
+	if (true == IsFadeIn_)
+	{
+		Alpha_ += 2;
+
+		FadeRender_->On();
+		FadeRender_->SetAlpha(Alpha_);
+
+		if (255 <= Alpha_)
+		{
+			Alpha_ = 255;
+			FadeRender_->Off();
+			IsFadeIn_ = false;
+		}
+	}
+}
+
+void PlayerRed::FadeOut()
+{
+	if (true == IsFadeOut_)
+	{
+		Alpha_ -= 1;
+
+		FadeRender_->On();
+		FadeRender_->SetAlpha(Alpha_);
+
+		if (0 >= Alpha_)
+		{
+			Alpha_ = 0;
+			FadeRender_->SetAlpha(0);
+			IsFadeOut_ = false;
+		}
+	}
+}
+
 
 void PlayerRed::Start()
 {
@@ -156,6 +199,9 @@ void PlayerRed::Start()
 	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp",20);
 	WMenuArrowRender_->Off();
 	
+	FadeRender_ = CreateRenderer("FadeInOut.bmp", 10);
+	FadeRender_->Off();
+	
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
@@ -188,8 +234,10 @@ void PlayerRed::Update()
 	StateUpdate();
 	IsWMenuKey();
 	WMenuUISelect();
-	Camera();
 	MoveAnim();
+	FadeIn();
+	FadeOut();
+	Camera();
 }
 
 void PlayerRed::Render()
@@ -217,14 +265,18 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 	{
 		if (_X == 8 && _Y == 0)
 		{
-			CurrentTileMap_ = RoomTileMap2::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+			IsFadeIn_ = true;
+			Alpha_ = 0;
+			//CurrentTileMap_ = RoomTileMap2::GetInst();
+			//SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
 		}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 10 && _Y == 0)
+		if (_X == 9 && _Y == 0)
 		{
+			IsFadeIn_ = true;
+			Alpha_ = 0;
 			CurrentTileMap_ = RoomTileMap1::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
 		}
@@ -436,8 +488,8 @@ void PlayerRed::MoveAnim()
 	}
 
 	LerpTime_ += GameEngineTime::GetDeltaTime();
-	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
-	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_ * 5);
+	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_ * 5);
 
 	SetPosition({ LerpX_,LerpY_ });
 }
