@@ -32,6 +32,7 @@ void PokemonEngine::GameInit()
 
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
+	CreateLevel<UITestLevel>("BagTestLevel");
 	CreateLevel<WorldMapLevel>("WorldMap");
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
@@ -44,6 +45,11 @@ void PokemonEngine::GameLoop()
 	if (GameEngineInput::GetInst()->IsDown("8") == true)
 	{
 		ChangeLevel("UITestLevel");
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("2") == true)
+	{
+		ChangeLevel("BagTestLevel");
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("WoldMapTest") == true)

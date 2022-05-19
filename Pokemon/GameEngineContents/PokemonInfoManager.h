@@ -67,6 +67,6 @@ private:
 
 	Pokemon* CreatePokemon(const std::string _Name);
 	PokemonInfo* CreatePokemonInfo(const std::string _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
-	PokemonSkill* CreateSkill(const std::string _Key, int Value, PokemonType _Type, SkillType _SkillType);
+	PokemonSkill* CreateSkill(const std::string _Key, int Value, int _PP, PokemonType _Type, SkillType _SkillType);
 };
 

@@ -1,15 +1,12 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 
-// Ό³Έν :
 class Bag : public GameEngineActor
 {
 public:
-	// constrcuter destructer
 	Bag();
 	~Bag();
 
-	// delete Function
 	Bag(const Bag& _Other) = delete;
 	Bag(Bag&& _Other) noexcept = delete;
 	Bag& operator=(const Bag& _Other) = delete;

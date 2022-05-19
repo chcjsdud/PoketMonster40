@@ -60,13 +60,13 @@ void PokemonInfoManager::Reset()
 {
 	{
 		//Tackle: ¸öÅë¹ÚÄ¡±â
-		CreateSkill("Tackle", 10, PokemonType::NORMAL, SkillType::Attack);
+		CreateSkill("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Attack);
 		//Tail Whip: ²¿¸® Èçµé±â 
-		CreateSkill("TailWhip", 10, PokemonType::NORMAL, SkillType::Debuff);
+		CreateSkill("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Debuff);
 		//Scratch: ÇÒÄû±â
-		CreateSkill("Scratch", 10, PokemonType::NORMAL, SkillType::Attack);
+		CreateSkill("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Attack);
 		//Scratch: ¿ïÀ½¼Ò¸® 
-		CreateSkill("Growl", 10, PokemonType::NORMAL, SkillType::Debuff);
+		CreateSkill("Growl", 10, 40, PokemonType::NORMAL, SkillType::Debuff);
 	}
 
 	{
@@ -206,13 +206,14 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string _Key, Pokem
 	return NewPokemonInfo;
 }
 
-PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value, PokemonType _Type, SkillType _SkillType)
+PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
 {
 	PokemonSkill* NewSkill = new PokemonSkill();
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
 	NewSkill->SetName(Key);
 	NewSkill->SetValue(_Value);
+	NewSkill->SetPP(_PP);
 	NewSkill->SetType(_Type);
 	NewSkill->SetSkillType(_SkillType);
 

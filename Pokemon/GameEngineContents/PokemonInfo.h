@@ -215,6 +215,11 @@ public:
 	//스킬 관련 함수
 	void AddMySkill(PokemonSkill* _Skill);
 
+	std::vector<PokemonSkill*>& GetSkill()
+	{
+		return MySkills_;
+	}
+
 protected:
 
 private:

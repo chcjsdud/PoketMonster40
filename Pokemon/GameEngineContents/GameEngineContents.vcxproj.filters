@@ -78,6 +78,9 @@
     <ClCompile Include="BattleUnitRenderer.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
+    <ClCompile Include="BagTestLevel.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="BattleEnum.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="BagTestLevel.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
