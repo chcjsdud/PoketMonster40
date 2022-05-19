@@ -5,11 +5,9 @@
 class Pokemon : public GameEngineActor
 {
 public:
-	// constrcuter destructer
 	Pokemon();
 	~Pokemon();
 
-	// delete Function
 	Pokemon(const Pokemon& _Other) = delete;
 	Pokemon(Pokemon&& _Other) noexcept = delete;
 	Pokemon& operator=(const Pokemon& _Other) = delete;

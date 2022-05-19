@@ -59,19 +59,6 @@ PokemonInfoManager::~PokemonInfoManager()
 void PokemonInfoManager::Reset()
 {
 	{
-		//Charmander: 颇捞府
-		CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
-		//Squirtle: 部何扁
-		CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
-		//Bulbasaur: 捞惑秦揪
-		CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
-		//Pidgey: 备备
-		CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
-		//Rattata: 部房
-		CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
-	}
-
-	{
 		//Tackle: 个烹冠摹扁
 		CreateSkill("Tackle", 10, PokemonType::NORMAL, SkillType::Attack);
 		//Tail Whip: 部府 如甸扁 
@@ -80,6 +67,33 @@ void PokemonInfoManager::Reset()
 		CreateSkill("Scratch", 10, PokemonType::NORMAL, SkillType::Attack);
 		//Scratch: 匡澜家府 
 		CreateSkill("Growl", 10, PokemonType::NORMAL, SkillType::Debuff);
+	}
+
+	{
+		//Charmander: 颇捞府
+		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
+		//胶懦 檬扁拳
+		CharmanderInfo->AddMySkill(FindSkill("Scratch")); 
+		CharmanderInfo->AddMySkill(FindSkill("Growl")); 
+
+		//Squirtle: 部何扁
+		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
+		SquirtleInfo->AddMySkill(FindSkill("Tackle"));
+		SquirtleInfo->AddMySkill(FindSkill("TailWhip"));
+
+		//Bulbasaur: 捞惑秦揪
+		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
+		BulbasaurInfo->AddMySkill(FindSkill("Tackle"));
+		BulbasaurInfo->AddMySkill(FindSkill("Growl"));
+
+		//Pidgey: 备备
+		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
+		PidgeyInfo->AddMySkill(FindSkill("Tackle"));
+		
+		//Rattata: 部房
+		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
+		RattataInfo->AddMySkill(FindSkill("Tackle"));
+		RattataInfo->AddMySkill(FindSkill("TailWhip"));
 	}
 		
 	{
@@ -201,7 +215,6 @@ PokemonSkill* PokemonInfoManager::CreateSkill(const std::string _Key, int _Value
 	NewSkill->SetValue(_Value);
 	NewSkill->SetType(_Type);
 	NewSkill->SetSkillType(_SkillType);
-	//NewSkill->SetMyEffect(NewSkill->CreateRenderer("Tackle.bmp"));
 
 	AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
 

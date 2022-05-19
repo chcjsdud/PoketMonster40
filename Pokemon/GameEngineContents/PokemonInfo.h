@@ -208,7 +208,12 @@ public:
 		return MyIcon_;
 	}
 
+
 	void SetPokemonImage(const std::string _Name);
+
+	
+	//스킬 관련 함수
+	void AddMySkill(PokemonSkill* _Skill);
 
 protected:
 
@@ -237,5 +242,6 @@ private:
 	std::string MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
+	int MySkillCount_;
 };
 
