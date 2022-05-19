@@ -184,6 +184,7 @@ void PlayerRed::Update()
 	IsWMenuKey();
 	WMenuUISelect();
 	Camera();
+	MoveAnim();
 }
 
 void PlayerRed::Render()
@@ -192,26 +193,16 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
-	StartPos_ = GetPosition();
 	LerpTime_ = 0;
+	StartPos_ = GetPosition();
 	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 
 	if (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y) == true)
 	{
-		float4 MovePos = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
-		//SetPosition(MovePos);
-		while (1 > LerpTime_)
-		{
-			LerpTime_ += GameEngineTime::GetDeltaTime();
-			LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, MovePos.x, LerpTime_);
-			LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, MovePos.y, LerpTime_);
-
- 			SetPosition({ LerpX_,LerpY_ });
-		}
-		
-		//SetPosition({LerpX_,LerpY_});
+		IsMove_ = true;
 		PlayerMoveTile(NextIndex.X, NextIndex.Y);
+		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
 	}
 }
 
@@ -390,4 +381,18 @@ void PlayerRed::IsWMenuKey()
 			WMenuUICheck_ = true;
 		}
 	}
+}
+
+void PlayerRed::MoveAnim()
+{
+	if (IsMove_ == false)
+	{
+		return;
+	}
+
+	LerpTime_ += GameEngineTime::GetDeltaTime();
+	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
+	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+
+	SetPosition({ LerpX_,LerpY_ });
 }

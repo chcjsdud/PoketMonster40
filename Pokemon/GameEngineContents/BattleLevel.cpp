@@ -48,6 +48,11 @@ void BattleLevel::Update()
 		return;
 		break;
 	case BattleState::Endding:
+		if (EnddingEnd_ == true)
+		{
+			// 레벨 이동
+			return;
+		}
 		break;
 	}
 } 
@@ -58,6 +63,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 	//BState_ = BattleState::Openning
 	BState_ = BattleState::Selecet;
 	OpenningEnd_ = false;
+	EnddingEnd_ = false;
 	ShowOpenning();
 }
 
@@ -69,5 +75,11 @@ void BattleLevel::ShowOpenning()
 
 void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
+	OpenningEnd_ = false;
 	EnddingEnd_ = false;
+}
+
+void BattleLevel::ShowEndding()
+{
+
 }

@@ -6,6 +6,16 @@
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
 
 //설명 : 전투 선택지를 띄우는 인터페이스
+
+enum class BattleOrder
+{
+	Fight,
+	Pokemon,
+	Bag,
+	Run,
+	None
+};
+
 class GameEngineImage;
 class BattleInerface : public GameEngineActor
 {
@@ -51,8 +61,11 @@ private:
 	GameEngineRenderer* MyHP;
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
+	GameEngineRenderer* BattleCommend;
 
 	BattleInerface* MainInterface;
+
+	BattleOrder CurOrder;
 
 	float TimeCheck;
 
@@ -63,5 +76,7 @@ public:
 
 	void MoveKey();
 	void DoomChit();
+	void OrderCheck();
+	void SelectOrder();
 };
 

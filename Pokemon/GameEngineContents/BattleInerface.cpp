@@ -1,10 +1,11 @@
 #include "BattleInerface.h"
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineTime.h>
-
+#include "PokemonEngine.h"
 
 BattleInerface::BattleInerface()
 	:TimeCheck(0.0f)
+	,CurOrder(BattleOrder::None)
 {
 
 }
@@ -20,7 +21,8 @@ void BattleInerface::Start()
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
 	GameEngineInput::GetInst()->CreateKey("SDown", VK_DOWN);
 	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
-	GameEngineInput::GetInst()->CreateKey("SSelect", 'A');
+	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
+	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",0);
@@ -32,6 +34,7 @@ void BattleInerface::Start()
 	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 2);
 	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 2);
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 2);
+	BattleCommend = CreateRenderer("BattleCommend4.bmp", 3);
 
 	//=========랜더러 위치 설정==========//
 	Select->SetPivot({ -190.0f, -25.0f });
@@ -41,6 +44,8 @@ void BattleInerface::Start()
 	EnemyHP->SetPivot({ -406.0f,-430.0f });
 	MyHP->SetPivot({ 80.0f, -170.0f });
 	EXP->SetPivot({48.0f,-170.0f});
+	BattleCommend->SetPivot({-240.0f,0.0f});
+	BattleCommend->Off();
 }
 
 void BattleInerface::Render()
@@ -50,8 +55,11 @@ void BattleInerface::Render()
 void BattleInerface::Update()
 {
 	//MoveKey();
+
 	DoomChit();
-	TimeCheck += GameEngineTime::GetDeltaTime();
+	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
+	SelectOrder();
+	OrderCheck();
 }
 
 
@@ -103,8 +111,6 @@ void BattleInerface::DoomChit()
 	if ((int)TimeCheck % 2 == 0)
 	{
 		MyHPUI->SetPivot({ 0.0f,-174.0f });
-		EnemyHPUI->SetPivot({ -450.0f,-434.0f });
-		EnemyHP->SetPivot({ -406.0f,-434.0f });
 		MyHP->SetPivot({ 80.0f, -174.0f });
 		EXP->SetPivot({ 48.0f,-174.0f });
 	}
@@ -112,9 +118,54 @@ void BattleInerface::DoomChit()
 	if ((int)TimeCheck % 2 == 1)
 	{
 		MyHPUI->SetPivot({ 0.0f,-170.0f });
-		EnemyHPUI->SetPivot({ -450.0f,-430.0f });
-		EnemyHP->SetPivot({ -406.0f,-430.0f });
 		MyHP->SetPivot({ 80.0f, -170.0f });
 		EXP->SetPivot({ 48.0f,-170.0f });
+	}
+}
+
+void BattleInerface::OrderCheck()
+{
+	switch (CurOrder)
+	{
+	case BattleOrder::Fight:
+		BattleCommend->On();
+		break;
+	case BattleOrder::Pokemon:
+		break;
+	case BattleOrder::Bag:
+		break;
+	case BattleOrder::Run:
+		break;
+	default:
+		break;
+	}
+}
+
+void BattleInerface::SelectOrder()
+{
+	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+	{	//싸우다 선택
+		CurOrder = BattleOrder::Fight;
+	}
+
+	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+	{	//포켓몬 선택
+		CurOrder = BattleOrder::Pokemon;
+	}
+
+	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+	{	//가방 선택
+		CurOrder = BattleOrder::Bag;
+	}
+	
+	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+	{
+		CurOrder = BattleOrder::Run;
+	}
+
+	if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
+	{
+		BattleCommend->Off();
+		CurOrder = BattleOrder::None;
 	}
 }

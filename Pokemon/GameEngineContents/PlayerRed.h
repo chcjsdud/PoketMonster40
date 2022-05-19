@@ -44,6 +44,7 @@ protected:
 private:
 	float4			CameraPos_;
 	float4			StartPos_;
+	float4			GoalPos_;
 	RedDir			CurrentDir_;
 	bool			WMenuUICheck_;
 	std::string		AnimationName_;
@@ -53,9 +54,11 @@ private:
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;
+	
 	// 타일맵 및 이동관련
 	PokemonTileMap* CurrentTileMap_;
 	float4 CurrentTilePos_;
+	bool IsMove_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
@@ -74,6 +77,7 @@ private:
 	bool IsMoveKey();
 	void IsWMenuKey();
 
+	void MoveAnim();
 
 	// FSM
 	float AnimTimer_;
