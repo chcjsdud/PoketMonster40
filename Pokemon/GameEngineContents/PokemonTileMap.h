@@ -25,13 +25,20 @@ public:
 	}
 	inline bool CanMove(int _X, int _Y)
 	{
+		// Å¸ÀÏ¸ÊÀ» ¹þ¾î³µÀ»¶§
+		if (TileMap_.GetMaxX() <= _X || TileMap_.GetMaxY() <= _Y)
+		{
+			return false;
+		}
+
+		// ÇØ´ç ÁÂÇ¥ÀÇ ÄÝ¸ÊÀÌ °ËÀº»öÀÌ ¾Æ´Ò¶§
 		float4 TestPos = TileMap_.GetWorldPostion(_X, _Y);
 		int color = ColMap_->GetImagePixel(TestPos);
 		if (RGB(0, 0, 0) != color)
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 

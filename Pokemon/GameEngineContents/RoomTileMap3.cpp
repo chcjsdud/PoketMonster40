@@ -6,14 +6,14 @@ RoomTileMap3::RoomTileMap3()
 {
 }
 
-RoomTileMap3::~RoomTileMap3() 
+RoomTileMap3::~RoomTileMap3()
 {
 }
 
 void RoomTileMap3::Start()
 {
 	Inst_ = this;
-	SetPosition({ -1769-65, 900-25 });
+	SetPosition({ -1769 - 65, 900 - 25 });
 	TileMap_.TileRangeSetting(13, 7, { 64, 64 });
 	ColMap_ = GameEngineImageManager::GetInst()->Find("Room3ColMap.bmp");
 

@@ -2,18 +2,18 @@
 
 RoomTileMap2* RoomTileMap2::Inst_ = nullptr;
 
-RoomTileMap2::RoomTileMap2() 
+RoomTileMap2::RoomTileMap2()
 {
 }
 
-RoomTileMap2::~RoomTileMap2() 
+RoomTileMap2::~RoomTileMap2()
 {
 }
 
 void RoomTileMap2::Start()
 {
 	Inst_ = this;
-	SetPosition({ -3950 + 69, -370 + 4});
+	SetPosition({ -3881, -366 });
 	TileMap_.TileRangeSetting(12, 7, { 64, 64 });
 	ColMap_ = GameEngineImageManager::GetInst()->Find("Room2ColMap.bmp");
 

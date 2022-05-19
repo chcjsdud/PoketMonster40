@@ -9,6 +9,8 @@
 
 #include "RoomTileMap1.h"
 #include "RoomTileMap2.h"
+#include "RoomTileMap3.h"
+#include "RoomTileMap4.h"
 #include "WorldTileMap1.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
@@ -216,16 +218,56 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 		if (_X == 8 && _Y == 0)
 		{
 			CurrentTileMap_ = RoomTileMap2::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(10, 0));
+			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
 		}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
+		if (_X == 10 && _Y == 0)
+		{
+			CurrentTileMap_ = RoomTileMap1::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+		}
 
+		if (_X == 3 && _Y == 6)
+		{
+			CurrentTileMap_ = WorldTileMap1::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(15, 92));
+		}
+	}
+	else if (RoomTileMap3::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 4 && _Y == 6)
+		{
+			CurrentTileMap_ = WorldTileMap1::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(24, 92));
+		}
+	}
+	else if (RoomTileMap4::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 6 && _Y == 10)
+		{
+			CurrentTileMap_ = WorldTileMap1::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(25, 98));
+		}
 	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
-
+		if (_X == 15 && _Y == 92)
+		{
+			CurrentTileMap_ = RoomTileMap2::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(3, 6));
+		}
+		if (_X == 24 && _Y == 92)
+		{
+			CurrentTileMap_ = RoomTileMap3::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(4, 6));
+		}
+		if (_X == 25 && _Y == 98)
+		{
+			CurrentTileMap_ = RoomTileMap4::GetInst();
+			SetPosition(CurrentTileMap_->GetWorldPostion(6, 10));
+		}
 	}
 }
 

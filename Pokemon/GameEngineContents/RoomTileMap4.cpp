@@ -2,11 +2,11 @@
 
 RoomTileMap4* RoomTileMap4::Inst_ = nullptr;
 
-RoomTileMap4::RoomTileMap4() 
+RoomTileMap4::RoomTileMap4()
 {
 }
 
-RoomTileMap4::~RoomTileMap4() 
+RoomTileMap4::~RoomTileMap4()
 {
 }
 

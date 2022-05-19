@@ -1,7 +1,7 @@
 #pragma once
 #include "PokemonTileMap.h"
 
-// 설명 : 지우집 2층
+// 설명 : 레드집 2층
 class RoomTileMap1 : public PokemonTileMap
 {
 private:

@@ -56,7 +56,7 @@ void PlayerRed::WalkUpdate()
 
 	//SetMove(MoveDir_ * GameEngineTime::GetDeltaTime() * 800);
 
-	if (AnimTimer_ >= 1.0f)
+	if (AnimTimer_ >= 0.1f)
 	{
 		PlayerSetMove(MoveDir_ * 50);
 		AnimTimer_ = 0.0f;

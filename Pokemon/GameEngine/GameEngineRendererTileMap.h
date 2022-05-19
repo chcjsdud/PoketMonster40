@@ -44,6 +44,9 @@ class GameEngineRendererTileMap
 	float4 TileSizeHalf_;
 	GameEngineActor* Master_;
 
+	int MaxX;
+	int MaxY;
+
 public:
 	// 타일맵을 맵 전체에 생성
 	void TileRangeSetting(int _X, int _Y, float4 _TileSize)
@@ -59,6 +62,9 @@ public:
 			MsgBoxAssert("0개인 타일맵을 만들수 없습니다.");
 			return;
 		}
+
+		MaxX = _X;
+		MaxY = _Y;
 
 		Tiles_.resize(_Y);
 
@@ -124,7 +130,7 @@ public:
 			FindTile = new TileType();
 			FindTile->Renderer = Master_->CreateRenderer(_Image, _Order);
 		}
-		else 
+		else
 		{
 			FindTile->Renderer->SetImage(_Image);
 		}
@@ -153,9 +159,20 @@ public:
 
 	TileIndex GetTileIndex(const float4& _Pos);
 
+	inline int GetMaxX()
+	{
+		return MaxX;
+	}
+	inline int GetMaxY()
+	{
+		return MaxY;
+	}
+
 public:
 	GameEngineRendererTileMap(GameEngineActor* _Actor)
 		: Master_(_Actor)
+		, MaxX(0)
+		, MaxY(0)
 	{
 	}
 

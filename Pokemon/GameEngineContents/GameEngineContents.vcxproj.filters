@@ -81,6 +81,12 @@
     <ClCompile Include="BagTestLevel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="RoomTileMap3.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap4.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -164,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="BagTestLevel.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap3.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap4.h">
+      <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
