@@ -2,6 +2,7 @@
 #include <GameEngineBase/GameEngineNameObject.h>
 #include <GameEngine/GameEngineImage.h>
 #include <string>
+#include "ContentEnum.h"
 
 class Item : public GameEngineNameObject
 {
@@ -24,12 +25,20 @@ public:
 		return Value_;
 	}
 
-	void SetItemImage(const std::string& _Name);
+	inline void SetType(ItemType _Type)
+	{
+		Type_ = _Type;
+	}
+
+	inline ItemType GetType()
+	{
+		return Type_;
+	}
 
 protected:
 
 private:
 	int Value_; //상처약이라면 회복될 수치
-	GameEngineImage* MyIcon_;
+	ItemType Type_;
 };
 

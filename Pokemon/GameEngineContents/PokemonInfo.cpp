@@ -21,6 +21,7 @@ PokemonInfo::PokemonInfo()
 	, MyProfile_()
 	, MyIcon_()
 	, MySkills_{nullptr}
+	, MySkillCount_(0)
 {
 	MySkills_.resize(4);
 	MySkillCount_ = 0;

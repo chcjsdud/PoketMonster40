@@ -38,3 +38,12 @@ enum class SkillType
 	DEBUFF,
 	BUFF
 };
+
+
+//아이템의 종류
+enum class ItemType
+{
+	ITEM,
+	KEYITEM,
+	BALL
+};

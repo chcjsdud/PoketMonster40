@@ -44,15 +44,15 @@ public:
 	PokemonSkill* FindSkill(const std::string& _Key);
 	Item* FindItem(const std::string& _Key);
 
-	template<typename ItemType>
-	Item* CreateItem(const std::string& _Key, int _Value)
+	template<typename ItemKind>
+	Item* CreateItem(const std::string& _Key, int _Value, ItemType _Type)
 	{
-		Item* NewItem = new ItemType();
+		Item* NewItem = new ItemKind();
 		std::string Key = GameEngineString::ToUpperReturn(_Key);
 
 		NewItem->SetName(Key);
 		NewItem->SetValue(_Value);
-		NewItem->SetItemImage(Key);
+		NewItem->SetType(_Type);
 
 		AllItemList_.insert(std::make_pair(Key, NewItem));
 		return NewItem;

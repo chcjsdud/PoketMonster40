@@ -97,8 +97,8 @@ void PokemonInfoManager::Reset()
 	}
 		
 	{
-		CreateItem<MonsterBall>("MonsterBall", 10);
-		CreateItem<Potion>("Potion", 10);
+		CreateItem<MonsterBall>("MonsterBall", 10, ItemType::BALL);
+		CreateItem<Potion>("Potion", 10, ItemType::ITEM);
 	}
 }
 

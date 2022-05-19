@@ -3,6 +3,7 @@
 
 Item::Item() 
 	: Value_(0)
+	, Type_(ItemType::ITEM)
 {
 }
 
@@ -10,8 +11,3 @@ Item::~Item()
 {
 }
 
-void Item::SetItemImage(const std::string& _Name)
-{
-	std::string MyName = _Name + ".bmp";
-	MyIcon_ = GameEngineImageManager::GetInst()->Find(MyName);
-}
