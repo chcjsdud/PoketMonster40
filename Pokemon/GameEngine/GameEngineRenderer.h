@@ -38,6 +38,12 @@ public:
 		return RenderPivot_;
 	}
 
+	inline void PlusPivot(const float4& _Pos)
+	{
+		RenderPivot_ += _Pos;
+	}
+
+
 	inline void SetPivotType(const RenderPivot& _Type)
 	{
 		PivotType_ = _Type;

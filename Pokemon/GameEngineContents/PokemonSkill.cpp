@@ -2,7 +2,7 @@
 
 PokemonSkill::PokemonSkill() 
 	: Value_(0)
-	, SkillType_(SkillType::Attack)
+	, SkillType_(SkillType::ATTACK)
 	, Type_(PokemonType::NORMAL)
 {
 }

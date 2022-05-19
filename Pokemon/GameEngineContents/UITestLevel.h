@@ -14,7 +14,7 @@ public:
 	UITestLevel& operator=(const UITestLevel& _Ohter) = delete;
 	UITestLevel& operator=(const UITestLevel&& _Other) noexcept = delete;
 
-protected:
+protected:	
 	void Loading() override;
 	void Update() override;
 
