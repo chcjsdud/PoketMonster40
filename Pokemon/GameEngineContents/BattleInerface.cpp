@@ -24,8 +24,8 @@ void BattleInerface::Start()
 	
 	Select = CreateRenderer("Select.bmp", 1);
 
-	//MyHPUI = CreateRenderer("FriendlyHPBackground.bmp",1);
-	//EnemyHPUI = CreateRenderer("EnemyHPBackground.bmp",1);
+	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",1);
+	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",1);
 }
 
 void BattleInerface::Render()
