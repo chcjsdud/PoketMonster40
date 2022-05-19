@@ -49,7 +49,7 @@ void BattleInerface::Render()
 
 void BattleInerface::Update()
 {
-	MoveKey();
+	//MoveKey();
 	DoomChit();
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 }
