@@ -1,4 +1,5 @@
 #pragma once
+#include <GameEngineBase/GameEngineMath.h>
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineImage.h>
 
@@ -42,13 +43,16 @@ protected:
 
 private:
 	float4			CameraPos_;
+	float4			StartPos_;
 	RedDir			CurrentDir_;
 	bool			WMenuUICheck_;
 	std::string		AnimationName_;
 	std::string		ChangeDirText_;
 
 	GameEngineRenderer* RedRender_;
-
+	float LerpX_;
+	float LerpY_;
+	float LerpTime_;
 	// 타일맵 및 이동관련
 	PokemonTileMap* CurrentTileMap_;
 	float4 CurrentTilePos_;

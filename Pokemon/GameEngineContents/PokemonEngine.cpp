@@ -30,13 +30,13 @@ void PokemonEngine::GameInit()
 	InitKey();
 	InitFont();
 
-	PokemonInfoManager::GetInst().Reset();
-
 	CreateLevel<TitleLevel>("Title");
 	CreateLevel<UITestLevel>("UITestLevel");
 	CreateLevel<WorldMapLevel>("WorldMap");
 	CreateLevel<BattleLevel>("Battle");
 	ChangeLevel("Title");
+
+	PokemonInfoManager::GetInst().Reset();
 }
 
 void PokemonEngine::GameLoop() 
@@ -125,6 +125,18 @@ void PokemonEngine::ResourcesLoad()
 		}
 	}
 
+	{
+		GameEngineDirectory ResourcesDirectory;
+		ResourcesDirectory.MoveParent("Pokemon");
+		ResourcesDirectory.Move("Resources");
+		ResourcesDirectory.Move("KYN-AllResources");
+		ResourcesDirectory.Move("Effect");
+		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
+		for (int i = 0; i < AllFileVec.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
+		}
+	}
 }
 
 void PokemonEngine::ImageCut()

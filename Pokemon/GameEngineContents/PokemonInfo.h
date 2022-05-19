@@ -62,7 +62,7 @@ public:
 		MaxLv_ = _MaxLv;
 	}
 
-	inline int GetHp()
+	inline int& GetHp()
 	{
 		return Hp_;
 	}
@@ -74,10 +74,10 @@ public:
 
 	inline void PlusHp(int _Value) //Hp 증가
 	{
-		Hp_ = _Value;
+		Hp_ += _Value;
 	}
 
-	inline int GetMaxHp()
+	inline int& GetMaxHp()
 	{
 		return MaxHp_;
 	}
@@ -87,7 +87,7 @@ public:
 		MaxHp_ = _MaxHp;
 	}
 
-	inline int GetExp()
+	inline int& GetExp()
 	{
 		return Exp_;
 	}
@@ -97,14 +97,14 @@ public:
 		Exp_ = _Exp;
 	}
 
-	inline int GetMaxExp()
+	inline int& GetMaxExp()
 	{
 		return MaxExp_;
 	}
 
 	inline void PlusExp(int _Value) //Exp 증가
 	{
-		Exp_ = _Value;
+		Exp_ += _Value;
 	}
 
 	inline void SetMaxExp(int _MaxExp)
@@ -208,7 +208,12 @@ public:
 		return MyIcon_;
 	}
 
+
 	void SetPokemonImage(const std::string _Name);
+
+	
+	//스킬 관련 함수
+	void AddMySkill(PokemonSkill* _Skill);
 
 protected:
 
@@ -237,5 +242,6 @@ private:
 	std::string MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
+	int MySkillCount_;
 };
 

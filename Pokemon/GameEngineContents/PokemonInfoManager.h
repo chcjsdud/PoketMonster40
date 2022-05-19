@@ -52,7 +52,7 @@ public:
 
 		NewItem->SetName(Key);
 		NewItem->SetValue(_Value);
-		//NewItem->SetIcon(NewItem->CreateRenderer(Key + "bmp"));
+		NewItem->SetItemImage(Key);
 
 		AllItemList_.insert(std::make_pair(Key, NewItem));
 		return NewItem;
