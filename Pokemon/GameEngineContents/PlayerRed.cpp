@@ -21,19 +21,31 @@ PlayerRed::PlayerRed()
 	: CurrentDir_()
 	, CurrentState_()
 	, CurrentTileMap_()
-	, RedRender_()
-	, AnimTimer_()
+	, RedRender_(nullptr)
+	, ShadowRender_(nullptr)
+	, FadeRender_(nullptr)
+	, FadeRightRender_(nullptr)
+	, FadeLeftRender_(nullptr)
+	, AnimTimer_(0.0f)
 	, WMenuArrowRender_()
 	, WMenuUIRender_()
 	, WMenuUICheck_(true)
 	, LerpTime_(0)
 	, FadeTime_(0)
+	, Alpha_()
 	, MyPokemonList_{nullptr}
 	, MyItemList_{}
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
 	, IsFadeRL_(false)
 	, IsFadeRLCheck_(false)
+	, LerpX_(0)
+	, LerpY_(0)
+	, MoveTimer_(0.0f)
+	, NextMoveTime_(0.0f)
+	, IsJump_()
+	, IsMove_()
+	, NextTileMap_()
 {
 	MyPokemonList_.resize(6);
 }
@@ -243,6 +255,10 @@ void PlayerRed::Start()
 	FadeLeftRender_ = CreateRenderer("FadeLeft.bmp", 10);
 	FadeLeftRender_->Off();
 	
+	ShadowRender_ = CreateRenderer("shadow.bmp");
+	ShadowRender_->SetPivot({0, 20});
+	ShadowRender_->Off();
+
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
@@ -308,7 +324,9 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
 		break;
 	case TileState::MoreDown:
-		IsMove_ = true;
+		IsJump_ = true;
+		ShadowRender_->On();
+		NextMoveTime_ = GetAccTime() + 0.51f;
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
 		break;
 	default:
@@ -327,6 +345,13 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			NextTilePos_ = { 9, 0 };
 			return true;
 		}
+
+		//if (_X == 8 && _Y == 0)
+		//{
+		//	NextTileMap_ = WorldTileMap1::GetInst();
+		//	NextTilePos_ = { 33, 24 };
+		//	return true;
+		//}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
@@ -403,13 +428,13 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			NextTilePos_ = { 6,10 };
 			return true;
 		}
-		if (_X == 23 && _Y == 31) // 치료소
+		if (_X == 23 && _Y == 30) // 치료소
 		{
 			NextTileMap_ = RoomTileMap5::GetInst();
 			NextTilePos_ = { 7, 6 };
 			return true;
 		}
-		if (_X == 33 && _Y == 24) // 상점
+		if (_X == 33 && _Y == 23) // 상점
 		{
 			NextTileMap_ = RoomTileMap6::GetInst();
 			NextTilePos_ = { 4, 5 };
@@ -599,19 +624,31 @@ void PlayerRed::IsWMenuKey()
 
 void PlayerRed::MoveAnim()
 {
-	if (IsMove_ == false)
+	if (true == IsMove_)
 	{
-		return;
+		LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
+		LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
+		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+		SetPosition({ LerpX_,LerpY_ });
+
+		if (LerpTime_ > 1.0f)
+		{
+			LerpTime_ = 0.0f;
+			IsMove_ = false;
+		}
 	}
-
-	LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
-	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_ );
-	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_ );
-	SetPosition({ LerpX_,LerpY_ });
-
-	if (LerpTime_ > 1.0f)
+	if (true == IsJump_)
 	{
-		LerpTime_ = 0.0f;
-		IsMove_ = false;
+		LerpTime_ += GameEngineTime::GetDeltaTime() * 2.0f;
+		LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
+		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+		SetPosition({ LerpX_,LerpY_ });
+
+		if (LerpTime_ > 1.0f)
+		{
+			LerpTime_ = 0.0f;
+			IsJump_ = false;
+			ShadowRender_->Off();
+		}
 	}
 }

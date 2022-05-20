@@ -57,6 +57,7 @@ private:
 	std::string		ChangeDirText_;
 
 	GameEngineRenderer* RedRender_;
+	GameEngineRenderer* ShadowRender_;
 	GameEngineRenderer* FadeRender_;
 	GameEngineRenderer* FadeRightRender_;
 	GameEngineRenderer* FadeLeftRender_;
@@ -76,6 +77,7 @@ private:
 	float4 CurrentTilePos_;
 	float4 NextTilePos_;
 	bool IsMove_;
+	bool IsJump_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
@@ -103,6 +105,8 @@ private:
 
 	// FSM
 	float AnimTimer_;
+	float NextMoveTime_;
+	float MoveTimer_;
 
 	void IdleUpdate();
 	void WalkUpdate();

@@ -29,7 +29,6 @@ void PlayerRed::WalkUpdate()
 		return;
 	}
 	
-	AnimTimer_ += GameEngineTime::GetDeltaTime();
 	float4 MoveDir_ = float4::ZERO;
 	if (true == GameEngineInput::GetInst()->IsPress("Up"))
 	{
@@ -55,11 +54,10 @@ void PlayerRed::WalkUpdate()
 	}
 
 	//SetMove(MoveDir_ * GameEngineTime::GetDeltaTime() * 800);
-
-	if (AnimTimer_ >= 0.3f)
+	if (GetAccTime() >= NextMoveTime_)
 	{
+		NextMoveTime_ = GetAccTime() + 0.26f;
 		PlayerSetMove(MoveDir_ * 50);
-		AnimTimer_ = 0.0f;
 	}
 }
 
