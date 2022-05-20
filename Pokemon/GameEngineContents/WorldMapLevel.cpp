@@ -6,6 +6,8 @@
 #include "RoomTileMap2.h"
 #include "RoomTileMap3.h"
 #include "RoomTileMap4.h"
+#include "RoomTileMap5.h"
+#include "RoomTileMap6.h"
 
 WorldMapLevel::WorldMapLevel()
 {
@@ -23,6 +25,8 @@ void WorldMapLevel::Loading()
 	CreateActor<RoomTileMap2>();
 	CreateActor<RoomTileMap3>();
 	CreateActor<RoomTileMap4>();
+	CreateActor<RoomTileMap5>();
+	CreateActor<RoomTileMap6>();
 	CreateActor<PlayerRed>();
 }
 

@@ -87,6 +87,12 @@
     <ClCompile Include="RoomTileMap4.cpp">
       <Filter>WorldMap\TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="RoomTileMap5.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap6.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -175,6 +181,12 @@
       <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
     <ClInclude Include="RoomTileMap4.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap5.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap6.h">
       <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
   </ItemGroup>

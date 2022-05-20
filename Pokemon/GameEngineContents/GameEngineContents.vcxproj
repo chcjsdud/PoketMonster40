@@ -246,6 +246,14 @@
     </ClInclude>
     <ClInclude Include="RoomTileMap3.h" />
     <ClInclude Include="RoomTileMap4.h" />
+    <ClInclude Include="RoomTileMap5.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap6.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TitleBackground.h">
       <SubType>
       </SubType>
@@ -350,6 +358,14 @@
     </ClCompile>
     <ClCompile Include="RoomTileMap3.cpp" />
     <ClCompile Include="RoomTileMap4.cpp" />
+    <ClCompile Include="RoomTileMap5.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap6.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="TitleBackground.cpp">
       <SubType>
       </SubType>

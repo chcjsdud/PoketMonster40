@@ -11,6 +11,8 @@
 #include "RoomTileMap2.h"
 #include "RoomTileMap3.h"
 #include "RoomTileMap4.h"
+#include "RoomTileMap5.h"
+#include "RoomTileMap6.h"
 #include "WorldTileMap1.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
@@ -290,23 +292,31 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 
-	if (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y) == true)
+	switch (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y, _Value))
 	{
-		if (false == PlayerMoveTileCheck(NextIndex.X, NextIndex.Y))
-		{
-			IsMove_ = true;
-			GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
-		}
-		else
+	case TileState::False:
+		if (true == PlayerMoveTileCheck(NextIndex.X, NextIndex.Y, _Value))
 		{
 			Alpha_ = 0;
 			IsFadeIn_ = true;
 		}
+		break;
+	case TileState::True:
+		IsMove_ = true;
+		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+		break;
+	case TileState::MoreDown:
+		IsMove_ = true;
+		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
+		break;
+	default:
+		break;
 	}
 }
 
-bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
+bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 {
+	_Dir.Normal2D();
 	if (RoomTileMap1::GetInst() == CurrentTileMap_)
 	{
 		if (_X == 8 && _Y == 0)
@@ -353,6 +363,24 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			return true;
 		}
 	}
+	else if (RoomTileMap5::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 7 && _Y == 6)
+		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 23, 31 };
+			return true;
+		}
+	}
+	else if (RoomTileMap6::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 4 && _Y == 5)
+		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 33, 24 };
+			return true;
+		}
+	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
 		if (_X == 15 && _Y == 92)
@@ -371,6 +399,18 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 		{
 			NextTileMap_ = RoomTileMap4::GetInst();
 			NextTilePos_ = { 6,10 };
+			return true;
+		}
+		if (_X == 23 && _Y == 31) // 치료소
+		{
+			NextTileMap_ = RoomTileMap5::GetInst();
+			NextTilePos_ = { 7, 6 };
+			return true;
+		}
+		if (_X == 33 && _Y == 24) // 상점
+		{
+			NextTileMap_ = RoomTileMap6::GetInst();
+			NextTilePos_ = { 4, 5 };
 			return true;
 		}
 	}

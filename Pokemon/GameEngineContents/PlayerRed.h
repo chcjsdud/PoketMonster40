@@ -90,7 +90,7 @@ private:
 	void Render() override;
 
 	void PlayerSetMove(float4 _Value);
-	bool PlayerMoveTileCheck(int _X, int _Y);
+	bool PlayerMoveTileCheck(int _X, int _Y, float4 _Dir = float4::ZERO);
 	void MoveTile(PokemonTileMap& _Tile, float4 _Pos);
 	
 	void Camera();
