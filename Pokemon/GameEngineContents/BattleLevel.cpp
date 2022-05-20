@@ -1,6 +1,8 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngine/GameEngine.h>
 
+#include <GameEngineContentsCore/GameEngineContentFont.h>
+
 #include "BattleLevel.h"
 #include "BattleUnitRenderer.h"
 #include "BattleBackground.h"
@@ -27,11 +29,15 @@ BattleLevel::~BattleLevel()
 void BattleLevel::Loading()
 {
 	CreateActor<BattleBackground>();
-	CreateActor<BattleUnitRenderer>();
 	BEngine_ = CreateActor<BattleEngine>();
 
 	Interface = CreateActor<BattleInerface>(3);
 	Interface->SetPosition({ 720.0f, 548.0f });
+	
+	//김예나:테스트 코드
+	PlayerStopCheck = CreateActor<BattleUnitRenderer>();
+	Fonts = CreateActor<GameEngineContentFont>();
+	Fonts->SetPosition({ 200, 200 });
 }
 
 void BattleLevel::Update()
@@ -60,10 +66,12 @@ void BattleLevel::Update()
 		break;
 	}
 
-	//if (BattleUnitRenderer::GetPlayerStop() == true)
-	//{
-	//	텍스트 출력 어떡하지..
-	//}
+	if (PlayerStopCheck->GetPlayerStop()==true)
+	{
+		//김예나:플레이어 멈출시 폰트출력 테스트
+		Fonts->ShowString("Very Very \\ABCDEFGHIJ", false);
+		
+	}
 } 
 
 
