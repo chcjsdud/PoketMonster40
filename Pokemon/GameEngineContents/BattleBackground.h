@@ -36,6 +36,7 @@ protected:
 
 	GameEngineRenderer* Fade_Up;
 	GameEngineRenderer* Fade_Down;
+	GameEngineRenderer* Start_Effect;
 
 	float Fade_Time;
 

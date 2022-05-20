@@ -59,6 +59,11 @@ void BattleLevel::Update()
 		}
 		break;
 	}
+
+	//if (BattleUnitRenderer::GetPlayerStop() == true)
+	//{
+	//	텍스트 출력 어떡하지..
+	//}
 } 
 
 

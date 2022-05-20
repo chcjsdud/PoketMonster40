@@ -37,5 +37,13 @@ private:
 
 	float PlayerTime_;
 	float MoveSpeed;
+
+	bool PlayerStop;
+
+public:
+	bool GetPlayerStop()
+	{
+		return PlayerStop;
+	}
 };
 

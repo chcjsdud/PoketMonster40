@@ -12,6 +12,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
 	, MoveSpeed(200.0f)
+	, PlayerStop(false)
 {
 }
 
@@ -35,5 +36,6 @@ void BattleUnitRenderer::Update()
 	if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
 	{
 		MoveSpeed = 0.0f;
+		PlayerStop = true;
 	}
 }

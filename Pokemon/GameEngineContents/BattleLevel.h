@@ -76,4 +76,7 @@ private:
 	BattleEngine* BEngine_;
 	// 플레이어
 	PlayerRed* PlayerRed_;
+
+	//전투시 폰트 출력
+	class GameEngineContentFont* Fonts;
 };
