@@ -46,7 +46,7 @@ void GameEngine::GameEnd()
 
 void GameEngine::WindowCreate()
 {
-    GameEngineWindow::GetInst().CreateGameWindow(nullptr, "GameWindow");
+    GameEngineWindow::GetInst().CreateGameWindow(nullptr, "Pokemonster: FireRed");
     GameEngineWindow::GetInst().ShowGameWindow();
     GameEngineWindow::GetInst().MessageLoop(EngineInit, EngineLoop);
 }

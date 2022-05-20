@@ -49,6 +49,11 @@ void Bag::Start()
 	ItemPreview_->SetPivot({-400, 225});
 
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
 	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
 
 	if (false == GameEngineInput::GetInst()->IsKey("LeftArrow"))
@@ -59,7 +64,7 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
 	}
 
-	ShowItemInfo();
+	ShowItemList();
 }
 
 void Bag::Update()
@@ -79,6 +84,19 @@ void Bag::Update()
 			ChangeBag();
 		}
 	}
+}
+
+void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+}
+
+void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+	BagType_ = ItemType::ITEM;
+	SelectIndex_ = 0;
+	BagIndex_ = 0;
+
+	ChangeBag();
 }
 
 
@@ -125,7 +143,7 @@ void Bag::ChangeBag()
 		BagName_->SetImage("Bag_Items.bmp");
 
 		LeftArrow_->SetOrder(-1);
-		ShowItemInfo();
+		ShowItemList();
 		break;
 		
 	case ItemType::KEYITEM:
@@ -135,7 +153,7 @@ void Bag::ChangeBag()
 
 		LeftArrow_->SetOrder(5);
 		RightArrow_->SetOrder(5);
-		ShowKeyItemInfo();
+		ShowKeyItemList();
 		break;
 
 	case ItemType::BALL:
@@ -144,7 +162,7 @@ void Bag::ChangeBag()
 		BagName_->SetImage("Bag_PoketBalls.bmp");
 
 		RightArrow_->SetOrder(-1);
-		ShowBallInfo();
+		ShowBallList();
 		break;
 	}
 }
@@ -159,21 +177,54 @@ void Bag::MoveItem()
 			if (ItemList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				SelectArrow_->PlusPivot({0, 70});
+				++ItemIndex_;
+
+				MoveArrow();
+				UpFonts();
+
+				if (ItemList_.size() == SelectIndex_)
+				{
+					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+					return;
+				}
+				
+				ShowItemInfo();
 			}
 			break;
 		case ItemType::KEYITEM:
 			if (KeyItemList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				SelectArrow_->PlusPivot({ 0, 70 });
+				++ItemIndex_;
+
+				MoveArrow();
+				UpFonts();
+
+				if (KeyItemList_.size() == SelectIndex_)
+				{
+					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+					return;
+				}
+
+				ShowKeyItemInfo();
 			}
 			break;
 		case ItemType::BALL:
 			if (BallList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				SelectArrow_->PlusPivot({ 0, 70 });
+				++ItemIndex_;
+
+				MoveArrow();
+				UpFonts();
+
+				if (BallList_.size() == SelectIndex_)
+				{
+					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+					return;
+				}
+
+				ShowBallInfo();
 			}
 			break;
 		}
@@ -187,62 +238,249 @@ void Bag::MoveItem()
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				SelectArrow_->PlusPivot({ 0, -70 });
+				--ItemIndex_;
+				ShowItemInfo();
+				DownFonts();
 			}
 			break;
 		case ItemType::KEYITEM:
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				SelectArrow_->PlusPivot({ 0, -70 });
+				--ItemIndex_;
+				ShowKeyItemInfo();
+				DownFonts();
 			}
 			break;
 		case ItemType::BALL:
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				SelectArrow_->PlusPivot({ 0, -70 });
+				--ItemIndex_;
+				ShowBallInfo();
+				DownFonts();
 			}
 			break;
 		}
+
+		MoveArrow();
 	}
 }
 
+void Bag::MoveArrow()
+{
+	switch (SelectIndex_)
+	{
+	case 0:
+		SelectArrow_->SetPivot({ -107, -260 });
+		break;
+
+	case 1:
+		SelectArrow_->SetPivot({ -107, -195 });
+		break;
+
+	case 2:
+		SelectArrow_->SetPivot({ -107, -130 });
+		break;
+
+	case 3:
+		SelectArrow_->SetPivot({ -107, -65 });
+		break;
+
+	case 4:
+		SelectArrow_->SetPivot({ -107, 0 });
+		break;
+
+	case 5:
+		SelectArrow_->SetPivot({ -107, 60 });
+		break;
+
+	default:
+		SelectArrow_->SetPivot({ -107, 60 });
+		break;
+	}
+}
 
 void Bag::ShowItemInfo()
 {
-	if (0 == ItemList_.size())
-	{
-		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-		return;
-	}
-
-	ItemPreview_->SetImage(ItemList_[0]->GetNameCopy() + ".bmp");
-
-	GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
-	Fonts->SetPosition({ -90, -260});
-	Fonts->ShowString(ItemList_[0]->GetNameCopy(), true);
-	AllFonts_.push_back(Fonts);
+	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 }
 
 void Bag::ShowKeyItemInfo()
 {
-	if (0 == KeyItemList_.size())
-	{
-		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-		return;
-	}
-
-	ItemPreview_->SetImage(KeyItemList_[0]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(KeyItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 }
 
 void Bag::ShowBallInfo()
 {
-	if (0 == BallList_.size())
+	ItemPreview_->SetImage(BallList_[SelectIndex_]->GetNameCopy() + ".bmp");
+}
+
+
+void Bag::ShowItemList()
+{
+	DestroyFonts();
+
+	UpArrow_->SetOrder(-1);
+	DownArrow_->SetOrder(-1);
+
+	if (0 == ItemList_.size())
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		EndFont->SetPosition({ 380, 30.f });
+		EndFont->ShowString("CLOSE", true);
+		AllFonts_.push_back(EndFont);
+
 		return;
 	}
 
+	else if (6 == ItemList_.size())
+	{
+		UpArrow_->SetOrder(5);
+		DownArrow_->SetOrder(5);
+	}
+
+	ItemPreview_->SetImage(ItemList_[0]->GetNameCopy() + ".bmp");
+
+	ShowFonts(ItemList_);
+}
+
+void Bag::ShowKeyItemList()
+{
+	DestroyFonts();
+
+	UpArrow_->SetOrder(-1);
+	DownArrow_->SetOrder(-1);
+
+	if (0 == KeyItemList_.size())
+	{
+		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		EndFont->SetPosition({ 380, 30.f });
+		EndFont->ShowString("CLOSE", true);
+		AllFonts_.push_back(EndFont);
+
+		return;
+	}
+
+	else if (6 == KeyItemList_.size())
+	{
+		UpArrow_->SetOrder(5);
+		DownArrow_->SetOrder(5);
+	}
+
+	ItemPreview_->SetImage(KeyItemList_[0]->GetNameCopy() + ".bmp");
+
+	ShowFonts(KeyItemList_);
+}
+
+void Bag::ShowBallList()
+{
+	DestroyFonts();
+
+	UpArrow_->SetOrder(-1);
+	DownArrow_->SetOrder(-1);
+
+	if (0 == BallList_.size())
+	{
+		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		EndFont->SetPosition({ 380, 30.f });
+		EndFont->ShowString("CLOSE", true);
+		AllFonts_.push_back(EndFont);
+
+		return;
+	}
+
+	else if (6 == BallList_.size())
+	{
+		UpArrow_->SetOrder(5);
+		DownArrow_->SetOrder(5);
+	}
+
 	ItemPreview_->SetImage(BallList_[0]->GetNameCopy() + ".bmp");
+
+	ShowFonts(BallList_);
+}
+
+void Bag::UpFonts()
+{
+	if (7 > AllFonts_.size())
+	{
+		return;
+	}
+
+	if (5 < SelectIndex_
+		&& AllFonts_.size() - 1 >= SelectIndex_)
+	{
+		for (int i = 0; i < AllFonts_.size(); ++i)
+		{
+			AllFonts_[i]->SetMove({ 0.f, -65.f });
+		}
+	}
+}
+
+void Bag::DownFonts()
+{
+	if (7 > AllFonts_.size())
+	{
+		return;
+	}
+
+ 	if (5 >= SelectIndex_
+		&& AllFonts_.size() - 1 <= SelectIndex_ + 1)
+	{
+		for (int i = 0; i < AllFonts_.size(); ++i)
+		{
+			AllFonts_[i]->SetMove({ 0.f, 65.f });
+		}
+	}
+}
+
+void Bag::HideFonts()
+{
+}
+
+void Bag::ShowFonts(std::vector<Item*>& _Fonts)
+{
+	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	BeginFont->SetPosition({ 380, 30.f });
+	BeginFont->ShowString(_Fonts[0]->GetNameCopy(), true);
+	AllFonts_.push_back(BeginFont);
+
+	if (1 < _Fonts.size())
+	{
+		for (int i = 1; i < _Fonts.size(); ++i)
+		{
+			GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
+			Fonts->SetPosition(AllFonts_.back()->GetPosition() + float4{ 0, 65.f });
+			Fonts->ShowString(_Fonts[i]->GetNameCopy(), true);
+			AllFonts_.push_back(Fonts);
+		}
+	}
+
+	GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	EndFont->SetPosition(AllFonts_.back()->GetPosition() + float4{ 0, 65.f });
+	EndFont->ShowString("CLOSE", true);
+	AllFonts_.push_back(EndFont);
+}
+
+void Bag::DestroyFonts()
+{
+	std::vector<GameEngineContentFont*>::iterator StartIter = AllFonts_.begin();
+	std::vector<GameEngineContentFont*>::iterator EndIter = AllFonts_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != (*StartIter))
+		{
+			(*StartIter)->Death();
+		}
+	}
+
+	AllFonts_.clear();
 }

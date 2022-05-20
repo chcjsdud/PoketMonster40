@@ -28,7 +28,7 @@ public:
 	// True  : 출력 예약 성공적으로 완료
 	// False : 이미 등록된 출력 명령이 있음
 	//
-	// _String : 출력할 문장
+	// _String : 출력할 문장	
 	// _ShowAllText : 애니메이션 형태로 출력 하려면 false, 한번에 출력하려면 true
 	// _LineHeight : 줄 간 간격
 	// _DelayTime : 문자 간 출력 딜레이
