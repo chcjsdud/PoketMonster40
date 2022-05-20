@@ -233,6 +233,7 @@ void PlayerRed::Start()
 	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp",20);
 	WMenuUIRender_->Off();
 	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp",20);
+	WMenuArrowRender_->SetPivot({ 240,-260 });
 	WMenuArrowRender_->Off();
 	
 	FadeRender_ = CreateRenderer("FadeInOut.bmp", 10);
@@ -478,6 +479,11 @@ void PlayerRed::WMenuUISelect()
 			return;
 		}
 
+		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Z"))
+		{
+			GameEngine::GetInst().ChangeLevel("UITestLevel");
+			return;
+		}
 		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
 			WMenuArrowRender_->SetPivot({ 240,-260 });
@@ -489,6 +495,11 @@ void PlayerRed::WMenuUISelect()
 			return;
 		}
 
+		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Z"))
+		{
+			GameEngine::GetInst().ChangeLevel("BagTestLevel");
+			return;
+		}
 		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
 			WMenuArrowRender_->SetPivot({ 240,-200 });
@@ -533,6 +544,13 @@ void PlayerRed::WMenuUISelect()
 			return;
 		}
 
+		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Z"))
+		{
+			WMenuUIRender_->Off();
+			WMenuArrowRender_->Off();
+			WMenuUICheck_ = true;
+			return;
+		}
 		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
 			WMenuArrowRender_->SetPivot({ 240,40 });
@@ -565,8 +583,6 @@ void PlayerRed::IsWMenuKey()
 		if (true == WMenuUICheck_)
 		{
 			WMenuUIRender_->On();
-			//-260, -200, -140, -80, -20, 40, 100
-			WMenuArrowRender_->SetPivot({ 240,-260 });
 			WMenuArrowRender_->On();
 
 			WMenuUICheck_ = false;

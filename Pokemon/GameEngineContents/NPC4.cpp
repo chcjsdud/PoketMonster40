@@ -45,6 +45,8 @@ void NPC4::Start()
 
 	NPCRender_->ChangeAnimation("IdleDown");
 	SetPosition(RoomTileMap1::GetInst()->GetWorldPostion(8, 4));
+	// NPC 움직임 작업 후 아래 주석 해제, 위 SetPosition제거 및 include 헤더 변경
+	//SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(20, 100));
 }
 
 void NPC4::Update()
