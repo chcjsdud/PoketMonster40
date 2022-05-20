@@ -75,6 +75,16 @@ public:
 	inline void PlusHp(int _Value) //Hp 증가
 	{
 		Hp_ += _Value;
+		//HP 최대치, 최소치 조절
+		if (Hp_ <= 0)
+		{
+			Hp_ = 0;
+		}
+
+		if (Hp_ >= MaxHp_)
+		{
+			Hp_ = MaxHp_;
+		}
 	}
 
 	inline int& GetMaxHp()

@@ -96,6 +96,23 @@ void PokemonMenu::Render()
 		CancelRenderer_->SetImage("PoketmonMenu_10.bmp");
 	}
 
+	//Hp 렌더링
+	float HpRatio = static_cast<float>(PokemonList_[0]->GetHp()) / static_cast<float>(PokemonList_[0]->GetMaxHp());
+	float HpXScale = GameEngineImageManager::GetInst()->Find("PoketmonMenu_Hp1.bmp")->GetScale().x * HpRatio;
+	if (HpRatio > 0.5f)
+	{
+		HpRenderer_[0]->SetImage("PoketmonMenu_Hp1.bmp");
+	}
+	else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
+	{
+		HpRenderer_[0]->SetImage("PoketmonMenu_Hp2.bmp");
+	}
+	else
+	{
+		HpRenderer_[0]->SetImage("PoketmonMenu_Hp3.bmp");
+	}
+	HpRenderer_[0]->SetScale({HpXScale ,HpRenderer_[0]->GetScale().y});
+
 	//LPPOINT mousePos; // 마우스 좌표를 저장할 변수 생성. POINT 자료형의 포인터형임.
 	//mousePos = new POINT;
 	//GetCursorPos(mousePos); // 바탕화면에서의 마우스 좌표를 가져옴
@@ -198,6 +215,16 @@ void PokemonMenu::SelectPokemonUpdate()
 			CurrentOrder_ = RememberOrder_;
 		}
 	}
+
+	if (GameEngineInput::GetInst()->IsPress("Z") == true)
+	{
+		ChangeHp(0, -1);
+	}
+
+	if (GameEngineInput::GetInst()->IsPress("X") == true)
+	{
+		ChangeHp(0, 1);
+	}
 }
 
 void PokemonMenu::SelectActionStart()
@@ -265,6 +292,19 @@ void PokemonMenu::InitRenderer()
 		PokemonRenderer_[i]->SetTransColor(RGB(255, 0, 255));
 		PokemonRenderer_[i]->Off();
 	}
+
+	//HP박스
+	HpRenderer_[0] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, {128,236});
+	HpRenderer_[0]->SetImage("PoketmonMenu_Hp1.bmp");
+	HpRenderer_[0]->SetTransColor(RGB(255, 0, 255));
+
+	for (int i = 1; i < 6; i++)
+	{
+		HpRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 736,static_cast<float>( -26+ 96 * i) });
+		HpRenderer_[i]->SetImage("PoketmonMenu_Hp1.bmp");
+		HpRenderer_[i]->SetTransColor(RGB(255, 0, 255));
+		HpRenderer_[i]->Off();
+	}
 }
 
 void PokemonMenu::GetPlayerPokemon()
@@ -286,8 +326,6 @@ void PokemonMenu::GetPlayerPokemon()
 		{
 			PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
 			PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
-
-
 		}
 	}
 }
@@ -300,8 +338,30 @@ void PokemonMenu::OnUI()
 	{
 		BoxRenderer_[i]->On();
 		PokemonRenderer_[i]->On();
+		HpRenderer_[i]->On();
 	}
 
+}
+
+void PokemonMenu::ChangeHp(int _PokemonIndex, int _value)
+{
+	PokemonInfo* CurPokemonInfo = PokemonList_[_PokemonIndex];
+	CurPokemonInfo->PlusHp(_value);
+	//현재 폰트 업데이트
+	CurHpFonts_[_PokemonIndex]->ClearCurrentFonts();
+
+	GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+	if (_PokemonIndex == 0)
+	{
+		NewFonts->SetPosition({ 150,248 });
+	}
+	else
+	{
+		NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * _PokemonIndex) });
+	}
+	NewFonts->ShowString(std::to_string(PokemonList_[_PokemonIndex]->GetHp()), true);
+	AllFonts_[_PokemonIndex] = NewFonts;
+	CurHpFonts_[_PokemonIndex] = NewFonts;
 }
 
 void PokemonMenu::InitFont()
@@ -330,6 +390,7 @@ void PokemonMenu::InitFont()
 			NewFonts->SetPosition({ 150,248 });
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
 			AllFonts_.push_back(NewFonts);
+			CurHpFonts_.push_back(NewFonts);
 		}
 
 		//최대 체력
@@ -359,6 +420,23 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//현재 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * i)});
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetHp()), true);
+			AllFonts_.push_back(NewFonts);
+			CurHpFonts_.push_back(NewFonts);
+		}
+
+		//최대 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMaxHp()), true);
 			AllFonts_.push_back(NewFonts);
 		}
 

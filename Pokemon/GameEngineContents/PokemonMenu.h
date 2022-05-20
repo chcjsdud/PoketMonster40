@@ -43,9 +43,12 @@ private:
 	void InitRenderer();
 	void GetPlayerPokemon();
 	void OnUI(); //UI가 켜질경우
+	void ChangeHp(int _PokemonIndex, int _value);
+
 
 	//폰트 
 	std::vector<GameEngineContentFont*> AllFonts_; //나중에 OffUI일때 모든 폰트 삭제하기
+	std::vector<GameEngineContentFont*> CurHpFonts_; //나중에 OffUi할 때 모든 폰트 클리어하기
 	void InitFont();
 
 	//렌더러
@@ -54,6 +57,7 @@ private:
 	GameEngineRenderer* DialogRenderer_;
 	GameEngineRenderer* CancelRenderer_;
 	GameEngineRenderer* PokemonRenderer_[6];
+	GameEngineRenderer* HpRenderer_[6];
 
 	//포켓몬 아이콘 관련
 	float CurTickTime_;
