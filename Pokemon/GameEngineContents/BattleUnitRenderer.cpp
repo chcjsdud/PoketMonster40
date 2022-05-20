@@ -11,7 +11,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, OpponentPokemonPos_({ 200, -105 })
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
-	, MoveSpeed(100.0f)
+	, MoveSpeed(200.0f)
 {
 }
 
