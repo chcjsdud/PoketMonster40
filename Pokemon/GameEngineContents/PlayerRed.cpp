@@ -140,6 +140,15 @@ void PlayerRed::FadeIn()
 			FadeRender_->Off();
 			IsFadeIn_ = false;
 			IsMoveCamera_ = true;
+			
+			if (nullptr != NextTileMap_)
+			{
+				CurrentTileMap_ = NextTileMap_;
+				SetPosition(CurrentTileMap_->GetWorldPostion(NextTilePos_.ix(), NextTilePos_.iy()));
+
+				NextTileMap_ = nullptr;
+				NextTilePos_ = float4::ZERO;
+			}
 		}
 	}
 }
@@ -249,46 +258,50 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
-	LerpTime_ = 0;
 	StartPos_ = GetPosition();
 	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 
 	if (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y) == true)
 	{
-		IsMove_ = true;
-		PlayerMoveTile(NextIndex.X, NextIndex.Y);
-		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+		if (false == PlayerMoveTileCheck(NextIndex.X, NextIndex.Y))
+		{
+			IsMove_ = true;
+			GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+		}
+		else
+		{
+			Alpha_ = 0;
+			IsFadeIn_ = true;
+		}
 	}
 }
 
-void PlayerRed::PlayerMoveTile(int _X, int _Y)
+bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
 	if (RoomTileMap1::GetInst() == CurrentTileMap_)
 	{
 		if (_X == 8 && _Y == 0)
 		{
-			IsFadeIn_ = true;
-			Alpha_ = 0;
-			CurrentTileMap_ = RoomTileMap2::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
-			//MoveCamera(9, 0);
+			NextTileMap_ = RoomTileMap2::GetInst();
+			NextTilePos_ = { 9, 0 };
+			return true;
 		}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
 		if (_X == 9 && _Y == 0)
 		{
-			IsFadeIn_ = true;
-			Alpha_ = 0;
 			CurrentTileMap_ = RoomTileMap1::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+			return true;
 		}
 
 		if (_X == 3 && _Y == 6)
 		{
 			CurrentTileMap_ = WorldTileMap1::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(15, 92));
+			return true;
 		}
 	}
 	else if (RoomTileMap3::GetInst() == CurrentTileMap_)
@@ -297,6 +310,7 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 		{
 			CurrentTileMap_ = WorldTileMap1::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(24, 92));
+			return true;
 		}
 	}
 	else if (RoomTileMap4::GetInst() == CurrentTileMap_)
@@ -305,6 +319,7 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 		{
 			CurrentTileMap_ = WorldTileMap1::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(25, 98));
+			return true;
 		}
 	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
@@ -313,18 +328,28 @@ void PlayerRed::PlayerMoveTile(int _X, int _Y)
 		{
 			CurrentTileMap_ = RoomTileMap2::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(3, 6));
+			return true;
 		}
 		if (_X == 24 && _Y == 92)
 		{
 			CurrentTileMap_ = RoomTileMap3::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(4, 6));
+			return true;
 		}
 		if (_X == 25 && _Y == 98)
 		{
 			CurrentTileMap_ = RoomTileMap4::GetInst();
 			SetPosition(CurrentTileMap_->GetWorldPostion(6, 10));
+			return true;
 		}
 	}
+	return false;
+}
+
+void PlayerRed::MoveTile(PokemonTileMap& _Tile, float4 _Pos)
+{
+	CurrentTileMap_ = &_Tile;
+	SetPosition(CurrentTileMap_->GetWorldPostion(_Pos.ix(), _Pos.iy()));
 }
 
 void PlayerRed::Camera()
@@ -499,9 +524,14 @@ void PlayerRed::MoveAnim()
 		return;
 	}
 
-	LerpTime_ += GameEngineTime::GetDeltaTime();
+	LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
 	LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_ );
 	LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_ );
-
 	SetPosition({ LerpX_,LerpY_ });
+
+	if (LerpTime_ > 1.0f)
+	{
+		LerpTime_ = 0.0f;
+		IsMove_ = false;
+	}
 }

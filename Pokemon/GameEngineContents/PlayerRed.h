@@ -67,7 +67,9 @@ private:
 	
 	// 타일맵 및 이동관련
 	PokemonTileMap* CurrentTileMap_;
+	PokemonTileMap* NextTileMap_;
 	float4 CurrentTilePos_;
+	float4 NextTilePos_;
 	bool IsMove_;
 
 	GameEngineRenderer* WMenuUIRender_;
@@ -83,8 +85,9 @@ private:
 	void Render() override;
 
 	void PlayerSetMove(float4 _Value);
-	void PlayerMoveTile(int _X, int _Y);
-
+	bool PlayerMoveTileCheck(int _X, int _Y);
+	void MoveTile(PokemonTileMap& _Tile, float4 _Pos);
+	
 	void Camera();
 	void MoveCamera(int _X, int _Y);
 	void WMenuUISelect();
