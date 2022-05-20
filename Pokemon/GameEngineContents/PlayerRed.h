@@ -43,6 +43,7 @@ public:
 
 	void FadeIn();
 	void FadeOut();
+	void FadeRL();
 
 protected:
 
@@ -57,12 +58,16 @@ private:
 
 	GameEngineRenderer* RedRender_;
 	GameEngineRenderer* FadeRender_;
+	GameEngineRenderer* FadeRightRender_;
+	GameEngineRenderer* FadeLeftRender_;
 	bool IsFadeIn_;
 	bool IsFadeOut_;
-	bool IsMoveCamera_;
+	bool IsFadeRL_;
+	bool IsFadeRLCheck_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;
+	float FadeTime_;
 	UINT Alpha_;
 	
 	// 타일맵 및 이동관련
@@ -89,7 +94,6 @@ private:
 	void MoveTile(PokemonTileMap& _Tile, float4 _Pos);
 	
 	void Camera();
-	void MoveCamera(int _X, int _Y);
 	void WMenuUISelect();
 
 	bool IsMoveKey();

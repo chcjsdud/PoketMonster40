@@ -25,11 +25,13 @@ PlayerRed::PlayerRed()
 	, WMenuUIRender_()
 	, WMenuUICheck_(true)
 	, LerpTime_(0)
+	, FadeTime_(0)
 	, MyPokemonList_{nullptr}
 	, MyItemList_{}
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
-	, IsMoveCamera_(false)
+	, IsFadeRL_(false)
+	, IsFadeRLCheck_(false)
 {
 	MyPokemonList_.resize(6);
 }
@@ -137,10 +139,9 @@ void PlayerRed::FadeIn()
 		if (255 <= Alpha_)
 		{
 			Alpha_ = 255;
-			FadeRender_->Off();
+			//FadeRender_->Off();
 			IsFadeIn_ = false;
-			IsMoveCamera_ = true;
-			
+			IsFadeOut_ = true;
 			if (nullptr != NextTileMap_)
 			{
 				CurrentTileMap_ = NextTileMap_;
@@ -148,6 +149,11 @@ void PlayerRed::FadeIn()
 
 				NextTileMap_ = nullptr;
 				NextTilePos_ = float4::ZERO;
+			}
+			if (true == IsFadeRLCheck_)
+			{
+				IsFadeRL_ = true;
+				FadeTime_ = 0;
 			}
 		}
 	}
@@ -159,14 +165,31 @@ void PlayerRed::FadeOut()
 	{
 		Alpha_ -= 1;
 
-		FadeRender_->On();
 		FadeRender_->SetAlpha(Alpha_);
 
 		if (0 >= Alpha_)
 		{
 			Alpha_ = 0;
-			FadeRender_->SetAlpha(0);
 			IsFadeOut_ = false;
+		}
+	}
+}
+
+void PlayerRed::FadeRL()
+{
+	if (true == IsFadeRL_)
+	{
+		FadeTime_ += GameEngineTime::GetDeltaTime() * 300;
+		FadeRightRender_->On();
+		FadeLeftRender_->On();
+		FadeRightRender_->SetPivot({ 0 + FadeTime_, 0 });
+		FadeLeftRender_->SetPivot({ 0 - FadeTime_,0 });
+
+		if (FadeRightRender_->GetPivot().x >= 500)
+		{
+			IsFadeRLCheck_ = false;
+			IsFadeRL_ = false;
+			return;
 		}
 	}
 }
@@ -212,6 +235,10 @@ void PlayerRed::Start()
 	
 	FadeRender_ = CreateRenderer("FadeInOut.bmp", 10);
 	FadeRender_->Off();
+	FadeRightRender_ = CreateRenderer("FadeRight.bmp", 10);
+	FadeRightRender_->Off();
+	FadeLeftRender_ = CreateRenderer("FadeLeft.bmp", 10);
+	FadeLeftRender_->Off();
 	
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
@@ -249,6 +276,7 @@ void PlayerRed::Update()
 	MoveAnim();
 	FadeIn();
 	FadeOut();
+	FadeRL();
 	//Camera();
 }
 
@@ -292,15 +320,16 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 9 && _Y == 0)
 		{
-			CurrentTileMap_ = RoomTileMap1::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(9, 0));
+			NextTileMap_ = RoomTileMap1::GetInst();
+			NextTilePos_ = { 9,0 };
 			return true;
 		}
 
 		if (_X == 3 && _Y == 6)
 		{
-			CurrentTileMap_ = WorldTileMap1::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(15, 92));
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 15,92 };
+			IsFadeRLCheck_ = true;
 			return true;
 		}
 	}
@@ -308,8 +337,9 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 4 && _Y == 6)
 		{
-			CurrentTileMap_ = WorldTileMap1::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(24, 92));
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 24,92 };
+			IsFadeRLCheck_ = true;
 			return true;
 		}
 	}
@@ -317,8 +347,9 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 6 && _Y == 10)
 		{
-			CurrentTileMap_ = WorldTileMap1::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(25, 98));
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 25,98 };
+			IsFadeRLCheck_ = true;
 			return true;
 		}
 	}
@@ -326,20 +357,20 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 15 && _Y == 92)
 		{
-			CurrentTileMap_ = RoomTileMap2::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(3, 6));
+			NextTileMap_ = RoomTileMap2::GetInst();
+			NextTilePos_ = { 3,6 };
 			return true;
 		}
 		if (_X == 24 && _Y == 92)
 		{
-			CurrentTileMap_ = RoomTileMap3::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(4, 6));
+			NextTileMap_ = RoomTileMap3::GetInst();
+			NextTilePos_ = { 4,6 };
 			return true;
 		}
 		if (_X == 25 && _Y == 98)
 		{
-			CurrentTileMap_ = RoomTileMap4::GetInst();
-			SetPosition(CurrentTileMap_->GetWorldPostion(6, 10));
+			NextTileMap_ = RoomTileMap4::GetInst();
+			NextTilePos_ = { 6,10 };
 			return true;
 		}
 	}
@@ -388,14 +419,6 @@ void PlayerRed::Camera()
 		float4 CurrentCameraPos = GetLevel()->GetCameraPos();
 		CurrentCameraPos.y = GetLevel()->GetCameraPos().y - (GetLevel()->GetCameraPos().y + CameraRectY - WorldMapScaleY);
 		GetLevel()->SetCameraPos(CurrentCameraPos);
-	}
-}
-
-void PlayerRed::MoveCamera(int _X, int _Y)
-{
-	if (true == IsMoveCamera_)
-	{
-		SetPosition(CurrentTileMap_->GetWorldPostion(_X, _Y));
 	}
 }
 
