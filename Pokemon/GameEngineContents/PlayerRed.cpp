@@ -259,6 +259,7 @@ void PlayerRed::Start()
 	RedRender_->CreateAnimation("RunRight.bmp", "RunRight", 0, 2, 0.1f, true);
 
 	RedRender_->ChangeAnimation("IdleDown");
+	RedRender_->SetPivot({0, -15});
 
 	AnimationName_ = "Idle";
 	CurrentDir_ = RedDir::Down;
@@ -328,14 +329,14 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 9 && _Y == 0)
+		if (_X == 10 && _Y == 0)
 		{
 			NextTileMap_ = RoomTileMap1::GetInst();
 			NextTilePos_ = { 9,0 };
 			return true;
 		}
 
-		if (_X == 3 && _Y == 6)
+		if (_X == 3 && _Y == 7)
 		{
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 15,92 };
@@ -345,7 +346,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	}
 	else if (RoomTileMap3::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 4 && _Y == 6)
+		if (_X == 4 && _Y == 7)
 		{
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 24,92 };
@@ -355,7 +356,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	}
 	else if (RoomTileMap4::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 6 && _Y == 10)
+		if (_X == 6 && _Y == 11)
 		{
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 25,98 };
@@ -365,7 +366,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	}
 	else if (RoomTileMap5::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 7 && _Y == 6)
+		if (_X == 7 && _Y == 7)
 		{
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 23, 31 };
@@ -374,7 +375,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	}
 	else if (RoomTileMap6::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 4 && _Y == 5)
+		if (_X == 4 && _Y == 6)
 		{
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 33, 24 };
@@ -383,19 +384,19 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 15 && _Y == 92)
+		if (_X == 15 && _Y == 91) // 레드 집
 		{
 			NextTileMap_ = RoomTileMap2::GetInst();
 			NextTilePos_ = { 3,6 };
 			return true;
 		}
-		if (_X == 24 && _Y == 92)
+		if (_X == 24 && _Y == 91) // 그린 집
 		{
 			NextTileMap_ = RoomTileMap3::GetInst();
 			NextTilePos_ = { 4,6 };
 			return true;
 		}
-		if (_X == 25 && _Y == 98)
+		if (_X == 25 && _Y == 97) // 오박사 연구소
 		{
 			NextTileMap_ = RoomTileMap4::GetInst();
 			NextTilePos_ = { 6,10 };
