@@ -88,6 +88,7 @@ void Bag::Update()
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	HideFonts();
 }
 
 void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
@@ -165,6 +166,8 @@ void Bag::ChangeBag()
 		ShowBallList();
 		break;
 	}
+
+	HideFonts();
 }
 
 void Bag::MoveItem()
@@ -422,6 +425,8 @@ void Bag::UpFonts()
 			AllFonts_[i]->SetMove({ 0.f, -65.f });
 		}
 	}
+
+	HideFonts();
 }
 
 void Bag::DownFonts()
@@ -439,10 +444,29 @@ void Bag::DownFonts()
 			AllFonts_[i]->SetMove({ 0.f, 65.f });
 		}
 	}
+
+	HideFonts();
 }
 
 void Bag::HideFonts()
 {
+	for (int i = 0; i < AllFonts_.size(); ++i)
+	{
+		AllFonts_[i]->On();
+	}
+
+	for (int i = 0; i < AllFonts_.size(); ++i)
+	{
+		if (10 >= AllFonts_[i]->GetPosition().y)
+		{
+			AllFonts_[i]->Off();
+		}
+
+		else if (400 <= AllFonts_[i]->GetPosition().y)
+		{
+			AllFonts_[i]->Off();
+		}
+	}
 }
 
 void Bag::ShowFonts(std::vector<Item*>& _Fonts)
