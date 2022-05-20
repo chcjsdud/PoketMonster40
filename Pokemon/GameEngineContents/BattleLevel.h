@@ -80,4 +80,6 @@ private:
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* PlayerStopCheck;
+
+	bool OneTalk;
 };
