@@ -1,22 +1,25 @@
-#include "BattleInerface.h"
+#include "BattleInterface.h"
+#include "BattleLevel.h"
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineTime.h>
 #include "PokemonEngine.h"
 
-BattleInerface::BattleInerface()
+BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
 	,CurOrder(BattleOrder::None)
 {
 
 }
 
-BattleInerface::~BattleInerface()
+BattleInterface::~BattleInterface()
 {
 
 }
 
-void BattleInerface::Start()
+void BattleInterface::Start()
 {
+	Level_ = dynamic_cast<BattleLevel*>(GetLevel());
+
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
 	GameEngineInput::GetInst()->CreateKey("SDown", VK_DOWN);
@@ -50,22 +53,30 @@ void BattleInerface::Start()
 	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
 }
 
-void BattleInerface::Render()
+void BattleInterface::Render()
 {
 }
 
-void BattleInerface::Update()
+void BattleInterface::Update()
 {
 	//MoveKey();
 
 	DoomChit();
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	SelectOrder();
-	OrderCheck();
+	if (Level_->GetBattleState() != BattleState::Battle)
+	{
+		SelectOrder();
+		OrderCheck();
+	}
+
 }
 
+void BattleInterface::FirstBattlePage()
+{
+	//std::string& AttactPokemon = 
+}
 
-void BattleInerface::MoveKey()
+bool BattleInterface::MoveKey()
 {
 	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
 	{	//Fight에서 Pokemon으로
@@ -106,9 +117,19 @@ void BattleInerface::MoveKey()
 	{	//Run에서 Pokemon으로
 		GetSelect()->SetPivot({ -190.0f,35.0f });
 	}
+
+
+
+	// 장중혁 : Debug
+	if (GameEngineInput::GetInst()->IsDown("SSelect"))
+	{
+		return true;
+	}
+	return false;
+	//
 }
 
-void BattleInerface::DoomChit()
+void BattleInterface::DoomChit()
 {
 	if ((int)TimeCheck % 2 == 0)
 	{
@@ -125,7 +146,7 @@ void BattleInerface::DoomChit()
 	}
 }
 
-void BattleInerface::OrderCheck()
+void BattleInterface::OrderCheck()
 {
 	switch (CurOrder)
 	{
@@ -143,7 +164,7 @@ void BattleInerface::OrderCheck()
 	}
 }
 
-void BattleInerface::SelectOrder()
+void BattleInterface::SelectOrder()
 {
 	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 	{	//싸우다 선택

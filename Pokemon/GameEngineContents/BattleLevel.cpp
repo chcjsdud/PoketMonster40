@@ -2,6 +2,7 @@
 #include <GameEngine/GameEngine.h>
 
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "BattleTestNPC1.h"
 
 #include "BattleLevel.h"
 #include "BattleUnitRenderer.h"
@@ -16,29 +17,51 @@ BattleLevel::BattleLevel()
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
 	, PlayerRed_(nullptr)
-	, BEngine_(nullptr)
 	, OneTalk(false)
+	, Fonts(nullptr)
+	// 디버깅
+	, Opponent_(nullptr)
+	, PlayerPokemon_(nullptr)
+	, InBattle_(BattleTurn::Off)
 {
 
 }
 
 BattleLevel::~BattleLevel()
 {
-
+	BattleEngine::Destroy();
 }
 
 void BattleLevel::Loading()
 {
-	CreateActor<BattleBackground>();
-	BEngine_ = CreateActor<BattleEngine>();
 
-	Interface = CreateActor<BattleInerface>(3);
+	/// BattleTestNPC1 DebugTest
+	Pokemon* Debug = CreateActor<Pokemon>();
+	Debug->SetInfo("Squirtle");
+	Opponent_ = CreateActor<BattleTestNPC1>();
+	Opponent_->PushPokemon(Debug);
+	PlayerPokemon_ = CreateActor<Pokemon>();
+	PlayerPokemon_->SetInfo("Charmander");
+	// Debug
+	{
+		BattleEngine::GetInst()->BattleStart(PlayerPokemon_, Opponent_->GetPokemon()); // Debug
+
+	}
+	//
+
+
+
+	CreateActor<BattleBackground>();
+
+	Interface = CreateActor<BattleInterface>(3);
 	Interface->SetPosition({ 720.0f, 548.0f });
 	
 	//김예나:테스트 코드
 	PlayerStopCheck = CreateActor<BattleUnitRenderer>();
 	Fonts = CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
+
+
 }
 
 void BattleLevel::Update()
@@ -53,9 +76,17 @@ void BattleLevel::Update()
 		return;
 		break;
 	case BattleState::Selecet:
-		Interface->MoveKey();
+		if (Interface->MoveKey() == true)
+		{
+			// 메뉴 확인 로직 필요
+			BattleEngine::GetInst()->StartBattlePage("Scratch", "Tackle");// Debug
+			BState_ = BattleState::Battle; // Debug
+			InBattle_ = BattleTurn::FirstTurn;
+			BattlePageStart();
+		}
 		break;
 	case BattleState::Battle:
+		
 		return;
 		break;
 	case BattleState::Endding:
@@ -75,18 +106,58 @@ void BattleLevel::Update()
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
 } 
+void BattleLevel::BattlePageStart()
+{
+	switch (InBattle_)
+	{
+	case BattleTurn::Off:
+		break;
+	case BattleTurn::Wait:
+		break;
+	case BattleTurn::FirstTurn:
+		FirstBattlePage();
+		break;
+	case BattleTurn::SecondTurn:
+		SecondBattlePage();
+		break;
+	case BattleTurn::BattleEnd:
+		break;
+	default:
+		break;
+	}
+}
+
+
+void BattleLevel::FirstBattlePage()
+{
+
+}
+
+
+void BattleLevel::SecondBattlePage()
+{
+
+}
 
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
+	// Debug
+	
+	//
+
 	if (PlayerRed_ == nullptr)
 	{
 		PlayerRed_  = PlayerRed::MainRed_;
 	}
+
+
+
 	//BState_ = BattleState::Openning
 	BState_ = BattleState::Selecet;
 	OpenningEnd_ = false;
 	EnddingEnd_ = false;
+	InBattle_ = BattleTurn::Off;
 	ShowOpenning();
 }
 

@@ -17,24 +17,24 @@ enum class BattleOrder
 };
 
 class GameEngineImage;
-class BattleInerface : public GameEngineActor
+class BattleInterface : public GameEngineActor
 {
 public:
 	//디폴트 생성자
-	BattleInerface();
+	BattleInterface();
 	//디폴트 소멸자
-	~BattleInerface();
+	~BattleInterface();
 	
 	
 	//======아래것들은 명시적으로 안쓰겠습니다(delete)======
 	
 	//디폴트 복사 생성자
-	BattleInerface(const BattleInerface& _Other) = delete;
+	BattleInterface(const BattleInterface& _Other) = delete;
 	//RValue Reference 생성자 (나중에 배울것)
-	BattleInerface(BattleInerface&& _Other) noexcept = delete;
+	BattleInterface(BattleInterface&& _Other) noexcept = delete;
 	//operater= (자기자신을 리턴하는)
-	BattleInerface& operator=(const BattleInerface& _Other) = delete;
-	BattleInerface& operator=(BattleInerface&& _Other) noexcept = delete;
+	BattleInterface& operator=(const BattleInterface& _Other) = delete;
+	BattleInterface& operator=(BattleInterface&& _Other) noexcept = delete;
 
 
 
@@ -52,6 +52,9 @@ public:
 	}
 
 protected:
+	void Start() override;
+	void Render() override;
+	void Update() override;
 
 private:
 	GameEngineRenderer* InterfaceImage;
@@ -64,20 +67,20 @@ private:
 	GameEngineRenderer* BattleCommend;
 	
 
-	BattleInerface* MainInterface;
+	BattleInterface* MainInterface;
 
 	BattleOrder CurOrder;
 
 	float TimeCheck;
 
-public:
-	void Start() override;
-	void Render() override;
-	void Update() override;
 
-	void MoveKey();
 	void DoomChit();
 	void OrderCheck();
 	void SelectOrder();
+	class BattleLevel* Level_;
+
+public:
+	bool MoveKey();
+	void FirstBattlePage();
 };
 

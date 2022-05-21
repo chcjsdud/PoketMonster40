@@ -1,17 +1,20 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
+#include "BattleNPCInterface.h"
 #include "PlayerRed.h"
-#include "BattleInerface.h"
+#include "BattleInterface.h"
 #include "BattleEnum.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
 
 //설명 : 
+
+enum class BattleTurn;
 class BattleEngine;
 class BattleLevel : public GameEngineLevel
 {
-	friend BattleEngine;
+	friend class BattleInterface;
 public:
 	//디폴트 생성자
 	BattleLevel();
@@ -36,11 +39,15 @@ public:
 		return BState_;
 	}
 
-	inline PlayerRed* GetRed()
+	inline PlayerRed* GetRed() const
 	{
 		return PlayerRed_;
 	}
 	
+	inline BattleTurn GetBattleTurn() const
+	{
+		return InBattle_;
+	}
 
 public:
 	inline void OpenningEnd()
@@ -62,24 +69,44 @@ protected:
 
 
 private:
-	BattleInerface* Interface;
+	BattleInterface* Interface;
 	BattleState BState_;
+	BattleTurn InBattle_;
+
+	void FirstBattlePage();
+	void BattlePageStart();
+	void SecondBattlePage();
 
 	// 오프닝 관련
 	void ShowOpenning();
 	bool OpenningEnd_;
-
+	//
+	
 	// 엔딩 관련
 	void ShowEndding();
 	bool EnddingEnd_;
+	//
+	
 
-	BattleEngine* BEngine_;
-	// 플레이어
+
+	// 플레이어 및 NPC
 	PlayerRed* PlayerRed_;
+	Pokemon* PlayerPokemon_; // Debug
+	BattleNPCInterface* Opponent_;
+	//
 
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* PlayerStopCheck;
 
 	bool OneTalk;
+};
+
+enum class BattleTurn
+{
+	Off,
+	Wait,
+	FirstTurn,
+	SecondTurn,
+	BattleEnd
 };

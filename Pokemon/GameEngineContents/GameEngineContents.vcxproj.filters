@@ -42,7 +42,7 @@
       <Filter>Battle</Filter>
     </ClCompile>
     <ClCompile Include="PlayerRed.cpp" />
-    <ClCompile Include="BattleInerface.cpp">
+    <ClCompile Include="BattleInterface.cpp">
       <Filter>Battle</Filter>
     </ClCompile>
     <ClCompile Include="BattleEngine.cpp">
@@ -96,6 +96,12 @@
     <ClCompile Include="NPC4.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
+    <ClCompile Include="BattleNPCInterface.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleTestNPC1.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -143,7 +149,7 @@
       <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="PlayerRed.h" />
-    <ClInclude Include="BattleInerface.h">
+    <ClInclude Include="BattleInterface.h">
       <Filter>Battle</Filter>
     </ClInclude>
     <ClInclude Include="BattleEngine.h">
@@ -193,6 +199,12 @@
       <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
     <ClInclude Include="NPC4.h">
+      <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleNPCInterface.h">
+      <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleTestNPC1.h">
       <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
