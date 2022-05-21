@@ -60,13 +60,13 @@ void PokemonInfoManager::Reset()
 {
 	{
 		//Tackle: ¸öÅë¹ÚÄ¡±â
-		CreateSkill("Tackle", 10, 35, PokemonType::NORMAL, SkillType::ATTACK);
+		CreateSkill("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical);
 		//Tail Whip: ²¿¸® Èçµé±â 
-		CreateSkill("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::DEBUFF);
+		CreateSkill("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status);
 		//Scratch: ÇÒÄû±â
-		CreateSkill("Scratch", 10, 35, PokemonType::NORMAL, SkillType::ATTACK);
+		CreateSkill("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical);
 		//Scratch: ¿ïÀ½¼Ò¸® 
-		CreateSkill("Growl", 10, 40, PokemonType::NORMAL, SkillType::DEBUFF);
+		CreateSkill("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status);
 	}
 
 	{

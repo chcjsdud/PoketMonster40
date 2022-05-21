@@ -341,7 +341,6 @@ void Bag::ShowItemList()
 
 	else if (6 == ItemList_.size())
 	{
-		UpArrow_->SetOrder(5);
 		DownArrow_->SetOrder(5);
 	}
 
@@ -371,7 +370,6 @@ void Bag::ShowKeyItemList()
 
 	else if (6 == KeyItemList_.size())
 	{
-		UpArrow_->SetOrder(5);
 		DownArrow_->SetOrder(5);
 	}
 
@@ -401,7 +399,6 @@ void Bag::ShowBallList()
 
 	else if (6 == BallList_.size())
 	{
-		UpArrow_->SetOrder(5);
 		DownArrow_->SetOrder(5);
 	}
 
