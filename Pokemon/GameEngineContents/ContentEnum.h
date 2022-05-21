@@ -33,10 +33,9 @@ enum class StatusEffect
 //스킬 종류
 enum class SkillType
 {
-	ATTACK, 
-	DEFENCE,
-	DEBUFF,
-	BUFF
+	Physical,
+	Special,
+	Status
 };
 
 
