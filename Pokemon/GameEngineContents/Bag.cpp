@@ -10,8 +10,20 @@
 Bag::Bag() 
 	: BagType_(ItemType::ITEM)
 	, BagRedrerer_(nullptr)
-	, BagIndex_(0)
+	, BagName_(nullptr)
+	, LeftArrow_(nullptr)
+	, RightArrow_(nullptr)
+	, UpArrow_(nullptr)
+	, DownArrow_(nullptr)
+	, SelectArrow_(nullptr)
 	, SelectIndex_(0)
+	, ItemPreview_(nullptr)
+	, AllFonts_{nullptr}
+	, BagIndex_(0)
+	, BagMoveTime_(0.f)
+	, IsMove_(false)
+	, ArrowMoveTime_(0.f)
+	, IsArrowSync_(false)
 {
 }
 
@@ -31,12 +43,12 @@ void Bag::Start()
 	BagName_->SetPivot({-314, -258 });
 
 	LeftArrow_ = CreateRenderer("Bag_LeftArrow.bmp");
-	LeftArrow_->SetPivot({-440, -25});
+	LeftArrow_->SetPivot({-436, -25});
 	LeftArrow_->SetOrder(-1);
 	RightArrow_ = CreateRenderer("Bag_RightArrow.bmp");
 	RightArrow_->SetPivot({ -200, -25 });
 	UpArrow_ = CreateRenderer("Bag_UpArrow.bmp");
-	UpArrow_->SetPivot({150, -290});
+	UpArrow_->SetPivot({150, -280});
 	UpArrow_->SetOrder(-1);
 	DownArrow_ = CreateRenderer("Bag_DownArrow.bmp");
 	DownArrow_->SetPivot({ 150, 90 });
@@ -66,24 +78,50 @@ void Bag::Start()
 
 	ShowItemList();
 }
-
 void Bag::Update()
 {
 	MoveBag();
 	MoveItem();
 
+	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
+
 	if (true == IsMove_)
 	{
-		MoveTime_ += GameEngineTime::GetDeltaTime();
+		BagMoveTime_ += GameEngineTime::GetDeltaTime();
 
-		if (0.1f <= MoveTime_)
+		if (0.1f <= BagMoveTime_)
 		{
 			IsMove_ = false;
-			MoveTime_ = 0.f;
+			BagMoveTime_ = 0.f;
 
 			ChangeBag();
 		}
 	}
+
+	if (0.3f <= ArrowMoveTime_
+		&& false == IsArrowSync_)
+	{
+		IsArrowSync_ = true;
+		ArrowMoveTime_ = 0.f;
+
+		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ 15, 0 });
+		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ -15, 0 });
+		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, -15 });
+		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, 15 });
+	}
+
+	if (0.3f <= ArrowMoveTime_
+		&& true == IsArrowSync_)
+	{
+		IsArrowSync_ = false;
+		ArrowMoveTime_ = 0.f;
+
+		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ -15, 0 });
+		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ 15, 0 });
+		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, 15 });
+		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, -15 });
+	}
+
 }
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -180,54 +218,49 @@ void Bag::MoveItem()
 			if (ItemList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				++ItemIndex_;
 
-				MoveArrow();
+				MoveSelectArrow();
 				UpFonts();
-
-				if (ItemList_.size() == SelectIndex_)
-				{
-					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-					return;
-				}
-				
 				ShowItemInfo();
+
+				//if (ItemList_.size() == SelectIndex_)
+				//{
+				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+				//	DownArrow_->SetOrder(-1);
+				//	//return;
+				//}
 			}
 			break;
 		case ItemType::KEYITEM:
 			if (KeyItemList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				++ItemIndex_;
 
-				MoveArrow();
+				MoveSelectArrow();
 				UpFonts();
-
-				if (KeyItemList_.size() == SelectIndex_)
-				{
-					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-					return;
-				}
-
 				ShowKeyItemInfo();
+
+				//if (KeyItemList_.size() == SelectIndex_)
+				//{
+				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+				//	return;
+				//}
 			}
 			break;
 		case ItemType::BALL:
 			if (BallList_.size() > SelectIndex_)
 			{
 				++SelectIndex_;
-				++ItemIndex_;
 
-				MoveArrow();
+				MoveSelectArrow();
 				UpFonts();
-
-				if (BallList_.size() == SelectIndex_)
-				{
-					ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-					return;
-				}
-
 				ShowBallInfo();
+
+				//if (BallList_.size() == SelectIndex_)
+				//{
+				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+				//	return;
+				//}
 			}
 			break;
 		}
@@ -241,7 +274,6 @@ void Bag::MoveItem()
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				--ItemIndex_;
 				ShowItemInfo();
 				DownFonts();
 			}
@@ -250,7 +282,6 @@ void Bag::MoveItem()
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				--ItemIndex_;
 				ShowKeyItemInfo();
 				DownFonts();
 			}
@@ -259,18 +290,17 @@ void Bag::MoveItem()
 			if (0 < SelectIndex_)
 			{
 				--SelectIndex_;
-				--ItemIndex_;
 				ShowBallInfo();
 				DownFonts();
 			}
 			break;
 		}
 
-		MoveArrow();
+		MoveSelectArrow();
 	}
 }
 
-void Bag::MoveArrow()
+void Bag::MoveSelectArrow()
 {
 	switch (SelectIndex_)
 	{
@@ -306,16 +336,77 @@ void Bag::MoveArrow()
 
 void Bag::ShowItemInfo()
 {
+	if (5 < SelectIndex_
+		&& 5 < ItemList_.size())
+	{
+		UpArrow_->SetOrder(5);
+	}
+
+	else if (5 >= SelectIndex_
+		&& 5 < ItemList_.size())
+	{
+		DownArrow_->SetOrder(5);
+		UpArrow_->SetOrder(-1);
+	}
+
+	if (ItemList_.size() == SelectIndex_)
+	{
+		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+		DownArrow_->SetOrder(-1);
+		return;
+	}
+
+	//아이템 정보들
 	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 }
 
 void Bag::ShowKeyItemInfo()
 {
+	if (5 < SelectIndex_
+		&& 5 < KeyItemList_.size())
+	{
+		UpArrow_->SetOrder(5);
+	}
+
+	else if (5 >= SelectIndex_
+		&& 5 < KeyItemList_.size())
+	{
+		DownArrow_->SetOrder(5);
+		UpArrow_->SetOrder(-1);
+	}
+
+	if (KeyItemList_.size() == SelectIndex_)
+	{
+		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+		DownArrow_->SetOrder(-1);
+		return;
+	}
+
 	ItemPreview_->SetImage(KeyItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 }
 
 void Bag::ShowBallInfo()
 {
+	if (5 < SelectIndex_
+		&& 5 < BallList_.size())
+	{
+		UpArrow_->SetOrder(5);
+	}
+
+	else if (5 >= SelectIndex_
+		&& 5 < BallList_.size())
+	{
+		DownArrow_->SetOrder(5);
+		UpArrow_->SetOrder(-1);
+	}
+
+	if (BallList_.size() == SelectIndex_)
+	{
+		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+		DownArrow_->SetOrder(-1);
+		return;
+	}
+
 	ItemPreview_->SetImage(BallList_[SelectIndex_]->GetNameCopy() + ".bmp");
 }
 
