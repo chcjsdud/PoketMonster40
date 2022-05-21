@@ -1,6 +1,7 @@
 #include "Pokemon.h"
 
 Pokemon::Pokemon() 
+	: MyInfo_(nullptr)
 {
 }
 

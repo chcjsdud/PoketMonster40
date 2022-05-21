@@ -1,6 +1,7 @@
 #pragma once
 #include "PokemonInfo.h"
 #include <GameEngine/GameEngineActor.h>
+#include "PokemonInfoManager.h"
 
 class Pokemon : public GameEngineActor
 {
@@ -20,6 +21,14 @@ public:
 	{
 		return MyInfo_;
 	}
+
+
+	// 장중혁 : 디버그를 위한 SetInfo 임시추가
+	inline void SetInfo(const std::string& _String)
+	{
+		MyInfo_ = PokemonInfoManager::GetInst().FindPokemonInfo(_String);
+	}
+	//
 
 protected:
 

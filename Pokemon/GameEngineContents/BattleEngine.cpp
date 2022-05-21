@@ -2,21 +2,20 @@
 #include "BattleLevel.h"
 #include "PokemonInfoManager.h"
 
-
+BattleEngine* BattleEngine::Inst_ = new BattleEngine();
 
 BattleEngine::BattleEngine()
 	: PlayerTurn_(false)
-	, BattleLevel_(nullptr)
 	, PlayerPokemon_(nullptr)
 	, OpponentPokemon_(nullptr)
 	, Random_(nullptr)
-	, CurrentTurn_(BattleTurn::Off)
 	, BattleStart_(false)
 	, BattleFirstSupporter_(nullptr)
 	, BattleSecondSupporter_(nullptr)
 	, PlayerPokemonState_(nullptr)
 	, OpponentPokemonState_(nullptr)
 {
+	Random_ = new GameEngineRandom();
 }
 
 BattleEngine::~BattleEngine() 
@@ -26,46 +25,23 @@ BattleEngine::~BattleEngine()
 		delete Random_;
 		Random_ = nullptr;
 	}
+
+	BattleEnd(); // Debug
+
 }
 
-void BattleEngine::Start()
-{
-	Random_ = new GameEngineRandom();
-	// Opponent
-}
-
-void BattleEngine::Update()
-{
-	switch (CurrentTurn_)
-	{
-	case BattleTurn::Off:
-		return;
-		break;
-	case BattleTurn::Wait:
-		break;
-	case BattleTurn::FirstTurn:
-		break;
-	case BattleTurn::SecondTurn:
-		break;
-	case BattleTurn::End:
-		break;
-	default:
-		break;
-	}
-}
 
 void BattleEngine::ScanBattleLevel()
 {
-	BattleLevel_ = dynamic_cast<BattleLevel*>(GetLevel());
 	// BattleLevel에서 포켓몬을 가져온다
 }
 
-void BattleEngine::BattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill)
+void BattleEngine::StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill)
 {
 	//InitialReSetting();
 	{
-		PokemonSkill* PlayerSkill = PokemonInfoManager::GetInst().FindSkill("_PlayerSkill");
-		PokemonSkill* OpponentSkill = PokemonInfoManager::GetInst().FindSkill("_OpponentSkill");
+		PokemonSkill* PlayerSkill = PokemonInfoManager::GetInst().FindSkill(_PlayerSkill);
+		PokemonSkill* OpponentSkill = PokemonInfoManager::GetInst().FindSkill(_OpponentSkill);
 		if (PlayerSkill == nullptr)
 		{
 			MsgBoxAssert("스킬 명이 다릅니다")
@@ -90,7 +66,7 @@ void BattleEngine::BattlePage(const std::string& _PlayerSkill, const std::string
 			BattleSecondSupporter_ = new BattlePageSupport(PlayerPokemonState_, OpponentPokemonState_, PlayerSkill);
 		}
 	}
-	CurrentTurn_ = BattleTurn::FirstTurn;
+	//CurrentTurn_ = BattleTurn::FirstTurn;
 }
 
 PokemonBattleState* BattleEngine::CreatePokemon(Pokemon* _Pokemon)
@@ -100,13 +76,16 @@ PokemonBattleState* BattleEngine::CreatePokemon(Pokemon* _Pokemon)
 	return NewPokemonState;
 }
 
-void BattleEngine::LevelChangeStart(GameEngineLevel* _PrevLevel)
+void BattleEngine::BattleStart(Pokemon* _PlayPokemon, Pokemon* _OpponentPokemon)
 {
+	PlayerPokemon_ = _PlayPokemon;
+	OpponentPokemon_ = _OpponentPokemon;
+
 	PlayerPokemonState_ = CreatePokemon(PlayerPokemon_);
 	OpponentPokemonState_ = CreatePokemon(OpponentPokemon_);
 }
 
-void BattleEngine::LevelChangeEnd(GameEngineLevel* _NextLevel)
+void BattleEngine::BattleEnd()
 {
 	if (BattleFirstSupporter_ != nullptr)
 	{
@@ -150,10 +129,22 @@ PokemonBattleState::PokemonBattleState(Pokemon* _Pokemon)
 	}
 }
 
-bool PokemonBattleState::SetSkill(Pokemon* _AlppyPokemon, PokemonSkill* _Skill)
+PokemonBattleState::~PokemonBattleState()
+{
+	for (auto* ApplySkill_ : AllCurrentApplySkill_)
+	{
+		if (ApplySkill_ != nullptr)
+		{
+			delete ApplySkill_;
+		}
+	}
+}
+
+bool PokemonBattleState::SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill)
 {
 	// 면역일시 return false
-	ApplySkill_[1][_AlppyPokemon].push_back(_Skill);
+	ApplySkill* MakeApplySkill = new ApplySkill(_AlppyPokemon, _Skill);
+	AllCurrentApplySkill_.push_back(MakeApplySkill);
 	return true;
 }
 float PokemonBattleState::GetRank(const PokemonAbility& _State)
@@ -258,6 +249,7 @@ float PokemonBattleState::GetRank(const PokemonAbility& _State)
 			MsgBoxAssert("랭크 수치가 잘못 되었습니다")
 				break;
 		}
+		break;
 	default:
 		break;
 
@@ -267,19 +259,21 @@ float PokemonBattleState::GetRank(const PokemonAbility& _State)
 
 void PokemonBattleState::Update()
 {
-	for (auto& Skill : ApplySkill_)
+	for (auto* ApplySkill_ : AllCurrentApplySkill_)
 	{
-		if (Skill.first == 0)
+		int LeftTurn = (ApplySkill_)->GetLeftTurn();
+		if (LeftTurn == 0)
 		{
 			// Skill.second.second->End()
 		}
-		else if (Skill.first <= -1)
+		else if (LeftTurn <= -1)
 		{
 			// 무한 지속
 		}
 		else
 		{
-
+			//(ApplySkill_)->Update();
+			//(ApplySkill_)->TurnPass();
 		}
 	}
 }

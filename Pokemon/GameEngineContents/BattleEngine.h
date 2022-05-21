@@ -1,27 +1,24 @@
 #pragma once
 #include <GameEngineBase/GameEngineRandom.h>
 #include <GameEngineBase/GameEngineDebug.h>
-#include <GameEngine/GameEngineActor.h>
 #include "PokemonSkill.h"
 #include "ContentEnum.h"
 #include "Pokemon.h"
 #include "PokemonInfoManager.h"
 #include "ContentEnum.h"
+#include "BattleNPCInterface.h"
 
 // 설명 :
-class BattleLevel;
 class BattlePageSupport;
 class PokemonBattleState;
-class ApplySkill;
 enum class TypeDamge;
-enum class BattleTurn;
-
 enum class PokemonAbility;
 
-class BattleEngine : public GameEngineActor
+class BattleEngine
 {
-public:
-	// constrcuter destructer
+private:
+	static BattleEngine* Inst_;
+
 	BattleEngine();
 	~BattleEngine();
 
@@ -30,25 +27,36 @@ public:
 	BattleEngine(BattleEngine&& _Other) noexcept = delete;
 	BattleEngine& operator=(const BattleEngine& _Other) = delete;
 	BattleEngine& operator=(BattleEngine&& _Other) noexcept = delete;
+public:
+	static inline BattleEngine* GetInst()
+	{
+		return Inst_;
+	}
 
-
-	BattleTurn CurrentTurn_;
+	static inline void Destroy()
+	{
+		if (Inst_ != nullptr)
+		{
+			delete Inst_;
+			Inst_ = nullptr;
+		}
+		
+	}
 
 	void ScanBattleLevel();
-	void BattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill);
+	void StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill);
+
+	void BattleStart(Pokemon* _PlayPokemon, Pokemon* _OpponentPokemon);
+	void BattleEnd();
 
 protected:
-	void Update() override;
-	void Start() override;
 
-	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
-	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+private:
+	GameEngineRandom* Random_;
+
 
 private:
 	PokemonBattleState* CreatePokemon(Pokemon* _Pokemon);
-
-	BattleLevel* BattleLevel_;
-	GameEngineRandom* Random_;
 	
 	Pokemon* PlayerPokemon_;
 	Pokemon* OpponentPokemon_;
@@ -71,13 +79,12 @@ private:
 
 class PokemonBattleState
 {
+	// 중첩 클래스 전방선언
+	class ApplySkill;
 	PokemonBattleState();
 public:
 	PokemonBattleState(Pokemon* _Pokemon);
-	~PokemonBattleState()
-	{
-
-	}
+	~PokemonBattleState();
 
 	int SetRank(const PokemonAbility& _State, int _Value)
 	{
@@ -100,7 +107,7 @@ public:
 
 
 	// 몇 턴 동안 지속인지 확인하는 함수 필요
-	bool SetSkill(Pokemon* _AlppyPokemon, PokemonSkill* _Skill);
+	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill);
 	void Update();
 
 private:
@@ -108,8 +115,8 @@ private:
 	bool CanAction_;
 	std::map<PokemonAbility, int> CurrentRank_;
 	// PokemonSkill 상속에 virtual 함수 Ing, End 필요
+	std::list<PokemonBattleState::ApplySkill*> AllCurrentApplySkill_;
 
-	std::list<ApplySkill*> AllCurrentApplySkill_;
 	// 현재 적용받는 스킬들
 	class ApplySkill
 	{
@@ -131,6 +138,11 @@ private:
 			LeftTurn_ -= 1;
 		}
 
+		inline int GetLeftTurn() const
+		{
+			return LeftTurn_;
+		}
+
 		void Update() const
 		{
 			//Skill_->;
@@ -140,7 +152,7 @@ private:
 		const PokemonSkill* Skill_;
 		int LeftTurn_;
 	};
-	std::map<int, std::map<Pokemon*, std::list<PokemonSkill*>>> ApplySkill_;
+
 
 };
 
@@ -173,16 +185,6 @@ private:
 	TypeDamge ComparePokemonType(const PokemonType& _Attack, const PokemonType& _Defend);
 
 private:
-	BattlePageSupport() {}
-};
-
-enum class BattleTurn
-{
-	Off,
-	Wait,
-	FirstTurn,
-	SecondTurn,
-	End
 };
 
 enum class TypeDamge

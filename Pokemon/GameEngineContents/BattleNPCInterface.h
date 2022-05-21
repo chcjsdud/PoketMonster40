@@ -1,0 +1,60 @@
+#pragma once
+#include <GameEngine/GameEngineActor.h>
+
+
+// 설명 : NPC들이 상속받는 Battle용 Interface
+class Pokemon;
+class BattleNPCInterface : public GameEngineActor
+{
+public:
+	// constrcuter destructer
+	BattleNPCInterface();
+	~BattleNPCInterface();
+
+	// delete Function
+	BattleNPCInterface(const BattleNPCInterface& _Other) = delete;
+	BattleNPCInterface(BattleNPCInterface&& _Other) noexcept = delete;
+	BattleNPCInterface& operator=(const BattleNPCInterface& _Other) = delete;
+	BattleNPCInterface& operator=(BattleNPCInterface&& _Other) noexcept = delete;
+
+	inline bool IsBattleNPC() const
+	{
+		return BattleNPC_;
+	}
+
+	//
+	// 디버그
+	inline void PushPokemon(Pokemon* _Pokemon)
+	{
+		CurrentPossessionPokemon_ = _Pokemon;
+	}
+
+	inline Pokemon* GetPokemon()
+	{
+		return CurrentPossessionPokemon_;
+	}
+	//
+	//
+
+protected:
+	virtual void Start() override {}
+	virtual void Update() override {}
+
+	// 
+	void GetRandomPokemon();
+
+	inline void SetBattleNPC_(bool _Idx)
+	{
+		BattleNPC_ = _Idx;
+	}
+
+	Pokemon* CurrentPossessionPokemon_;
+
+	// 현재 가지고 있는 포켓몬
+	//std::vector<Pokemon*> CurrentPossessionPokemon_;
+private:
+
+	// 배틀 할 수 있는 NPC인가?
+	bool BattleNPC_;
+};
+
