@@ -92,7 +92,7 @@ private:
 	void Render() override;
 
 	void PlayerSetMove(float4 _Value);
-	bool PlayerMoveTileCheck(int _X, int _Y, float4 _Dir = float4::ZERO);
+	bool PlayerMoveTileCheck(int _X, int _Y);
 	void MoveTile(PokemonTileMap& _Tile, float4 _Pos);
 	
 	void Camera();
@@ -102,6 +102,10 @@ private:
 	void IsWMenuKey();
 
 	void MoveAnim();
+
+	// 상호작용
+	void InteractionUpdate();
+	bool InteractTileCheck(int _X, int _Y, RedDir _Dir);
 
 	// FSM
 	float AnimTimer_;

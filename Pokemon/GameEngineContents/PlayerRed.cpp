@@ -279,7 +279,7 @@ void PlayerRed::Start()
 	RedRender_->SetPivot({0, -15});
 
 	AnimationName_ = "Idle";
-	CurrentDir_ = RedDir::Down;
+	CurrentDir_ = RedDir::Up;
 	CurrentState_ = RedState::Idle;
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
@@ -298,6 +298,7 @@ void PlayerRed::Update()
 	FadeOut();
 	FadeRL();
 	//Camera();
+	InteractionUpdate();
 }
 
 void PlayerRed::Render()
@@ -306,6 +307,11 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
+	if (true == IsFadeIn_)
+	{
+		return;
+	}
+
 	StartPos_ = GetPosition();
 	float4 CheckPos = GetPosition() + _Value - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
@@ -313,7 +319,7 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 	switch (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y, _Value))
 	{
 	case TileState::False:
-		if (true == PlayerMoveTileCheck(NextIndex.X, NextIndex.Y, _Value))
+		if (true == PlayerMoveTileCheck(NextIndex.X, NextIndex.Y))
 		{
 			Alpha_ = 0;
 			IsFadeIn_ = true;
@@ -334,26 +340,25 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 	}
 }
 
-bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
+bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
-	_Dir.Normal2D();
-	if (RoomTileMap1::GetInst() == CurrentTileMap_)
+	if (RoomTileMap1::GetInst() == CurrentTileMap_) // 레드집 2층
 	{
-		if (_X == 8 && _Y == 0)
-		{
-			NextTileMap_ = RoomTileMap2::GetInst();
-			NextTilePos_ = { 9, 0 };
-			return true;
-		}
-
 		//if (_X == 8 && _Y == 0)
 		//{
-		//	NextTileMap_ = WorldTileMap1::GetInst();
-		//	NextTilePos_ = { 33, 24 };
+		//	NextTileMap_ = RoomTileMap2::GetInst();
+		//	NextTilePos_ = { 9, 0 };
 		//	return true;
 		//}
+
+		if (_X == 8 && _Y == 0)
+		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 23, 31 };
+			return true;
+		}
 	} 
-	else if (RoomTileMap2::GetInst() == CurrentTileMap_)
+	else if (RoomTileMap2::GetInst() == CurrentTileMap_) // 레드집 1층
 	{
 		if (_X == 10 && _Y == 0)
 		{
@@ -370,7 +375,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			return true;
 		}
 	}
-	else if (RoomTileMap3::GetInst() == CurrentTileMap_)
+	else if (RoomTileMap3::GetInst() == CurrentTileMap_) // 그린집
 	{
 		if (_X == 4 && _Y == 7)
 		{
@@ -380,7 +385,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			return true;
 		}
 	}
-	else if (RoomTileMap4::GetInst() == CurrentTileMap_)
+	else if (RoomTileMap4::GetInst() == CurrentTileMap_) // 오박사 연구소
 	{
 		if (_X == 6 && _Y == 11)
 		{
@@ -390,7 +395,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			return true;
 		}
 	}
-	else if (RoomTileMap5::GetInst() == CurrentTileMap_)
+	else if (RoomTileMap5::GetInst() == CurrentTileMap_) // 치료소
 	{
 		if (_X == 7 && _Y == 7)
 		{
@@ -398,11 +403,26 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y, float4 _Dir)
 			NextTilePos_ = { 23, 31 };
 			return true;
 		}
+
+		if (_X == 7 && _Y == 1)
+		{
+			// 치료 구현 및 추가필요
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 23, 31 };
+			return true;
+		}
 	}
-	else if (RoomTileMap6::GetInst() == CurrentTileMap_)
+	else if (RoomTileMap6::GetInst() == CurrentTileMap_) // 상점
 	{
 		if (_X == 4 && _Y == 6)
 		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 33, 24 };
+			return true;
+		}
+		if (_X == 3 && _Y == 1)
+		{
+			// 상점 구현 및 추가필요
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 33, 24 };
 			return true;
@@ -651,4 +671,144 @@ void PlayerRed::MoveAnim()
 			ShadowRender_->Off();
 		}
 	}
+}
+
+void PlayerRed::InteractionUpdate()
+{
+	if (false == GameEngineInput::GetInst()->IsDown("Z"))
+	{
+		return;
+	}
+
+	StartPos_ = GetPosition();
+	float4 CheckPos = GetPosition() - CurrentTileMap_->GetPosition();
+	TileIndex CheckIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
+	if (true == InteractTileCheck(CheckIndex.X, CheckIndex.Y, CurrentDir_))
+	{
+		int a = 0;
+	}
+}
+
+bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
+{
+	switch (_Dir)
+	{
+	case RedDir::Up:
+		_Y -= 1;
+		break;
+	case RedDir::Down:
+		_Y += 1;
+		break;
+	case RedDir::Left:
+		_X -= 1;
+		break;
+	case RedDir::Right:
+		_X += 1;
+		break;
+	default:
+		break;
+	}
+	if (RoomTileMap1::GetInst() == CurrentTileMap_) // 레드집 2층
+	{
+		if (_X == 2 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 3 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 4 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 5 && _Y == 3)
+		{
+			return true;
+		}
+	}
+	else if (RoomTileMap2::GetInst() == CurrentTileMap_) // 레드집 1층
+	{
+		if (_X == 0 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 1 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 2 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 3 && _Y == 0)
+		{
+			return true;
+		}
+		if (_X == 5 && _Y == 0)
+		{
+			return true;
+		}
+	}
+	else if (RoomTileMap3::GetInst() == CurrentTileMap_) // 그린집
+	{
+		if (_X == 4 && _Y == 7)
+		{
+			return true;
+		}
+	}
+	else if (RoomTileMap4::GetInst() == CurrentTileMap_) // 오박사 연구소
+	{
+		if (_X == 6 && _Y == 11)
+		{
+			return true;
+		}
+	}
+	else if (RoomTileMap5::GetInst() == CurrentTileMap_) // 치료소
+	{
+		if (_X == 7 && _Y == 7)
+		{
+			return true;
+		}
+
+		if (_X == 7 && _Y == 1)
+		{
+			return true;
+		}
+	}
+	else if (RoomTileMap6::GetInst() == CurrentTileMap_) // 상점
+	{
+		if (_X == 4 && _Y == 6)
+		{
+			return true;
+		}
+		if (_X == 3 && _Y == 1)
+		{
+			return true;
+		}
+	}
+	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 15 && _Y == 91) // 레드 집 1층
+		{
+			return true;
+		}
+		if (_X == 24 && _Y == 91) // 그린 집
+		{
+			return true;
+		}
+		if (_X == 25 && _Y == 97) // 오박사 연구소
+		{
+			return true;
+		}
+		if (_X == 23 && _Y == 30) // 치료소
+		{
+			return true;
+		}
+		if (_X == 33 && _Y == 23) // 상점
+		{
+			return true;
+		}
+	}
+	return false;
 }
