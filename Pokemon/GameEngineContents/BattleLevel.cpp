@@ -12,7 +12,7 @@
 
 
 BattleLevel::BattleLevel()
-	: Interface(nullptr)
+	: Interface_(nullptr)
 	, BState_(BattleState::Openning)
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
@@ -22,6 +22,7 @@ BattleLevel::BattleLevel()
 	// 디버깅
 	, Opponent_(nullptr)
 	, PlayerPokemon_(nullptr)
+	, OpponentPokemon_(nullptr)
 	, InBattle_(BattleTurn::Off)
 {
 
@@ -35,26 +36,22 @@ BattleLevel::~BattleLevel()
 void BattleLevel::Loading()
 {
 
-	/// BattleTestNPC1 DebugTest
+	/// 장중혁 : BattleTestNPC1 DebugTest
 	Pokemon* Debug = CreateActor<Pokemon>();
 	Debug->SetInfo("Squirtle");
 	Opponent_ = CreateActor<BattleTestNPC1>();
 	Opponent_->PushPokemon(Debug);
 	PlayerPokemon_ = CreateActor<Pokemon>();
 	PlayerPokemon_->SetInfo("Charmander");
+	OpponentPokemon_ = Opponent_->GetPokemon();
 	// Debug
-	{
-		BattleEngine::GetInst()->BattleStart(PlayerPokemon_, Opponent_->GetPokemon()); // Debug
-
-	}
-	//
 
 
 
 	CreateActor<BattleBackground>();
 
-	Interface = CreateActor<BattleInterface>(3);
-	Interface->SetPosition({ 720.0f, 548.0f });
+	Interface_ = CreateActor<BattleInterface>(3);
+	Interface_->SetPosition({ 720.0f, 548.0f });
 	
 	//김예나:테스트 코드
 	PlayerStopCheck = CreateActor<BattleUnitRenderer>();
@@ -76,17 +73,19 @@ void BattleLevel::Update()
 		return;
 		break;
 	case BattleState::Selecet:
-		if (Interface->MoveKey() == true)
+		if (Interface_->MoveKey() == true)
 		{
 			// 메뉴 확인 로직 필요
-			BattleEngine::GetInst()->StartBattlePage("Scratch", "Tackle");// Debug
-			BState_ = BattleState::Battle; // Debug
+			// 장중혁 : debug
 			InBattle_ = BattleTurn::FirstTurn;
 			BattlePageStart();
 		}
 		break;
 	case BattleState::Battle:
-		
+		if (Interface_->BattleKey())
+		{
+			NextStringTrun();
+		}
 		return;
 		break;
 	case BattleState::Endding:
@@ -98,6 +97,8 @@ void BattleLevel::Update()
 		break;
 	}
 
+	//
+
 	if (PlayerStopCheck->GetPlayerStop()==true&&OneTalk==false)
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
@@ -106,13 +107,17 @@ void BattleLevel::Update()
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
 } 
+
+void BattleLevel::NextStringTrun()
+{
+
+}
+
 void BattleLevel::BattlePageStart()
 {
 	switch (InBattle_)
 	{
 	case BattleTurn::Off:
-		break;
-	case BattleTurn::Wait:
 		break;
 	case BattleTurn::FirstTurn:
 		FirstBattlePage();
@@ -127,10 +132,20 @@ void BattleLevel::BattlePageStart()
 	}
 }
 
-
 void BattleLevel::FirstBattlePage()
 {
-
+	bool IsPlayerTurn = BattleEngine::GetInst()->StartBattlePage("Scratch", "Tackle");// Debug
+	BState_ = BattleState::Battle; // Debug
+	InBattle_ = BattleTurn::FirstTurn;
+	if (IsPlayerTurn)
+	{
+		//Interface_->UsedSkillString(PlayerPokemon_->GetNameConstRef() , OpponentPokemon_->GetNameConstRef(), "Scratch");
+	}
+	else
+	{
+		//Interface_->UsedSkillString(OpponentPokemon_->GetNameConstRef(), PlayerPokemon_->GetNameConstRef(), "Scratch");
+	}
+	// 포켓몬 배정되면 인터페이스와 엔진에 구현하는 기능 추가 해야함 <-
 }
 
 
@@ -142,8 +157,8 @@ void BattleLevel::SecondBattlePage()
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
-	// Debug
-	
+	// 장중혁 : Debug
+	BattleEngine::GetInst()->BattleStart(PlayerPokemon_, OpponentPokemon_); // Debug
 	//
 
 	if (PlayerRed_ == nullptr)

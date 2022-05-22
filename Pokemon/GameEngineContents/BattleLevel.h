@@ -69,13 +69,15 @@ protected:
 
 
 private:
-	BattleInterface* Interface;
+	BattleInterface* Interface_;
 	BattleState BState_;
 	BattleTurn InBattle_;
 
 	void FirstBattlePage();
 	void BattlePageStart();
 	void SecondBattlePage();
+	void NextStringTrun();
+
 
 	// 오프닝 관련
 	void ShowOpenning();
@@ -91,9 +93,13 @@ private:
 
 	// 플레이어 및 NPC
 	PlayerRed* PlayerRed_;
-	Pokemon* PlayerPokemon_; // Debug
 	BattleNPCInterface* Opponent_;
+	// Pokemon
+	Pokemon* PlayerPokemon_; // Debug
+	Pokemon* OpponentPokemon_;// Debug
 	//
+
+
 
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
@@ -105,7 +111,6 @@ private:
 enum class BattleTurn
 {
 	Off,
-	Wait,
 	FirstTurn,
 	SecondTurn,
 	BattleEnd

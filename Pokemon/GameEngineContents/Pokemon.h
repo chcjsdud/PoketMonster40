@@ -26,6 +26,7 @@ public:
 	// 장중혁 : 디버그를 위한 SetInfo 임시추가
 	inline void SetInfo(const std::string& _String)
 	{
+		SetName(_String);
 		MyInfo_ = PokemonInfoManager::GetInst().FindPokemonInfo(_String);
 	}
 	//

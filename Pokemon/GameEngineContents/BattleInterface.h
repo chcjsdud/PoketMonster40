@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <GameEngineContentsCore/GameEngineContentFont.h>
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
@@ -16,6 +17,7 @@ enum class BattleOrder
 	None
 };
 
+enum class FightString;
 class GameEngineImage;
 class BattleInterface : public GameEngineActor
 {
@@ -66,8 +68,9 @@ private:
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
 	
-
+	
 	BattleInterface* MainInterface;
+	
 
 	BattleOrder CurOrder;
 
@@ -77,10 +80,38 @@ private:
 	void DoomChit();
 	void OrderCheck();
 	void SelectOrder();
+
+
+
+	// 생성한 Level
 	class BattleLevel* Level_;
+
+	// Font
+	GameEngineContentFont* DownFont_;
 
 public:
 	bool MoveKey();
-	void FirstBattlePage();
+
+	// 장중혁 : test
+	bool BattleKey();
+	void UsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill);
+	void PoeFaintString(const std::string& _PoePokemon);
+	void SupperEffectString();
+	void CriticalHitString();
+	void NotEffective();
+
+	inline bool IsEndString()
+	{
+		return DownFont_->IsEnd();
+	}
+
 };
 
+// 장중혁 : Test
+enum class FightString
+{
+	Used,
+	Effective,
+	Critical,
+	Became
+};

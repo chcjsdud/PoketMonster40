@@ -5,8 +5,7 @@
 BattleEngine* BattleEngine::Inst_ = new BattleEngine();
 
 BattleEngine::BattleEngine()
-	: PlayerTurn_(false)
-	, PlayerPokemon_(nullptr)
+	:  PlayerPokemon_(nullptr)
 	, OpponentPokemon_(nullptr)
 	, Random_(nullptr)
 	, BattleStart_(false)
@@ -33,10 +32,11 @@ BattleEngine::~BattleEngine()
 
 void BattleEngine::ScanBattleLevel()
 {
+
 	// BattleLevel에서 포켓몬을 가져온다
 }
 
-void BattleEngine::StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill)
+bool BattleEngine::StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill)
 {
 	//InitialReSetting();
 	{
@@ -55,15 +55,15 @@ void BattleEngine::StartBattlePage(const std::string& _PlayerSkill, const std::s
 		// CompareSpeed
 		if (PlayerPokemon_->GetInfo()->GetSpeed() >= OpponentPokemon_->GetInfo()->GetSpeed())
 		{
-			PlayerTurn_ = true;
 			BattleFirstSupporter_ = new BattlePageSupport(PlayerPokemonState_, OpponentPokemonState_, PlayerSkill);
 			BattleSecondSupporter_ = new BattlePageSupport(OpponentPokemonState_, PlayerPokemonState_, OpponentSkill);
+			return true;
 		}
 		else
 		{
-			PlayerTurn_ = false;
 			BattleFirstSupporter_ = new BattlePageSupport(OpponentPokemonState_, PlayerPokemonState_, OpponentSkill);
 			BattleSecondSupporter_ = new BattlePageSupport(PlayerPokemonState_, OpponentPokemonState_, PlayerSkill);
+			return false;
 		}
 	}
 	//CurrentTurn_ = BattleTurn::FirstTurn;
@@ -703,8 +703,4 @@ void BattlePageSupport::UseSkillTurn()
 	//}
 }
 
-void BattleEngine::InitialReSetting()
-{
-	PlayerTurn_ = true;
-}
 

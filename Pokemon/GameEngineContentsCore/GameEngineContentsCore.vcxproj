@@ -153,17 +153,9 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="GameEngineContentFontManager.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineContentFont.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="GameEngineContentFontManager.cpp">
       <SubType>
       </SubType>
     </ClCompile>

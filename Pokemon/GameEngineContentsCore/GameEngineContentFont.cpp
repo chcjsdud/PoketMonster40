@@ -156,7 +156,11 @@ void GameEngineContentFont::Update()
 					case '/':
 						StringForRendererName = "Slash.bmp";
 						break;
+					case ';':
+						StringForRendererName = "Ellipsis.bmp";
+						break;
 					case '\'':
+						StringForRendererName = "Apostrophe_Right.bmp";
 						break;
 					case '\"':
 						break;

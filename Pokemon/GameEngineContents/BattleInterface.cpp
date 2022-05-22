@@ -1,12 +1,25 @@
-#include "BattleInterface.h"
-#include "BattleLevel.h"
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineTime.h>
+#include "BattleInterface.h"
+#include "BattleLevel.h"
 #include "PokemonEngine.h"
+#include "BattleEngine.h"
+#include <GameEngineContentsCore/GameEngineContentFont.h>
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
 	,CurOrder(BattleOrder::None)
+	, InterfaceImage(nullptr)
+	, Select(nullptr)
+	, MyHPUI(nullptr)
+	, EnemyHPUI(nullptr)
+	, MyHP(nullptr)
+	, EnemyHP(nullptr)
+	, EXP(nullptr)
+	, BattleCommend(nullptr)
+	, MainInterface(nullptr)
+	, DownFont_(nullptr)
+	, Level_(nullptr)
 {
 
 }
@@ -18,15 +31,19 @@ BattleInterface::~BattleInterface()
 
 void BattleInterface::Start()
 {
+	// 饭骇 积己
 	Level_ = dynamic_cast<BattleLevel*>(GetLevel());
-
+	// 迄飘 积己
+	DownFont_ = Level_->CreateActor<GameEngineContentFont>(10);
+	DownFont_->SetPosition({ 50, 485 });
+	// 虐 积己
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
 	GameEngineInput::GetInst()->CreateKey("SDown", VK_DOWN);
 	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
-
+	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
 	
@@ -71,9 +88,42 @@ void BattleInterface::Update()
 
 }
 
-void BattleInterface::FirstBattlePage()
+bool BattleInterface::BattleKey()
 {
-	//std::string& AttactPokemon = 
+	if (GameEngineInput::GetInst()->IsDown("SSelect"))
+	{
+		return true;
+	}
+}
+
+void BattleInterface::UsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString(_AttPokemon + " Used\\"+ _AttSkill + "!");
+}
+
+void BattleInterface::PoeFaintString(const std::string& _PoePokemon)
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
+}
+
+void BattleInterface::SupperEffectString()
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("It's Super effective!");
+}
+
+void BattleInterface::CriticalHitString()
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("A critical hit!");
+}
+
+void BattleInterface::NotEffective()
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("It's not Very effective;");
 }
 
 bool BattleInterface::MoveKey()

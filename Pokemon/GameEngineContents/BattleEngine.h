@@ -44,7 +44,8 @@ public:
 	}
 
 	void ScanBattleLevel();
-	void StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill);
+	// true = 플레이어  false = 상대방
+	bool StartBattlePage(const std::string& _PlayerSkill, const std::string& _OpponentSkill);
 
 	void BattleStart(Pokemon* _PlayPokemon, Pokemon* _OpponentPokemon);
 	void BattleEnd();
@@ -63,7 +64,6 @@ private:
 
 	PokemonBattleState* PlayerPokemonState_;
 	PokemonBattleState* OpponentPokemonState_;
-	void InitialReSetting();
 
 	std::list<PokemonBattleState*> AllPokemonState_;
 
@@ -73,7 +73,6 @@ private:
 	BattlePageSupport* BattleSecondSupporter_;
 	
 	bool BattleStart_;
-	bool PlayerTurn_;
 };
 
 

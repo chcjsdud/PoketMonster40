@@ -4,16 +4,10 @@
     <ClInclude Include="GameEngineContentFont.h">
       <Filter>Font</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngineContentFontManager.h">
-      <Filter>Font\Manager</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameEngineContentFont.cpp">
       <Filter>Font</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngineContentFontManager.cpp">
-      <Filter>Font\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
