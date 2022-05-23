@@ -21,9 +21,8 @@ BattleLevel::BattleLevel()
 	, Fonts(nullptr)
 	// 디버깅
 	, Opponent_(nullptr)
-	, PlayerPokemon_(nullptr)
-	, OpponentPokemon_(nullptr)
-	, InBattle_(BattleTurn::Off)
+	, PlayerCurrentPokemon_(nullptr)
+	, PoeCurrentPokemon_(nullptr)
 {
 
 }
@@ -37,13 +36,13 @@ void BattleLevel::Loading()
 {
 
 	/// 장중혁 : BattleTestNPC1 DebugTest
-	Pokemon* Debug = CreateActor<Pokemon>();
-	Debug->SetInfo("Squirtle");
-	Opponent_ = CreateActor<BattleTestNPC1>();
-	Opponent_->PushPokemon(Debug);
-	PlayerPokemon_ = CreateActor<Pokemon>();
-	PlayerPokemon_->SetInfo("Charmander");
-	OpponentPokemon_ = Opponent_->GetPokemon();
+	//Pokemon* Debug = CreateActor<Pokemon>();
+	//Debug->SetInfo("Squirtle");
+	//Opponent_ = CreateActor<BattleTestNPC1>();
+	//Opponent_->PushPokemon(Debug);
+	//PlayerCurrentPokemon_ = CreateActor<Pokemon>();
+	//PlayerCurrentPokemon_->SetInfo("Charmander");
+	//PoeCurrentPokemon_ = Opponent_->GetPokemon();
 	// Debug
 
 
@@ -75,16 +74,12 @@ void BattleLevel::Update()
 	case BattleState::Selecet:
 		if (Interface_->MoveKey() == true)
 		{
-			// 메뉴 확인 로직 필요
-			// 장중혁 : debug
-			InBattle_ = BattleTurn::FirstTurn;
-			BattlePageStart();
+
 		}
 		break;
 	case BattleState::Battle:
 		if (Interface_->BattleKey())
 		{
-			NextStringTrun();
 		}
 		return;
 		break;
@@ -115,21 +110,7 @@ void BattleLevel::NextStringTrun()
 
 void BattleLevel::BattlePageStart()
 {
-	switch (InBattle_)
-	{
-	case BattleTurn::Off:
-		break;
-	case BattleTurn::FirstTurn:
-		FirstBattlePage();
-		break;
-	case BattleTurn::SecondTurn:
-		SecondBattlePage();
-		break;
-	case BattleTurn::BattleEnd:
-		break;
-	default:
-		break;
-	}
+
 }
 
 void BattleLevel::FirstBattlePage()
@@ -157,7 +138,6 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 	BState_ = BattleState::Selecet;
 	OpenningEnd_ = false;
 	EnddingEnd_ = false;
-	InBattle_ = BattleTurn::Off;
 	ShowOpenning();
 }
 
@@ -179,9 +159,175 @@ void BattleLevel::ShowEndding()
 }
 
 BattleData::BattleData()
+	:
 {
 }
 
 BattleData::~BattleData()
 {
+}
+
+PokemonBattleState::PokemonBattleState(Pokemon* _Pokemon)
+	: Pokemon_(_Pokemon)
+	, CanAction_(true)
+{
+	{
+		CurrentRank_[PokemonAbility::Att] = 0;
+		CurrentRank_[PokemonAbility::Def] = 0;
+		CurrentRank_[PokemonAbility::SpAtt] = 0;
+		CurrentRank_[PokemonAbility::SpDef] = 0;
+		CurrentRank_[PokemonAbility::Speed] = 0;
+		CurrentRank_[PokemonAbility::Accuracy] = 0;
+		CurrentRank_[PokemonAbility::Evasion] = 0;
+	}
+}
+
+PokemonBattleState::~PokemonBattleState()
+{
+	for (auto* ApplySkill_ : AllCurrentApplySkill_)
+	{
+		if (ApplySkill_ != nullptr)
+		{
+			delete ApplySkill_;
+		}
+	}
+}
+
+bool PokemonBattleState::SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill)
+{
+	// 면역일시 return false
+	ApplySkill* MakeApplySkill = new ApplySkill(_AlppyPokemon, _Skill);
+	AllCurrentApplySkill_.push_back(MakeApplySkill);
+	return true;
+}
+
+float PokemonBattleState::GetRank(const PokemonAbility& _State)
+{
+	switch (_State)
+	{
+	case PokemonAbility::Att:
+	case PokemonAbility::Def:
+	case PokemonAbility::SpAtt:
+	case PokemonAbility::SpDef:
+	case PokemonAbility::Speed:
+		switch (CurrentRank_[_State])
+		{
+		case -6:
+			return 0.25f;
+			break;
+		case -5:
+			return 0.29f;
+			break;
+		case -4:
+			return 0.33f;
+			break;
+		case -3:
+			return 0.40f;
+			break;
+		case -2:
+			return 0.50f;
+			break;
+		case -1:
+			return 0.66f;
+			break;
+		case 0:
+			return 0;
+			break;
+		case 1:
+			return 1.5f;
+			break;
+		case 2:
+			return 2.0f;
+			break;
+		case 3:
+			return 2.5f;
+			break;
+		case 4:
+			return 3.0f;
+			break;
+		case 5:
+			return 3.5f;
+			break;
+		case 6:
+			return 4.0f;
+			break;
+		default:
+			MsgBoxAssert("랭크 수치가 잘못 되었습니다")
+				break;
+		}
+		break;
+	case PokemonAbility::Accuracy:
+	case PokemonAbility::Evasion:
+		switch (CurrentRank_[_State])
+		{
+		case -6:
+			return 0.33f;
+			break;
+		case -5:
+			return 0.38f;
+			break;
+		case -4:
+			return 0.43f;
+			break;
+		case -3:
+			return 0.50f;
+			break;
+		case -2:
+			return 0.60f;
+			break;
+		case -1:
+			return 0.75f;
+			break;
+		case 0:
+			return 0;
+			break;
+		case 1:
+			return 1.33f;
+			break;
+		case 2:
+			return 1.66f;
+			break;
+		case 3:
+			return 2.0f;
+			break;
+		case 4:
+			return 2.33f;
+			break;
+		case 5:
+			return 2.66f;
+			break;
+		case 6:
+			return 3.0f;
+			break;
+		default:
+			MsgBoxAssert("랭크 수치가 잘못 되었습니다")
+				break;
+		}
+		break;
+	default:
+		break;
+
+	}
+	return 100.0f;
+}
+
+void PokemonBattleState::Update()
+{
+	for (auto* ApplySkill_ : AllCurrentApplySkill_)
+	{
+		int LeftTurn = (ApplySkill_)->GetLeftTurn();
+		if (LeftTurn == 0)
+		{
+			// Skill.second.second->End()
+		}
+		else if (LeftTurn <= -1)
+		{
+			// 무한 지속
+		}
+		else
+		{
+			//(ApplySkill_)->Update();
+			//(ApplySkill_)->TurnPass();
+		}
+	}
 }

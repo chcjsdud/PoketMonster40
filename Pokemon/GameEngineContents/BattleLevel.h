@@ -10,7 +10,7 @@
 
 //설명 : 
 
-enum class BattleTurn;
+enum class PokemonAbility;
 class BattleEngine;
 class BattleLevel : public GameEngineLevel
 {
@@ -40,11 +40,6 @@ public:
 	{
 		return PlayerRed_;
 	}
-	
-	inline BattleTurn GetBattleTurn() const
-	{
-		return InBattle_;
-	}
 
 public:
 	inline void OpenningEnd()
@@ -68,7 +63,6 @@ protected:
 private:
 	BattleInterface* Interface_;
 	BattleState BState_;
-	BattleTurn InBattle_;
 
 	void FirstBattlePage();
 	void BattlePageStart();
@@ -92,8 +86,8 @@ private:
 	PlayerRed* PlayerRed_;
 	BattleNPCInterface* Opponent_;
 	// Pokemon
-	Pokemon* PlayerPokemon_; // Debug
-	Pokemon* OpponentPokemon_;// Debug
+	Pokemon* PlayerCurrentPokemon_; // Debug
+	Pokemon* PoeCurrentPokemon_;// Debug
 	//
 
 
@@ -118,16 +112,113 @@ private:
 
 private:
 	// Data 출력
-	Pokemon* PlayerPokemon_;
-	Pokemon* OpponentPokemon_;
+	Pokemon* PlayerCurrentPokemon_;
+	Pokemon* PoeCurrentPokemon_;
 
 
 };
 
-enum class BattleTurn
+class PokemonBattleState
 {
-	Off,
-	FirstTurn,
-	SecondTurn,
-	BattleEnd
+	// 중첩 클래스 전방선언
+	class ApplySkill;
+	PokemonBattleState();
+public:
+	PokemonBattleState(Pokemon* _Pokemon);
+	~PokemonBattleState();
+
+	int SetRank(const PokemonAbility& _State, int _Value)
+	{
+		CurrentRank_[_State] += _Value;
+		if (CurrentRank_[_State] > 6)
+		{
+			return CurrentRank_[_State] = 6;
+		}
+		else if (CurrentRank_[_State] < (-6))
+		{
+			return CurrentRank_[_State] = -6;
+		}
+		else
+		{
+			return CurrentRank_[_State];
+		}
+	}
+
+	float GetRank(const PokemonAbility& _State);
+
+
+	// 몇 턴 동안 지속인지 확인하는 함수 필요
+	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill);
+	void Update();
+
+private:
+	const Pokemon* Pokemon_;
+	bool CanAction_;
+	std::map<PokemonAbility, int> CurrentRank_;
+	// PokemonSkill 상속에 virtual 함수 Ing, End 필요
+	std::list<PokemonBattleState::ApplySkill*> AllCurrentApplySkill_;
+
+	// 현재 적용받는 스킬들
+	class ApplySkill
+	{
+	private:
+		ApplySkill();
+	public:
+		ApplySkill(PokemonBattleState* _CastPokemon, PokemonSkill* _Skill)
+			: CastPokemon_(_CastPokemon)
+			, Skill_(_Skill)
+			, LeftTurn_(0)
+		{
+			// 턴수 필요
+			LeftTurn_ = 1; // 임의의 값
+		}
+		~ApplySkill() {}
+
+		inline void TurnPass()
+		{
+			LeftTurn_ -= 1;
+		}
+
+		inline int GetLeftTurn() const
+		{
+			return LeftTurn_;
+		}
+
+		void Update() const
+		{
+			//Skill_->;
+		}
+	private:
+		const PokemonBattleState* CastPokemon_;
+		const PokemonSkill* Skill_;
+		int LeftTurn_;
+	};
+
+
+};
+
+
+class BattleManager
+{
+public:
+	BattleManager();
+	~BattleManager();
+
+	BattleManager(const BattleManager& _Other) = delete;
+	BattleManager(BattleManager&& _Other) noexcept = delete;
+	BattleManager& operator=(const BattleManager& _Other) = delete;
+	BattleManager& operator=(BattleManager&& _Other) noexcept = delete;
+
+
+};
+
+enum class PokemonAbility
+{
+	Att,
+	Def,
+	SpAtt,
+	SpDef,
+	Speed,
+	Accuracy,
+	Evasion
 };

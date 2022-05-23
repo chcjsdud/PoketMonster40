@@ -22,8 +22,8 @@ protected:
 	void Update() override;
 
 private:
-	GameEngineRenderer* PlayerPokemon_;
-	GameEngineRenderer* OpponentPokemon_;
+	GameEngineRenderer* PlayerCurrentPokemon_;
+	GameEngineRenderer* PoeCurrentPokemon_;
 
 
 	GameEngineRenderer* PlayerRenderer_;

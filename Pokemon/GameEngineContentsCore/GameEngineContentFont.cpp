@@ -67,6 +67,9 @@ void GameEngineContentFont::Update()
 						case 46:
 							StringForRendererName = "Period.bmp";
 							break;
+						case 44:
+							StringForRendererName = "Comma.bmp";
+							break;
 						case '/':
 							StringForRendererName = "Slash.bmp";
 							break;
