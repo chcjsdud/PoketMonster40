@@ -18,7 +18,7 @@ Bag::Bag()
 	, SelectArrow_(nullptr)
 	, SelectIndex_(0)
 	, ItemPreview_(nullptr)
-	, AllFonts_{nullptr}
+	, ItemNameFonts_{nullptr}
 	, BagIndex_(0)
 	, BagMoveTime_(0.f)
 	, IsMove_(false)
@@ -77,7 +77,9 @@ void Bag::Start()
 	}
 
 	ShowItemList();
+	ShowItemInfo();
 }
+
 void Bag::Update()
 {
 	MoveBag();
@@ -146,7 +148,7 @@ void Bag::MoveBag()
 		if (0 < BagIndex_)
 		{
 			IsMove_ = true;
-			BagRedrerer_->PlusPivot({ 0, -15 });
+			BagRedrerer_->PlusPivot({ 0, -20 });
 
 			SelectIndex_ = 0;
 			SelectArrow_->SetPivot({ -107, -260 });
@@ -161,7 +163,7 @@ void Bag::MoveBag()
 		if (2 > BagIndex_)
 		{
 			IsMove_ = true;
-			BagRedrerer_->PlusPivot({ 0, -15 });
+			BagRedrerer_->PlusPivot({ 0, -20 });
 
 			SelectIndex_ = 0;
 			SelectArrow_->SetPivot({ -107, -260 });
@@ -183,6 +185,7 @@ void Bag::ChangeBag()
 
 		LeftArrow_->SetOrder(-1);
 		ShowItemList();
+		ShowBallInfo();
 		break;
 		
 	case ItemType::KEYITEM:
@@ -193,6 +196,7 @@ void Bag::ChangeBag()
 		LeftArrow_->SetOrder(5);
 		RightArrow_->SetOrder(5);
 		ShowKeyItemList();
+		ShowKeyItemInfo();
 		break;
 
 	case ItemType::BALL:
@@ -202,6 +206,7 @@ void Bag::ChangeBag()
 
 		RightArrow_->SetOrder(-1);
 		ShowBallList();
+		ShowBallInfo();
 		break;
 	}
 
@@ -286,37 +291,64 @@ void Bag::MoveSelectArrow()
 	switch (SelectIndex_)
 	{
 	case 0:
-		SelectArrow_->SetPivot({ -107, -260 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return; 
+		}
+		SelectArrow_->SetPivot({ -107, -255 });
 		break;
 
 	case 1:
-		SelectArrow_->SetPivot({ -107, -195 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return;
+		}
+
+		SelectArrow_->SetPivot({ -107, -190 });
 		break;
 
 	case 2:
-		SelectArrow_->SetPivot({ -107, -130 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return;
+		}
+		SelectArrow_->SetPivot({ -107, -125 });
 		break;
 
 	case 3:
-		SelectArrow_->SetPivot({ -107, -65 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return;
+		}
+		SelectArrow_->SetPivot({ -107, -60 });
 		break;
 
 	case 4:
-		SelectArrow_->SetPivot({ -107, 0 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return;
+		}
+		SelectArrow_->SetPivot({ -107, 5 });
 		break;
 
 	case 5:
-		SelectArrow_->SetPivot({ -107, 60 });
+		if (ItemNameFonts_.size() - 1 < SelectIndex_)
+		{
+			return;
+		}
+		SelectArrow_->SetPivot({ -107, 65 });
 		break;
 
 	default:
-		SelectArrow_->SetPivot({ -107, 60 });
+		SelectArrow_->SetPivot({ -107, 65 });
 		break;
 	}
 }
 
 void Bag::ShowItemInfo()
 {
+	DestroyDescFonts();
+
 	if (5 < SelectIndex_
 		&& 5 < ItemList_.size())
 	{
@@ -333,6 +365,12 @@ void Bag::ShowItemInfo()
 	if (ItemList_.size() == SelectIndex_)
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		DescFont->SetPosition({ 150, 460.f });
+		DescFont->ShowString("CLOSE BAG", true);
+		ItemDescFonts_.push_back(DescFont);
+
 		DownArrow_->SetOrder(-1);
 		return;
 	}
@@ -340,14 +378,16 @@ void Bag::ShowItemInfo()
 	//아이템 정보들
 	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 
-	//GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
-	//BeginFont->SetPosition({ 150, 460.f });
-	//BeginFont->ShowString(ItemList_[SelectIndex_]->GetDesc(), true);
-	//AllFonts_.push_back(BeginFont);
+	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	DescFont->SetPosition({ 150, 460.f });
+	DescFont->ShowString(ItemList_[SelectIndex_]->GetDesc(), true);
+	ItemDescFonts_.push_back(DescFont);
 }
 
 void Bag::ShowKeyItemInfo()
 {
+	DestroyDescFonts();
+
 	if (5 < SelectIndex_
 		&& 5 < KeyItemList_.size())
 	{
@@ -364,15 +404,28 @@ void Bag::ShowKeyItemInfo()
 	if (KeyItemList_.size() == SelectIndex_)
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		DescFont->SetPosition({ 150, 460.f });
+		DescFont->ShowString("CLOSE BAG", true);
+		ItemDescFonts_.push_back(DescFont);
+
 		DownArrow_->SetOrder(-1);
 		return;
 	}
 
 	ItemPreview_->SetImage(KeyItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
+
+	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	DescFont->SetPosition({ 150, 460.f });
+	DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+	ItemDescFonts_.push_back(DescFont);
 }
 
 void Bag::ShowBallInfo()
 {
+	DestroyDescFonts();
+
 	if (5 < SelectIndex_
 		&& 5 < BallList_.size())
 	{
@@ -389,11 +442,22 @@ void Bag::ShowBallInfo()
 	if (BallList_.size() == SelectIndex_)
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
+
+		GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		DescFont->SetPosition({ 150, 460.f });
+		DescFont->ShowString("CLOSE BAG", true);
+		ItemDescFonts_.push_back(DescFont);
+
 		DownArrow_->SetOrder(-1);
 		return;
 	}
 
 	ItemPreview_->SetImage(BallList_[SelectIndex_]->GetNameCopy() + ".bmp");
+
+	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	DescFont->SetPosition({ 150, 460.f });
+	DescFont->ShowString(BallList_[SelectIndex_]->GetDesc(), true);
+	ItemDescFonts_.push_back(DescFont);
 }
 
 
@@ -409,9 +473,9 @@ void Bag::ShowItemList()
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
 		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		EndFont->SetPosition({ 380, 30.f });
+		EndFont->SetPosition({ 380, 40.f });
 		EndFont->ShowString("CLOSE", true);
-		AllFonts_.push_back(EndFont);
+		ItemNameFonts_.push_back(EndFont);
 
 		return;
 	}
@@ -438,9 +502,9 @@ void Bag::ShowKeyItemList()
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
 		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		EndFont->SetPosition({ 380, 30.f });
+		EndFont->SetPosition({ 380, 40.f });
 		EndFont->ShowString("CLOSE", true);
-		AllFonts_.push_back(EndFont);
+		ItemNameFonts_.push_back(EndFont);
 
 		return;
 	}
@@ -467,9 +531,9 @@ void Bag::ShowBallList()
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
 		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		EndFont->SetPosition({ 380, 30.f });
+		EndFont->SetPosition({ 380, 40.f });
 		EndFont->ShowString("CLOSE", true);
-		AllFonts_.push_back(EndFont);
+		ItemNameFonts_.push_back(EndFont);
 
 		return;
 	}
@@ -486,17 +550,17 @@ void Bag::ShowBallList()
 
 void Bag::UpFonts()
 {
-	if (7 > AllFonts_.size())
+	if (7 > ItemNameFonts_.size())
 	{
 		return;
 	}
 
 	if (5 < SelectIndex_
-		&& AllFonts_.size() - 1 >= SelectIndex_)
+		&& ItemNameFonts_.size() - 1 >= SelectIndex_)
 	{
-		for (int i = 0; i < AllFonts_.size(); ++i)
+		for (int i = 0; i < ItemNameFonts_.size(); ++i)
 		{
-			AllFonts_[i]->SetMove({ 0.f, -65.f });
+			ItemNameFonts_[i]->SetMove({ 0.f, -65.f });
 		}
 	}
 
@@ -505,17 +569,17 @@ void Bag::UpFonts()
 
 void Bag::DownFonts()
 {
-	if (7 > AllFonts_.size())
+	if (7 > ItemNameFonts_.size())
 	{
 		return;
 	}
 
  	if (5 >= SelectIndex_
-		&& AllFonts_.size() - 1 <= SelectIndex_ + 1)
+		&& ItemNameFonts_.size() - 1 <= SelectIndex_ + 1)
 	{
-		for (int i = 0; i < AllFonts_.size(); ++i)
+		for (int i = 0; i < ItemNameFonts_.size(); ++i)
 		{
-			AllFonts_[i]->SetMove({ 0.f, 65.f });
+			ItemNameFonts_[i]->SetMove({ 0.f, 65.f });
 		}
 	}
 
@@ -524,53 +588,72 @@ void Bag::DownFonts()
 
 void Bag::HideFonts()
 {
-	for (int i = 0; i < AllFonts_.size(); ++i)
+	for (int i = 0; i < ItemNameFonts_.size(); ++i)
 	{
-		AllFonts_[i]->On();
+		ItemNameFonts_[i]->On();
 	}
 
-	for (int i = 0; i < AllFonts_.size(); ++i)
+	for (int i = 0; i < ItemNameFonts_.size(); ++i)
 	{
-		if (10 >= AllFonts_[i]->GetPosition().y)
+		if (10 >= ItemNameFonts_[i]->GetPosition().y)
 		{
-			AllFonts_[i]->Off();
+			ItemNameFonts_[i]->Off();
 		}
 
-		else if (400 <= AllFonts_[i]->GetPosition().y)
+		else if (400 <= ItemNameFonts_[i]->GetPosition().y)
 		{
-			AllFonts_[i]->Off();
+			ItemNameFonts_[i]->Off();
 		}
 	}
 }
 
-void Bag::ShowFonts(std::vector<Item*>& _Fonts)
+void Bag::ShowFonts(std::vector<Item*>& _List)
 {
 	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
-	BeginFont->SetPosition({ 380, 30.f });
-	BeginFont->ShowString(_Fonts[0]->GetNameCopy(), true);
-	AllFonts_.push_back(BeginFont);
+	BeginFont->SetPosition({ 380, 40.f });
+	BeginFont->ShowString(_List[0]->GetNameCopy(), true);
+	ItemNameFonts_.push_back(BeginFont);
 
-	if (1 < _Fonts.size())
+	if (1 < _List.size())
 	{
-		for (int i = 1; i < _Fonts.size(); ++i)
+		for (int i = 1; i < _List.size(); ++i)
 		{
+			if (_List[i - 1]->GetNameConstRef() == _List[i]->GetNameConstRef())
+			{
+				DestroyOverlapFonts();
+
+				GameEngineContentFont* OverlapFont = GetLevel()->CreateActor<GameEngineContentFont>();
+				OverlapFont->SetPosition({ 800, 40.f });
+				OverlapFont->ShowString("x " + std::to_string(i + 1), true);
+				ItemOverlapFonts_.push_back(OverlapFont);
+
+				continue;
+			}
+
 			GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
-			Fonts->SetPosition(AllFonts_.back()->GetPosition() + float4{ 0, 65.f });
-			Fonts->ShowString(_Fonts[i]->GetNameCopy(), true);
-			AllFonts_.push_back(Fonts);
+			Fonts->SetPosition(ItemNameFonts_.back()->GetPosition() + float4{ 0, 65.f });
+			Fonts->ShowString(_List[i]->GetNameCopy(), true);
+			ItemNameFonts_.push_back(Fonts);
 		}
 	}
 
 	GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>();
-	EndFont->SetPosition(AllFonts_.back()->GetPosition() + float4{ 0, 65.f });
+	EndFont->SetPosition(ItemNameFonts_.back()->GetPosition() + float4{ 0, 65.f });
 	EndFont->ShowString("CLOSE", true);
-	AllFonts_.push_back(EndFont);
+	ItemNameFonts_.push_back(EndFont);
 }
 
 void Bag::DestroyFonts()
 {
-	std::vector<GameEngineContentFont*>::iterator StartIter = AllFonts_.begin();
-	std::vector<GameEngineContentFont*>::iterator EndIter = AllFonts_.end();
+	DestroyNameFonts();
+	DestroyDescFonts();
+	DestroyOverlapFonts();
+}
+
+void Bag::DestroyNameFonts()
+{
+	std::vector<GameEngineContentFont*>::iterator StartIter = ItemNameFonts_.begin();
+	std::vector<GameEngineContentFont*>::iterator EndIter = ItemNameFonts_.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
@@ -580,5 +663,39 @@ void Bag::DestroyFonts()
 		}
 	}
 
-	AllFonts_.clear();
+	ItemNameFonts_.clear();
+
 }
+
+void Bag::DestroyDescFonts()
+{
+	std::vector<GameEngineContentFont*>::iterator StartIter = ItemDescFonts_.begin();
+	std::vector<GameEngineContentFont*>::iterator EndIter = ItemDescFonts_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != (*StartIter))
+		{
+			(*StartIter)->Death();
+		}
+	}
+
+	ItemDescFonts_.clear();
+}
+
+void Bag::DestroyOverlapFonts()
+{
+	std::vector<GameEngineContentFont*>::iterator StartIter = ItemOverlapFonts_.begin();
+	std::vector<GameEngineContentFont*>::iterator EndIter = ItemOverlapFonts_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != (*StartIter))
+		{
+			(*StartIter)->Death();
+		}
+	}
+
+	ItemOverlapFonts_.clear();
+}
+

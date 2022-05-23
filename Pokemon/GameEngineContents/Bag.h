@@ -30,7 +30,11 @@ public:
 	void DownFonts();
 	void HideFonts();
 	void ShowFonts(std::vector<class Item*>& _Fonts);
-	void DestroyFonts(); //폰트 삭제
+	void DestroyFonts(); //전체 폰트 삭제
+	void DestroyNameFonts(); //아이템 이름 삭제
+	void DestroyDescFonts(); //아이템 내용 삭제
+	void DestroyOverlapFonts(); //아이템 중복 삭제
+
 
 protected:
 	void Start() override;
@@ -59,7 +63,9 @@ private:
 
 	GameEngineRenderer* ItemPreview_; //현재 선택한 아이템 이미지
 
-	std::vector<class GameEngineContentFont*> AllFonts_; 
+	std::vector<class GameEngineContentFont*> ItemNameFonts_; 
+	std::vector<class GameEngineContentFont*> ItemDescFonts_;
+	std::vector<class GameEngineContentFont*> ItemOverlapFonts_;
 
 	int BagIndex_; //가방 순서
 
