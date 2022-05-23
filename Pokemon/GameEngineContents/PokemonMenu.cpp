@@ -37,10 +37,10 @@ void PokemonMenu::Start()
 
 	////폰트 출력 테스트
 	{
-		GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-		Fonts->SetPosition({ 16,540 });
-		Fonts->ShowString("Please choose a pokemon",true);
-		AllFonts_.push_back(Fonts);
+		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		DialogFont_->SetPosition({ 16,540 });
+		DialogFont_->ShowString("Please choose a pokemon",true);
+		//AllFonts_.push_back(DialogFont_);
 	}
 
 
@@ -162,6 +162,25 @@ void PokemonMenu::UpdateState()
 void PokemonMenu::SelectPokemonStart()
 {
 	DialogRenderer_->On();
+	DialogFont_->On();
+	CancelRenderer_->On();
+	QuestionDialogRenderer_->Off();
+	SelectDialogRenderer_->Off();
+
+	//퀘스쳔 폰트 제거
+	{
+		for (GameEngineContentFont* i : AllFonts_)
+		{
+			if (i == QuestionFont_)
+			{
+				AllFonts_.remove(i);
+				break;
+			}
+		}
+		QuestionFont_->ClearCurrentFonts();
+	}
+
+
 }
 
 void PokemonMenu::SelectPokemonUpdate()
@@ -218,21 +237,41 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsPress("Z") == true)
 	{
-		ChangeHp(0, -1);
+		ChangeState(PokemonMenuType::SelectAction);
+		//ChangeHp(0, -1);
 	}
 
 	if (GameEngineInput::GetInst()->IsPress("X") == true)
 	{
-		ChangeHp(0, 1);
+		ChangeState(PokemonMenuType::SelectPokemon);
+		//ChangeHp(0, 1);
 	}
 }
 
 void PokemonMenu::SelectActionStart()
 {
+	DialogRenderer_->Off();
+	DialogFont_->Off();
+	CancelRenderer_->Off();
+	QuestionDialogRenderer_->On();
+	SelectDialogRenderer_->On();
+
+	//폰트 초기화
+	{
+		QuestionFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		QuestionFont_->SetPosition({ 16,540 });
+		QuestionFont_->ShowString("What do " + PokemonList_[CurrentOrder_]->GetNameCopy(), true);
+		AllFonts_.push_back(QuestionFont_);
+	}
 }
 
 void PokemonMenu::SelectActionUpdate()
 {
+	if (GameEngineInput::GetInst()->IsPress("X") == true)
+	{
+		ChangeState(PokemonMenuType::SelectPokemon);
+		//ChangeHp(0, 1);
+	}
 }
 
 
@@ -271,6 +310,18 @@ void PokemonMenu::InitRenderer()
 	DialogRenderer_ = CreateRenderer(static_cast<int>(UIRenderType::Box), RenderPivot::LeftTop, { 8,520 });
 	DialogRenderer_->SetImage("PoketmonMenu_16.bmp");
 	DialogRenderer_->SetTransColor(RGB(255, 0, 255));
+
+	//질문형 대화형 박스
+	QuestionDialogRenderer_ = CreateRenderer(static_cast<int>(UIRenderType::Box), RenderPivot::LeftTop, { 8,520 });
+	QuestionDialogRenderer_->SetImage("DialogBox_PokemonMenu_Question.bmp");
+	QuestionDialogRenderer_->SetTransColor(RGB(255, 0, 255));
+	QuestionDialogRenderer_->Off();
+
+	//선택형 대화형 박스
+	SelectDialogRenderer_ = CreateRenderer(static_cast<int>(UIRenderType::Box), RenderPivot::LeftTop, { 580,326 });
+	SelectDialogRenderer_->SetImage("DialogBox_PokemonMenu_Select.bmp");
+	SelectDialogRenderer_->SetTransColor(RGB(255, 0, 255));
+	SelectDialogRenderer_->Off();
 
 	//캔슬 버튼
 	CancelRenderer_ = CreateRenderer(static_cast<int>(UIRenderType::Box), RenderPivot::LeftTop, { 732,530 });
@@ -348,6 +399,14 @@ void PokemonMenu::ChangeHp(int _PokemonIndex, int _value)
 	PokemonInfo* CurPokemonInfo = PokemonList_[_PokemonIndex];
 	CurPokemonInfo->PlusHp(_value);
 	//현재 폰트 업데이트
+	for (GameEngineContentFont* i : AllFonts_)
+	{
+		if (i == CurHpFonts_[_PokemonIndex])
+		{
+			AllFonts_.remove(i);
+			break;
+		}
+	}
 	CurHpFonts_[_PokemonIndex]->ClearCurrentFonts();
 
 	GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
@@ -360,7 +419,8 @@ void PokemonMenu::ChangeHp(int _PokemonIndex, int _value)
 		NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * _PokemonIndex) });
 	}
 	NewFonts->ShowString(std::to_string(PokemonList_[_PokemonIndex]->GetHp()), true);
-	AllFonts_[_PokemonIndex] = NewFonts;
+
+	AllFonts_.push_back(NewFonts);
 	CurHpFonts_[_PokemonIndex] = NewFonts;
 }
 
@@ -442,6 +502,10 @@ void PokemonMenu::InitFont()
 
 	}
 
+	//SeletAction 선택 폰트
+	{
+		SelectFonts_.reserve(4);
+	}
 
 }
 
