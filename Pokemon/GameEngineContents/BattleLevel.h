@@ -118,7 +118,10 @@ private:
 
 private:
 	// Data Ãâ·Â
-	
+	Pokemon* PlayerPokemon_;
+	Pokemon* OpponentPokemon_;
+
+
 };
 
 enum class BattleTurn
