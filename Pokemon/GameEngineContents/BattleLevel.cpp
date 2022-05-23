@@ -134,18 +134,6 @@ void BattleLevel::BattlePageStart()
 
 void BattleLevel::FirstBattlePage()
 {
-	bool IsPlayerTurn = BattleEngine::GetInst()->StartBattlePage("Scratch", "Tackle");// Debug
-	BState_ = BattleState::Battle; // Debug
-	InBattle_ = BattleTurn::FirstTurn;
-	if (IsPlayerTurn)
-	{
-		//Interface_->UsedSkillString(PlayerPokemon_->GetNameConstRef() , OpponentPokemon_->GetNameConstRef(), "Scratch");
-	}
-	else
-	{
-		//Interface_->UsedSkillString(OpponentPokemon_->GetNameConstRef(), PlayerPokemon_->GetNameConstRef(), "Scratch");
-	}
-	// 포켓몬 배정되면 인터페이스와 엔진에 구현하는 기능 추가 해야함 <-
 }
 
 
@@ -157,9 +145,6 @@ void BattleLevel::SecondBattlePage()
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
-	// 장중혁 : Debug
-	BattleEngine::GetInst()->BattleStart(PlayerPokemon_, OpponentPokemon_); // Debug
-	//
 
 	if (PlayerRed_ == nullptr)
 	{
