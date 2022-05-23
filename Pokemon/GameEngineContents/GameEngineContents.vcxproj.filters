@@ -105,6 +105,9 @@
     <ClCompile Include="Tackle.cpp">
       <Filter>Battle\Skill</Filter>
     </ClCompile>
+    <ClCompile Include="InteractionText.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -212,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="Tackle.h">
       <Filter>Battle\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionText.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

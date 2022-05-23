@@ -15,6 +15,8 @@
 #include "RoomTileMap6.h"
 #include "WorldTileMap1.h"
 
+#include "InteractionText.h"
+
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 
 PlayerRed::PlayerRed()
@@ -43,11 +45,13 @@ PlayerRed::PlayerRed()
 	, LerpY_(0)
 	, MoveTimer_(0.0f)
 	, NextMoveTime_(0.0f)
-	, IsJump_()
-	, IsMove_()
+	, IsJump_(false)
+	, IsMove_(false)
+	, IsInteraction_(false)
 	, NextTileMap_()
 {
 	MyPokemonList_.resize(6);
+	MainRed_ = this;
 }
 
 PlayerRed::~PlayerRed() 
@@ -275,7 +279,7 @@ void PlayerRed::Start()
 	RedRender_->CreateAnimation("RunLeft.bmp", "RunLeft", 0, 2, 0.1f, true);
 	RedRender_->CreateAnimation("RunRight.bmp", "RunRight", 0, 2, 0.1f, true);
 
-	RedRender_->ChangeAnimation("IdleDown");
+	RedRender_->ChangeAnimation("IdleUp");
 	RedRender_->SetPivot({0, -15});
 
 	AnimationName_ = "Idle";
@@ -307,7 +311,7 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
-	if (true == IsFadeIn_)
+	if (true == IsFadeIn_ || true == IsInteraction_)
 	{
 		return;
 	}
@@ -675,6 +679,11 @@ void PlayerRed::MoveAnim()
 
 void PlayerRed::InteractionUpdate()
 {
+	if (true == IsFadeIn_ || true == IsInteraction_)
+	{
+		return;
+	}
+
 	if (false == GameEngineInput::GetInst()->IsDown("Z"))
 	{
 		return;
@@ -685,7 +694,7 @@ void PlayerRed::InteractionUpdate()
 	TileIndex CheckIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 	if (true == InteractTileCheck(CheckIndex.X, CheckIndex.Y, CurrentDir_))
 	{
-		int a = 0;
+		IsInteraction_ = true;
 	}
 }
 
@@ -710,20 +719,42 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	}
 	if (RoomTileMap1::GetInst() == CurrentTileMap_) // ทนตๅมý 2รþ
 	{
-		if (_X == 2 && _Y == 0)
+		if (_X == 2 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("It's a nicely made dresser.");
+			TmpText->AddText("It will hold a lot of stuff");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 3 && _Y == 0)
+		if (_X == 3 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("It's a nicely made dresser.");
+			TmpText->AddText("It will hold a lot of stuff");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 4 && _Y == 0)
+		if (_X == 4 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("It's a nicely made dresser.");
+			TmpText->AddText("It will hold a lot of stuff");
+			TmpText->Setting();
 			return true;
 		}
 		if (_X == 5 && _Y == 3)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Red Played with the NES.");
+			TmpText->AddText("");
+			TmpText->AddText("...Okay!");
+			TmpText->AddText("It's time to go!");
+			TmpText->Setting();
 			return true;
 		}
 	}

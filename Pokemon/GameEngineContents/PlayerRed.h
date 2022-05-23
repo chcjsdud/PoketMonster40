@@ -45,6 +45,11 @@ public:
 	void FadeOut();
 	void FadeRL();
 
+	inline void SetInteraction(const bool _Value)
+	{
+		IsInteraction_ = _Value;
+	}
+
 protected:
 
 private:
@@ -78,6 +83,7 @@ private:
 	float4 NextTilePos_;
 	bool IsMove_;
 	bool IsJump_;
+	bool IsInteraction_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
