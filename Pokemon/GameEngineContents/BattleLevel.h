@@ -20,9 +20,6 @@ public:
 	BattleLevel();
 	//디폴트 소멸자
 	~BattleLevel();
-
-	
-	
 	
 	//======아래것들은 명시적으로 안쓰겠습니다(delete)======
 	
@@ -100,12 +97,28 @@ private:
 	//
 
 
-
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* PlayerStopCheck;
 
 	bool OneTalk;
+};
+
+class BattleData
+{
+	friend BattleLevel;
+private:
+	BattleData();
+	~BattleData();
+
+	BattleData(const BattleData& _Other) = delete;
+	BattleData(BattleData&& _Other) noexcept = delete;
+	BattleData& operator=(const BattleData& _Other) = delete;
+	BattleData& operator=(BattleData&& _Other) noexcept = delete;
+
+private:
+	// Data 출력
+	
 };
 
 enum class BattleTurn

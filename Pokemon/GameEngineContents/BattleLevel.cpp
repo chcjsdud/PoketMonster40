@@ -177,3 +177,11 @@ void BattleLevel::ShowEndding()
 {
 
 }
+
+BattleData::BattleData()
+{
+}
+
+BattleData::~BattleData()
+{
+}
