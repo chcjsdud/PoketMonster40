@@ -1,8 +1,8 @@
 #pragma once
-#include <GameEngine/GameEngineActor.h>
+#include "NPCBase.h"
 
 // Ό³Έν :
-class NPC4 : public GameEngineActor
+class NPC4 : public NPCBase
 {
 public:
 	// constrcuter destructer
@@ -19,7 +19,7 @@ protected:
 
 private:
 	GameEngineRenderer* NPCRender_;
-	
+
 	void Start() override;
 	void Update() override;
 };
