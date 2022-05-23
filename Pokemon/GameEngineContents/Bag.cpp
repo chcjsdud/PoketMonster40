@@ -55,7 +55,7 @@ void Bag::Start()
 	DownArrow_->SetOrder(-1);
 
 	SelectArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	SelectArrow_->SetPivot({-107, -260});
+	SelectArrow_->SetPivot({ -107, -250 });
 
 	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
 	ItemPreview_->SetPivot({-400, 225});
@@ -67,6 +67,10 @@ void Bag::Start()
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
 	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+
 
 	if (false == GameEngineInput::GetInst()->IsKey("LeftArrow"))
 	{
@@ -151,7 +155,7 @@ void Bag::MoveBag()
 			BagRedrerer_->PlusPivot({ 0, -20 });
 
 			SelectIndex_ = 0;
-			SelectArrow_->SetPivot({ -107, -260 });
+			SelectArrow_->SetPivot({ -107, -250 });
 
 			--BagIndex_;
 			BagType_ = static_cast<ItemType>(BagIndex_);
@@ -166,7 +170,7 @@ void Bag::MoveBag()
 			BagRedrerer_->PlusPivot({ 0, -20 });
 
 			SelectIndex_ = 0;
-			SelectArrow_->SetPivot({ -107, -260 });
+			SelectArrow_->SetPivot({ -107, -250 });
 
 			++BagIndex_;
 			BagType_ = static_cast<ItemType>(BagIndex_);
@@ -185,7 +189,7 @@ void Bag::ChangeBag()
 
 		LeftArrow_->SetOrder(-1);
 		ShowItemList();
-		ShowBallInfo();
+		ShowItemInfo();
 		break;
 		
 	case ItemType::KEYITEM:
@@ -220,7 +224,7 @@ void Bag::MoveItem()
 		switch (BagType_)
 		{
 		case ItemType::ITEM:
-			if (ItemList_.size() > SelectIndex_)
+			if (ItemNameFonts_.size() - 1 > SelectIndex_)
 			{
 				++SelectIndex_;
 
@@ -230,7 +234,7 @@ void Bag::MoveItem()
 			}
 			break;
 		case ItemType::KEYITEM:
-			if (KeyItemList_.size() > SelectIndex_)
+			if (ItemNameFonts_.size() - 1 > SelectIndex_)
 			{
 				++SelectIndex_;
 
@@ -240,7 +244,7 @@ void Bag::MoveItem()
 			}
 			break;
 		case ItemType::BALL:
-			if (BallList_.size() > SelectIndex_)
+			if (ItemNameFonts_.size() - 1 > SelectIndex_)
 			{
 				++SelectIndex_;
 
@@ -291,56 +295,31 @@ void Bag::MoveSelectArrow()
 	switch (SelectIndex_)
 	{
 	case 0:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return; 
-		}
-		SelectArrow_->SetPivot({ -107, -255 });
+		SelectArrow_->SetPivot({ -107, -250 });
 		break;
 
 	case 1:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return;
-		}
-
-		SelectArrow_->SetPivot({ -107, -190 });
+		SelectArrow_->SetPivot({ -107, -185 });
 		break;
 
 	case 2:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return;
-		}
-		SelectArrow_->SetPivot({ -107, -125 });
+		SelectArrow_->SetPivot({ -107, -120 });
 		break;
 
 	case 3:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return;
-		}
-		SelectArrow_->SetPivot({ -107, -60 });
+		SelectArrow_->SetPivot({ -107, -55 });
 		break;
 
 	case 4:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return;
-		}
-		SelectArrow_->SetPivot({ -107, 5 });
+		SelectArrow_->SetPivot({ -107, 10 });
 		break;
 
 	case 5:
-		if (ItemNameFonts_.size() - 1 < SelectIndex_)
-		{
-			return;
-		}
-		SelectArrow_->SetPivot({ -107, 65 });
+		SelectArrow_->SetPivot({ -107, 70 });
 		break;
 
 	default:
-		SelectArrow_->SetPivot({ -107, 65 });
+		SelectArrow_->SetPivot({ -107, 70 });
 		break;
 	}
 }
@@ -350,19 +329,23 @@ void Bag::ShowItemInfo()
 	DestroyDescFonts();
 
 	if (5 < SelectIndex_
-		&& 5 < ItemList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		UpArrow_->SetOrder(5);
 	}
 
 	else if (5 >= SelectIndex_
-		&& 5 < ItemList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 		UpArrow_->SetOrder(-1);
 	}
 
-	if (ItemList_.size() == SelectIndex_)
+	if (ItemNameFonts_.size() - 1 == SelectIndex_
+		|| ItemList_.size() == SelectIndex_
+		|| 0 == ItemList_.size())
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
@@ -375,7 +358,7 @@ void Bag::ShowItemInfo()
 		return;
 	}
 
-	//아이템 정보들
+	//아이템 정보
 	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
 
 	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
@@ -389,19 +372,24 @@ void Bag::ShowKeyItemInfo()
 	DestroyDescFonts();
 
 	if (5 < SelectIndex_
-		&& 5 < KeyItemList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		UpArrow_->SetOrder(5);
 	}
 
 	else if (5 >= SelectIndex_
-		&& 5 < KeyItemList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 		UpArrow_->SetOrder(-1);
 	}
 
-	if (KeyItemList_.size() == SelectIndex_)
+
+	if (ItemNameFonts_.size() - 1 == SelectIndex_
+		|| KeyItemList_.size() == SelectIndex_
+		|| 0 == KeyItemList_.size())
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
@@ -427,19 +415,25 @@ void Bag::ShowBallInfo()
 	DestroyDescFonts();
 
 	if (5 < SelectIndex_
-		&& 5 < BallList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		UpArrow_->SetOrder(5);
 	}
 
 	else if (5 >= SelectIndex_
-		&& 5 < BallList_.size())
+		&& 5 < ItemList_.size()
+		&& 5 < ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 		UpArrow_->SetOrder(-1);
 	}
 
-	if (BallList_.size() == SelectIndex_)
+
+	if (ItemNameFonts_.size() - 1 == SelectIndex_
+		|| BallList_.size() == SelectIndex_
+		|| 0 == BallList_.size())
+
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
@@ -480,7 +474,7 @@ void Bag::ShowItemList()
 		return;
 	}
 
-	else if (6 == ItemList_.size())
+	else if (6 == ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 	}
@@ -509,7 +503,7 @@ void Bag::ShowKeyItemList()
 		return;
 	}
 
-	else if (6 == KeyItemList_.size())
+	else if (6 == ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 	}
@@ -538,7 +532,7 @@ void Bag::ShowBallList()
 		return;
 	}
 
-	else if (6 == BallList_.size())
+	else if (6 == ItemNameFonts_.size())
 	{
 		DownArrow_->SetOrder(5);
 	}
