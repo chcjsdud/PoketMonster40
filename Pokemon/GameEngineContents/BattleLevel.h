@@ -56,7 +56,7 @@ public:
 	}
 	inline void EnddingEnd()
 	{
-		EnddingEnd_ = true;
+		EnddingEnd_ = true;	
 	}
 
 protected:

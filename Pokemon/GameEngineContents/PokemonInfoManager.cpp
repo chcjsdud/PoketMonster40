@@ -1,9 +1,10 @@
-#include "PokemonInfoManager.h"
+Ôªø#include "PokemonInfoManager.h"
 #include "Pokemon.h"
 #include "PokemonInfo.h"
 #include "PokemonSkill.h"
 #include "MonsterBall.h"
 #include "Potion.h"
+#include "Tackle.h"
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
 
@@ -59,46 +60,46 @@ PokemonInfoManager::~PokemonInfoManager()
 void PokemonInfoManager::Reset()
 {
 	{
-		//Tackle: ∏ˆ≈Îπ⁄ƒ°±‚
-		CreateSkill("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical);
-		//Tail Whip: ≤ø∏Æ »ÁµÈ±‚ 
-		CreateSkill("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status);
-		//Scratch: «“ƒ˚±‚
-		CreateSkill("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical);
-		//Scratch: øÔ¿Ωº“∏Æ 
-		CreateSkill("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status);
+		//Tackle: Î™∏ÌÜµÎ∞ïÏπòÍ∏∞
+		CreateSkill<Tackle>("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical);
+		//Tail Whip: Íº¨Î¶¨ ÌùîÎì§Í∏∞ 
+		CreateSkill<Tackle>("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status);
+		//Scratch: Ìï†ÌÄ¥Í∏∞
+		CreateSkill<Tackle>("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical);
+		//Scratch: Ïö∏ÏùåÏÜåÎ¶¨ 
+		CreateSkill<Tackle>("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status);
 	}
 
 	{
-		//Charmander: ∆ƒ¿Ã∏Æ
+		//Charmander: ÌååÏù¥Î¶¨
 		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
-		//Ω∫≈≥ √ ±‚»≠
+		//Ïä§ÌÇ¨ Ï¥àÍ∏∞Ìôî
 		CharmanderInfo->AddMySkill(FindSkill("Scratch")); 
 		CharmanderInfo->AddMySkill(FindSkill("Growl")); 
 
-		//Squirtle: ≤ø∫Œ±‚
+		//Squirtle: Íº¨Î∂ÄÍ∏∞
 		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
 		SquirtleInfo->AddMySkill(FindSkill("Tackle"));
 		SquirtleInfo->AddMySkill(FindSkill("TailWhip"));
 
-		//Bulbasaur: ¿ÃªÛ«ÿææ
+		//Bulbasaur: Ïù¥ÏÉÅÌï¥Ïî®
 		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
 		BulbasaurInfo->AddMySkill(FindSkill("Tackle"));
 		BulbasaurInfo->AddMySkill(FindSkill("Growl"));
 
-		//Pidgey: ±∏±∏
+		//Pidgey: Íµ¨Íµ¨
 		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
 		PidgeyInfo->AddMySkill(FindSkill("Tackle"));
 		
-		//Rattata: ≤ø∑ø
+		//Rattata: Íº¨Î†õ
 		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
 		RattataInfo->AddMySkill(FindSkill("Tackle"));
 		RattataInfo->AddMySkill(FindSkill("TailWhip"));
 	}
 		
 	{
-		CreateItem<MonsterBall>("MonsterBall", 10, ItemType::BALL);
-		CreateItem<Potion>("Potion", 10, ItemType::ITEM);
+		CreateItem<MonsterBall>("MonsterBall", 10, ItemType::BALL, "A Ball thrown to catch a wild Pokemon. It is designed in a capsule style.");
+		CreateItem<Potion>("Potion", 10, ItemType::ITEM, "A Potion is an item that heals 20 HP of a Pokemon.");
 	}
 }
 
@@ -200,19 +201,5 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, Poke
 	return NewPokemonInfo;
 }
 
-PokemonSkill* PokemonInfoManager::CreateSkill(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
-{
-	PokemonSkill* NewSkill = new PokemonSkill();
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
-	NewSkill->SetName(Key);
-	NewSkill->SetValue(_Value);
-	NewSkill->SetPP(_PP);
-	NewSkill->SetType(_Type);
-	NewSkill->SetSkillType(_SkillType);
-
-	AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
-
-	return NewSkill;
-}
 

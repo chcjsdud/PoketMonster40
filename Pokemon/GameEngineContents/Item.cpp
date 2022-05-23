@@ -4,6 +4,7 @@
 Item::Item() 
 	: Value_(0)
 	, Type_(ItemType::ITEM)
+	, Desc_{}
 {
 }
 

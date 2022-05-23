@@ -222,13 +222,6 @@ void Bag::MoveItem()
 				MoveSelectArrow();
 				UpFonts();
 				ShowItemInfo();
-
-				//if (ItemList_.size() == SelectIndex_)
-				//{
-				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-				//	DownArrow_->SetOrder(-1);
-				//	//return;
-				//}
 			}
 			break;
 		case ItemType::KEYITEM:
@@ -239,12 +232,6 @@ void Bag::MoveItem()
 				MoveSelectArrow();
 				UpFonts();
 				ShowKeyItemInfo();
-
-				//if (KeyItemList_.size() == SelectIndex_)
-				//{
-				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-				//	return;
-				//}
 			}
 			break;
 		case ItemType::BALL:
@@ -255,12 +242,6 @@ void Bag::MoveItem()
 				MoveSelectArrow();
 				UpFonts();
 				ShowBallInfo();
-
-				//if (BallList_.size() == SelectIndex_)
-				//{
-				//	ItemPreview_->SetImage("Bag_EnterArrow.bmp");
-				//	return;
-				//}
 			}
 			break;
 		}
@@ -358,6 +339,11 @@ void Bag::ShowItemInfo()
 
 	//아이템 정보들
 	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
+
+	//GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	//BeginFont->SetPosition({ 150, 460.f });
+	//BeginFont->ShowString(ItemList_[SelectIndex_]->GetDesc(), true);
+	//AllFonts_.push_back(BeginFont);
 }
 
 void Bag::ShowKeyItemInfo()

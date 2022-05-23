@@ -35,10 +35,21 @@ public:
 		return Type_;
 	}
 
+	inline void SetDesc(const std::string& _Desc)
+	{
+		Desc_ = _Desc;
+	}
+
+	inline std::string& GetDesc()
+	{
+		return Desc_;
+	}
+
 protected:
 
 private:
 	int Value_; //상처약이라면 회복될 수치
 	ItemType Type_;
+	std::string Desc_;
 };
 

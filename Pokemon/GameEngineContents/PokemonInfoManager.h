@@ -45,17 +45,34 @@ public:
 	Item* FindItem(const std::string& _Key);
 
 	template<typename ItemKind>
-	Item* CreateItem(const std::string& _Key, int _Value, ItemType _Type)
+	Item* CreateItem(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc)
 	{
 		Item* NewItem = new ItemKind();
 		std::string Key = GameEngineString::ToUpperReturn(_Key);
 
 		NewItem->SetName(Key);
 		NewItem->SetValue(_Value);
-		NewItem->SetType(_Type);
+		NewItem->SetDesc(_Desc);
 
 		AllItemList_.insert(std::make_pair(Key, NewItem));
 		return NewItem;
+	}
+
+	template<typename SkillKind>
+	PokemonSkill* CreateSkill(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
+	{
+		PokemonSkill* NewSkill = new SkillKind();
+		std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+		NewSkill->SetName(Key);
+		NewSkill->SetValue(_Value);
+		NewSkill->SetPP(_PP);
+		NewSkill->SetType(_Type);
+		NewSkill->SetSkillType(_SkillType);
+
+		AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
+
+		return NewSkill;
 	}
 
 protected:
@@ -67,6 +84,5 @@ private:
 
 	Pokemon* CreatePokemon(const std::string& _Name);
 	PokemonInfo* CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
-	PokemonSkill* CreateSkill(const std::string& _Key, int Value, int _PP, PokemonType _Type, SkillType _SkillType);
 };
 
