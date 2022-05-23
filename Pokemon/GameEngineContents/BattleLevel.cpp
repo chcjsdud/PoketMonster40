@@ -159,7 +159,6 @@ void BattleLevel::ShowEndding()
 }
 
 BattleData::BattleData()
-	:
 {
 }
 
