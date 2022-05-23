@@ -151,14 +151,17 @@ void GameEngineContentFont::Update()
 					case ' ':
 						StringForRendererName = "LineJamp.bmp";
 						break;
-					case '?' :
+					case '?':
 						StringForRendererName = "QuestionMark.bmp";
 						break;
-					case '!' :
+					case '!':
 						StringForRendererName = "ExclamationMark.bmp";
 						break;
 					case 46:
 						StringForRendererName = "Period.bmp";
+						break;
+					case 44:
+						StringForRendererName = "Comma.bmp";
 						break;
 					case '/':
 						StringForRendererName = "Slash.bmp";
