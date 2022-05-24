@@ -3,13 +3,15 @@
 
 
 // 설명 : NPC들이 상속받는 Battle용 Interface
+class PlayerRed;
 class Pokemon;
 class BattleNPCInterface : public GameEngineActor
 {
+	friend PlayerRed;
 public:
 	// constrcuter destructer
 	BattleNPCInterface();
-	~BattleNPCInterface();
+	virtual ~BattleNPCInterface();
 
 	// delete Function
 	BattleNPCInterface(const BattleNPCInterface& _Other) = delete;
@@ -26,12 +28,11 @@ public:
 	// 디버그
 	inline void PushPokemon(Pokemon* _Pokemon)
 	{
-		CurrentPossessionPokemon_ = _Pokemon;
+		CurrentPossessionPokemons_.push_back(_Pokemon);
 	}
-
-	inline Pokemon* GetPokemon()
+	inline std::vector<Pokemon*>& GetPokemonList()
 	{
-		return CurrentPossessionPokemon_;
+		return CurrentPossessionPokemons_;
 	}
 	//
 	//
@@ -40,18 +41,17 @@ protected:
 	virtual void Start() override {}
 	virtual void Update() override {}
 
-	// 
-	void GetRandomPokemon();
 
-	inline void SetBattleNPC_(bool _Idx)
+
+	inline void SetBattleNPC(bool _Idx)
 	{
 		BattleNPC_ = _Idx;
 	}
 
-	Pokemon* CurrentPossessionPokemon_;
+	//Pokemon* CurrentPossessionPokemon_;
 
 	// 현재 가지고 있는 포켓몬
-	//std::vector<Pokemon*> CurrentPossessionPokemon_;
+	std::vector<Pokemon*> CurrentPossessionPokemons_;
 private:
 
 	// 배틀 할 수 있는 NPC인가?

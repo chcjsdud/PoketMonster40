@@ -8,6 +8,8 @@
 #include "BattleUnitRenderer.h"
 #include "BattleBackground.h"
 #include "BattleEngine.h"
+#include "BattleNPCInterface.h"
+#include "WildPokemonNPC.h"
 
 
 
@@ -21,6 +23,9 @@ BattleLevel::BattleLevel()
 	// µð¹ö±ë
 	, PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
+	, PlayerStopCheck(nullptr)
+	, PlayerRed_(nullptr)
+	, Opponent_(nullptr)
 {
 
 }
@@ -40,7 +45,7 @@ void BattleLevel::Loading()
 	//Opponent_->PushPokemon(Debug);
 	//PlayerCurrentPokemon_ = CreateActor<Pokemon>();
 	//PlayerCurrentPokemon_->SetInfo("Charmander");
-	//PoeCurrentPokemon_ = Opponent_->GetPokemon();
+	//PoeCurrentPokemon_ = Opponent_->GetPokemonList();
 	// Debug
 
 
@@ -104,18 +109,27 @@ void BattleLevel::Update()
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
 
-	//if (PlayerRed_ == nullptr)
-	//{
-	//	PlayerRed_  = PlayerRed::MainRed_;
-	//}
+	if (PlayerRed_ == nullptr)
+	{
+		PlayerRed_  = PlayerRed::MainRed_;
+	}
+
+	// ÀåÁßÇõ : ¹èÆ² µð¹ö±ë
+	{
+		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
+		//Pokemon* AA =
+		//Opponent_->PushPokemon();
+	}
 
 
 
 	//BState_ = BattleState::Openning
-	BState_ = BattleState::Selecet;
-	OpenningEnd_ = false;
-	EnddingEnd_ = false;
-	ShowOpenning();
+	{
+		BState_ = BattleState::Selecet;
+		OpenningEnd_ = false;
+		EnddingEnd_ = false;
+		ShowOpenning();
+	}
 }
 
 void BattleLevel::ShowOpenning()
@@ -135,21 +149,94 @@ void BattleLevel::ShowEndding()
 
 }
 
-BattleData::BattleData(PlayerRed* _Player)
-	: PlayerPokemonList_(nullptr)
-	, PoePokemonList_(nullptr)
-	, PlayerCurrentPokemon_(nullptr)
-	, PoeCurrentPokemon_(nullptr)
-	, PlayerCurrentPokemonInBattle_(nullptr)
+
+BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel* _Level)
+	: PlayerCurrentPokemonInBattle_(nullptr)
 	, PoeCurrentPokemonInBattle_(nullptr)
-	, AllPokemonInBattle_(nullptr)
+	, PoeNPC_(_Poe)
+	, Player_(_Player)
+	, PlayerPokemonList_(_Player->GetPokemonList())
+	, PoePokemonList_(_Poe->GetPokemonList())
+	, WildBattle_(false)
+{
+	{
+		// Player
+		int PokemonInt = PlayerPokemonList_.size();
+		for (int i = 0; i < PokemonInt; i++)
+		{
+			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
+		}
+	}
+	{
+		// Poe
+		int PokemonInt = PoePokemonList_.size();
+		for (int i = 0; i < PokemonInt; i++)
+		{
+			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
+		}
+	}
+
+
+	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
+	PoeCurrentPokemonInBattle_ = PeoPokemonsInBattle_.front();
+}
+
+BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _Level)
+	: PlayerCurrentPokemonInBattle_(nullptr)
+	, PoeCurrentPokemonInBattle_(nullptr)
+	, PoeNPC_(nullptr)
+	, Player_(_Player)
+	, PlayerPokemonList_(_Player->GetPokemonList())
+	, PoePokemonList_(_Level->CreateActor<WildPokemonNPC>(0, "WildPokemon")->GetPokemonList())
+	, WildBattle_(true)
 {
 	// PlayerCurrentPokemonInBattle_ = _Player->GetPlayerPokemon
+	PoeNPC_ = dynamic_cast<BattleNPCInterface*>(_Level->FindActor("WildPokemon"));
 	
+	{
+		// Player
+		int PokemonInt = PlayerPokemonList_.size();
+		for (int i = 0; i < PokemonInt; i++)
+		{
+			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
+		}
+	}
+
+	{
+		// Poe
+		int PokemonInt = PoePokemonList_.size();
+		for (int i = 0; i < PokemonInt; i++)
+		{
+			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
+		}
+	}
+
+	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
+	PoeCurrentPokemonInBattle_ = PeoPokemonsInBattle_.front();
 }
 
 BattleData::~BattleData()
 {
+	if (WildBattle_ == true)
+	{
+		PoeNPC_->Death();
+	}
+
+	for (auto* State : AllPokemonInBattle_)
+	{
+		if (State != nullptr)
+		{
+			delete State;
+			State = nullptr;
+		}
+	}
+}
+
+PokemonBattleState* BattleData::CreatePokemonState(Pokemon* _Pokemon)
+{
+	PokemonBattleState* PokemonState = new PokemonBattleState(_Pokemon);
+	AllPokemonInBattle_.push_back(PokemonState);
+	return PokemonState;
 }
 
 PokemonBattleState::PokemonBattleState(Pokemon* _Pokemon)
