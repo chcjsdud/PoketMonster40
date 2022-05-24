@@ -74,8 +74,8 @@ void PokemonInfoManager::Reset()
 		//Charmander: 파이리
 		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
 		//스킬 초기화
-		CharmanderInfo->AddMySkill(FindSkill("Scratch")); 
-		CharmanderInfo->AddMySkill(FindSkill("Growl")); 
+		CharmanderInfo->AddMySkill(FindSkill("Scratch"));
+		CharmanderInfo->AddMySkill(FindSkill("Growl"));
 
 		//Squirtle: 꼬부기
 		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
@@ -90,13 +90,13 @@ void PokemonInfoManager::Reset()
 		//Pidgey: 구구
 		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
 		PidgeyInfo->AddMySkill(FindSkill("Tackle"));
-		
+
 		//Rattata: 꼬렛
 		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
 		RattataInfo->AddMySkill(FindSkill("Tackle"));
 		RattataInfo->AddMySkill(FindSkill("TailWhip"));
 	}
-		
+
 	{
 		CreateItem<MonsterBall>("MonsterBall", 10, ItemType::BALL, "A Ball thrown to catch a Pokemon.\\It is designed in a capsule style.");
 		CreateItem<Potion>("Potion", 10, ItemType::ITEM, "A Potion is an item that\\heals 20 HP of a Pokemon.");
@@ -153,23 +153,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	Pokemon* NewPokemon = new Pokemon();
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
-	NewPokemon->GetInfo()->SetName(_Name);
-	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
-	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
-	NewPokemon->GetInfo()->SetMyLevel(MyInfo->GetMyLevel());
-	NewPokemon->GetInfo()->SetMyMaxLevel(MyInfo->GetMyMaxLevel());
-	NewPokemon->GetInfo()->SetHp(MyInfo->GetHp());
-	NewPokemon->GetInfo()->SetMaxHp(MyInfo->GetMaxHp());
-	NewPokemon->GetInfo()->SetExp(MyInfo->GetExp());
-	NewPokemon->GetInfo()->SetMaxExp(MyInfo->GetMaxExp());
-	NewPokemon->GetInfo()->SetAtt(MyInfo->GetAtt());
-	NewPokemon->GetInfo()->SetDef(MyInfo->GetDef());
-	NewPokemon->GetInfo()->SetSpAtt(MyInfo->GetSpAtt());
-	NewPokemon->GetInfo()->SetSpDef(MyInfo->GetSpDef());
-	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
-	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
-	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
-	NewPokemon->GetInfo()->SetPokemonImage(_Name);
+	NewPokemon->SetInfo(MyInfo);
 
 	return NewPokemon;
 }

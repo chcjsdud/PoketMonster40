@@ -7,7 +7,7 @@ class PokemonSkill : public GameEngineNameObject
 public:
 	// constrcuter destructer
 	PokemonSkill();
-	~PokemonSkill();
+	virtual ~PokemonSkill();
 
 	// delete Function
 	PokemonSkill(const PokemonSkill& _Other) = delete;

@@ -33,63 +33,21 @@ Bag::~Bag()
 
 void Bag::Start()
 {
-	SetPosition(GameEngineWindow::GetScale().Half());
-	CreateRenderer("Bag_Back.bmp");
-
-	BagRedrerer_ = CreateRenderer("Bag_LeftOpen.bmp");
-	BagRedrerer_->SetPivot({-317, -40});
-
-	BagName_ = CreateRenderer("Bag_Items.bmp");
-	BagName_->SetPivot({-314, -258 });
-
-	LeftArrow_ = CreateRenderer("Bag_LeftArrow.bmp");
-	LeftArrow_->SetPivot({-436, -25});
-	LeftArrow_->SetOrder(-1);
-	RightArrow_ = CreateRenderer("Bag_RightArrow.bmp");
-	RightArrow_->SetPivot({ -200, -25 });
-	UpArrow_ = CreateRenderer("Bag_UpArrow.bmp");
-	UpArrow_->SetPivot({150, -280});
-	UpArrow_->SetOrder(-1);
-	DownArrow_ = CreateRenderer("Bag_DownArrow.bmp");
-	DownArrow_->SetPivot({ 150, 90 });
-	DownArrow_->SetOrder(-1);
-
-	SelectArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	SelectArrow_->SetPivot({ -107, -250 });
-
-	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
-	ItemPreview_->SetPivot({-400, 225});
-
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	
-	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
-	BagDialog_->SetPivot({200, 200 });
-
 	if (false == GameEngineInput::GetInst()->IsKey("LeftArrow"))
 	{
 		GameEngineInput::GetInst()->CreateKey("LeftArrow", VK_LEFT);
 		GameEngineInput::GetInst()->CreateKey("RightArrow", VK_RIGHT);
 		GameEngineInput::GetInst()->CreateKey("DownArrow", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
+		GameEngineInput::GetInst()->CreateKey("DialogOn", VK_LCONTROL);
 	}
-
-	ShowItemList();
-	ShowItemInfo();
 }
 
 void Bag::Update()
 {
 	MoveBag();
 	MoveItem();
+	MoveDialog();
 
 	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
 
@@ -134,6 +92,56 @@ void Bag::Update()
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+
+	SetPosition(GameEngineWindow::GetScale().Half());
+	CreateRenderer("Bag_Back.bmp");
+
+	BagRedrerer_ = CreateRenderer("Bag_LeftOpen.bmp");
+	BagRedrerer_->SetPivot({ -317, -40 });
+
+	BagName_ = CreateRenderer("Bag_Items.bmp");
+	BagName_->SetPivot({ -314, -258 });
+
+	LeftArrow_ = CreateRenderer("Bag_LeftArrow.bmp");
+	LeftArrow_->SetPivot({ -436, -25 });
+	LeftArrow_->SetOrder(-1);
+	RightArrow_ = CreateRenderer("Bag_RightArrow.bmp");
+	RightArrow_->SetPivot({ -200, -25 });
+	UpArrow_ = CreateRenderer("Bag_UpArrow.bmp");
+	UpArrow_->SetPivot({ 150, -280 });
+	UpArrow_->SetOrder(-1);
+	DownArrow_ = CreateRenderer("Bag_DownArrow.bmp");
+	DownArrow_->SetPivot({ 150, 90 });
+	DownArrow_->SetOrder(-1);
+
+	SelectArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
+	SelectArrow_->SetPivot({ -107, -250 });
+
+	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
+	ItemPreview_->SetPivot({ -400, 225 });
+
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+
+	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
+	BagDialog_->SetPivot({ 335, 190 });
+	BagDialog_->Off();
+
+	DialogBox_ = CreateRenderer("AA.bmp");
+	DialogBox_->SetPivot({ -80, 224 });
+	DialogBox_->Off();
+
+	ShowItemList();
+	ShowItemInfo();
+
 	HideFonts();
 }
 
@@ -454,6 +462,56 @@ void Bag::ShowBallInfo()
 	DescFont->SetPosition({ 150, 460.f });
 	DescFont->ShowString(BallList_[SelectIndex_]->GetDesc(), true);
 	ItemDescFonts_.push_back(DescFont);
+}
+
+void Bag::MoveDialog()
+{
+	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
+		&& false == IsDialogOn_)
+	{
+		IsDialogOn_ = true;
+		BagDialog_->On();
+		DialogBox_->On();
+		DestroyDescFonts();
+
+		UpArrow_->Off();
+		DownArrow_->Off();
+		RightArrow_->Off();
+		LeftArrow_->Off();
+	}
+
+	else if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
+		&& true == IsDialogOn_)
+	{
+		IsDialogOn_ = false;
+		BagDialog_->Off();
+		DialogBox_->Off();
+
+		LeftArrow_->On();
+		RightArrow_->On();
+
+		switch (BagType_)
+		{
+		case ItemType::ITEM:
+			LeftArrow_->SetOrder(-1);
+			ShowItemList();
+			ShowItemInfo();
+			break;
+
+		case ItemType::KEYITEM:
+			LeftArrow_->SetOrder(5);
+			RightArrow_->SetOrder(5);
+			ShowKeyItemList();
+			ShowKeyItemInfo();
+			break;
+
+		case ItemType::BALL:
+			RightArrow_->SetOrder(-1);
+			ShowBallList();
+			ShowBallInfo();
+			break;
+			}
+	}
 }
 
 

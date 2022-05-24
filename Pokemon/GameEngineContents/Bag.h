@@ -26,6 +26,8 @@ public:
 	void ShowKeyItemInfo();
 	void ShowBallInfo();
 
+	void MoveDialog();
+
 	void UpFonts(); //아이템이 5개 이상일 경우 폰트 움직임
 	void DownFonts();
 	void HideFonts();
@@ -49,6 +51,7 @@ private:
 	class GameEngineRenderer* BagRedrerer_;
 	GameEngineRenderer* BagName_;
 	GameEngineRenderer* BagDialog_;
+	GameEngineRenderer* DialogBox_;
 
 	GameEngineRenderer* LeftArrow_;
 	GameEngineRenderer* RightArrow_;
@@ -64,9 +67,10 @@ private:
 
 	GameEngineRenderer* ItemPreview_; //현재 선택한 아이템 이미지
 
-	std::vector<class GameEngineContentFont*> ItemNameFonts_; 
-	std::vector<class GameEngineContentFont*> ItemDescFonts_;
-	std::vector<class GameEngineContentFont*> ItemOverlapFonts_;
+	std::vector<class GameEngineContentFont*> ItemNameFonts_; //아이템 이름
+	std::vector<class GameEngineContentFont*> ItemDescFonts_; //아이템 내용
+	std::vector<class GameEngineContentFont*> ItemOverlapFonts_; //아이템 개수
+	std::vector<class GameEngineContentFont*> DialogFonts_; //다이얼로그 창 
 
 	int BagIndex_; //가방 순서
 
@@ -77,5 +81,8 @@ private:
 	//화살표 움직임
 	float ArrowMoveTime_;
 	bool IsArrowSync_;
+
+	//다이얼로그 상자 켜짐
+	bool IsDialogOn_;
 };
 

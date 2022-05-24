@@ -8,7 +8,7 @@ class Item : public GameEngineNameObject
 {
 public:
 	Item();
-	~Item();
+	virtual ~Item();
 
 	Item(const Item& _Other) = delete;
 	Item(Item&& _Other) noexcept = delete;
