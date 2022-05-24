@@ -10,6 +10,7 @@
 #include "BattleEngine.h"
 #include "BattleNPCInterface.h"
 #include "WildPokemonNPC.h"
+#include "PokemonInfoManager.h"
 
 
 
@@ -26,13 +27,24 @@ BattleLevel::BattleLevel()
 	, PlayerStopCheck(nullptr)
 	, PlayerRed_(nullptr)
 	, Opponent_(nullptr)
+	, BattleData_(nullptr)
 {
 
 }
 
 BattleLevel::~BattleLevel()
-{
-	BattleEngine::Destroy();
+{	
+	if (BattleData_ != nullptr)
+	{
+		{
+			delete BattleData_;
+		}
+	}
+	if (Opponent_ != nullptr)
+	{
+		delete Opponent_->GetPokemonList()[0];
+		delete PlayerRed_->GetPokemonList().front();
+	}
 }
 
 void BattleLevel::Loading()
@@ -114,21 +126,23 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 		PlayerRed_  = PlayerRed::MainRed_;
 	}
 
-	// ÀåÁßÇõ : ¹èÆ² µð¹ö±ë
-	{
-		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
-		//Pokemon* AA =
-		//Opponent_->PushPokemon();
-	}
-
-
-
 	//BState_ = BattleState::Openning
 	{
 		BState_ = BattleState::Selecet;
 		OpenningEnd_ = false;
 		EnddingEnd_ = false;
 		ShowOpenning();
+	}
+
+
+
+	// ÀåÁßÇõ : ¹èÆ² µð¹ö±ë
+	{
+		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
+		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
+		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
+
+		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 	}
 }
 
@@ -142,11 +156,18 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	OpenningEnd_ = false;
 	EnddingEnd_ = false;
+
+	// ÀåÁßÇõ : Debug
+	{
+		Opponent_->Death();
+		Opponent_->GetPokemonList()[0]->Death();
+		PlayerRed_->GetPokemonList().front()->Death();
+		delete BattleData_;
+	}
 }
 
 void BattleLevel::ShowEndding()
 {
-
 }
 
 
@@ -161,21 +182,20 @@ BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel
 {
 	{
 		// Player
-		int PokemonInt = PlayerPokemonList_.size();
-		for (int i = 0; i < PokemonInt; i++)
+		size_t PokemonInt = PlayerPokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
 		{
 			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
 		}
 	}
 	{
 		// Poe
-		int PokemonInt = PoePokemonList_.size();
-		for (int i = 0; i < PokemonInt; i++)
+		size_t PokemonInt = PoePokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
 		{
 			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
 		}
 	}
-
 
 	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
 	PoeCurrentPokemonInBattle_ = PeoPokemonsInBattle_.front();
@@ -195,8 +215,8 @@ BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _
 	
 	{
 		// Player
-		int PokemonInt = PlayerPokemonList_.size();
-		for (int i = 0; i < PokemonInt; i++)
+		size_t PokemonInt = PlayerPokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
 		{
 			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
 		}
@@ -204,8 +224,8 @@ BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _
 
 	{
 		// Poe
-		int PokemonInt = PoePokemonList_.size();
-		for (int i = 0; i < PokemonInt; i++)
+		size_t PokemonInt = PoePokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
 		{
 			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
 		}

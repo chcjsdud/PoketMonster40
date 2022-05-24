@@ -13,6 +13,7 @@
 
 enum class PokemonAbility;
 class BattleEngine;
+class BattleData;
 class PokemonBattleState;
 class BattleLevel : public GameEngineLevel
 {
@@ -92,6 +93,8 @@ private:
 	Pokemon* PlayerCurrentPokemon_; // Debug
 	Pokemon* PoeCurrentPokemon_;// Debug
 	//
+
+	BattleData* BattleData_;
 
 	
 };
