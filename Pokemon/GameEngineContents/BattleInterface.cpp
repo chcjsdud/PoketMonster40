@@ -94,6 +94,7 @@ bool BattleInterface::BattleKey()
 	{
 		return true;
 	}
+	return false;
 }
 
 void BattleInterface::UsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)

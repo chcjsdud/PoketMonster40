@@ -13,7 +13,7 @@
 
 enum class PokemonAbility;
 class BattleEngine;
-class PokemonBattleState
+class PokemonBattleState;
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
@@ -38,10 +38,10 @@ public:
 		return BState_;
 	}
 
-	inline PlayerRed* GetRed() const
-	{
-		return PlayerRed_;
-	}
+	//inline PlayerRed* GetRed() const
+	//{
+	//	return PlayerRed_;
+	//}
 
 public:
 	inline void OpenningEnd()

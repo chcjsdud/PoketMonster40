@@ -18,7 +18,6 @@ BattleLevel::BattleLevel()
 	, EnddingEnd_(false)
 	, OneTalk(false)
 	, Fonts(nullptr)
-	, PlayerStopCheck(false)
 	// µð¹ö±ë
 	, PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
