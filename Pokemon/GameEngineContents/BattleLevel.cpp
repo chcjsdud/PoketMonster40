@@ -18,14 +18,14 @@ BattleLevel::BattleLevel()
 	, BState_(BattleState::Openning)
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
-	, OneTalk(false)
-	, Fonts(nullptr)
 	// µð¹ö±ë
 	, PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
-	, PlayerStopCheck(nullptr)
 	, PlayerRed_(nullptr)
 	, Opponent_(nullptr)
+	, PlayerStopCheck(nullptr)
+	, OneTalk(false)
+	, Fonts(nullptr)
 {
 
 }

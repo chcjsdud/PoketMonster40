@@ -5,6 +5,7 @@
 #include "PokemonEngine.h"
 #include "BattleEngine.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "BattleUnitRenderer.h"
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
@@ -20,6 +21,9 @@ BattleInterface::BattleInterface()
 	, MainInterface(nullptr)
 	, DownFont_(nullptr)
 	, Level_(nullptr)
+	, PlayerStopCheck(nullptr)
+	, OneTalk(false)
+	, Fonts(nullptr)
 {
 
 }
@@ -68,6 +72,11 @@ void BattleInterface::Start()
 	BattleCommend->SetPivot({-240.0f,0.0f});
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
 	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
+
+	//김예나:테스트 코드
+	PlayerStopCheck = Level_->CreateActor<BattleUnitRenderer>();
+	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
+	Fonts->SetPosition({ 50, 485 });
 }
 
 void BattleInterface::Render()
@@ -86,6 +95,13 @@ void BattleInterface::Update()
 		OrderCheck();
 	}
 
+	if (PlayerStopCheck->GetPlayerStop() == true && OneTalk == false)
+	{
+		//김예나:플레이어 멈출시 폰트출력 테스트
+		Fonts->ShowString("Wild Bulbarsaur\\is appear!!", false);
+		OneTalk = true;
+		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
+	}
 }
 
 bool BattleInterface::BattleKey()
