@@ -56,7 +56,7 @@ void NPC4::Start()
 
 void NPC4::Update()
 {
-	NPCBase::NPCMove();
 	NPCBase::NPCMoveAnim();
+	NPCBase::NPCMove();
 }
 

@@ -17,6 +17,10 @@ public:
 	BattleUnitRenderer& operator=(const BattleUnitRenderer& _Other) = delete;
 	BattleUnitRenderer& operator=(BattleUnitRenderer&& _Other) noexcept = delete;
 
+
+	static GameEngineRenderer* PlayerRenderer_;
+
+
 protected:
 	void Start() override;
 	void Update() override;
@@ -26,7 +30,6 @@ private:
 	GameEngineRenderer* PoeCurrentPokemon_;
 
 
-	GameEngineRenderer* PlayerRenderer_;
 	GameEngineRenderer* OpponentRenderer_;
 
 

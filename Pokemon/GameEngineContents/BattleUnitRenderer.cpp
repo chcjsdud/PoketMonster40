@@ -1,12 +1,15 @@
 #include "BattleUnitRenderer.h"
 #include "GameEngineBase/GameEngineWindow.h"
 #include "GameEngineBase/GameEngineTime.h"
+#include <GameEngine/GameEngineImageManager.h>
+
+GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
 
 BattleUnitRenderer::BattleUnitRenderer() 
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)
-	, PlayerRenderer_(nullptr)
+	
 	, PlayerPokemonPos_({ -220, 60 })
 	, OpponentPokemonPos_({ 200, -105 })
 	, PlayerRendererPos_({ 480,31 })
@@ -27,6 +30,11 @@ void BattleUnitRenderer::Start()
 	PoeCurrentPokemon_ = CreateRenderer("BulbasaurF.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
 
 	PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
+	
+	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
+	Image->CutCount(5, 1);
+
+	PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
 }
 
 void BattleUnitRenderer::Update()

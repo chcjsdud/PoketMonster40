@@ -98,10 +98,44 @@ void BattleInterface::Update()
 	if (PlayerStopCheck->GetPlayerStop() == true && OneTalk == false)
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
-		Fonts->ShowString("Wild Bulbarsaur\\is appear!!", false);
+		Fonts->ShowString("Wild Bulbarsaur\\is appear!!\\Go!!\\Charizard!!", false);
 		OneTalk = true;
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
+
+	{
+		// 폰트 출력이 완료되고 키입력 대기
+		if (Fonts->IsWait())
+		{
+			// Z 키 입력시 다음 문장 출력
+			if (GameEngineInput::GetInst()->IsDown("Z") == true)
+			{
+				// 다음 문장 출력 함수
+				Fonts->NextString();
+			}
+		}
+		// 다음 문장이 없을 때 == 끝났을 때
+		if (Fonts->IsEnd())
+		{
+			// 모든 대화가 끝났을 때 z 키누르면 다음 대화 시작
+			if (GameEngineInput::GetInst()->IsDown("Z") == true)
+			{
+				//애니메이션체인지
+				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
+
+				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
+				{
+					BattleUnitRenderer::PlayerRenderer_->Off();
+				}
+			}
+			// 모든 대화가 끝났을 때 x 키누르면 종료
+			else if (GameEngineInput::GetInst()->IsDown("X") == true)
+			{
+				Fonts->EndFont();
+			}
+		}
+	}
+
 }
 
 bool BattleInterface::BattleKey()
