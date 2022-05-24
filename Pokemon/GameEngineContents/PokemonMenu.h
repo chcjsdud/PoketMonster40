@@ -9,6 +9,7 @@ class PokemonMenu : public GameEngineActor
 	{
 		SelectPokemon,
 		SelectAction,
+		SelectSwitch,
 		Max
 	};
 public:
@@ -38,6 +39,9 @@ private:
 	void SelectActionStart();
 	void SelectActionUpdate();
 
+	void SelectSwitchStart();
+	void SelectSwitchUpdate();
+
 	PokemonMenuType CurState_;
 
 	void InitRenderer();
@@ -56,6 +60,7 @@ private:
 	void InitFont();
 
 	//렌더러
+	GameEngineRenderer* MenuArrowRenderer_;
 	GameEngineRenderer* BackgroundRenderer_;
 	GameEngineRenderer* BoxRenderer_[6];
 	GameEngineRenderer* DialogRenderer_;
@@ -64,6 +69,7 @@ private:
 	GameEngineRenderer* CancelRenderer_;
 	GameEngineRenderer* PokemonRenderer_[6];
 	GameEngineRenderer* HpRenderer_[6];
+	GameEngineRenderer* GenderRenderer_[6];
 
 	//포켓몬 아이콘 관련
 	float CurTickTime_;
@@ -74,8 +80,10 @@ private:
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
 	//가지고 있는 포켓몬 수
 	int PokemonNumber_;
-	//현재 키가 가리키고 있는 순서
+	//현재 키가 가리키고 있는 순서 < 포켓몬의
 	int CurrentOrder_;
+	//현재 SelectAction에서 순서
+	int SelectActionOrder_;
 	//왼쪽 오른쪽 버튼을 눌렀을 때 기억하는 키 내용
 	int RememberOrder_;
 	// 포켓몬 리스트
