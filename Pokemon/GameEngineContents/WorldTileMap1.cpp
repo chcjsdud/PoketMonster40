@@ -1,4 +1,5 @@
 #include "WorldTileMap1.h"
+#include "Flower.h"
 
 WorldTileMap1* WorldTileMap1::Inst_ = nullptr;
 
@@ -36,5 +37,39 @@ void WorldTileMap1::Start()
 	//		}
 	//	}
 	//}
+
+	///// ²É 
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(14, 96));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(15, 96));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(16, 96));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(17, 96));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(14, 97));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(15, 97));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(16, 97));
+	}
+	{
+		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
+		TmpFlower->SetPosition(GetWorldPostion(17, 97));
+	}
 }
 
