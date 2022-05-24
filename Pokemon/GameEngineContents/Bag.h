@@ -26,6 +26,7 @@ public:
 	void ShowKeyItemInfo();
 	void ShowBallInfo();
 
+	void OnDialog(); //다이얼로그 메뉴 이동
 	void MoveDialog();
 
 	void UpFonts(); //아이템이 5개 이상일 경우 폰트 움직임
@@ -52,6 +53,7 @@ private:
 	GameEngineRenderer* BagName_;
 	GameEngineRenderer* BagDialog_;
 	GameEngineRenderer* DialogBox_;
+	GameEngineRenderer* DialogArrow_;
 
 	GameEngineRenderer* LeftArrow_;
 	GameEngineRenderer* RightArrow_;
@@ -84,5 +86,6 @@ private:
 
 	//다이얼로그 상자 켜짐
 	bool IsDialogOn_;
+	int DialogIndex_;
 };
 

@@ -7,7 +7,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "Item.h"
 
-Bag::Bag() 
+Bag::Bag()
 	: BagType_(ItemType::ITEM)
 	, BagRedrerer_(nullptr)
 	, BagName_(nullptr)
@@ -27,7 +27,7 @@ Bag::Bag()
 {
 }
 
-Bag::~Bag() 
+Bag::~Bag()
 {
 }
 
@@ -45,8 +45,13 @@ void Bag::Start()
 
 void Bag::Update()
 {
-	MoveBag();
-	MoveItem();
+	if (false == IsDialogOn_)
+	{
+		MoveBag();
+		MoveItem();
+	}
+
+	OnDialog();
 	MoveDialog();
 
 	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
@@ -92,7 +97,6 @@ void Bag::Update()
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-
 	SetPosition(GameEngineWindow::GetScale().Half());
 	CreateRenderer("Bag_Back.bmp");
 
@@ -138,6 +142,10 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	DialogBox_ = CreateRenderer("AA.bmp");
 	DialogBox_->SetPivot({ -80, 224 });
 	DialogBox_->Off();
+
+	DialogArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
+	DialogArrow_->SetPivot({ 240, 130 });
+	DialogArrow_->Off();
 
 	ShowItemList();
 	ShowItemInfo();
@@ -201,7 +209,7 @@ void Bag::ChangeBag()
 		ShowItemList();
 		ShowItemInfo();
 		break;
-		
+
 	case ItemType::KEYITEM:
 		BagRedrerer_->SetImage("Bag_MiddleOpen.bmp");
 		BagRedrerer_->SetPivot({ -317, -48 });
@@ -464,7 +472,7 @@ void Bag::ShowBallInfo()
 	ItemDescFonts_.push_back(DescFont);
 }
 
-void Bag::MoveDialog()
+void Bag::OnDialog()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
 		&& false == IsDialogOn_)
@@ -472,7 +480,52 @@ void Bag::MoveDialog()
 		IsDialogOn_ = true;
 		BagDialog_->On();
 		DialogBox_->On();
+		DialogArrow_->On();
+
+		DialogIndex_ = 0;
+
 		DestroyDescFonts();
+
+		if ("BattleLevel" != GetLevel()->GetNameConstRef())
+		{
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString("Pokemon", true);
+			ItemDescFonts_.push_back(DescFont);
+
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString("Pokemon", true);
+			ItemDescFonts_.push_back(DescFont);
+
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+			ItemDescFonts_.push_back(DescFont);
+		}
+
+		else
+		{
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+			ItemDescFonts_.push_back(DescFont);
+
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+			ItemDescFonts_.push_back(DescFont);
+
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+			ItemDescFonts_.push_back(DescFont);
+
+			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+			DescFont->SetPosition({ 150, 460.f });
+			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+			ItemDescFonts_.push_back(DescFont);
+		}
 
 		UpArrow_->Off();
 		DownArrow_->Off();
@@ -486,6 +539,7 @@ void Bag::MoveDialog()
 		IsDialogOn_ = false;
 		BagDialog_->Off();
 		DialogBox_->Off();
+		DialogArrow_->Off();
 
 		LeftArrow_->On();
 		RightArrow_->On();
@@ -510,7 +564,72 @@ void Bag::MoveDialog()
 			ShowBallList();
 			ShowBallInfo();
 			break;
+		}
+	}
+}
+
+void Bag::MoveDialog()
+{
+	if (true == IsDialogOn_)
+	{
+		if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
+		{
+			if ("BattleLevel" != GetLevel()->GetNameConstRef()
+				&& DialogIndex_ == 2)
+			{
+				return;
 			}
+
+			else if ("BattleLevel" == GetLevel()->GetNameConstRef()
+				&& DialogIndex_ == 3)
+			{
+				return;
+			}
+
+			++DialogIndex_;
+
+			switch (DialogIndex_)
+			{
+			case 0:
+				DialogArrow_->SetPivot({ 240, 130 });
+				break;
+			case 1:
+				DialogArrow_->SetPivot({ 240, 180 });
+				break;
+			case 2:
+				DialogArrow_->SetPivot({ 240, 250 });
+				break;
+			case 3:
+				DialogArrow_->SetPivot({ 240, 320 });
+				break;
+			}
+		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
+		{
+			if (0 == DialogIndex_)
+			{
+				return;
+			}
+
+			--DialogIndex_;
+
+			switch (DialogIndex_)
+			{
+			case 0:
+				DialogArrow_->SetPivot({ 240, 130 });
+				break;
+			case 1:
+				DialogArrow_->SetPivot({ 240, 180 });
+				break;
+			case 2:
+				DialogArrow_->SetPivot({ 240, 250 });
+				break;
+			case 3:
+				DialogArrow_->SetPivot({ 240, 320 });
+				break;
+			}
+		}
 	}
 }
 
@@ -628,7 +747,7 @@ void Bag::DownFonts()
 		return;
 	}
 
- 	if (5 >= SelectIndex_
+	if (5 >= SelectIndex_
 		&& ItemNameFonts_.size() - 1 <= SelectIndex_ + 1)
 	{
 		for (int i = 0; i < ItemNameFonts_.size(); ++i)
