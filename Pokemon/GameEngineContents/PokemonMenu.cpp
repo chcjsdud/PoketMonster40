@@ -71,7 +71,7 @@ void PokemonMenu::Render()
 	if (CurrentOrder_ == 0) //선택된 경우
 	{
 		BoxRenderer_[0]->SetPivot({ 8,72 });
-		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스
+		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스ㅇ
 	}
 	
 	else
