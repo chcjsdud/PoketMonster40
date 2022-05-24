@@ -20,6 +20,7 @@ PokemonMenu::PokemonMenu():
 	CurTickTime_(0),
 	IsJump_(0)
 {
+	PokemonRenderer_.resize(6);
 }
 
 PokemonMenu::~PokemonMenu()
@@ -34,15 +35,9 @@ void PokemonMenu::Start()
 
 	InitRenderer();
 	OnUI();
+	
 
-	////폰트 출력 테스트
-	{
-		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-		DialogFont_->SetPosition({ 16,540 });
-		DialogFont_->ShowString("Choose a pokemon",true);
-		//AllFonts_.push_back(DialogFont_);
-	}
-
+	
 
 }
 
@@ -55,19 +50,34 @@ void PokemonMenu::Update()
 
 void PokemonMenu::Render()
 {
+	//포켓몬 렌더 피벗 정보 업데이트
+	{
+		//포켓몬
+		{
+			PokemonRenderer_[0]->SetPivot({ 65,200 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
+			}
+		}
+
+		//체력
+		{
+
+		}
+		
+	}
 	//포켓몬 이미지 선택 렌더링
 	if (CurrentOrder_ == 0) //선택된 경우
 	{
 		BoxRenderer_[0]->SetPivot({ 8,72 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스
-		IconJump(PokemonRenderer_[0]);
 	}
 	
 	else
 	{
 		BoxRenderer_[0]->SetPivot({ 8,80 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_14.bmp"); //커다란 박스
-		PokemonRenderer_[0]->SetPivot({ 65,200 });
 	}
 
 	for (int i = 1; i < 6; i++)
@@ -76,13 +86,11 @@ void PokemonMenu::Render()
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-60 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_13.bmp"); //작은 박스
-			IconJump(PokemonRenderer_[i]);
 		}
 		else //선택 안된 경우
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-56 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_12.bmp"); //작은 박스
-			PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
 		}	
 	}
 	if (CurrentOrder_ == PokemonNumber_)
@@ -112,6 +120,24 @@ void PokemonMenu::Render()
 		HpRenderer_[0]->SetImage("PoketmonMenu_Hp3.bmp");
 	}
 	HpRenderer_[0]->SetScale({HpXScale ,HpRenderer_[0]->GetScale().y});
+	for (size_t i = 1; i < PokemonNumber_; i++)
+	{
+		float HpRatio = static_cast<float>(PokemonList_[i]->GetHp()) / static_cast<float>(PokemonList_[i]->GetMaxHp());
+		float HpXScale = GameEngineImageManager::GetInst()->Find("PoketmonMenu_Hp1.bmp")->GetScale().x * HpRatio;
+		if (HpRatio > 0.5f)
+		{
+			HpRenderer_[i]->SetImage("PoketmonMenu_Hp1.bmp");
+		}
+		else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
+		{
+			HpRenderer_[i]->SetImage("PoketmonMenu_Hp2.bmp");
+		}
+		else
+		{
+			HpRenderer_[i]->SetImage("PoketmonMenu_Hp3.bmp");
+		}
+		HpRenderer_[i]->SetScale({ HpXScale ,HpRenderer_[0]->GetScale().y });
+	}
 
 
 
@@ -190,9 +216,12 @@ void PokemonMenu::UpdateState()
 
 void PokemonMenu::SelectPokemonStart()
 {
+
+
 	DialogRenderer_->On();
 	DialogFont_->On();
 	CancelRenderer_->On();
+	SwitchFont_->Off();
 	QuestionDialogRenderer_->Off();
 	SelectDialogRenderer_->Off();
 	MenuArrowRenderer_->Off();
@@ -281,6 +310,7 @@ void PokemonMenu::SelectActionStart()
 	DialogRenderer_->Off();
 	DialogFont_->Off();
 	CancelRenderer_->Off();
+	SwitchFont_->Off();
 	QuestionDialogRenderer_->On();
 	SelectDialogRenderer_->On();
 	MenuArrowRenderer_->On();
@@ -309,6 +339,7 @@ void PokemonMenu::SelectActionUpdate()
 		switch (SelectActionOrder_)
 		{
 		case 1:
+			ChangePokemonNumber_1 = CurrentOrder_;
 			ChangeState(PokemonMenuType::SelectSwitch);
 			break;
 		case 3:
@@ -352,6 +383,7 @@ void PokemonMenu::SelectSwitchStart()
 {
 	DialogRenderer_->On();
 	CancelRenderer_->On();
+	SwitchFont_->On();
 	QuestionDialogRenderer_->Off();
 	SelectDialogRenderer_->Off();
 	MenuArrowRenderer_->Off();
@@ -372,6 +404,82 @@ void PokemonMenu::SelectSwitchStart()
 
 void PokemonMenu::SelectSwitchUpdate()
 {
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
+	{
+		if (CurrentOrder_ >= PokemonNumber_)
+		{
+			CurrentOrder_ = 0;
+		}
+		else
+		{
+			ResetJump();
+			CurrentOrder_++;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (CurrentOrder_ <= 0)
+		{
+			CurrentOrder_ = PokemonNumber_;
+		}
+		else
+		{
+			ResetJump();
+			CurrentOrder_--;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Left") == true)
+	{
+		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
+		{
+			ResetJump();
+			RememberOrder_ = CurrentOrder_;
+			CurrentOrder_ = 0;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Right") == true)
+	{
+		if (CurrentOrder_ == 0)
+		{
+			if (RememberOrder_ == 0)
+			{
+				ResetJump();
+				RememberOrder_ = 1;
+			}
+			ResetJump();
+			CurrentOrder_ = RememberOrder_;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	{
+		ChangePokemonNumber_2 = CurrentOrder_;
+		if (ChangePokemonNumber_1 != ChangePokemonNumber_2)
+		{
+			{
+				//Info 변경
+				PokemonInfo* temp = PokemonList_[ChangePokemonNumber_1];
+				PokemonList_[ChangePokemonNumber_1] = PokemonList_[ChangePokemonNumber_2];
+				PokemonList_[ChangePokemonNumber_2] = temp;
+			}
+
+			//Renderer 변경
+			{
+				GameEngineRenderer* temp = PokemonRenderer_[ChangePokemonNumber_1];
+				PokemonRenderer_[ChangePokemonNumber_1] = PokemonRenderer_[ChangePokemonNumber_2];
+				PokemonRenderer_[ChangePokemonNumber_2] = temp;
+			}
+
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
+	{
+		ChangeState(PokemonMenuType::SelectPokemon);
+	}
 }
 
 
@@ -451,7 +559,7 @@ void PokemonMenu::InitRenderer()
 
 	for (int i = 1; i < 6; i++)
 	{
-		HpRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 736,static_cast<float>( -26+ 96 * i) });
+		HpRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 736,static_cast<float>( -24+ 96 * i) });
 		HpRenderer_[i]->SetImage("PoketmonMenu_Hp1.bmp");
 		HpRenderer_[i]->SetTransColor(RGB(255, 0, 255));
 		HpRenderer_[i]->Off();
@@ -486,6 +594,9 @@ void PokemonMenu::GetPlayerPokemon()
 		PokemonInfo* Charmander = PokemonInfoManager::GetInst().FindPokemonInfo("Charmander");
 		PokemonInfo* Squirtle = PokemonInfoManager::GetInst().FindPokemonInfo("Squirtle"); //Bulbasaur
 		PokemonInfo* Bulbasaur = PokemonInfoManager::GetInst().FindPokemonInfo("Bulbasaur");
+		Charmander->PlusHp(-10);
+		Squirtle->PlusHp(-50);
+		Bulbasaur->PlusHp(-90);
 
 		PokemonList_.push_back(Charmander);
 		PokemonList_.push_back(Squirtle);
@@ -636,16 +747,116 @@ void PokemonMenu::InitFont()
 		}
 
 	}
-
-	//SeletAction 선택 폰트
+	//포켓몬을 골라주세요 폰트
 	{
-		SelectFonts_.reserve(4);
-		for (size_t i = 0; i < 4; i++)
-		{
-
-		}
+		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		DialogFont_->SetPosition({ 16,540 });
+		DialogFont_->ShowString("Choose a pokemon", true);
+		AllFonts_.push_back(DialogFont_);
+	}
+	//swtich 문구
+	{
+		SwitchFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		SwitchFont_->SetPosition({ 16,540});
+		SwitchFont_->ShowString("Move to Where?", true);
+		SwitchFont_->Off();
+		AllFonts_.push_back(SwitchFont_);
 	}
 
+}
+
+void PokemonMenu::UpdateFont()
+{
+		//첫번째 포켓몬 폰트
+	{
+		//이름
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 75,126 });
+			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//레벨
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 190,175 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMyLevel()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//현재 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 150,248 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
+			AllFonts_.push_back(NewFonts);
+			CurHpFonts_.push_back(NewFonts);
+		}
+
+		//최대 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 260,248 });
+			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMaxHp()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+	}
+	
+	//2째 ~ 그뒤 포켓몬
+	for (int i = 1; i < PokemonList_.size(); i++)
+	{
+		//PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
+		//이름
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 416,static_cast<float>(-60 + 96 * i )});
+			NewFonts->ShowString(PokemonList_[i]->GetNameCopy(), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//레벨
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+		//현재 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * i)});
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetHp()), true);
+			AllFonts_.push_back(NewFonts);
+			CurHpFonts_.push_back(NewFonts);
+		}
+
+		//최대 체력
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+			NewFonts->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
+			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMaxHp()), true);
+			AllFonts_.push_back(NewFonts);
+		}
+
+	}
+	//포켓몬을 골라주세요 폰트
+	{
+		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		DialogFont_->SetPosition({ 16,540 });
+		DialogFont_->ShowString("Choose a pokemon", true);
+		AllFonts_.push_back(DialogFont_);
+	}
+	//swtich 문구
+	{
+		SwitchFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
+		SwitchFont_->SetPosition({ 16,540});
+		SwitchFont_->ShowString("Move to Where?", true);
+		SwitchFont_->Off();
+		AllFonts_.push_back(SwitchFont_);
+	}
 }
 
 void PokemonMenu::IconJump(GameEngineRenderer* _Render)

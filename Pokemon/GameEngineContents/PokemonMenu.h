@@ -53,11 +53,12 @@ private:
 	//폰트 
 	std::list<GameEngineContentFont*> AllFonts_; //나중에 OffUI일때 모든 폰트 삭제하기
 	std::vector<GameEngineContentFont*> CurHpFonts_; //나중에 OffUi할 때 모든 폰트 클리어하기
-	std::vector<GameEngineContentFont*> SelectFonts_;
 
 	GameEngineContentFont* DialogFont_;
+	GameEngineContentFont* SwitchFont_;
 	GameEngineContentFont* QuestionFont_;
 	void InitFont();
+	void UpdateFont();
 
 	//렌더러
 	GameEngineRenderer* MenuArrowRenderer_;
@@ -67,7 +68,7 @@ private:
 	GameEngineRenderer* QuestionDialogRenderer_;
 	GameEngineRenderer* SelectDialogRenderer_;
 	GameEngineRenderer* CancelRenderer_;
-	GameEngineRenderer* PokemonRenderer_[6];
+	std::vector<GameEngineRenderer*> PokemonRenderer_;
 	GameEngineRenderer* HpRenderer_[6];
 	GameEngineRenderer* GenderRenderer_[6];
 
@@ -86,6 +87,11 @@ private:
 	int SelectActionOrder_;
 	//왼쪽 오른쪽 버튼을 눌렀을 때 기억하는 키 내용
 	int RememberOrder_;
+
+	//바꿀 포켓몬 넘버
+	int ChangePokemonNumber_1;
+	int ChangePokemonNumber_2;
+
 	// 포켓몬 리스트
 	std::vector<PokemonInfo*> PokemonList_;
 
