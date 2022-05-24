@@ -37,6 +37,7 @@ public:
 	void DestroyNameFonts(); //아이템 이름 삭제
 	void DestroyDescFonts(); //아이템 내용 삭제
 	void DestroyOverlapFonts(); //아이템 중복 삭제
+	void DestroyDialogFonts(); //다이얼로그 삭제
 
 
 protected:

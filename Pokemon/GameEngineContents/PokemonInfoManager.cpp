@@ -98,7 +98,7 @@ void PokemonInfoManager::Reset()
 	}
 
 	{
-		CreateItem<MonsterBall>("MonsterBall", 10, ItemType::BALL, "A Ball thrown to catch a Pokemon.\\It is designed in a capsule style.");
+		CreateItem<MonsterBall>("Pokeball", 10, ItemType::BALL, "A Ball thrown to catch a Pokemon.\\It is designed in a capsule style.");
 		CreateItem<Potion>("Potion", 10, ItemType::ITEM, "A Potion is an item that\\heals 20 HP of a Pokemon.");
 	}
 }

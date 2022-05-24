@@ -25,6 +25,7 @@ Bag::Bag()
 	, ArrowMoveTime_(0.f)
 	, IsArrowSync_(false)
 {
+
 }
 
 Bag::~Bag()
@@ -97,6 +98,13 @@ void Bag::Update()
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	BagType_ = ItemType::ITEM;
+	SelectIndex_ = 0;
+	BagIndex_ = 0;
+
+	IsDialogOn_ = false;
+	DialogIndex_ = 0;
+
 	SetPosition(GameEngineWindow::GetScale().Half());
 	CreateRenderer("Bag_Back.bmp");
 
@@ -130,10 +138,10 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
 	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
 
 	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
 	BagDialog_->SetPivot({ 335, 190 });
@@ -151,15 +159,13 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	ShowItemInfo();
 
 	HideFonts();
+
+	ChangeBag();
 }
 
 void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
-	BagType_ = ItemType::ITEM;
-	SelectIndex_ = 0;
-	BagIndex_ = 0;
 
-	ChangeBag();
 }
 
 
@@ -477,6 +483,8 @@ void Bag::OnDialog()
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
 		&& false == IsDialogOn_)
 	{
+		DestroyDialogFonts();
+
 		IsDialogOn_ = true;
 		BagDialog_->On();
 		DialogBox_->On();
@@ -486,46 +494,71 @@ void Bag::OnDialog()
 
 		DestroyDescFonts();
 
-		//if ("BattleLevel" != GetLevel()->GetNameConstRef())
-		//{
-		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	DescFont->SetPosition({ 150, 460.f });
-		//	DescFont->ShowString("Pokemon", true);
-		//	ItemDescFonts_.push_back(DescFont);
+		GameEngineContentFont* SelcetFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		SelcetFont->SetPosition({ 170, 480.f });
 
-		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	DescFont->SetPosition({ 150, 460.f });
-		//	DescFont->ShowString("Pokemon", true);
-		//	ItemDescFonts_.push_back(DescFont);
+		switch (BagType_)
+		{
+		case ItemType::ITEM:
+			if (ItemList_.size() == 0)
+			{
+				return;
+			}
+			SelcetFont->ShowString(ItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+			break;
+		case ItemType::KEYITEM:
+			if (KeyItemList_.size() == 0)
+			{
+				return;
+			}
+			SelcetFont->ShowString(KeyItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+			break;
+		case ItemType::BALL:
+			if (BallList_.size() == 0)
+			{
+				return;
+			}
+			SelcetFont->ShowString(BallList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+			break;
+		}
 
-		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	DescFont->SetPosition({ 150, 460.f });
-		//	DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-		//	ItemDescFonts_.push_back(DescFont);
-		//}
+		DialogFonts_.push_back(SelcetFont);
 
-		//else
-		//{
-		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	//DescFont->SetPosition({ 150, 460.f });
-		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-		//	//ItemDescFonts_.push_back(DescFont);
+		if ("BattleLevel" != GetLevel()->GetNameConstRef())
+		{
+			GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
+			Give->SetPosition({ 730, 420.f });
+			Give->ShowString("GIVE", true);
+			DialogFonts_.push_back(Give);
 
-		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	//DescFont->SetPosition({ 150, 460.f });
-		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-		//	//ItemDescFonts_.push_back(DescFont);
+			GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>();
+			Toss->SetPosition({ 730, 480.f });
+			Toss->ShowString("TOSS", true);
+			DialogFonts_.push_back(Toss);
 
-		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	//DescFont->SetPosition({ 150, 460.f });
-		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-		//	//ItemDescFonts_.push_back(DescFont);
+			GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
+			Cancle->SetPosition({ 730, 540.f });
+			Cancle->ShowString("CANCLE", true);
+			DialogFonts_.push_back(Cancle);
+		}
 
-		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		//	//DescFont->SetPosition({ 150, 460.f });
-		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-		//	//ItemDescFonts_.push_back(DescFont);
-		//}
+		else
+		{
+			GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
+			Give->SetPosition({ 730, 420.f });
+			Give->ShowString("GIVE", true);
+			DialogFonts_.push_back(Give);
+
+			GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>();
+			Toss->SetPosition({ 730, 480.f });
+			Toss->ShowString("TOSS", true);
+			DialogFonts_.push_back(Toss);
+
+			GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
+			Cancle->SetPosition({ 730, 540.f });
+			Cancle->ShowString("CANCLE", true);
+			DialogFonts_.push_back(Cancle);
+		}
 
 		UpArrow_->Off();
 		DownArrow_->Off();
@@ -543,6 +576,8 @@ void Bag::OnDialog()
 
 		LeftArrow_->On();
 		RightArrow_->On();
+
+		DestroyDialogFonts();
 
 		switch (BagType_)
 		{
@@ -594,13 +629,13 @@ void Bag::MoveDialog()
 				DialogArrow_->SetPivot({ 240, 130 });
 				break;
 			case 1:
-				DialogArrow_->SetPivot({ 240, 180 });
+				DialogArrow_->SetPivot({ 240, 190 });
 				break;
 			case 2:
-				DialogArrow_->SetPivot({ 240, 250 });
+				DialogArrow_->SetPivot({ 240, 250 }); 
 				break;
 			case 3:
-				DialogArrow_->SetPivot({ 240, 320 });
+				DialogArrow_->SetPivot({ 240, 310 });
 				break;
 			}
 		}
@@ -620,13 +655,13 @@ void Bag::MoveDialog()
 				DialogArrow_->SetPivot({ 240, 130 });
 				break;
 			case 1:
-				DialogArrow_->SetPivot({ 240, 180 });
+				DialogArrow_->SetPivot({ 240, 190 });
 				break;
 			case 2:
 				DialogArrow_->SetPivot({ 240, 250 });
 				break;
 			case 3:
-				DialogArrow_->SetPivot({ 240, 320 });
+				DialogArrow_->SetPivot({ 240, 310 });
 				break;
 			}
 		}
@@ -870,5 +905,21 @@ void Bag::DestroyOverlapFonts()
 	}
 
 	ItemOverlapFonts_.clear();
+}
+
+void Bag::DestroyDialogFonts()
+{
+	std::vector<GameEngineContentFont*>::iterator StartIter = DialogFonts_.begin();
+	std::vector<GameEngineContentFont*>::iterator EndIter = DialogFonts_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != (*StartIter))
+		{
+			(*StartIter)->Death();
+		}
+	}
+
+	DialogFonts_.clear();
 }
 
