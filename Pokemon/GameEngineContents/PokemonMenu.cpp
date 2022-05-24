@@ -39,7 +39,7 @@ void PokemonMenu::Start()
 	{
 		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 		DialogFont_->SetPosition({ 16,540 });
-		DialogFont_->ShowString("Please choose a pokemon",true);
+		DialogFont_->ShowString("Choose a pokemon",true);
 		//AllFonts_.push_back(DialogFont_);
 	}
 
@@ -113,6 +113,29 @@ void PokemonMenu::Render()
 	}
 	HpRenderer_[0]->SetScale({HpXScale ,HpRenderer_[0]->GetScale().y});
 
+
+
+	//Curstate == SelectAction일때만 렌더
+	if (CurState_ == PokemonMenuType::SelectAction)
+	{
+		switch (SelectActionOrder_)
+		{
+		case 0:
+			MenuArrowRenderer_->SetPivot({ 610,370 });
+			break;
+		case 1:
+			MenuArrowRenderer_->SetPivot({ 610,434 });
+			break;
+		case 2:
+			MenuArrowRenderer_->SetPivot({ 610,498});
+			break;
+		case 3:
+			MenuArrowRenderer_->SetPivot({ 610,562 });
+			break;
+		default:
+			break;
+		}
+	}
 	//LPPOINT mousePos; // 마우스 좌표를 저장할 변수 생성. POINT 자료형의 포인터형임.
 	//mousePos = new POINT;
 	//GetCursorPos(mousePos); // 바탕화면에서의 마우스 좌표를 가져옴
@@ -138,6 +161,9 @@ void PokemonMenu::ChangeState(PokemonMenuType _Type)
 	case PokemonMenu::PokemonMenuType::SelectAction:
 		SelectActionStart();
 		break;
+	case PokemonMenu::PokemonMenuType::SelectSwitch:
+		SelectSwitchStart();
+		break;
 	default:
 		break;
 	}
@@ -154,6 +180,9 @@ void PokemonMenu::UpdateState()
 	case PokemonMenu::PokemonMenuType::SelectAction:
 		SelectActionUpdate();
 		break;
+	case PokemonMenu::PokemonMenuType::SelectSwitch:
+		SelectSwitchUpdate();
+		break;
 	default:
 		break;
 	}
@@ -166,6 +195,7 @@ void PokemonMenu::SelectPokemonStart()
 	CancelRenderer_->On();
 	QuestionDialogRenderer_->Off();
 	SelectDialogRenderer_->Off();
+	MenuArrowRenderer_->Off();
 
 	//퀘스쳔 폰트 제거
 	{
@@ -235,16 +265,14 @@ void PokemonMenu::SelectPokemonUpdate()
 		}
 	}
 
-	if (GameEngineInput::GetInst()->IsPress("Z") == true)
+	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
 		ChangeState(PokemonMenuType::SelectAction);
-		//ChangeHp(0, -1);
 	}
 
-	if (GameEngineInput::GetInst()->IsPress("X") == true)
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonMenuType::SelectPokemon);
-		//ChangeHp(0, 1);
 	}
 }
 
@@ -255,7 +283,7 @@ void PokemonMenu::SelectActionStart()
 	CancelRenderer_->Off();
 	QuestionDialogRenderer_->On();
 	SelectDialogRenderer_->On();
-
+	MenuArrowRenderer_->On();
 	//폰트 초기화
 	{
 		QuestionFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
@@ -263,15 +291,87 @@ void PokemonMenu::SelectActionStart()
 		QuestionFont_->ShowString("What do " + PokemonList_[CurrentOrder_]->GetNameCopy(), true);
 		AllFonts_.push_back(QuestionFont_);
 	}
+
+	SelectActionOrder_ = 0;
+	MenuArrowRenderer_->SetPivot({ 610,370 });
 }
 
 void PokemonMenu::SelectActionUpdate()
 {
-	if (GameEngineInput::GetInst()->IsPress("X") == true)
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonMenuType::SelectPokemon);
 		//ChangeHp(0, 1);
 	}
+
+	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	{
+		switch (SelectActionOrder_)
+		{
+		case 1:
+			ChangeState(PokemonMenuType::SelectSwitch);
+			break;
+		case 3:
+			ChangeState(PokemonMenuType::SelectPokemon);
+			break;
+
+		default:
+			break;
+		}
+
+		//ChangeHp(0, 1);
+	}
+
+	//위 아래 조작
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
+	{
+		if (SelectActionOrder_ >= 3)
+		{
+			SelectActionOrder_ = 0;
+		}
+		else
+		{
+			SelectActionOrder_++;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (SelectActionOrder_ <= 0)
+		{
+			SelectActionOrder_ = 3;
+		}
+		else
+		{
+			SelectActionOrder_--;
+		}
+	}
+}
+
+void PokemonMenu::SelectSwitchStart()
+{
+	DialogRenderer_->On();
+	CancelRenderer_->On();
+	QuestionDialogRenderer_->Off();
+	SelectDialogRenderer_->Off();
+	MenuArrowRenderer_->Off();
+
+	//퀘스쳔 폰트 제거
+	{
+		for (GameEngineContentFont* i : AllFonts_)
+		{
+			if (i == QuestionFont_)
+			{
+				AllFonts_.remove(i);
+				break;
+			}
+		}
+		QuestionFont_->ClearCurrentFonts();
+	}
+}
+
+void PokemonMenu::SelectSwitchUpdate()
+{
 }
 
 
@@ -356,6 +456,26 @@ void PokemonMenu::InitRenderer()
 		HpRenderer_[i]->SetTransColor(RGB(255, 0, 255));
 		HpRenderer_[i]->Off();
 	}
+
+	//성별
+	GenderRenderer_	[0] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 268,186 });
+	GenderRenderer_[0]->SetImage("PoketmonMenu_20.bmp");
+	GenderRenderer_[0]->SetTransColor(RGB(255, 0, 255));
+
+	for (int i = 1; i < 6; i++)
+	{
+		GenderRenderer_[i] = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 636,static_cast<float>(+ 96 * i) });
+		GenderRenderer_[i]->SetImage("PoketmonMenu_20.bmp");
+		GenderRenderer_[i]->SetTransColor(RGB(255, 0, 255));
+		GenderRenderer_[i]->Off();
+	}
+
+	//MenuArrow
+	MenuArrowRenderer_ = CreateRenderer(static_cast<int>(UIRenderType::Object), RenderPivot::LeftTop, { 610,370 });
+	MenuArrowRenderer_->SetImage("Bag_CurrentArrow.bmp");
+	MenuArrowRenderer_->SetTransColor(RGB(255, 0, 255));
+	MenuArrowRenderer_->Off();
+
 }
 
 void PokemonMenu::GetPlayerPokemon()
@@ -378,6 +498,20 @@ void PokemonMenu::GetPlayerPokemon()
 			PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
 			PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
 		}
+
+		//포켓몬의 성별을 렌더러에 업데이트 해준다
+		for (int i = 0; i < PokemonList_.size(); i++)
+		{
+			if (PokemonList_[i]->GetGender() == true) //수컷
+			{
+				GenderRenderer_[i]->SetImage("PoketmonMenu_20.bmp");
+			}
+			else
+			{
+				GenderRenderer_[i]->SetImage("PoketmonMenu_21.bmp");
+			}
+			
+		}
 	}
 }
 
@@ -390,6 +524,7 @@ void PokemonMenu::OnUI()
 		BoxRenderer_[i]->On();
 		PokemonRenderer_[i]->On();
 		HpRenderer_[i]->On();
+		GenderRenderer_[i]->On();
 	}
 
 }
@@ -505,6 +640,10 @@ void PokemonMenu::InitFont()
 	//SeletAction 선택 폰트
 	{
 		SelectFonts_.reserve(4);
+		for (size_t i = 0; i < 4; i++)
+		{
+
+		}
 	}
 
 }
