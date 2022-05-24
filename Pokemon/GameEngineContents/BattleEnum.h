@@ -11,8 +11,9 @@ enum class BattleOrderMenu
 enum class BattleState
 {
 	Openning,
-	Battle,
-	Selecet,
+	BattlePage,
+	SelecetPage,
+	LastPage,
 	Endding
 };
 

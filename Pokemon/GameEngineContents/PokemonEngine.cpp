@@ -12,6 +12,7 @@
 #include "BattleLevel.h"
 #include "MonsterBall.h"
 #include "Potion.h"
+#include <GameEngineBase/GameEngineRandom.h>
 
 PokemonEngine::PokemonEngine() 
 {
@@ -69,6 +70,7 @@ void PokemonEngine::GameLoop()
 void PokemonEngine::GameEnd() 
 {
 	PokemonInfoManager::Destroy();
+	GameEngineRandom::Destroy();
 }
 
 void PokemonEngine::InitUI()

@@ -82,19 +82,20 @@ void BattleLevel::Update()
 	case BattleState::Openning:
 		if (OpenningEnd_ == true)
 		{
-			BState_ = BattleState::Selecet;
+			BState_ = BattleState::SelecetPage;
 		}
 		return;
 		break;
-	case BattleState::Selecet:
+	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
 
 		}
 		break;
-	case BattleState::Battle:
+	case BattleState::BattlePage:
 		if (Interface_->BattleKey())
 		{
+
 		}
 		return;
 		break;
@@ -128,7 +129,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 
 	//BState_ = BattleState::Openning
 	{
-		BState_ = BattleState::Selecet;
+		BState_ = BattleState::SelecetPage;
 		OpenningEnd_ = false;
 		EnddingEnd_ = false;
 		ShowOpenning();
