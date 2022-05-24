@@ -88,5 +88,8 @@ private:
 	//다이얼로그 상자 켜짐
 	bool IsDialogOn_;
 	int DialogIndex_;
+
+	Item* CurrentItem_;
+	class Pokemon* CurrentPokemon_;
 };
 

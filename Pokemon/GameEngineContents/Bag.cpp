@@ -11,6 +11,9 @@ Bag::Bag()
 	: BagType_(ItemType::ITEM)
 	, BagRedrerer_(nullptr)
 	, BagName_(nullptr)
+	, BagDialog_(nullptr)
+	, DialogBox_(nullptr)
+	, DialogArrow_(nullptr)
 	, LeftArrow_(nullptr)
 	, RightArrow_(nullptr)
 	, UpArrow_(nullptr)
@@ -24,6 +27,10 @@ Bag::Bag()
 	, IsMove_(false)
 	, ArrowMoveTime_(0.f)
 	, IsArrowSync_(false)
+	, IsDialogOn_(false)
+	, DialogIndex_(0)
+	, CurrentItem_(nullptr)
+	, CurrentPokemon_(nullptr)
 {
 
 }
@@ -457,7 +464,6 @@ void Bag::ShowBallInfo()
 	if (ItemNameFonts_.size() - 1 == SelectIndex_
 		|| BallList_.size() == SelectIndex_
 		|| 0 == BallList_.size())
-
 	{
 		ItemPreview_->SetImage("Bag_EnterArrow.bmp");
 
@@ -483,6 +489,11 @@ void Bag::OnDialog()
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
 		&& false == IsDialogOn_)
 	{
+		if (ItemNameFonts_.size() - 1 == SelectIndex_)
+		{
+			return;
+		}
+ 
 		DestroyDialogFonts();
 
 		IsDialogOn_ = true;
@@ -491,6 +502,22 @@ void Bag::OnDialog()
 		DialogArrow_->On();
 
 		DialogIndex_ = 0;
+
+		switch (DialogIndex_)
+		{
+		case 0:
+			DialogArrow_->SetPivot({ 240, 130 });
+			break;
+		case 1:
+			DialogArrow_->SetPivot({ 240, 190 });
+			break;
+		case 2:
+			DialogArrow_->SetPivot({ 240, 250 });
+			break;
+		case 3:
+			DialogArrow_->SetPivot({ 240, 310 });
+			break;
+		}
 
 		DestroyDescFonts();
 
