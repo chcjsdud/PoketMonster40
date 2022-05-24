@@ -38,8 +38,6 @@ public:
 	BattleInterface& operator=(const BattleInterface& _Other) = delete;
 	BattleInterface& operator=(BattleInterface&& _Other) noexcept = delete;
 
-
-
 	GameEngineRenderer* GetSelect()
 	{
 		return Select;
@@ -88,6 +86,14 @@ private:
 
 	// Font
 	GameEngineContentFont* DownFont_;
+
+	//전투시 폰트 출력
+	class GameEngineContentFont* Fonts;
+	class BattleUnitRenderer* PlayerStopCheck;
+	bool OneTalk;
+	//전투시 폰트 출력
+	class GameEngineContentFont* Fonts;
+	class BattleUnitRenderer* PlayerStopCheck;
 
 public:
 	bool MoveKey();
