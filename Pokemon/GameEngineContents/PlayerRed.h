@@ -50,6 +50,11 @@ public:
 		IsInteraction_ = _Value;
 	}
 
+	inline std::vector<Pokemon*>& GetPokemonList()
+	{
+		return MyPokemonList_;
+	}
+
 protected:
 
 private:

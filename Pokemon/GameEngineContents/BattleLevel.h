@@ -13,6 +13,7 @@
 
 enum class PokemonAbility;
 class BattleEngine;
+class PokemonBattleState
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
@@ -65,11 +66,6 @@ private:
 	BattleInterface* Interface_;
 	BattleState BState_;
 
-	void FirstBattlePage();
-	void BattlePageStart();
-	void SecondBattlePage();
-	void NextStringTrun();
-
 
 	// 오프닝 관련
 	void ShowOpenning();
@@ -84,8 +80,8 @@ private:
 
 
 	// 플레이어 및 NPC
-	PlayerRed* PlayerRed_;
-	BattleNPCInterface* Opponent_;
+	//PlayerRed* PlayerRed_;
+	//BattleNPCInterface* Opponent_;
 	// Pokemon
 	Pokemon* PlayerCurrentPokemon_; // Debug
 	Pokemon* PoeCurrentPokemon_;// Debug
@@ -103,7 +99,8 @@ class BattleData
 {
 	friend BattleLevel;
 private:
-	BattleData();
+	BattleData(/*PlayerRed* _Player, BattleNPCInterface* _Poe*/);
+	BattleData(PlayerRed* _Player);
 	~BattleData();
 
 	BattleData(const BattleData& _Other) = delete;
@@ -112,10 +109,20 @@ private:
 	BattleData& operator=(BattleData&& _Other) noexcept = delete;
 
 private:
+
 	// Data 출력
 	Pokemon* PlayerCurrentPokemon_;
 	Pokemon* PoeCurrentPokemon_;
 
+	// 주머니속 가지고 있는 포켓몬
+	std::vector<Pokemon*>* PlayerPokemonList_;
+	std::vector<Pokemon*>* PoePokemonList_;
+
+	// PokemonBatleState
+	PokemonBattleState* PlayerCurrentPokemonInBattle_;
+	PokemonBattleState* PoeCurrentPokemonInBattle_;
+
+	std::vector<PokemonBattleState>* AllPokemonInBattle_;
 
 };
 
@@ -123,7 +130,7 @@ class PokemonBattleState
 {
 	// 중첩 클래스 전방선언
 	class ApplySkill;
-	PokemonBattleState();
+	// PokemonBattleState();
 public:
 	PokemonBattleState(Pokemon* _Pokemon);
 	~PokemonBattleState();
@@ -153,9 +160,15 @@ public:
 	void Update();
 
 private:
+	// 고정된 포켓몬
 	const Pokemon* Pokemon_;
+
+	// 행동 가능여부
 	bool CanAction_;
+
+	//현재 랭크 상태
 	std::map<PokemonAbility, int> CurrentRank_;
+
 	// PokemonSkill 상속에 virtual 함수 Ing, End 필요
 	std::list<PokemonBattleState::ApplySkill*> AllCurrentApplySkill_;
 

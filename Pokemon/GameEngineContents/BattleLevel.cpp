@@ -16,11 +16,10 @@ BattleLevel::BattleLevel()
 	, BState_(BattleState::Openning)
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
-	, PlayerRed_(nullptr)
 	, OneTalk(false)
 	, Fonts(nullptr)
+	, PlayerStopCheck(false)
 	// µð¹ö±ë
-	, Opponent_(nullptr)
 	, PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
 {
@@ -103,34 +102,13 @@ void BattleLevel::Update()
 	}
 } 
 
-void BattleLevel::NextStringTrun()
-{
-
-}
-
-void BattleLevel::BattlePageStart()
-{
-
-}
-
-void BattleLevel::FirstBattlePage()
-{
-}
-
-
-void BattleLevel::SecondBattlePage()
-{
-
-}
-
-
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
 
-	if (PlayerRed_ == nullptr)
-	{
-		PlayerRed_  = PlayerRed::MainRed_;
-	}
+	//if (PlayerRed_ == nullptr)
+	//{
+	//	PlayerRed_  = PlayerRed::MainRed_;
+	//}
 
 
 
@@ -158,8 +136,17 @@ void BattleLevel::ShowEndding()
 
 }
 
-BattleData::BattleData()
+BattleData::BattleData(PlayerRed* _Player)
+	: PlayerPokemonList_(nullptr)
+	, PoePokemonList_(nullptr)
+	, PlayerCurrentPokemon_(nullptr)
+	, PoeCurrentPokemon_(nullptr)
+	, PlayerCurrentPokemonInBattle_(nullptr)
+	, PoeCurrentPokemonInBattle_(nullptr)
+	, AllPokemonInBattle_(nullptr)
 {
+	// PlayerCurrentPokemonInBattle_ = _Player->GetPlayerPokemon
+	
 }
 
 BattleData::~BattleData()
