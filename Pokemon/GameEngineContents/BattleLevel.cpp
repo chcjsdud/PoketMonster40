@@ -54,12 +54,6 @@ void BattleLevel::Loading()
 
 	Interface_ = CreateActor<BattleInterface>(3);
 	Interface_->SetPosition({ 720.0f, 548.0f });
-	
-	//김예나:테스트 코드
-	PlayerStopCheck = CreateActor<BattleUnitRenderer>();
-	Fonts = CreateActor<GameEngineContentFont>(3);
-	Fonts->SetPosition({ 50, 485 });
-
 
 }
 
@@ -93,16 +87,6 @@ void BattleLevel::Update()
 			return;
 		}
 		break;
-	}
-
-	//
-
-	if (PlayerStopCheck->GetPlayerStop()==true&&OneTalk==false)
-	{
-		//김예나:플레이어 멈출시 폰트출력 테스트
-		Fonts->ShowString("Wild Bulbarsaur\\is appear!!", false);
-		OneTalk = true;
-		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
 } 
 
