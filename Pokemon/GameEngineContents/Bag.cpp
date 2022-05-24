@@ -486,46 +486,46 @@ void Bag::OnDialog()
 
 		DestroyDescFonts();
 
-		if ("BattleLevel" != GetLevel()->GetNameConstRef())
-		{
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString("Pokemon", true);
-			ItemDescFonts_.push_back(DescFont);
+		//if ("BattleLevel" != GetLevel()->GetNameConstRef())
+		//{
+		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	DescFont->SetPosition({ 150, 460.f });
+		//	DescFont->ShowString("Pokemon", true);
+		//	ItemDescFonts_.push_back(DescFont);
 
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString("Pokemon", true);
-			ItemDescFonts_.push_back(DescFont);
+		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	DescFont->SetPosition({ 150, 460.f });
+		//	DescFont->ShowString("Pokemon", true);
+		//	ItemDescFonts_.push_back(DescFont);
 
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-			ItemDescFonts_.push_back(DescFont);
-		}
+		//	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	DescFont->SetPosition({ 150, 460.f });
+		//	DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+		//	ItemDescFonts_.push_back(DescFont);
+		//}
 
-		else
-		{
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-			ItemDescFonts_.push_back(DescFont);
+		//else
+		//{
+		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	//DescFont->SetPosition({ 150, 460.f });
+		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+		//	//ItemDescFonts_.push_back(DescFont);
 
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-			ItemDescFonts_.push_back(DescFont);
+		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	//DescFont->SetPosition({ 150, 460.f });
+		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+		//	//ItemDescFonts_.push_back(DescFont);
 
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-			ItemDescFonts_.push_back(DescFont);
+		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	//DescFont->SetPosition({ 150, 460.f });
+		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+		//	//ItemDescFonts_.push_back(DescFont);
 
-			GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
-			DescFont->SetPosition({ 150, 460.f });
-			DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
-			ItemDescFonts_.push_back(DescFont);
-		}
+		//	//GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
+		//	//DescFont->SetPosition({ 150, 460.f });
+		//	//DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+		//	//ItemDescFonts_.push_back(DescFont);
+		//}
 
 		UpArrow_->Off();
 		DownArrow_->Off();

@@ -91,9 +91,6 @@ private:
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* PlayerStopCheck;
 	bool OneTalk;
-	//전투시 폰트 출력
-	class GameEngineContentFont* Fonts;
-	class BattleUnitRenderer* PlayerStopCheck;
 
 public:
 	bool MoveKey();
