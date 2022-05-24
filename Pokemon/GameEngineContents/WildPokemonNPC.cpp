@@ -8,13 +8,7 @@ WildPokemonNPC::WildPokemonNPC()
 
 WildPokemonNPC::~WildPokemonNPC() 
 {
-	for (auto* Pokemon : CurrentPossessionPokemons_)
-	{
-		if (Pokemon != nullptr)
-		{
-			Pokemon->Death();
-		}
-	}
+
 	
 }
 

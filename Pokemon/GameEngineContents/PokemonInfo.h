@@ -195,6 +195,15 @@ public:
 		IsGender_ = _Gender;
 	}
 
+	inline bool GetFaint()
+	{
+		return IsFaint_;
+	}
+
+	inline void SetFaint(bool _Faint)
+	{
+		IsFaint_ = _Faint;
+	}
 
 
 	//렌더러 관련 함수
@@ -248,6 +257,7 @@ private:
 	int SpDef_;
 	int Speed_;
 
+	bool IsFaint_; //포켓몬 기절 체크
 	bool IsPlayer_; //플레이어 포켓몬인지 아닌지
 	bool IsGender_; //true: 수컷, false: 암컷
 

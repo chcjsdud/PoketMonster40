@@ -92,7 +92,6 @@ private:
 	class BattleUnitRenderer* PlayerStopCheck;
 	bool OneTalk;
 
-
 public:
 	bool MoveKey();
 
