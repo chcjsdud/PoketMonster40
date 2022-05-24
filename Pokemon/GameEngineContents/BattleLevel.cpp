@@ -8,6 +8,9 @@
 #include "BattleUnitRenderer.h"
 #include "BattleBackground.h"
 #include "BattleEngine.h"
+#include "BattleNPCInterface.h"
+#include "WildPokemonNPC.h"
+#include "PokemonInfoManager.h"
 
 
 
@@ -16,18 +19,32 @@ BattleLevel::BattleLevel()
 	, BState_(BattleState::Openning)
 	, OpenningEnd_(false)
 	, EnddingEnd_(false)
-	, OneTalk(false)
-	, Fonts(nullptr)
 	// 디버깅
 	, PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
+	, PlayerRed_(nullptr)
+	, Opponent_(nullptr)
+	, PlayerStopCheck(nullptr)
+	, OneTalk(false)
+	, Fonts(nullptr)
+	, BattleData_(nullptr)
 {
 
 }
 
 BattleLevel::~BattleLevel()
-{
-	BattleEngine::Destroy();
+{	
+	if (BattleData_ != nullptr)
+	{
+		{
+			delete BattleData_;
+		}
+	}
+	if (Opponent_ != nullptr)
+	{
+		delete Opponent_->GetPokemonList()[0];
+		delete PlayerRed_->GetPokemonList().front();
+	}
 }
 
 void BattleLevel::Loading()
@@ -40,7 +57,7 @@ void BattleLevel::Loading()
 	//Opponent_->PushPokemon(Debug);
 	//PlayerCurrentPokemon_ = CreateActor<Pokemon>();
 	//PlayerCurrentPokemon_->SetInfo("Charmander");
-	//PoeCurrentPokemon_ = Opponent_->GetPokemon();
+	//PoeCurrentPokemon_ = Opponent_->GetPokemonList();
 	// Debug
 
 
@@ -49,12 +66,6 @@ void BattleLevel::Loading()
 
 	Interface_ = CreateActor<BattleInterface>(3);
 	Interface_->SetPosition({ 720.0f, 548.0f });
-	
-	//김예나:테스트 코드
-	PlayerStopCheck = CreateActor<BattleUnitRenderer>();
-	Fonts = CreateActor<GameEngineContentFont>(3);
-	Fonts->SetPosition({ 50, 485 });
-
 
 }
 
@@ -65,19 +76,20 @@ void BattleLevel::Update()
 	case BattleState::Openning:
 		if (OpenningEnd_ == true)
 		{
-			BState_ = BattleState::Selecet;
+			BState_ = BattleState::SelecetPage;
 		}
 		return;
 		break;
-	case BattleState::Selecet:
+	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
 
 		}
 		break;
-	case BattleState::Battle:
+	case BattleState::BattlePage:
 		if (Interface_->BattleKey())
 		{
+
 		}
 		return;
 		break;
@@ -89,33 +101,34 @@ void BattleLevel::Update()
 		}
 		break;
 	}
-
-	//
-
-	if (PlayerStopCheck->GetPlayerStop()==true&&OneTalk==false)
-	{
-		//김예나:플레이어 멈출시 폰트출력 테스트
-		Fonts->ShowString("Wild Bulbarsaur\\is appear!!", false);
-		OneTalk = true;
-		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
-	}
 } 
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
 
-	//if (PlayerRed_ == nullptr)
-	//{
-	//	PlayerRed_  = PlayerRed::MainRed_;
-	//}
-
-
+	if (PlayerRed_ == nullptr)
+	{
+		PlayerRed_  = PlayerRed::MainRed_;
+	}
 
 	//BState_ = BattleState::Openning
-	BState_ = BattleState::Selecet;
-	OpenningEnd_ = false;
-	EnddingEnd_ = false;
-	ShowOpenning();
+	{
+		BState_ = BattleState::SelecetPage;
+		OpenningEnd_ = false;
+		EnddingEnd_ = false;
+		ShowOpenning();
+	}
+
+
+
+	// 장중혁 : 배틀 디버깅
+	{
+		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
+		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
+		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
+
+		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+	}
 }
 
 void BattleLevel::ShowOpenning()
@@ -128,28 +141,107 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	OpenningEnd_ = false;
 	EnddingEnd_ = false;
+
+	// 장중혁 : Debug
+	{
+		Opponent_->Death();
+		Opponent_->GetPokemonList()[0]->Death();
+		PlayerRed_->GetPokemonList().front()->Death();
+		delete BattleData_;
+	}
 }
 
 void BattleLevel::ShowEndding()
 {
-
 }
 
-BattleData::BattleData(PlayerRed* _Player)
-	: PlayerPokemonList_(nullptr)
-	, PoePokemonList_(nullptr)
-	, PlayerCurrentPokemon_(nullptr)
-	, PoeCurrentPokemon_(nullptr)
-	, PlayerCurrentPokemonInBattle_(nullptr)
+
+BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel* _Level)
+	: PlayerCurrentPokemonInBattle_(nullptr)
 	, PoeCurrentPokemonInBattle_(nullptr)
-	, AllPokemonInBattle_(nullptr)
+	, PoeNPC_(_Poe)
+	, Player_(_Player)
+	, PlayerPokemonList_(_Player->GetPokemonList())
+	, PoePokemonList_(_Poe->GetPokemonList())
+	, WildBattle_(false)
+{
+	{
+		// Player
+		size_t PokemonInt = PlayerPokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
+		{
+			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
+		}
+	}
+	{
+		// Poe
+		size_t PokemonInt = PoePokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
+		{
+			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
+		}
+	}
+
+	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
+	PoeCurrentPokemonInBattle_ = PeoPokemonsInBattle_.front();
+}
+
+BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _Level)
+	: PlayerCurrentPokemonInBattle_(nullptr)
+	, PoeCurrentPokemonInBattle_(nullptr)
+	, PoeNPC_(nullptr)
+	, Player_(_Player)
+	, PlayerPokemonList_(_Player->GetPokemonList())
+	, PoePokemonList_(_Level->CreateActor<WildPokemonNPC>(0, "WildPokemon")->GetPokemonList())
+	, WildBattle_(true)
 {
 	// PlayerCurrentPokemonInBattle_ = _Player->GetPlayerPokemon
+	PoeNPC_ = dynamic_cast<BattleNPCInterface*>(_Level->FindActor("WildPokemon"));
 	
+	{
+		// Player
+		size_t PokemonInt = PlayerPokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
+		{
+			PlayerPokemonsInBattle_.push_back(CreatePokemonState(PlayerPokemonList_[i]));
+		}
+	}
+
+	{
+		// Poe
+		size_t PokemonInt = PoePokemonList_.size();
+		for (size_t i = 0; i < PokemonInt; i++)
+		{
+			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
+		}
+	}
+
+	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
+	PoeCurrentPokemonInBattle_ = PeoPokemonsInBattle_.front();
 }
 
 BattleData::~BattleData()
 {
+	if (WildBattle_ == true)
+	{
+		PoeNPC_->Death();
+	}
+
+	for (auto* State : AllPokemonInBattle_)
+	{
+		if (State != nullptr)
+		{
+			delete State;
+			State = nullptr;
+		}
+	}
+}
+
+PokemonBattleState* BattleData::CreatePokemonState(Pokemon* _Pokemon)
+{
+	PokemonBattleState* PokemonState = new PokemonBattleState(_Pokemon);
+	AllPokemonInBattle_.push_back(PokemonState);
+	return PokemonState;
 }
 
 PokemonBattleState::PokemonBattleState(Pokemon* _Pokemon)

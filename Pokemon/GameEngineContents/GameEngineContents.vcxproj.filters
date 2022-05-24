@@ -118,6 +118,9 @@
     <ClCompile Include="PlayerRedState.cpp">
       <Filter>Player</Filter>
     </ClCompile>
+    <ClCompile Include="WildPokemonNPC.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -240,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="UIEnum.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="WildPokemonNPC.h">
+      <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

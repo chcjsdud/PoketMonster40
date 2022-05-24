@@ -22,6 +22,10 @@ public:
 		return MyInfo_;
 	}
 
+	inline void SetInfo(PokemonInfo* _Info)
+	{
+		MyInfo_ = _Info;
+	}
 
 
 protected:

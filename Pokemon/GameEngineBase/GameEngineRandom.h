@@ -19,8 +19,20 @@ class GameEngineRandom
 	std::mt19937_64 mt_;
 
 	//std::uniform_int_distribution<int> Uniform;
-
 public:
+	static GameEngineRandom* GetInst_;
+	static GameEngineRandom* GetRandom()
+	{
+		return GetInst_;
+	}
+
+	static void Destroy()
+	{
+		if (GetInst_ != nullptr)
+		{
+			delete GetInst_;
+		}
+	}
 	// 
 	int RandomInt(int _Min, int _Max)
 	{

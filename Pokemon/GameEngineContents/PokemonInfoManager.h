@@ -10,6 +10,10 @@ class PokemonInfo;
 class PokemonSkill;
 class PokemonInfoManager
 {
+	// ¿Â¡ﬂ«ı : Debug
+	friend class BattleLevel;
+	//
+
 private:
 	static PokemonInfoManager* Inst_;
 

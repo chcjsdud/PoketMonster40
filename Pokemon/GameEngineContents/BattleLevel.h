@@ -13,6 +13,7 @@
 
 enum class PokemonAbility;
 class BattleEngine;
+class BattleData;
 class PokemonBattleState;
 class BattleLevel : public GameEngineLevel
 {
@@ -60,8 +61,6 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
-
-
 private:
 	BattleInterface* Interface_;
 	BattleState BState_;
@@ -79,28 +78,33 @@ private:
 	
 
 
-	// 플레이어 및 NPC
-	//PlayerRed* PlayerRed_;
-	//BattleNPCInterface* Opponent_;
-	// Pokemon
-	Pokemon* PlayerCurrentPokemon_; // Debug
-	Pokemon* PoeCurrentPokemon_;// Debug
-	//
-
 
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* PlayerStopCheck;
 
 	bool OneTalk;
+
+private:
+	// 플레이어 및 NPC
+	PlayerRed* PlayerRed_;
+	BattleNPCInterface* Opponent_;
+	// Pokemon
+	Pokemon* PlayerCurrentPokemon_; // Debug
+	Pokemon* PoeCurrentPokemon_;// Debug
+	//
+
+	BattleData* BattleData_;
+
+	
 };
 
 class BattleData
 {
 	friend BattleLevel;
 private:
-	BattleData(/*PlayerRed* _Player, BattleNPCInterface* _Poe*/);
-	BattleData(PlayerRed* _Player);
+	BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel* _Level);
+	BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _Level);
 	~BattleData();
 
 	BattleData(const BattleData& _Other) = delete;
@@ -109,21 +113,29 @@ private:
 	BattleData& operator=(BattleData&& _Other) noexcept = delete;
 
 private:
+	PlayerRed* Player_;
+	BattleNPCInterface* PoeNPC_;
 
 	// Data 출력
-	Pokemon* PlayerCurrentPokemon_;
-	Pokemon* PoeCurrentPokemon_;
 
 	// 주머니속 가지고 있는 포켓몬
-	std::vector<Pokemon*>* PlayerPokemonList_;
-	std::vector<Pokemon*>* PoePokemonList_;
+	std::vector<Pokemon*>& PlayerPokemonList_;
+	std::vector<Pokemon*>& PoePokemonList_;
+
 
 	// PokemonBatleState
 	PokemonBattleState* PlayerCurrentPokemonInBattle_;
 	PokemonBattleState* PoeCurrentPokemonInBattle_;
 
-	std::vector<PokemonBattleState>* AllPokemonInBattle_;
 
+	std::vector<PokemonBattleState*> PlayerPokemonsInBattle_;
+	std::vector<PokemonBattleState*> PeoPokemonsInBattle_;
+
+	std::vector<PokemonBattleState*> AllPokemonInBattle_;
+
+	bool WildBattle_;
+
+	PokemonBattleState* CreatePokemonState(Pokemon* _Pokemon);
 };
 
 class PokemonBattleState

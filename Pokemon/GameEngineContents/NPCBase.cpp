@@ -20,8 +20,10 @@ void NPCBase::Start()
 
 void NPCBase::Update()
 {
-	NPCMove();
+	//NPCMove();
 	NPCMoveAnim();
+	NPCMove();
+
 }
 
 void NPCBase::Render()
@@ -40,57 +42,78 @@ void NPCBase::NPCMove()
 	if (0 == RandomStateNum_)
 	{
 		State_ = NPCState::Idle;
+		NPCAnimationName_ = "Idle";
+		if ("" == NPCChangeDirText_)
+		{
+			NPCChangeDirText_ = "Down";
+		}
+		NPCMoveDir_ = float4::ZERO;
 	}
 	else if (1 == RandomStateNum_)
 	{
-		State_ = NPCState::Up;
+		State_ = NPCState::Walk;
+		CurrentDir_ = NPCDir::Up;
+		NPCAnimationName_ = "Walk";
+		NPCChangeDirText_ = "Up";
+		NPCMoveDir_ = float4::UP;
 	}
 	else if (2 == RandomStateNum_)
 	{
-		State_ = NPCState::Down;
+		State_ = NPCState::Walk;
+		CurrentDir_ = NPCDir::Down;
+		NPCAnimationName_ = "Walk";
+		NPCChangeDirText_ = "Down";
+		NPCMoveDir_ = float4::DOWN;
 	}
 	else if (3 == RandomStateNum_)
 	{
-		State_ = NPCState::Left;
+		State_ = NPCState::Walk;
+		CurrentDir_ = NPCDir::Left;
+		NPCAnimationName_ = "Walk";
+		NPCChangeDirText_ = "Left";
+		NPCMoveDir_ = float4::LEFT;
 	}
 	else if (4 == RandomStateNum_)
 	{
-		State_ = NPCState::Right;
-	}
-	
-	switch (State_)
-	{
-	case NPCState::Idle:
-		NPCMoveDir_ = float4::ZERO;
-		break;
-	case NPCState::Up:
-		NPCMoveDir_ = float4::UP;
-		break;
-	case NPCState::Down:
-		NPCMoveDir_ = float4::DOWN;
-		break;
-	case NPCState::Left:
-		NPCMoveDir_ = float4::LEFT;
-		break;
-	case NPCState::Right:
+		State_ = NPCState::Walk;
+		CurrentDir_ = NPCDir::Right;
+		NPCAnimationName_ = "Walk";
+		NPCChangeDirText_ = "Right";
 		NPCMoveDir_ = float4::RIGHT;
-		break;
-	default:
-		break;
 	}
 
 	if (GetAccTime() >= NPCNextMoveTime_)
 	{
-		NPCNextMoveTime_ = GetAccTime() + 0.26f;
+		NPCNextMoveTime_ = GetAccTime() + 0.5f;
 		StartPos_ = GetPosition();
 		float4 CheckPos_ = GetPosition() + (NPCMoveDir_ * 50) - CurrentTileMap_->GetPosition();
 		TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos_);
 
-		if (TileState::True == CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y, (NPCMoveDir_ * 50)))
+		switch (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y, (NPCMoveDir_ * 50)))
+		{
+		case TileState::False:
+		{
+			State_ = NPCState::Idle;
+			NPCAnimationName_ = "Idle";
+			if ("" == NPCChangeDirText_)
+			{
+				NPCChangeDirText_ = "Down";
+			}
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_); 
+			NPCMoveDir_ = float4::ZERO;
+			break;
+		}
+		case TileState::True:
 		{
 			IsMove_ = true;
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
 			GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
-			return;
+			break;
+		}
+		case TileState::MoreDown:
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -99,7 +122,7 @@ void NPCBase::NPCMoveAnim()
 {
 	if (true == IsMove_)
 	{
-		NPCLerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
+		NPCLerpTime_ += GameEngineTime::GetDeltaTime() * 3.0f;
 		NPCLerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, NPCLerpTime_);
 		NPCLerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, NPCLerpTime_);
 		SetPosition({ NPCLerpX_,NPCLerpY_ });
@@ -108,6 +131,9 @@ void NPCBase::NPCMoveAnim()
 		{
 			NPCLerpTime_ = 0.0f;
 			IsMove_ = false;
+			State_ = NPCState::Idle;
+			NPCAnimationName_ = "Idle";
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
 		}
 	}
 }

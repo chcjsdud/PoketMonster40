@@ -36,7 +36,7 @@ PlayerRed::PlayerRed()
 	, LerpTime_(0)
 	, FadeTime_(0)
 	, Alpha_()
-	, MyPokemonList_{nullptr}
+	, MyPokemonList_{}
 	, MyItemList_{}
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
@@ -51,7 +51,6 @@ PlayerRed::PlayerRed()
 	, IsInteraction_(false)
 	, NextTileMap_()
 {
-	MyPokemonList_.resize(6);
 	MainRed_ = this;
 }
 

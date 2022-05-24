@@ -5,10 +5,21 @@
 enum class NPCState
 {
 	Idle,
+	Walk,
+	//Up,
+	//Down,
+	//Left,
+	//Right,
+
+	Max
+};
+enum class NPCDir
+{
 	Up,
 	Down,
 	Left,
 	Right,
+
 };
 // Ό³Έν :
 class NPCBase : public GameEngineActor
@@ -31,7 +42,10 @@ public:
 protected:
 	void NPCMove();
 	void NPCMoveAnim();
-	PokemonTileMap* CurrentTileMap_;
+	PokemonTileMap*		CurrentTileMap_;
+	GameEngineRenderer* NPCRender_;
+	std::string			NPCAnimationName_;
+	std::string			NPCChangeDirText_;
 
 	float NPCLerpX_;
 	float NPCLerpY_;
@@ -45,5 +59,6 @@ private:
 	float4	NPCMoveDir_;
 
 	NPCState State_;
+	NPCDir CurrentDir_;
 };
 

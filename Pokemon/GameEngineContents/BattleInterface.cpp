@@ -5,6 +5,7 @@
 #include "PokemonEngine.h"
 #include "BattleEngine.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "BattleUnitRenderer.h"
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
@@ -20,6 +21,9 @@ BattleInterface::BattleInterface()
 	, MainInterface(nullptr)
 	, DownFont_(nullptr)
 	, Level_(nullptr)
+	, PlayerStopCheck(nullptr)
+	, OneTalk(false)
+	, Fonts(nullptr)
 {
 
 }
@@ -68,6 +72,11 @@ void BattleInterface::Start()
 	BattleCommend->SetPivot({-240.0f,0.0f});
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
 	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
+
+	//김예나:테스트 코드
+	PlayerStopCheck = Level_->CreateActor<BattleUnitRenderer>();
+	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
+	Fonts->SetPosition({ 50, 485 });
 }
 
 void BattleInterface::Render()
@@ -80,10 +89,51 @@ void BattleInterface::Update()
 
 	DoomChit();
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	if (Level_->GetBattleState() != BattleState::Battle)
+	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
 		SelectOrder();
 		OrderCheck();
+	}
+
+	if (PlayerStopCheck->GetPlayerStop() == true && OneTalk == false)
+	{
+		//김예나:플레이어 멈출시 폰트출력 테스트
+		Fonts->ShowString("Wild Bulbarsaur\\is appear!!\\Go!!\\Charizard!!", false);
+		OneTalk = true;
+		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
+	}
+
+	{
+		// 폰트 출력이 완료되고 키입력 대기
+		if (Fonts->IsWait())
+		{
+			// Z 키 입력시 다음 문장 출력
+			if (GameEngineInput::GetInst()->IsDown("Z") == true)
+			{
+				// 다음 문장 출력 함수
+				Fonts->NextString();
+			}
+		}
+		// 다음 문장이 없을 때 == 끝났을 때
+		if (Fonts->IsEnd())
+		{
+			// 모든 대화가 끝났을 때 z 키누르면 다음 대화 시작
+			if (GameEngineInput::GetInst()->IsDown("Z") == true)
+			{
+				//애니메이션체인지
+				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
+
+				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
+				{
+					BattleUnitRenderer::PlayerRenderer_->Off();
+				}
+			}
+			// 모든 대화가 끝났을 때 x 키누르면 종료
+			else if (GameEngineInput::GetInst()->IsDown("X") == true)
+			{
+				Fonts->EndFont();
+			}
+		}
 	}
 
 }

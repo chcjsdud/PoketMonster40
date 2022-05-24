@@ -6,6 +6,7 @@
 #include "Pokemon.h"
 
 TitleLevel::TitleLevel() 
+	: Fonts(nullptr)
 {
 }
 
