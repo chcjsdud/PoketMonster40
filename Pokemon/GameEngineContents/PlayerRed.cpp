@@ -13,6 +13,8 @@
 #include "RoomTileMap4.h"
 #include "RoomTileMap5.h"
 #include "RoomTileMap6.h"
+#include "RoomTileMap7.h"
+#include "RoomTileMap8.h"
 #include "WorldTileMap1.h"
 
 #include "InteractionText.h"
@@ -26,6 +28,7 @@ PlayerRed::PlayerRed()
 	, CurrentTileMap_()
 	, RedRender_(nullptr)
 	, ShadowRender_(nullptr)
+	, BushRender_(nullptr)
 	, FadeRender_(nullptr)
 	, FadeRightRender_(nullptr)
 	, FadeLeftRender_(nullptr)
@@ -282,6 +285,9 @@ void PlayerRed::Start()
 	RedRender_->ChangeAnimation("IdleUp");
 	RedRender_->SetPivot({0, -15});
 
+	//BushRender_ = CreateRenderer("Bush.bmp");
+	//BushRender_->SetPivot({0, 0});
+
 	AnimationName_ = "Idle";
 	CurrentDir_ = RedDir::Up;
 	CurrentState_ = RedState::Idle;
@@ -359,7 +365,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 		//if (_X == 8 && _Y == 0)
 		//{
 		//	NextTileMap_ = WorldTileMap1::GetInst();
-		//	NextTilePos_ = { 23, 31 };
+		//	NextTilePos_ = { 22, 23 };
 		//	return true;
 		//}
 	} 
@@ -433,6 +439,24 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			return true;
 		}
 	}
+	else if (RoomTileMap7::GetInst() == CurrentTileMap_) // 학교
+	{
+		if (_X == 4 && _Y == 6)
+		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 22, 23 };
+			return true;
+		}
+	}
+	else if (RoomTileMap8::GetInst() == CurrentTileMap_) // Npc 집
+	{
+		if (_X == 4 && _Y == 6)
+		{
+			NextTileMap_ = WorldTileMap1::GetInst();
+			NextTilePos_ = { 22, 16 };
+			return true;
+		}
+	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
 		if (_X == 15 && _Y == 91) // 레드 집
@@ -462,6 +486,18 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 		if (_X == 33 && _Y == 23) // 상점
 		{
 			NextTileMap_ = RoomTileMap6::GetInst();
+			NextTilePos_ = { 4, 5 };
+			return true;
+		}
+		if (_X == 22 && _Y == 22) // 학교
+		{
+			NextTileMap_ = RoomTileMap7::GetInst();
+			NextTilePos_ = { 4, 5 };
+			return true;
+		}
+		if (_X == 22 && _Y == 15) // Npc집
+		{
+			NextTileMap_ = RoomTileMap8::GetInst();
 			NextTilePos_ = { 4, 5 };
 			return true;
 		}
@@ -669,6 +705,15 @@ void PlayerRed::MoveAnim()
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
 		SetPosition({ LerpX_,LerpY_ });
 
+		if (LerpTime_ < 0.5f)
+		{
+			RedRender_->SetPivot({0, -15 - 32 * LerpTime_ * 2.0f });
+		}
+		else
+		{
+			RedRender_->SetPivot({ 0, -15 - 32 * ( 1 - ((LerpTime_ - 0.5f) * 2.0f))});
+		}
+
 		if (LerpTime_ > 1.0f)
 		{
 			LerpTime_ = 0.0f;
@@ -718,6 +763,7 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	default:
 		break;
 	}
+
 	if (RoomTileMap1::GetInst() == CurrentTileMap_) // 레드집 2층
 	{
 		if (_X == 2 && _Y == -1)
@@ -850,24 +896,47 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
-		if (_X == 15 && _Y == 91) // 레드 집 1층
+		if (_X == 13 && _Y == 91)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("RED's house");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 24 && _Y == 91) // 그린 집
+		if (_X == 22 && _Y == 91)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("GREEN's house");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 25 && _Y == 97) // 오박사 연구소
+		if (_X == 18 && _Y == 95)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("PALLET TOWN");
+			TmpText->AddText("Shades of your journey await!");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 23 && _Y == 30) // 치료소
+		if (_X == 14 && _Y == 98)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("TRAINER TIPS");
+			TmpText->AddText("");
+			TmpText->AddText("Press P to open the MENU!");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 33 && _Y == 23) // 상점
+		if (_X == 25 && _Y == 100)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("OAK POKEMON RESEARCH LAB");
+			TmpText->Setting();
 			return true;
 		}
 	}

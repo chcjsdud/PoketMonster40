@@ -21,6 +21,7 @@ protected:
 private:
 	GameEngineRenderer* WorldMap1_;
 	GameEngineRenderer* RoomsRenderer_;
+	GameEngineRenderer* Rooms2Renderer_;
 
 	void Start() override;
 	void Update() override;

@@ -68,6 +68,7 @@ private:
 
 	GameEngineRenderer* RedRender_;
 	GameEngineRenderer* ShadowRender_;
+	GameEngineRenderer* BushRender_;
 	GameEngineRenderer* FadeRender_;
 	GameEngineRenderer* FadeRightRender_;
 	GameEngineRenderer* FadeLeftRender_;

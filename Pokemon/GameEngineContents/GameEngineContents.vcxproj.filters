@@ -121,6 +121,15 @@
     <ClCompile Include="WildPokemonNPC.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
+    <ClCompile Include="RoomTileMap7.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomTileMap8.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bush.cpp">
+      <Filter>WorldMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -246,6 +255,15 @@
     </ClInclude>
     <ClInclude Include="WildPokemonNPC.h">
       <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap7.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomTileMap8.h">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Bush.h">
+      <Filter>WorldMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
