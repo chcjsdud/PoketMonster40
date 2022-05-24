@@ -18,7 +18,7 @@ public:
 protected:
 
 private:
-	GameEngineRenderer* NPCRender_;
+	//GameEngineRenderer* NPCRender_;
 
 	void Start() override;
 	void Update() override;
