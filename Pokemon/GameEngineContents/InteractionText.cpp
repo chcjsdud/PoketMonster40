@@ -7,6 +7,7 @@ InteractionText::InteractionText()
 	: UIRenderer_(nullptr)
 	, ArrowRenderer_(nullptr)
 	, Fonts(nullptr)
+	, IsSetting_(false)
 {
 }
 
@@ -31,6 +32,7 @@ void InteractionText::Setting()
 	Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
 	Fonts->SetPosition(GetPosition() + float4(-420, 160));
 	Fonts->ShowString(TmpString, false);
+	IsSetting_ = true;	
 }
 
 void InteractionText::Start()
@@ -40,6 +42,11 @@ void InteractionText::Start()
 
 void InteractionText::Update()
 {
+	if (false == IsSetting_)
+	{
+		return;
+	}
+
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
 	{

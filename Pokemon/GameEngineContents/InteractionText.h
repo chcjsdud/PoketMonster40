@@ -28,6 +28,7 @@ private:
 	GameEngineRenderer* UIRenderer_;
 	GameEngineRenderer* ArrowRenderer_;
 	class GameEngineContentFont* Fonts;
+	bool IsSetting_;
 
 	void Start() override;
 	void Update() override;

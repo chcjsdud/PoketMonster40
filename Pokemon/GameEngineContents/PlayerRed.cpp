@@ -350,19 +350,19 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
 	if (RoomTileMap1::GetInst() == CurrentTileMap_) // ทนตๅมý 2รþ
 	{
-		//if (_X == 8 && _Y == 0)
-		//{
-		//	NextTileMap_ = RoomTileMap2::GetInst();
-		//	NextTilePos_ = { 9, 0 };
-		//	return true;
-		//}
-
 		if (_X == 8 && _Y == 0)
 		{
-			NextTileMap_ = WorldTileMap1::GetInst();
-			NextTilePos_ = { 23, 31 };
+			NextTileMap_ = RoomTileMap2::GetInst();
+			NextTilePos_ = { 9, 0 };
 			return true;
 		}
+
+		//if (_X == 8 && _Y == 0)
+		//{
+		//	NextTileMap_ = WorldTileMap1::GetInst();
+		//	NextTilePos_ = { 23, 31 };
+		//	return true;
+		//}
 	} 
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_) // ทนตๅมý 1รþ
 	{
@@ -754,7 +754,7 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->SetPosition(GetPosition());
 			TmpText->AddText("Red Played with the NES.");
 			TmpText->AddText("");
-			TmpText->AddText("...Okay!");
+			TmpText->AddText(";Okay!");
 			TmpText->AddText("It's time to go!");
 			TmpText->Setting();
 			return true;
@@ -762,24 +762,53 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	}
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_) // ทนตๅมý 1รþ
 	{
-		if (_X == 0 && _Y == 0)
+		if (_X == 0 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("It smells delicious!");
+			TmpText->AddText("Somebody's been cooking here.");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 1 && _Y == 0)
+		if (_X == 1 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("It smells delicious!");
+			TmpText->AddText("Somebody's been cooking here.");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 2 && _Y == 0)
+		if (_X == 2 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Dishes and plates are neatly");
+			TmpText->AddText("lined up.");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 3 && _Y == 0)
+		if (_X == 3 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Dishes and plates are neatly");
+			TmpText->AddText("lined up.");
+			TmpText->Setting();
 			return true;
 		}
-		if (_X == 5 && _Y == 0)
+		if (_X == 5 && _Y == -1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("There's a movie on TV.");
+			TmpText->AddText("Four boys are walking on railroad");
+			TmpText->AddText("tracks.");
+			TmpText->AddText("");
+			TmpText->AddText(";I better go, too.");
+			TmpText->AddText("");
+			TmpText->Setting();
 			return true;
 		}
 	}
