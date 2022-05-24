@@ -89,7 +89,7 @@ void BattleInterface::Update()
 
 	DoomChit();
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	if (Level_->GetBattleState() != BattleState::Battle)
+	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
 		SelectOrder();
 		OrderCheck();
