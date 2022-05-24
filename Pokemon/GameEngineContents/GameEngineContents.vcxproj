@@ -200,6 +200,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Flower.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="InteractionText.h">
       <SubType>
       </SubType>
@@ -332,6 +336,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="BattleUnitRenderer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Flower.cpp">
       <SubType>
       </SubType>
     </ClCompile>

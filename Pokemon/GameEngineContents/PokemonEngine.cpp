@@ -164,6 +164,10 @@ void PokemonEngine::ResourcesLoad()
 
 void PokemonEngine::ImageCut()
 {
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Flower.bmp");
+		Image->CutCount(5, 1);
+	}
 
 }
 

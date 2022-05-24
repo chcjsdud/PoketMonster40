@@ -16,6 +16,7 @@
 #include "WorldTileMap1.h"
 
 #include "InteractionText.h"
+#include "Flower.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 
@@ -288,6 +289,7 @@ void PlayerRed::Start()
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
+	GetLevel()->CreateActor<Flower>()->SetPosition(GetPosition() + float4{64, 0});
 }
 
 void PlayerRed::Update()
