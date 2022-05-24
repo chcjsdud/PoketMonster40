@@ -48,6 +48,7 @@ private:
 
 	class GameEngineRenderer* BagRedrerer_;
 	GameEngineRenderer* BagName_;
+	GameEngineRenderer* BagDialog_;
 
 	GameEngineRenderer* LeftArrow_;
 	GameEngineRenderer* RightArrow_;

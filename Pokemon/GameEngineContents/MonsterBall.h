@@ -16,6 +16,7 @@ public:
 	MonsterBall& operator=(MonsterBall&& _Other) noexcept = delete;
 
 protected:
+	void Use() override;
 
 private:
 

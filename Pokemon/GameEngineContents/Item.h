@@ -46,6 +46,7 @@ public:
 	}
 
 protected:
+	virtual void Use() = 0;
 
 private:
 	int Value_; //상처약이라면 회복될 수치

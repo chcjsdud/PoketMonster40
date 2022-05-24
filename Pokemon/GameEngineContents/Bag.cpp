@@ -70,7 +70,9 @@ void Bag::Start()
 	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
 	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
 	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("MonsterBall"));
-
+	
+	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
+	BagDialog_->SetPivot({200, 200 });
 
 	if (false == GameEngineInput::GetInst()->IsKey("LeftArrow"))
 	{

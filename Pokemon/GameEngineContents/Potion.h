@@ -18,6 +18,7 @@ public:
 	void Recovery(class PokemonInfo* _MyPokemon);
 
 protected:
+	void Use() override;
 
 private:
 

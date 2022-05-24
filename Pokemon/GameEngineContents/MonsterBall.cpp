@@ -8,3 +8,7 @@ MonsterBall::~MonsterBall()
 {
 }
 
+void MonsterBall::Use()
+{
+}
+

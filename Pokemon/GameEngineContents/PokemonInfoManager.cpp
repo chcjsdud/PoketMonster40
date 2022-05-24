@@ -168,7 +168,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	NewPokemon->GetInfo()->SetSpDef(MyInfo->GetSpDef());
 	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
 	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
-	NewPokemon->GetInfo()->SetIsGender(MyInfo->GetGender());
+	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
 	NewPokemon->GetInfo()->SetPokemonImage(_Name);
 
 	return NewPokemon;
@@ -193,7 +193,7 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, Poke
 	NewPokemonInfo->SetSpDef(_SpDef);
 	NewPokemonInfo->SetSpeed(_Speed);
 	NewPokemonInfo->SetIsPlayer(false);
-	NewPokemonInfo->SetIsGender(false);
+	NewPokemonInfo->SetGender(false);
 	NewPokemonInfo->SetPokemonImage(_Key);
 
 	AllPokemonInfoList_.insert(std::make_pair(_Key, NewPokemonInfo));

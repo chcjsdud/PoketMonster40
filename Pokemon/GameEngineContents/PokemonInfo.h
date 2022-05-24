@@ -190,9 +190,9 @@ public:
 		return IsGender_;
 	}
 
-	inline void SetIsGender(bool _IsGender)
+	inline void SetGender(bool _Gender)
 	{
-		IsGender_ = _IsGender;
+		IsGender_ = _Gender;
 	}
 
 
