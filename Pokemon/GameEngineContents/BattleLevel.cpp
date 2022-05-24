@@ -308,7 +308,7 @@ float PokemonBattleState::GetRank(const PokemonAbility& _State)
 			return 0.66f;
 			break;
 		case 0:
-			return 0;
+			return 1;
 			break;
 		case 1:
 			return 1.5f;
@@ -356,7 +356,7 @@ float PokemonBattleState::GetRank(const PokemonAbility& _State)
 			return 0.75f;
 			break;
 		case 0:
-			return 0;
+			return 1;
 			break;
 		case 1:
 			return 1.33f;

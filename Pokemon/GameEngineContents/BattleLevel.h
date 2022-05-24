@@ -12,6 +12,7 @@
 //설명 : 
 
 enum class PokemonAbility;
+enum class DamgeType;
 class BattleEngine;
 class BattleData;
 class PokemonBattleState;
@@ -163,17 +164,18 @@ public:
 			return CurrentRank_[_State];
 		}
 	}
-
+	inline Pokemon* GetPokemon()
+	{
+		return Pokemon_;
+	}
 	float GetRank(const PokemonAbility& _State);
-
-
 	// 몇 턴 동안 지속인지 확인하는 함수 필요
 	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill);
 	void Update();
 
 private:
 	// 고정된 포켓몬
-	const Pokemon* Pokemon_;
+	Pokemon* const Pokemon_;
 
 	// 행동 가능여부
 	bool CanAction_;
@@ -236,6 +238,14 @@ public:
 	BattleManager& operator=(BattleManager&& _Other) noexcept = delete;
 
 
+};
+
+enum class DamgeType
+{
+	Great,
+	Nomal,
+	Bad,
+	Nothing
 };
 
 enum class PokemonAbility
