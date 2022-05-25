@@ -250,6 +250,7 @@ void PlayerRed::Start()
 		Image->CutCount(3, 1);
 	}
 
+	GameEngineInput::GetInst()->CreateKey("JBMTest", 'L');
 	GameEngineInput::GetInst()->CreateKey("WMenuUI", 'P');
 	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp", 20);
 	WMenuUIRender_->Off();
@@ -310,6 +311,12 @@ void PlayerRed::Update()
 	FadeRL();
 	//Camera();
 	InteractionUpdate();
+
+	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
+	{
+		CurrentTileMap_ = WorldTileMap1::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(25, 57));
+	}
 }
 
 void PlayerRed::Render()
@@ -350,6 +357,8 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		break;
 	case TileState::MoreDown:
 		IsJump_ = true;
+		IsBush_ = BushTileCheck(NextIndex.X, NextIndex.Y + 1);
+		IsBushEventReady_ = true;
 		ShadowRender_->On();
 		NextMoveTime_ = GetAccTime() + 0.51f;
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
@@ -700,6 +709,7 @@ void PlayerRed::MoveAnim()
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
 		SetPosition({ LerpX_,LerpY_ });
 
+		// 수풀
 		if (LerpTime_ >= 0.8f && true == IsBushEventReady_)
 		{
 			IsBushEventReady_ = false;
@@ -728,6 +738,7 @@ void PlayerRed::MoveAnim()
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
 		SetPosition({ LerpX_,LerpY_ });
 
+		// 높이조절
 		if (LerpTime_ < 0.5f)
 		{
 			RedRender_->SetPivot({ 0, -15 - 32 * LerpTime_ * 2.0f });
@@ -735,6 +746,22 @@ void PlayerRed::MoveAnim()
 		else
 		{
 			RedRender_->SetPivot({ 0, -15 - 32 * (1 - ((LerpTime_ - 0.5f) * 2.0f)) });
+		}
+
+		// 수풀
+		if (LerpTime_ >= 0.8f && true == IsBushEventReady_)
+		{
+			IsBushEventReady_ = false;
+			if (IsBush_)
+			{
+				BushActor_->On();
+				BushActor_->SetPosition(GoalPos_);
+				BushActor_->CreateEffect();
+			}
+			else
+			{
+				BushActor_->Off();
+			}
 		}
 
 		if (LerpTime_ > 1.0f)
@@ -1036,9 +1063,20 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 			}
 		}
 
-		for (int y = 59; y <= 63; y++)
+		for (int y = 57; y <= 61; y++)
 		{
 			for (int x = 25; x <= 30; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 50; y <= 54; y++)
+		{
+			for (int x = 19; x <= 30; x++)
 			{
 				if (_X == x && _Y == y)
 				{
