@@ -18,7 +18,6 @@
 #include "WorldTileMap1.h"
 
 #include "InteractionText.h"
-#include "Flower.h"
 #include "Bush.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
@@ -53,6 +52,7 @@ PlayerRed::PlayerRed()
 	, IsMove_(false)
 	, IsInteraction_(false)
 	, IsBush_(false)
+	, IsBushEventReady_(false)
 	, BushActor_(nullptr)
 	, NextTileMap_()
 {
@@ -295,7 +295,6 @@ void PlayerRed::Start()
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
-	GetLevel()->CreateActor<Flower>()->SetPosition(GetPosition() + float4{ 64, 0 });
 }
 
 void PlayerRed::Update()
@@ -346,6 +345,7 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 
 		IsMove_ = true;
 		IsBush_ = BushTileCheck(NextIndex.X, NextIndex.Y);
+		IsBushEventReady_ = true;
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
 		break;
 	case TileState::MoreDown:
@@ -700,12 +700,14 @@ void PlayerRed::MoveAnim()
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
 		SetPosition({ LerpX_,LerpY_ });
 
-		if (LerpTime_ >= 0.8f)
+		if (LerpTime_ >= 0.8f && true == IsBushEventReady_)
 		{
+			IsBushEventReady_ = false;
 			if (IsBush_)
 			{
 				BushActor_->On();
 				BushActor_->SetPosition(GoalPos_);
+				BushActor_->CreateEffect();
 			}
 			else
 			{
@@ -1015,6 +1017,28 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 		for (int y = 76; y <= 77; y++)
 		{
 			for (int x = 13; x <= 19; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 68; y <= 72; y++)
+		{
+			for (int x = 21; x <= 26; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 59; y <= 63; y++)
+		{
+			for (int x = 25; x <= 30; x++)
 			{
 				if (_X == x && _Y == y)
 				{

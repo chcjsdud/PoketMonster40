@@ -16,10 +16,13 @@ public:
 	Bush& operator=(const Bush& _Other) = delete;
 	Bush& operator=(Bush&& _Other) noexcept = delete;
 
+	void CreateEffect();
+
 protected:
 
 private:
 	GameEngineRenderer* Renderer_;
+	float NextTimer_;
 
 	void Start() override;
 };

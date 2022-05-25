@@ -20,6 +20,9 @@ GameEngineRenderer::GameEngineRenderer()
 	, Alpha_(255)
 	, RotZ_(0.0f)
 	, SortingPivot(float4::ZERO)
+	, CurrentAnimation_()
+	, Pause_()
+	, RotationFilterImage_()
 {
 }
 

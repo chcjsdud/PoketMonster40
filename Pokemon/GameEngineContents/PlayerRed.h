@@ -92,6 +92,7 @@ private:
 	bool IsJump_;
 	bool IsInteraction_;
 	bool IsBush_;
+	bool IsBushEventReady_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;

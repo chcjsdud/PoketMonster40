@@ -170,7 +170,14 @@ void PokemonEngine::ImageCut()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Flower.bmp");
 		Image->CutCount(5, 1);
 	}
-
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("BushEffect.bmp");
+		Image->CutCount(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("None.bmp");
+		Image->CutCount(1, 1);
+	}
 }
 
 void PokemonEngine::InitFont()
