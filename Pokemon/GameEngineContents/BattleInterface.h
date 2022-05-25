@@ -79,7 +79,7 @@ private:
 	void OrderCheck();
 	void SelectOrder();
 
-
+	bool PlayerEnd;
 
 	// »ý¼ºÇÑ Level
 	class BattleLevel* Level_;

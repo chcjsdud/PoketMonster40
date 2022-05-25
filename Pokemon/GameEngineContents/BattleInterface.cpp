@@ -24,6 +24,7 @@ BattleInterface::BattleInterface()
 	, PlayerStopCheck(nullptr)
 	, OneTalk(false)
 	, Fonts(nullptr)
+	, PlayerEnd(false)
 {
 
 }
@@ -104,6 +105,9 @@ void BattleInterface::Update()
 	}
 
 	{
+		float Move = BattleUnitRenderer::PlayerRenderer_->GetPivot().x;
+		//현재 플레이어 렌더 위치(x)를 가져옴
+
 		// 폰트 출력이 완료되고 키입력 대기
 		if (Fonts->IsWait())
 		{
@@ -117,11 +121,13 @@ void BattleInterface::Update()
 		// 다음 문장이 없을 때 == 끝났을 때
 		if (Fonts->IsEnd())
 		{
-			// 모든 대화가 끝났을 때 z 키누르면 다음 대화 시작
+			PlayerEnd = true;
+			// 모든 대화가 끝났을 때 z 키누르면 
 			if (GameEngineInput::GetInst()->IsDown("Z") == true)
 			{
 				//애니메이션체인지
 				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
+				//이때 플레이어가 왼쪽으로 빠져야함
 
 				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
 				{
@@ -133,6 +139,12 @@ void BattleInterface::Update()
 			{
 				Fonts->EndFont();
 			}
+		}
+
+		if (PlayerEnd == true)
+		{
+			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*300.0f),31.0f});
+			//플레이어 무빙 설정
 		}
 	}
 

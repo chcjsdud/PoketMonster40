@@ -44,6 +44,7 @@ private:
 	bool PlayerStop;
 
 public:
+
 	bool GetPlayerStop()
 	{
 		return PlayerStop;
