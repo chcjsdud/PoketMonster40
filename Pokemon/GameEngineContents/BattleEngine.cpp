@@ -21,9 +21,16 @@ bool BattleEngine::ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* 
 	return PlayerSpeed >= PoeSpeed ? true : false;
 }
 
-float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, PokemonBattleState* _Def, const PokemonSkill& _Skill)
+float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill& _Skill, const DamgeType& _DamgeType)
 {
-	// int _Att->
+	//SkillType SkillType = _Skill.GetSkillType();
+	//_Att->Pokemon_->GetInfo()->GetSkill;
+	//if (SkillType == )
+	//{
+
+	//}
+	//_Att->Pokemon_->GetInfo()->
+	//// int _Att->
 	return 1.0f;
 }
 

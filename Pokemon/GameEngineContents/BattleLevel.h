@@ -13,12 +13,15 @@
 
 enum class PokemonAbility;
 enum class DamgeType;
+enum class BattlePage;
 class BattleEngine;
 class BattleData;
+class BattleManager;
 class PokemonBattleState;
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
+	friend BattleManager;
 public:
 	//디폴트 생성자
 	BattleLevel();
@@ -40,10 +43,6 @@ public:
 		return BState_;
 	}
 
-	//inline PlayerRed* GetRed() const
-	//{
-	//	return PlayerRed_;
-	//}
 
 public:
 	inline void OpenningEnd()
@@ -86,27 +85,46 @@ private:
 
 	bool OneTalk;
 
+
+
 private:
 	// 플레이어 및 NPC
 	PlayerRed* PlayerRed_;
 	BattleNPCInterface* Opponent_;
 	// Pokemon
-	Pokemon* PlayerCurrentPokemon_; // Debug
-	Pokemon* PoeCurrentPokemon_;// Debug
+	PokemonBattleState* PlayerCurrentPokemon_; // Debug
+	PokemonBattleState* PoeCurrentPokemon_;// Debug
 	//
 
 	BattleData* BattleData_;
-
+	BattleManager* BattleManager_;
 	
+	void RefreshPokemon();
+	
+
+	void StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill);
+	void EndBattlePage();
 };
 
 class BattleData
 {
-	friend BattleLevel;
-private:
+	friend BattleManager;
+public:
 	BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel* _Level);
 	BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _Level);
 	~BattleData();
+
+	inline PokemonBattleState* GetCurrentPlayerPokemon() const
+	{
+		return PlayerCurrentPokemonInBattle_;
+	}
+
+	inline PokemonBattleState* GetCurrentPoePokemon() const
+	{
+		return PoeCurrentPokemonInBattle_;
+	}
+
+private:
 
 	BattleData(const BattleData& _Other) = delete;
 	BattleData(BattleData&& _Other) noexcept = delete;
@@ -141,6 +159,8 @@ private:
 
 class PokemonBattleState
 {
+	friend BattleEngine;
+	friend BattleManager;
 	// 중첩 클래스 전방선언
 	class ApplySkill;
 	// PokemonBattleState();
@@ -228,16 +248,39 @@ private:
 
 class BattleManager
 {
-public:
-	BattleManager();
-	~BattleManager();
+	friend BattleLevel;
+private:
+	BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level);
+	//BattleManager(const std::string& _PlayerItem, const std::string& _PoeSkill);
+	~BattleManager() {}
 
 	BattleManager(const BattleManager& _Other) = delete;
 	BattleManager(BattleManager&& _Other) noexcept = delete;
 	BattleManager& operator=(const BattleManager& _Other) = delete;
 	BattleManager& operator=(BattleManager&& _Other) noexcept = delete;
 
+private:
+	BattleInterface* const Interface_;
 
+	PokemonSkill* const PlayerSkill_;
+	PokemonSkill* const PoeSkill_;
+	
+	PokemonBattleState* const PlayCurrentPokemon_;
+	PokemonBattleState* const PoeCurrentPokemon_;
+
+	const BattleOrderMenu Select_;
+	BattlePage CurrentBattlePage_;
+	Battlefont CurrentFont_;
+
+	void BattleFirstPage();
+
+	float IsEffect(DamgeType _DamgeType);
+
+	bool Critical_;
+	bool PlayerFirst_;
+
+public:
+	bool Update();
 };
 
 enum class DamgeType
@@ -258,3 +301,19 @@ enum class PokemonAbility
 	Accuracy,
 	Evasion
 };
+
+enum class BattlePage
+{
+	FirstBattle,
+	SecondBattle,
+	End
+};
+
+enum class Battlefont
+{
+	None,
+	Att,
+	Wait,
+	Effect
+};
+

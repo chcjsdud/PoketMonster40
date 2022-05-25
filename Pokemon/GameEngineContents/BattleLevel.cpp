@@ -28,6 +28,7 @@ BattleLevel::BattleLevel()
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, BattleData_(nullptr)
+	, BattleManager_(nullptr)
 {
 
 }
@@ -83,13 +84,13 @@ void BattleLevel::Update()
 	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
-
+			StartBattlePage("Tackle", "Scratch");
 		}
 		break;
 	case BattleState::BattlePage:
 		if (Interface_->BattleKey())
 		{
-
+			BattleManager_->Update();
 		}
 		return;
 		break;
@@ -102,6 +103,51 @@ void BattleLevel::Update()
 		break;
 	}
 } 
+
+void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill)
+{
+	RefreshPokemon();
+	{
+		bool Bool = false;
+		std::vector<PokemonSkill*>& PlayerSkill = PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
+		std::vector<PokemonSkill*>& PoeSkill = PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
+		for (auto& Skill : PlayerSkill)
+		{
+			if (Skill->GetNameConstRef() == _PlayerSkill)
+			{
+				Bool = true;
+				break;
+			}
+		}
+
+		for (auto& Skill : PoeSkill)
+		{
+			if (Skill->GetNameConstRef() == _PoeSkill)
+			{
+				Bool = true;
+				break;
+			}
+		}
+
+		if (Bool == false)
+		{
+			MsgBoxAssert("해당 포켓몬은 스킬을 가지고 있지 않습니다");
+		}
+	}
+
+	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, BattleData_);
+	BState_ = BattleState::BattlePage;
+}
+
+void BattleLevel::EndBattlePage()
+{
+	if (BattleManager_ != nullptr)
+	{
+		delete BattleManager_;
+		BattleManager_ = nullptr;
+	}
+	
+}
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 {
@@ -128,6 +174,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
 
 		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+		RefreshPokemon();
 	}
 }
 
@@ -153,6 +200,12 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 void BattleLevel::ShowEndding()
 {
+}
+
+void BattleLevel::RefreshPokemon()
+{
+	PlayerCurrentPokemon_ = BattleData_->GetCurrentPlayerPokemon();
+	PoeCurrentPokemon_ = BattleData_->GetCurrentPoePokemon();
 }
 
 
@@ -407,4 +460,93 @@ void PokemonBattleState::Update()
 			//(ApplySkill_)->TurnPass();
 		}
 	}
+}
+
+BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level)
+	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkill("_PlayerSkill"))
+	, PoeSkill_(PokemonInfoManager::GetInst().FindSkill("_PoeSkill"))
+	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
+	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
+	, Select_(BattleOrderMenu::Fight)
+	, CurrentBattlePage_(BattlePage::FirstBattle)
+	, PlayerFirst_(false)
+	, Critical_(false)
+	, Interface_(_Level->Interface_)
+	, CurrentFont_(Battlefont::None)
+{
+	if (PlayerSkill_ == nullptr || PoeSkill_ == nullptr)
+	{
+		MsgBoxAssert("스킬명이 일치하지 않습니다")
+	}
+
+	switch (Select_)
+	{
+	case BattleOrderMenu::Run:
+	case BattleOrderMenu::Fight:
+		PlayerFirst_ = BattleEngine::ComareSpeed(PlayCurrentPokemon_, PoeCurrentPokemon_);
+		break;
+	case BattleOrderMenu::Item:
+		break;
+	case BattleOrderMenu::Pokemon:
+		break;
+
+	default:
+		break;
+	}
+	
+
+}
+
+bool BattleManager::Update()
+{
+	PokemonBattleState* CurrentTurn = nullptr;
+	PokemonSkill* PokemonSkill = nullptr;
+	if (PlayerFirst_ == true)
+	{
+		CurrentTurn = PlayCurrentPokemon_;
+		PokemonSkill = PlayerSkill_;
+	}
+	else
+	{
+		CurrentTurn = PoeCurrentPokemon_;
+		PokemonSkill = PoeSkill_;
+	}
+	switch (CurrentBattlePage_)
+	{
+	case BattlePage::FirstBattle:
+		switch (Select_)
+		{
+		case BattleOrderMenu::Fight:
+			switch (CurrentFont_)
+			{
+			case Battlefont::None:
+				Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), PokemonSkill->GetNameConstRef());
+				break;
+			case Battlefont::Att:
+				break;
+			case Battlefont::Wait:
+				break;
+			case Battlefont::Effect:
+				break;
+			default:
+				break;
+			}
+			break;
+		case BattleOrderMenu::Item:
+			break;
+		case BattleOrderMenu::Pokemon:
+			break;
+		case BattleOrderMenu::Run:
+			break;
+		default:
+			break;
+		}
+		
+		break;
+	case BattlePage::SecondBattle:
+		break;
+	case BattlePage::End:
+		break;
+	}
+	return false;
 }

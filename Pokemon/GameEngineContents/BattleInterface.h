@@ -97,11 +97,11 @@ public:
 
 	// ¿Â¡ﬂ«ı : test
 	bool BattleKey();
-	void UsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill);
-	void PoeFaintString(const std::string& _PoePokemon);
-	void SupperEffectString();
-	void CriticalHitString();
-	void NotEffective();
+	void ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill);
+	void ShowPoeFaintString(const std::string& _PoePokemon);
+	void ShowSupperEffectString();
+	void ShowCriticalHitString();
+	void ShowNotEffective();
 
 	inline bool IsEndString()
 	{

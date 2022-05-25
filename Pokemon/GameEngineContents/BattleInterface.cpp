@@ -48,6 +48,7 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
+	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 0x70 );
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
@@ -154,36 +155,45 @@ bool BattleInterface::BattleKey()
 {
 	if (GameEngineInput::GetInst()->IsDown("SSelect"))
 	{
-		return true;
+		if (DownFont_->IsEnd())
+		{
+			DownFont_->EndFont();
+			return true;
+		}
+		else
+		{
+			DownFont_->SkipCharAnimation();
+			return false;
+		}
 	}
 	return false;
 }
 
-void BattleInterface::UsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
+void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString(_AttPokemon + " Used\\"+ _AttSkill + "!");
 }
 
-void BattleInterface::PoeFaintString(const std::string& _PoePokemon)
+void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
 }
 
-void BattleInterface::SupperEffectString()
+void BattleInterface::ShowSupperEffectString()
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString("It's Super effective!");
 }
 
-void BattleInterface::CriticalHitString()
+void BattleInterface::ShowCriticalHitString()
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString("A critical hit!");
 }
 
-void BattleInterface::NotEffective()
+void BattleInterface::ShowNotEffective()
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString("It's not Very effective;");
@@ -234,7 +244,7 @@ bool BattleInterface::MoveKey()
 
 
 	// ÀåÁßÇõ : Debug
-	if (GameEngineInput::GetInst()->IsDown("SSelect"))
+	if (GameEngineInput::GetInst()->IsDown("StartBattlePage"))
 	{
 		return true;
 	}
