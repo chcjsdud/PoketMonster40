@@ -21,7 +21,7 @@
 #include "Flower.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
-
+bool PlayerRed::WMenuUICheck_ = true;
 PlayerRed::PlayerRed()
 	: CurrentDir_()
 	, CurrentState_()
@@ -35,7 +35,7 @@ PlayerRed::PlayerRed()
 	, AnimTimer_(0.0f)
 	, WMenuArrowRender_()
 	, WMenuUIRender_()
-	, WMenuUICheck_(true)
+	//, WMenuUICheck_(true)
 	, LerpTime_(0)
 	, FadeTime_(0)
 	, Alpha_()

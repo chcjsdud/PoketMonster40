@@ -4,7 +4,8 @@
 #include <GameEngine/GameEngineRenderer.h>
 
 #include "NPCBase.h"
-#include "RoomTileMap1.h"
+//#include "RoomTileMap1.h"
+#include "WorldTileMap1.h"
 
 NPC4::NPC4() 
 {
@@ -47,11 +48,17 @@ void NPC4::Start()
 	NPCRender_->ChangeAnimation("IdleDown");
 	NPCRender_->SetPivot({ 0,-15 });
 	//SetPosition(RoomTileMap1::GetInst()->GetWorldPostion(8, 4));
-	// NPC 움직임 작업 후 아래 주석 해제, 위 SetPosition제거 및 include 헤더 변경
-	//SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(20, 100));
+	
+	NPCBase::InSideLeftTop_ = { 16,96 };
+	NPCBase::InSideRightBot_ = { 30,100 };
+	//NPCBase::InSideLeftTop_ = { 3,3 };
+	//NPCBase::InSideRightBot_ = { 8,6 };
 
-	CurrentTileMap_ = RoomTileMap1::GetInst();
-	SetPosition(RoomTileMap1::GetInst()->GetWorldPostion(8, 4));
+	CurrentTileMap_ = WorldTileMap1::GetInst();
+	SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(20, 100));
+
+	NPCBase::IsInside(NPCBase::InSideLeftTop_, NPCBase::InSideRightBot_);
+	
 }
 
 void NPC4::Update()

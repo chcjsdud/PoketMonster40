@@ -6,10 +6,6 @@ enum class NPCState
 {
 	Idle,
 	Walk,
-	//Up,
-	//Down,
-	//Left,
-	//Right,
 
 	Max
 };
@@ -42,11 +38,14 @@ public:
 protected:
 	void NPCMove();
 	void NPCMoveAnim();
+	bool IsInside(float4 _LeftTop, float4 _RightBot);
 	PokemonTileMap*		CurrentTileMap_;
 	GameEngineRenderer* NPCRender_;
 	std::string			NPCAnimationName_;
 	std::string			NPCChangeDirText_;
 
+	float4 InSideLeftTop_;
+	float4 InSideRightBot_;
 	float NPCLerpX_;
 	float NPCLerpY_;
 	float NPCLerpTime_;

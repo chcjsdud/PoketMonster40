@@ -1,4 +1,5 @@
 #include "NPCBase.h"
+#include "PlayerRed.h"
 #include <GameEngineBase/GameEngineRandom.h>
 
 NPCBase::NPCBase() 
@@ -32,6 +33,11 @@ void NPCBase::Render()
 
 void NPCBase::NPCMove()
 {
+	if (false == PlayerRed::WMenuUICheck_)
+	{
+		NPCMoveDir_ = float4::ZERO;
+		return;
+	}
 	if (nullptr == CurrentTileMap_)
 	{
 		return;
@@ -108,6 +114,19 @@ void NPCBase::NPCMove()
 			IsMove_ = true;
 			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
 			GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+			if (false == IsInside(InSideLeftTop_, InSideRightBot_))
+			{
+				IsMove_ = false;
+				State_ = NPCState::Idle;
+				NPCAnimationName_ = "Idle";
+				if ("" == NPCChangeDirText_)
+				{
+					NPCChangeDirText_ = "Down";
+				}
+				NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
+				NPCMoveDir_ = float4::ZERO;
+				return;
+			}
 			break;
 		}
 		case TileState::MoreDown:
@@ -136,4 +155,18 @@ void NPCBase::NPCMoveAnim()
 			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
 		}
 	}
+}
+
+bool NPCBase::IsInside(float4 _LeftTop, float4 _RightBot)
+{
+	if (CurrentTileMap_->GetWorldPostion(_LeftTop.x, _LeftTop.y).x > GoalPos_.x || CurrentTileMap_->GetWorldPostion(_RightBot.x, _RightBot.y).x < GoalPos_.x)
+	{
+		return false;
+	}
+	if (CurrentTileMap_->GetWorldPostion(_LeftTop.x, _LeftTop.y).y > GoalPos_.y || CurrentTileMap_->GetWorldPostion(_RightBot.x, _RightBot.y).y < GoalPos_.y)
+	{
+		return false;
+	}
+
+	return true;
 }

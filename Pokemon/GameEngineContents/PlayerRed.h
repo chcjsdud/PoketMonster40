@@ -36,6 +36,7 @@ public:
 	PlayerRed& operator=(PlayerRed&& _Other) noexcept = delete;
 
 	static PlayerRed* MainRed_;
+	static bool	WMenuUICheck_;
 
 	void ChangeState(RedState _State);
 	void StateUpdate();
@@ -62,7 +63,7 @@ private:
 	float4			StartPos_;
 	float4			GoalPos_;
 	RedDir			CurrentDir_;
-	bool			WMenuUICheck_;
+	//bool			WMenuUICheck_;
 	std::string		AnimationName_;
 	std::string		ChangeDirText_;
 
