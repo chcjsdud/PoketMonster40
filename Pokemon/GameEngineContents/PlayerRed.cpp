@@ -19,6 +19,7 @@
 
 #include "InteractionText.h"
 #include "Flower.h"
+#include "Bush.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 bool PlayerRed::WMenuUICheck_ = true;
@@ -28,7 +29,6 @@ PlayerRed::PlayerRed()
 	, CurrentTileMap_()
 	, RedRender_(nullptr)
 	, ShadowRender_(nullptr)
-	, BushRender_(nullptr)
 	, FadeRender_(nullptr)
 	, FadeRightRender_(nullptr)
 	, FadeLeftRender_(nullptr)
@@ -52,12 +52,14 @@ PlayerRed::PlayerRed()
 	, IsJump_(false)
 	, IsMove_(false)
 	, IsInteraction_(false)
+	, IsBush_(false)
+	, BushActor_(nullptr)
 	, NextTileMap_()
 {
 	MainRed_ = this;
 }
 
-PlayerRed::~PlayerRed() 
+PlayerRed::~PlayerRed()
 {
 }
 
@@ -112,7 +114,7 @@ void PlayerRed::DirAnimationCheck()
 	{
 		return;
 	}
-	
+
 	RedDir CheckDir_ = CurrentDir_;
 
 	if (true == GameEngineInput::GetInst()->IsPress("Up"))
@@ -220,7 +222,7 @@ void PlayerRed::Start()
 {
 	{
 		GameEngineImage*
-		Image = GameEngineImageManager::GetInst()->Find("IdleUp.bmp");
+			Image = GameEngineImageManager::GetInst()->Find("IdleUp.bmp");
 		Image->Cut({ 56,76 });
 		Image = GameEngineImageManager::GetInst()->Find("IdleDown.bmp");
 		Image->Cut({ 56,76 });
@@ -249,21 +251,21 @@ void PlayerRed::Start()
 	}
 
 	GameEngineInput::GetInst()->CreateKey("WMenuUI", 'P');
-	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp",20);
+	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp", 20);
 	WMenuUIRender_->Off();
-	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp",20);
+	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp", 20);
 	WMenuArrowRender_->SetPivot({ 240,-260 });
 	WMenuArrowRender_->Off();
-	
+
 	FadeRender_ = CreateRenderer("FadeInOut.bmp", 10);
 	FadeRender_->Off();
 	FadeRightRender_ = CreateRenderer("FadeRight.bmp", 10);
 	FadeRightRender_->Off();
 	FadeLeftRender_ = CreateRenderer("FadeLeft.bmp", 10);
 	FadeLeftRender_->Off();
-	
+
 	ShadowRender_ = CreateRenderer("shadow.bmp");
-	ShadowRender_->SetPivot({0, 20});
+	ShadowRender_->SetPivot({ 0, 20 });
 	ShadowRender_->Off();
 
 	RedRender_ = CreateRenderer();
@@ -271,7 +273,7 @@ void PlayerRed::Start()
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleLeft.bmp", "IdleLeft", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleRight.bmp", "IdleRight", 0, 0, 0.0f, false);
-	
+
 	RedRender_->CreateAnimation("WalkUp.bmp", "WalkUp", 0, 2, 0.1f, true);
 	RedRender_->CreateAnimation("WalkDown.bmp", "WalkDown", 0, 2, 0.1f, true);
 	RedRender_->CreateAnimation("WalkLeft.bmp", "WalkLeft", 0, 2, 0.1f, true);
@@ -283,10 +285,9 @@ void PlayerRed::Start()
 	RedRender_->CreateAnimation("RunRight.bmp", "RunRight", 0, 2, 0.1f, true);
 
 	RedRender_->ChangeAnimation("IdleUp");
-	RedRender_->SetPivot({0, -15});
+	RedRender_->SetPivot({ 0, -15 });
 
-	//BushRender_ = CreateRenderer("Bush.bmp");
-	//BushRender_->SetPivot({0, 0});
+	BushActor_ = GetLevel()->CreateActor<Bush>();
 
 	AnimationName_ = "Idle";
 	CurrentDir_ = RedDir::Up;
@@ -294,7 +295,7 @@ void PlayerRed::Start()
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
-	GetLevel()->CreateActor<Flower>()->SetPosition(GetPosition() + float4{64, 0});
+	GetLevel()->CreateActor<Flower>()->SetPosition(GetPosition() + float4{ 64, 0 });
 }
 
 void PlayerRed::Update()
@@ -337,7 +338,14 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		}
 		break;
 	case TileState::True:
+		if (_Value.ix() == 0 && _Value.iy() > 0)
+		{
+			// 아래로 움직일때 수풀은 무조건 끄도록
+			BushActor_->Off();
+		}
+
 		IsMove_ = true;
+		IsBush_ = BushTileCheck(NextIndex.X, NextIndex.Y);
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
 		break;
 	case TileState::MoreDown:
@@ -368,7 +376,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 		//	NextTilePos_ = { 22, 23 };
 		//	return true;
 		//}
-	} 
+	}
 	else if (RoomTileMap2::GetInst() == CurrentTileMap_) // 레드집 1층
 	{
 		if (_X == 10 && _Y == 0)
@@ -692,6 +700,19 @@ void PlayerRed::MoveAnim()
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
 		SetPosition({ LerpX_,LerpY_ });
 
+		if (LerpTime_ >= 0.8f)
+		{
+			if (IsBush_)
+			{
+				BushActor_->On();
+				BushActor_->SetPosition(GoalPos_);
+			}
+			else
+			{
+				BushActor_->Off();
+			}
+		}
+
 		if (LerpTime_ > 1.0f)
 		{
 			LerpTime_ = 0.0f;
@@ -707,11 +728,11 @@ void PlayerRed::MoveAnim()
 
 		if (LerpTime_ < 0.5f)
 		{
-			RedRender_->SetPivot({0, -15 - 32 * LerpTime_ * 2.0f });
+			RedRender_->SetPivot({ 0, -15 - 32 * LerpTime_ * 2.0f });
 		}
 		else
 		{
-			RedRender_->SetPivot({ 0, -15 - 32 * ( 1 - ((LerpTime_ - 0.5f) * 2.0f))});
+			RedRender_->SetPivot({ 0, -15 - 32 * (1 - ((LerpTime_ - 0.5f) * 2.0f)) });
 		}
 
 		if (LerpTime_ > 1.0f)
@@ -940,5 +961,68 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			return true;
 		}
 	}
+	return false;
+}
+
+bool PlayerRed::BushTileCheck(int _X, int _Y)
+{
+	if (WorldTileMap1::GetInst() == CurrentTileMap_)
+	{
+		for (int y = 79; y <= 83; y++)
+		{
+			for (int x = 21; x <= 22; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 78; y <= 79; y++)
+		{
+			for (int x = 24; x <= 28; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 76; y <= 77; y++)
+		{
+			for (int x = 26; x <= 30; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 78; y <= 79; y++)
+		{
+			for (int x = 11; x <= 17; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+
+		for (int y = 76; y <= 77; y++)
+		{
+			for (int x = 13; x <= 19; x++)
+			{
+				if (_X == x && _Y == y)
+				{
+					return true;
+				}
+			}
+		}
+	}
+
 	return false;
 }

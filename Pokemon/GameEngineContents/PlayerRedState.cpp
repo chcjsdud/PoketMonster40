@@ -5,6 +5,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include "Bush.h"
 
 void PlayerRed::IdleUpdate()
 {

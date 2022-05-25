@@ -1,6 +1,5 @@
 #include "WorldTileMap1.h"
 #include "Flower.h"
-#include "Bush.h"
 
 WorldTileMap1* WorldTileMap1::Inst_ = nullptr;
 
@@ -35,7 +34,6 @@ void WorldTileMap1::Start()
 	//}
 
 	MakeFlowers();
-	MakeBushes();
 }
 
 void WorldTileMap1::MakeFlowers()
@@ -264,12 +262,3 @@ void WorldTileMap1::MakeFlowers()
 		TmpFlower->SetPosition(GetWorldPostion(30, 0));
 	}
 }
-
-void WorldTileMap1::MakeBushes()
-{
-	{
-		Bush* TmpFlower = GetLevel()->CreateActor<Bush>();
-		TmpFlower->SetPosition(GetWorldPostion(21, 83));
-	}
-}
-

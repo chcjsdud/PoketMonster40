@@ -20,6 +20,7 @@ enum class RedDir
 	Right,
 };
 
+class Bush;
 class Pokemon;
 class PokemonTileMap;
 class PlayerRed : public GameEngineActor
@@ -69,7 +70,6 @@ private:
 
 	GameEngineRenderer* RedRender_;
 	GameEngineRenderer* ShadowRender_;
-	GameEngineRenderer* BushRender_;
 	GameEngineRenderer* FadeRender_;
 	GameEngineRenderer* FadeRightRender_;
 	GameEngineRenderer* FadeLeftRender_;
@@ -91,6 +91,7 @@ private:
 	bool IsMove_;
 	bool IsJump_;
 	bool IsInteraction_;
+	bool IsBush_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
@@ -119,6 +120,10 @@ private:
 	// 상호작용
 	void InteractionUpdate();
 	bool InteractTileCheck(int _X, int _Y, RedDir _Dir);
+
+	// 수풀
+	Bush* BushActor_;
+	bool BushTileCheck(int _X, int _Y);
 
 	// FSM
 	float AnimTimer_;

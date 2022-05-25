@@ -29,6 +29,5 @@ protected:
 private:
 	void Start() override;
 	void MakeFlowers();
-	void MakeBushes();
 };
 
