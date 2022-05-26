@@ -286,7 +286,7 @@ void PokemonMenu::ChangeState(PokemonMenuType _Type)
 		SelectSwitchStart();
 		break;
 	case PokemonMenu::PokemonMenuType::Switching:
-		SwitchingStart();//
+		SwitchingStart();////
 		break;
 	default:
 		break;
