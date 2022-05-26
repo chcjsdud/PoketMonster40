@@ -23,7 +23,7 @@ bool BattleEngine::ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* 
 	return PlayerSpeed >= PoeSpeed ? true : false;
 }
 
-int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill* _Skill, const DamgeType& _DamgeType)
+int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkillInfo* _Skill, const DamgeType& _DamgeType)
 {
 	//_Att->Pokemon_->GetInfo()->GetSkill();
 	PokemonInfo* AttPlayerInfo = _Att->Pokemon_->GetInfo();

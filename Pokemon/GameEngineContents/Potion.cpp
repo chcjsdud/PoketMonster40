@@ -11,7 +11,7 @@ Potion::~Potion()
 
 void Potion::Recovery(PokemonInfo* _MyPokemon)
 {
-	_MyPokemon->PlusHp(GetValue());
+	_MyPokemon->PlusHp(GetInfo()->GetValue());
 }
 
 void Potion::Use()

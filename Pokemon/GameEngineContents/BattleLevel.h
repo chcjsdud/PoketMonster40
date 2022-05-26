@@ -192,7 +192,7 @@ public:
 	}
 	float GetRank(const PokemonAbility& _State);
 	// 몇 턴 동안 지속인지 확인하는 함수 필요
-	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill);
+	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkillInfo* _Skill);
 	void Update();
 
 private:
@@ -216,7 +216,7 @@ private:
 	private:
 		ApplySkill();
 	public:
-		ApplySkill(PokemonBattleState* _CastPokemon, PokemonSkill* _Skill)
+		ApplySkill(PokemonBattleState* _CastPokemon, PokemonSkillInfo* _Skill)
 			: CastPokemon_(_CastPokemon)
 			, Skill_(_Skill)
 			, LeftTurn_(0)
@@ -236,7 +236,7 @@ private:
 			return LeftTurn_;
 		}
 
-		inline PokemonSkill* GetSkill() const
+		inline PokemonSkillInfo* GetSkill() const
 		{
 			return Skill_;
 		}
@@ -252,7 +252,7 @@ private:
 		}
 	private:
 		PokemonBattleState* const CastPokemon_;
-		PokemonSkill* const Skill_;
+		PokemonSkillInfo* const Skill_;
 		int LeftTurn_;
 	};
 
@@ -276,8 +276,8 @@ private:
 private:
 	BattleInterface* const Interface_;
 
-	PokemonSkill* const PlayerSkill_;
-	PokemonSkill* const PoeSkill_;
+	PokemonSkillInfo* const PlayerSkill_;
+	PokemonSkillInfo* const PoeSkill_;
 	
 	PokemonBattleState* const PlayCurrentPokemon_;
 	PokemonBattleState* const PoeCurrentPokemon_;

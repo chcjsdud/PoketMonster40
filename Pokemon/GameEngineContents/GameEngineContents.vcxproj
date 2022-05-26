@@ -216,6 +216,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ItemInfo.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="MonsterBall.h">
       <SubType>
       </SubType>
@@ -253,6 +257,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PokemonSkill.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PokemonSkillInfo.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -371,6 +379,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="ItemInfo.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="MonsterBall.cpp">
       <SubType>
       </SubType>
@@ -409,6 +421,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="PokemonSkill.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PokemonSkillInfo.cpp">
       <SubType>
       </SubType>
     </ClCompile>

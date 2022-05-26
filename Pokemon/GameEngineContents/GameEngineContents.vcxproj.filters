@@ -20,10 +20,10 @@
     <ClCompile Include="PokemonInfo.cpp">
       <Filter>Global</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="ItemInfo.cpp">
       <Filter>Global</Filter>
     </ClCompile>
-    <ClCompile Include="PokemonSkill.cpp">
+    <ClCompile Include="PokemonSkillInfo.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="WorldMapBackground.cpp">
@@ -130,6 +130,12 @@
     <ClCompile Include="Bush.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="PokemonSkill.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -154,10 +160,10 @@
     <ClInclude Include="PokemonInfo.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
+    <ClInclude Include="ItemInfo.h">
       <Filter>Global</Filter>
     </ClInclude>
-    <ClInclude Include="PokemonSkill.h">
+    <ClInclude Include="PokemonSkillInfo.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="WorldMapBackground.h">
@@ -264,6 +270,12 @@
     </ClInclude>
     <ClInclude Include="BattleUnitRenderer.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="PokemonSkill.h">
+      <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

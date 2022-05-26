@@ -42,7 +42,7 @@ void PokemonInfo::SetPokemonImage(const std::string _Name)
 	MyIconImage->Cut({ MyIconImage->GetScale().Half().x,MyIconImage->GetScale().y });
 }
 
-void PokemonInfo::AddMySkill(PokemonSkill* _Skill)
+void PokemonInfo::AddMySkill(PokemonSkillInfo* _Skill)
 {
 	if (4 <= MySkillCount_)
 	{

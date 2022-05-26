@@ -108,8 +108,8 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 	RefreshPokemon();
 	{
 		bool Bool = false;
-		std::vector<PokemonSkill*>& PlayerSkill = PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
-		std::vector<PokemonSkill*>& PoeSkill = PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
+		std::vector<PokemonSkillInfo*>& PlayerSkill = PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
+		std::vector<PokemonSkillInfo*>& PoeSkill = PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
 		for (auto& Skill : PlayerSkill)
 		{
 			if (Skill->GetNameConstRef() == _PlayerSkill)
@@ -327,7 +327,7 @@ PokemonBattleState::~PokemonBattleState()
 	}
 }
 
-bool PokemonBattleState::SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkill* _Skill)
+bool PokemonBattleState::SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkillInfo* _Skill)
 {
 	// 면역일시 return false
 	ApplySkill* MakeApplySkill = new ApplySkill(_AlppyPokemon, _Skill);
@@ -467,8 +467,8 @@ void PokemonBattleState::Update()
 }
 
 BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level)
-	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkill("_PlayerSkill"))
-	, PoeSkill_(PokemonInfoManager::GetInst().FindSkill("_PoeSkill"))
+	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkillInfo("_PlayerSkill"))
+	, PoeSkill_(PokemonInfoManager::GetInst().FindSkillInfo("_PoeSkill"))
 	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
 	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
 	, Select_(BattleOrderMenu::Fight)
@@ -505,10 +505,10 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 bool BattleManager::Update()
 {
 	PokemonBattleState* CurrentTurn = nullptr;
-	PokemonSkill* CurrentPokemonSkill = nullptr;
+	PokemonSkillInfo* CurrentPokemonSkill = nullptr;
 
 	PokemonBattleState* AfterTrun = nullptr;
-	PokemonSkill* AfterPokemonSkill = nullptr;
+	PokemonSkillInfo* AfterPokemonSkill = nullptr;
 	if (PlayerFirst_ == true)
 	{
 		CurrentTurn = PlayCurrentPokemon_;
