@@ -122,10 +122,10 @@ void BattleInterface::Update()
 		// 다음 문장이 없을 때 == 끝났을 때
 		if (Fonts->IsEnd())
 		{
-			PlayerEnd = true;
 			// 모든 대화가 끝났을 때 z 키누르면 
 			if (GameEngineInput::GetInst()->IsDown("Z") == true)
 			{
+				PlayerEnd = true;
 				//애니메이션체인지
 				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
 				//이때 플레이어가 왼쪽으로 빠져야함
@@ -144,7 +144,7 @@ void BattleInterface::Update()
 
 		if (PlayerEnd == true)
 		{
-			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*300.0f),31.0f});
+			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*900.0f),31.0f});
 			//플레이어 무빙 설정
 		}
 	}
