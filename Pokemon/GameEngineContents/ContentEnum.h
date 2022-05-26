@@ -46,3 +46,12 @@ enum class ItemType
 	KEYITEM,
 	BALL
 };
+
+
+
+enum class RenderOrder
+{
+	Background,
+	Player = 1,
+	UI = 15
+};
