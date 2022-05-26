@@ -202,9 +202,6 @@
     <ClInclude Include="WorldTileMap1.h">
       <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
-    <ClInclude Include="BattleUnitRenderer.h">
-      <Filter>Battle</Filter>
-    </ClInclude>
     <ClInclude Include="BattleEnum.h">
       <Filter>Battle</Filter>
     </ClInclude>
@@ -264,6 +261,9 @@
     </ClInclude>
     <ClInclude Include="Bush.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleUnitRenderer.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

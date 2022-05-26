@@ -2,6 +2,15 @@
 #include <GameEngineBase/GameEngineTime.h>
 
 BattleBackground::BattleBackground()
+	:BackgroundRender(nullptr)
+	,TextRender(nullptr)
+	,BattleSelect(nullptr)
+	,Fade_Up(nullptr)
+	,Fade_Down(nullptr)
+	,Start_Effect(nullptr)
+	,Fade_Time(0.0f)
+
+
 {
 
 }
