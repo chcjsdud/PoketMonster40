@@ -135,7 +135,7 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 		}
 	}
 
-	//BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, BattleData_);
+	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, this);
 	BState_ = BattleState::BattlePage;
 }
 
@@ -173,7 +173,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
 		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
 
-		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+		//BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 		RefreshPokemon();
 	}
 }
@@ -471,6 +471,7 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 	, CurrentBattlePage_(BattlePage::FirstBattle)
 	, PlayerFirst_(false)
 	, Critical_(false)
+	, Action_(false)
 	, Interface_(_Level->Interface_)
 	, CurrentFont_(Battlefont::None)
 {
@@ -520,7 +521,17 @@ bool BattleManager::Update()
 			switch (CurrentFont_)
 			{
 			case Battlefont::None:
-				Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), PokemonSkill->GetNameConstRef());
+				if (Action_ == false)
+				{
+					Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), PokemonSkill->GetNameConstRef());
+					// engine º“»Ø
+					Action_ = true;
+				}
+				else
+				{
+					Action_ = false;
+					CurrentFont_ = Battlefont::Att;
+				}
 				break;
 			case Battlefont::Att:
 				break;

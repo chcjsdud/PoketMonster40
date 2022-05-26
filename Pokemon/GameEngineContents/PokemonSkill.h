@@ -74,8 +74,8 @@ private:
 	int Value_; //공격 스킬 혹은 방어나 버프 계산에 쓰일 값
 	int PP_; //남은 공격 횟수
 
-	SkillType SkillType_; //스킬 종류 (공격, 방어 등
-	PokemonType Type_; //스킬 자체 속성 (노말, 불 등
+	SkillType SkillType_; // 스킬 종류 (공격, 방어 등
+	PokemonType Type_; // 스킬 자체 속성 (노말, 불 등
 
 	std::string Effect_;
 };
