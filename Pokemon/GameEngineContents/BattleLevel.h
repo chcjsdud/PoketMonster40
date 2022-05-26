@@ -295,8 +295,22 @@ private:
 	bool PlayerFirst_;
 	bool Action_;
 
-	//BattleManager::BattleTurn* FristTurn_;
+	BattleTurn* FristTurn_;
+	BattleTurn* SecondTurn_;
 
+private:
+	// 설명: 결과물 저장
+	class BattleTurn
+	{
+	public:
+		BattleTurn() {}
+		~BattleTurn() {}
+
+		BattleTurn(const BattleTurn& _Other) = delete;
+		BattleTurn(BattleTurn&& _Other) noexcept = delete;
+		BattleTurn& operator=(const BattleTurn& _Other) = delete;
+		BattleTurn& operator=(BattleTurn&& _Other) noexcept = delete;
+	};
 public:
 	bool Update();
 };

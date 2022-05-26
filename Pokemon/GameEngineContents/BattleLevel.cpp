@@ -190,7 +190,17 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	// ¿Â¡ﬂ«ı : Debug
 	{
-		std::vector<Pokemon*>& AA = PlayerRed_->GetPokemonList();
+		for (auto& Iter : PlayerRed_->GetPokemonList())
+		{
+			delete Iter;
+		}
+			PlayerRed_->GetPokemonList().clear();
+		for (auto& Iter : Opponent_->GetPokemonList())
+		{
+			delete Iter;
+		}
+			Opponent_->GetPokemonList().clear();
+
 		Opponent_->Death();
 		delete BattleData_;
 		BattleData_ = nullptr;
