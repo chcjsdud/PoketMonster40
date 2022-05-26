@@ -190,9 +190,13 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	// ÀåÁßÇõ : Debug
 	{
-		Opponent_->Death();
 		Opponent_->GetPokemonList()[0]->Death();
-		PlayerRed_->GetPokemonList().front()->Death();
+		for (auto& iter : PlayerRed_->GetPokemonList())
+		{
+			iter->Death();
+		}
+		std::vector<Pokemon*>& AA = PlayerRed_->GetPokemonList();
+		Opponent_->Death();
 		delete BattleData_;
 		BattleData_ = nullptr;
 	}
@@ -534,12 +538,14 @@ bool BattleManager::Update()
 			case Battlefont::None:
 				if (Action_ == false)
 				{
-					//Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), CurrentPokemonSkill->GetNameConstRef());
-					//BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun)
-					//Action_ = true;
+					Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), CurrentPokemonSkill->GetNameConstRef());
+					DamageType DamageType = BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun);
+
+					Action_ = true;
 				}
 				else
 				{
+
 					Action_ = false;
 					CurrentFont_ = Battlefont::Att;
 				}

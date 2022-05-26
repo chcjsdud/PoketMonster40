@@ -13,13 +13,14 @@
 //Ό³Έν : 
 
 enum class PokemonAbility;
-enum class DamgeType;
+enum class DamageType;
 enum class BattlePage;
 enum class Battlefont;
 class BattleEngine;
 class BattleData;
 class BattleManager;
 class PokemonBattleState;
+class BattleManager::BattleTurn;
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
@@ -262,6 +263,7 @@ private:
 
 class BattleManager
 {
+	class BattleTurn;
 	friend BattleLevel;
 private:
 	BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level);
@@ -288,17 +290,31 @@ private:
 
 	void BattleFirstPage();
 
-	float IsEffect(DamgeType _DamgeType);
+	float IsEffect(DamageType _DamgeType);
 
 	bool Critical_;
 	bool PlayerFirst_;
 	bool Action_;
 
+	BattleManager::BattleTurn* FristTurn_;
+
 public:
 	bool Update();
+
+	class BattleTurn
+	{
+	public:
+		BattleTurn();
+		~BattleTurn() {}
+
+		BattleTurn(const BattleTurn& _Other) = delete;
+		BattleTurn(BattleTurn&& _Other) noexcept = delete;
+		BattleTurn& operator=(const BattleTurn& _Other) = delete;
+		BattleTurn& operator=(BattleTurn&& _Other) noexcept = delete;
+	};
 };
 
-enum class DamgeType
+enum class DamageType
 {
 	Great,
 	Nomal,

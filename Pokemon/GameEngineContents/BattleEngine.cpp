@@ -58,16 +58,16 @@ int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Pokemo
 	{
 	switch (_DamgeType)
 	{
-		case DamgeType::Great:
+		case DamageType::Great:
 			CompareType = 2.0f;
 			break;
-		case DamgeType::Nomal:
+		case DamageType::Nomal:
 			CompareType = 1.0f;
 			break;
-		case DamgeType::Bad:
+		case DamageType::Bad:
 			CompareType = 0.5f;
 			break;
-		case DamgeType::Nothing:
+		case DamageType::Nothing:
 			CompareType = 0.0f;
 			break;
 		default:
@@ -82,361 +82,364 @@ int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Pokemo
 	return FinalDamage;
 }
 
-DamgeType BattleEngine::ComparePokemonType(const PokemonType& _Attack, const PokemonType& _Defend)
+DamageType BattleEngine::ComparePokemonType(const PokemonBattleState* _Attack, const PokemonBattleState* _Defend)
 {
-	switch (_Attack)
+	PokemonType Attack = _Attack->Pokemon_->GetInfo()->GetMyType();
+	PokemonType Defend = _Defend->Pokemon_->GetInfo()->GetMyType();
+
+	switch (Attack)
 	{
 	case PokemonType::NORMAL:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::ROCK:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GHOST:
-			return DamgeType::Nothing;
+			return DamageType::Nothing;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::FIRE:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::WATER:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ICE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::DRAGON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::WATER:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::WATER:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::DRAGON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::ELECTRIC:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::WATER:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ELECTRIC:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Nothing;
+			return DamageType::Nothing;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::DRAGON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::GRASS:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::WATER:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::DRAGON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::ICE:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::WATER:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ICE:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::DRAGON:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::FIGHTING:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::NORMAL:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ICE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::PSYCHIC:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::GHOST:
-			return DamgeType::Nothing;
+			return DamageType::Nothing;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::POISON:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::GRASS:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GHOST:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::GROUND:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ELECTRIC:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Nothing;
+			return DamageType::Nothing;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::FLYING:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::ELECTRIC:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FIGHTING:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ROCK:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::PSYCHIC:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIGHTING:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::PSYCHIC:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::BUG:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GRASS:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FIGHTING:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::POISON:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::PSYCHIC:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::GHOST:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::ROCK:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::FIRE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::ICE:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::FIGHTING:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::GROUND:
-			return DamgeType::Bad;
+			return DamageType::Bad;
 			break;
 		case PokemonType::FLYING:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::BUG:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::GHOST:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::NORMAL:
-			return DamgeType::Nothing;
+			return DamageType::Nothing;
 			break;
 		case PokemonType::PSYCHIC:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		case PokemonType::GHOST:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		default:
 			break;
 		}
 		break;
 	case PokemonType::DRAGON:
-		switch (_Defend)
+		switch (Defend)
 		{
 		case PokemonType::DRAGON:
-			return DamgeType::Great;
+			return DamageType::Great;
 			break;
 		default:
 			break;
 		}
 		break;
 	}
-	return DamgeType::Nomal;
+	return DamageType::Nomal;
 }
