@@ -14,6 +14,7 @@
 enum class PokemonAbility;
 enum class DamgeType;
 enum class BattlePage;
+enum class Battlefont;
 class BattleEngine;
 class BattleData;
 class BattleManager;

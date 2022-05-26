@@ -135,7 +135,7 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 		}
 	}
 
-	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, BattleData_);
+	//BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, BattleData_);
 	BState_ = BattleState::BattlePage;
 }
 
