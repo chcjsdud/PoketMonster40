@@ -9,7 +9,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)
-	
+	, FirstMove(true)
 	, PlayerPokemonPos_({ -220, 60 })
 	, OpponentPokemonPos_({ 200, -105 })
 	, PlayerRendererPos_({ 480,31 })
@@ -39,11 +39,17 @@ void BattleUnitRenderer::Start()
 
 void BattleUnitRenderer::Update()
 {
-	PlayerTime_ += GameEngineTime::GetDeltaTime()*MoveSpeed;
-	PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
-	if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
+	if (FirstMove == true)
 	{
-		MoveSpeed = 0.0f;
-		PlayerStop = true;
+		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
+		PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
+		if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
+		{
+			MoveSpeed = 0.0f;
+			PlayerStop = true;
+			
+			FirstMove = false;
+		}
+
 	}
 }
