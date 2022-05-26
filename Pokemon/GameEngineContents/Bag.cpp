@@ -631,10 +631,14 @@ void Bag::SelectDialog()
 		if (ItemType::ITEM == BagType_)
 		{
 			CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
+			ShowFonts(ItemList_);
+			//포켓몬 스탯창 가기
 		}
 		if (ItemType::BALL == BagType_)
 		{
 			CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
+			ShowFonts(BallList_);
+			//포켓몬 스탯창 가기ㅏ
 		}
 		break;
 	case 1:
@@ -650,10 +654,13 @@ void Bag::SelectDialog()
 		if (ItemType::ITEM == BagType_)
 		{
 			ItemList_.pop_back();
+			ShowFonts(ItemList_);
+
 		}
 		if (ItemType::BALL == BagType_)
 		{
 			BallList_.pop_back();
+			ShowFonts(BallList_);
 		}
 		break;
 	case 2:
@@ -908,6 +915,9 @@ void Bag::HideFonts()
 
 void Bag::ShowFonts(std::vector<Item*>& _List)
 {
+	DestroyNameFonts();
+	DestroyOverlapFonts();
+
 	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
 	BeginFont->SetPosition({ 380, 40.f });
 	BeginFont->ShowString(_List[0]->GetInfo()->GetNameCopy(), true);
