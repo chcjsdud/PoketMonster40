@@ -37,9 +37,8 @@ BattleLevel::~BattleLevel()
 {	
 	if (BattleData_ != nullptr)
 	{
-		{
-			delete BattleData_;
-		}
+		delete BattleData_;
+		BattleData_ = nullptr;
 	}
 	if (Opponent_ != nullptr)
 	{
@@ -195,6 +194,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		Opponent_->GetPokemonList()[0]->Death();
 		PlayerRed_->GetPokemonList().front()->Death();
 		delete BattleData_;
+		BattleData_ = nullptr;
 	}
 }
 
@@ -204,8 +204,12 @@ void BattleLevel::ShowEndding()
 
 void BattleLevel::RefreshPokemon()
 {
-	PlayerCurrentPokemon_ = BattleData_->GetCurrentPlayerPokemon();
-	PoeCurrentPokemon_ = BattleData_->GetCurrentPoePokemon();
+	if (BattleData_ != nullptr)
+	{
+		PlayerCurrentPokemon_ = BattleData_->GetCurrentPlayerPokemon();
+		PoeCurrentPokemon_ = BattleData_->GetCurrentPoePokemon();
+	}
+
 }
 
 
@@ -501,16 +505,23 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 bool BattleManager::Update()
 {
 	PokemonBattleState* CurrentTurn = nullptr;
-	PokemonSkill* PokemonSkill = nullptr;
+	PokemonSkill* CurrentPokemonSkill = nullptr;
+
+	PokemonBattleState* AfterTrun = nullptr;
+	PokemonSkill* AfterPokemonSkill = nullptr;
 	if (PlayerFirst_ == true)
 	{
 		CurrentTurn = PlayCurrentPokemon_;
-		PokemonSkill = PlayerSkill_;
+		CurrentPokemonSkill = PlayerSkill_;
+		AfterTrun = PoeCurrentPokemon_;
+		AfterPokemonSkill = PoeSkill_;
 	}
 	else
 	{
 		CurrentTurn = PoeCurrentPokemon_;
-		PokemonSkill = PoeSkill_;
+		CurrentPokemonSkill = PoeSkill_;
+		AfterTrun = PlayCurrentPokemon_;
+		AfterPokemonSkill = PlayerSkill_;
 	}
 	switch (CurrentBattlePage_)
 	{
@@ -523,9 +534,9 @@ bool BattleManager::Update()
 			case Battlefont::None:
 				if (Action_ == false)
 				{
-					Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), PokemonSkill->GetNameConstRef());
-					// engine ¼ÒÈ¯
-					Action_ = true;
+					//Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), CurrentPokemonSkill->GetNameConstRef());
+					//BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun)
+					//Action_ = true;
 				}
 				else
 				{

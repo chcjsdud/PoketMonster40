@@ -1,4 +1,5 @@
 #include "BattleEngine.h"
+#include <cmath>
 #include <GameEngineBase/GameEngineDebug.h>
 
 
@@ -22,7 +23,7 @@ bool BattleEngine::ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* 
 	return PlayerSpeed >= PoeSpeed ? true : false;
 }
 
-float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill* _Skill, const DamgeType& _DamgeType)
+int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill* _Skill, const DamgeType& _DamgeType)
 {
 	//_Att->Pokemon_->GetInfo()->GetSkill();
 	PokemonInfo* AttPlayerInfo = _Att->Pokemon_->GetInfo();
@@ -30,19 +31,22 @@ float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Poke
 	SkillType SkillType = _Skill->GetSkillType();
 
 	int AttLevel = _Att->Pokemon_->GetInfo()->GetMyLevel();
-	int SkillPower = _Skill->GetValue();
+	float SkillPower = static_cast<float>(_Skill->GetValue());
 
-	int AttPower = SkillType == SkillType::Physical ? AttPlayerInfo->GetAtt() * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::Att) 
-		: AttPlayerInfo->GetSpAtt() * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::SpAtt);
+	float AttPower = SkillType == SkillType::Physical ? static_cast<float>(AttPlayerInfo->GetAtt()) * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::Att)
+		: static_cast<float>(AttPlayerInfo->GetSpAtt()) * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::SpAtt);
 
-	int DefDefence = SkillType == SkillType::Physical ? DefPlayerInfo->GetDef() * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::Def)
-		: DefPlayerInfo->GetSpDef() * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::SpDef);
+	float DefDefence = SkillType == SkillType::Physical ? static_cast<float>(DefPlayerInfo->GetDef()) * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::Def)
+		: static_cast<float>(DefPlayerInfo->GetSpDef()) * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::SpDef);
 
-	float Mod1 = 1.0;
+	float Mod1 = 1.0f;
 	{
-		for (auto& ApplySkill : _Att->AllCurrentApplySkill_)
+		for (auto& ApplyStatus : _Att->ApplyStatus_)
 		{
-			
+			if (ApplyStatus == StatusEffect::BRN)
+			{
+				Mod1 *= 0.5f;
+			}
 		}
 	}
 
@@ -50,27 +54,32 @@ float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Poke
 	int RandomValue = (GameEngineRandom::GetInst_->RandomInt(217, 255) * 100) / 255;
 	float SameType = _Att->Pokemon_->GetInfo()->GetMyType() == _Skill->GetType() ? 1.5f : 1.0f;
 	float CompareType = 1.0f;
+
+	{
 	switch (_DamgeType)
 	{
-	case DamgeType::Great:
-		CompareType = 2.0f;
-		break;
-	case DamgeType::Nomal:
-		CompareType = 1.0f;
-		break;
-	case DamgeType::Bad:
-		CompareType = 0.5f;
-		break;
-	case DamgeType::Nothing:
-		CompareType = 0.0f;
-		break;
-	default:
-		break;
+		case DamgeType::Great:
+			CompareType = 2.0f;
+			break;
+		case DamgeType::Nomal:
+			CompareType = 1.0f;
+			break;
+		case DamgeType::Bad:
+			CompareType = 0.5f;
+			break;
+		case DamgeType::Nothing:
+			CompareType = 0.0f;
+			break;
+		default:
+			break;
+		}
 	}
-	//float FinalDamage = (((( AttLevel * 2 / 5 ) + 2 ) * SkillPower * AttPower / 50 ) / DefDefence ) *
+
+	int FinalDamage = (static_cast<int>(floor(floor(floor((floor(floor(static_cast<float>(static_cast<int>((static_cast<float>(( AttLevel * 2 / 5 ) + 2 ) * SkillPower) * AttPower) / 50 ) / DefDefence ) * Mod1 ) + 2.0f ) * Critical )
+	* SameType) * CompareType) * RandomValue) / 100);
 	
 	
-	return 1.0f;
+	return FinalDamage;
 }
 
 DamgeType BattleEngine::ComparePokemonType(const PokemonType& _Attack, const PokemonType& _Defend)
