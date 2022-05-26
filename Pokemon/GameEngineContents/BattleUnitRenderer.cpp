@@ -10,12 +10,13 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)
 	, FirstMove(true)
-	, PlayerPokemonPos_({ -220, 60 })
+	, PlayerPokemonPos_({ -220, 63 })
 	, OpponentPokemonPos_({ 200, -105 })
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
 	, MoveSpeed(200.0f)
 	, PlayerStop(false)
+	, TimeCheck(0.0f)
 {
 }
 
@@ -39,6 +40,8 @@ void BattleUnitRenderer::Start()
 
 void BattleUnitRenderer::Update()
 {
+	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
+	DoomChit();
 	if (FirstMove == true)
 	{
 		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
@@ -51,5 +54,18 @@ void BattleUnitRenderer::Update()
 			FirstMove = false;
 		}
 
+	}
+}
+
+void BattleUnitRenderer::DoomChit()
+{
+	if ((int)TimeCheck % 2 == 0)
+	{
+		PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
+	}
+
+	if ((int)TimeCheck % 2 == 1)
+	{
+		PlayerCurrentPokemon_->SetPivot({ -220, 61 });
 	}
 }

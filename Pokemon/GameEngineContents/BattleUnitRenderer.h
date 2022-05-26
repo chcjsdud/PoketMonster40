@@ -43,9 +43,10 @@ private:
 
 	bool PlayerStop;//김예나 : 일정 위치 도착하면 멈추도록 할 조건문
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
+	float TimeCheck;
 
 public:
-
+	void DoomChit();
 	bool GetPlayerStop()
 	{
 		return PlayerStop;

@@ -59,11 +59,16 @@ void BattleInterface::Start()
 	Select = CreateRenderer("Select.bmp", 3);
 	Select->Off();
 
-	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",2);
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",2);
-	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3);
+	EnemyHPUI->Off();
 	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3);
+	EnemyHP->Off();
+	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",2);
+	MyHPUI->Off();
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3);
+	MyHP->Off();
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
+	EXP->Off();
 	BattleCommend = CreateRenderer("BattleCommend4.bmp", 4);
 	//Player = CreateRenderer("Player.bmp",0);
 
@@ -128,6 +133,8 @@ void BattleInterface::Update()
 			// Z 키 입력시 다음 문장 출력
 			if (GameEngineInput::GetInst()->IsDown("Z") == true)
 			{
+				EnemyHPUI->On();
+				EnemyHP->On();
 				// 다음 문장 출력 함수
 				Fonts->NextString();
 			}
@@ -182,6 +189,9 @@ void BattleInterface::Update()
 				{
 					InterfaceImage->On();
 					Select->On();
+					MyHPUI->On();
+					MyHP->On();
+					EXP->On();
 				}
 			}
 		}
