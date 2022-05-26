@@ -104,6 +104,7 @@ public:
 	void ShowSupperEffectString();
 	void ShowCriticalHitString();
 	void ShowNotEffective();
+	void ShowFailed();
 
 	inline bool IsEndString()
 	{

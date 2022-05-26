@@ -267,7 +267,19 @@ class BattleManager
 private:
 	BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level);
 	//BattleManager(const std::string& _PlayerItem, const std::string& _PoeSkill);
-	~BattleManager() {}
+	~BattleManager() 
+	{
+		if (FristTurn_ != nullptr)
+		{
+			delete FristTurn_;
+			FristTurn_ = nullptr;
+		}
+		if (SecondTurn_ != nullptr)
+		{
+			delete SecondTurn_;
+			SecondTurn_ = nullptr;
+		}
+	}
 
 	BattleManager(const BattleManager& _Other) = delete;
 	BattleManager(BattleManager&& _Other) noexcept = delete;
@@ -287,13 +299,12 @@ private:
 	BattlePage CurrentBattlePage_;
 	Battlefont CurrentFont_;
 
-	void BattleFirstPage();
+	bool CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn);
 
 	float IsEffect(DamageType _DamgeType);
 
-	bool Critical_;
+
 	bool PlayerFirst_;
-	bool Action_;
 
 	BattleTurn* FristTurn_;
 	BattleTurn* SecondTurn_;
@@ -303,13 +314,22 @@ private:
 	class BattleTurn
 	{
 	public:
-		BattleTurn() {}
+		BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, SkillType _Skill);
+
 		~BattleTurn() {}
 
 		BattleTurn(const BattleTurn& _Other) = delete;
 		BattleTurn(BattleTurn&& _Other) noexcept = delete;
 		BattleTurn& operator=(const BattleTurn& _Other) = delete;
 		BattleTurn& operator=(BattleTurn&& _Other) noexcept = delete;
+
+		PokemonBattleState* const AttPokemon_;
+		PokemonBattleState* const DefPokemon_;
+
+		DamageType DamageType_;
+		const SkillType SkillType_;
+		int FinalDamage_;
+		bool Critical_;
 	};
 public:
 	bool Update();

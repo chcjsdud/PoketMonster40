@@ -51,7 +51,7 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("SUp", VK_UP);
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
-	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 0x70 );
+	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 'H');
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
@@ -245,6 +245,12 @@ void BattleInterface::ShowNotEffective()
 {
 	DownFont_->EndFont();
 	DownFont_->ShowString("It's not Very effective;");
+}
+
+void BattleInterface::ShowFailed()
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("But it failed!");
 }
 
 bool BattleInterface::MoveKey()

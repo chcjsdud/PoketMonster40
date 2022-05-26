@@ -82,9 +82,9 @@ int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Pokemo
 	return FinalDamage;
 }
 
-DamageType BattleEngine::ComparePokemonType(const PokemonBattleState* _Attack, const PokemonBattleState* _Defend)
+DamageType BattleEngine::ComparePokemonType(const PokemonSkillInfo* _Attack, const PokemonBattleState* _Defend)
 {
-	PokemonType Attack = _Attack->Pokemon_->GetInfo()->GetMyType();
+	PokemonType Attack = const_cast<PokemonSkillInfo*>(_Attack)->GetType();
 	PokemonType Defend = _Defend->Pokemon_->GetInfo()->GetMyType();
 
 	switch (Attack)

@@ -20,6 +20,6 @@ private:
 public:
 	static bool ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* _Poe);
 	static int AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkillInfo* _Skill, const DamageType& _DamgeType);
-	static DamageType ComparePokemonType(const PokemonBattleState* _Attack, const PokemonBattleState* _Defend);
+	static DamageType ComparePokemonType(const PokemonSkillInfo* _Attack, const PokemonBattleState* _Defend);
 
 };

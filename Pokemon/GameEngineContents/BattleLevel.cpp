@@ -44,6 +44,14 @@ BattleLevel::~BattleLevel()
 	{
 		delete Opponent_->GetPokemonList()[0];
 		delete PlayerRed_->GetPokemonList().front();
+		PlayerRed_ = nullptr;
+		Opponent_ = nullptr;
+	}
+
+	if (BattleManager_ != nullptr)
+	{
+		delete BattleManager_;
+		BattleManager_ = nullptr;
 	}
 }
 
@@ -71,6 +79,7 @@ void BattleLevel::Loading()
 
 void BattleLevel::Update()
 {
+	int a = 0;
 	switch (BState_)
 	{
 	case BattleState::Openning:
@@ -89,7 +98,11 @@ void BattleLevel::Update()
 	case BattleState::BattlePage:
 		if (Interface_->BattleKey())
 		{
-			BattleManager_->Update();
+			if (BattleManager_->Update() == true)
+			{
+				EndBattlePage();
+			}
+
 		}
 		return;
 		break;
@@ -107,12 +120,18 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 {
 	RefreshPokemon();
 	{
+		std::string Player = GameEngineString::ToUpperReturn(_PlayerSkill);
+		std::string Poe = GameEngineString::ToUpperReturn(_PoeSkill);
 		bool Bool = false;
 		std::vector<PokemonSkillInfo*>& PlayerSkill = PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
 		std::vector<PokemonSkillInfo*>& PoeSkill = PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
 		for (auto& Skill : PlayerSkill)
 		{
-			if (Skill->GetNameConstRef() == _PlayerSkill)
+			if (Skill == nullptr)
+			{
+				continue;
+			}
+			if (Skill->GetNameConstRef() == Player)
 			{
 				Bool = true;
 				break;
@@ -121,7 +140,11 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 
 		for (auto& Skill : PoeSkill)
 		{
-			if (Skill->GetNameConstRef() == _PoeSkill)
+			if (Skill == nullptr)
+			{
+				continue;
+			}
+			if (Skill->GetNameConstRef() == Poe)
 			{
 				Bool = true;
 				break;
@@ -136,6 +159,7 @@ void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::st
 
 	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, this);
 	BState_ = BattleState::BattlePage;
+	BattleManager_->Update();
 }
 
 void BattleLevel::EndBattlePage()
@@ -145,7 +169,8 @@ void BattleLevel::EndBattlePage()
 		delete BattleManager_;
 		BattleManager_ = nullptr;
 	}
-	
+	BState_ = BattleState::SelecetPage;
+
 }
 
 void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
@@ -172,7 +197,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
 		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
 
-		//BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 		RefreshPokemon();
 	}
 }
@@ -483,10 +508,10 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 	, Select_(BattleOrderMenu::Fight)
 	, CurrentBattlePage_(BattlePage::FirstBattle)
 	, PlayerFirst_(false)
-	, Critical_(false)
-	, Action_(false)
 	, Interface_(_Level->Interface_)
 	, CurrentFont_(Battlefont::None)
+	, FristTurn_(nullptr)
+	, SecondTurn_(nullptr)
 {
 	if (PlayerSkill_ == nullptr || PoeSkill_ == nullptr)
 	{
@@ -538,31 +563,15 @@ bool BattleManager::Update()
 		switch (Select_)
 		{
 		case BattleOrderMenu::Fight:
-			switch (CurrentFont_)
+			if (FristTurn_ == nullptr)
 			{
-			case Battlefont::None:
-				if (Action_ == false)
-				{
-					Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), CurrentPokemonSkill->GetNameConstRef());
-					//DamageType DamageType = BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun);
-
-					Action_ = true;
-				}
-				else
-				{
-
-					Action_ = false;
-					CurrentFont_ = Battlefont::Att;
-				}
-				break;
-			case Battlefont::Att:
-				break;
-			case Battlefont::Wait:
-				break;
-			case Battlefont::Effect:
-				break;
-			default:
-				break;
+				FristTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill->GetSkillType());
+			}
+			if (CheckFont(CurrentTurn, AfterTrun, CurrentPokemonSkill, FristTurn_))
+			{
+				delete FristTurn_;
+				FristTurn_ = nullptr;
+				CurrentBattlePage_ = BattlePage::SecondBattle;
 			}
 			break;
 		case BattleOrderMenu::Item:
@@ -574,12 +583,97 @@ bool BattleManager::Update()
 		default:
 			break;
 		}
-		
 		break;
 	case BattlePage::SecondBattle:
+		switch (Select_)
+		{
+		case BattleOrderMenu::Fight:
+			if (SecondTurn_ == nullptr)
+			{
+				SecondTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill->GetSkillType());
+			}
+			if (CheckFont(CurrentTurn, AfterTrun, CurrentPokemonSkill, SecondTurn_))
+			{
+				delete SecondTurn_;
+				SecondTurn_ = nullptr;
+				CurrentBattlePage_ = BattlePage::End;
+			}
+			break;
+		case BattleOrderMenu::Item:
+			break;
+		case BattleOrderMenu::Pokemon:
+			break;
+		case BattleOrderMenu::Run:
+			break;
+		default:
+			break;
+		}
 		break;
 	case BattlePage::End:
+		return true;
 		break;
 	}
 	return false;
+}
+
+bool BattleManager::CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn)
+{
+
+	switch (CurrentFont_)
+	{
+	case Battlefont::None:
+		Interface_->ShowUsedSkillString(_CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), _Skill->GetNameConstRef());
+		_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _AfterTrun);
+		_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_CurrentTurn, _AfterTrun, _Skill, _Turn->DamageType_);
+		CurrentFont_ = Battlefont::Wait;
+		break;
+
+	case Battlefont::Att:
+		// 어택 모션
+		break;
+	case Battlefont::Wait:
+		if (_Turn->Critical_ == true)
+		{
+			Interface_->ShowCriticalHitString();
+			FristTurn_->Critical_ = false;
+		}
+		else
+		{
+			switch (_Turn->DamageType_)
+			{
+			case DamageType::Great:
+				Interface_->ShowSupperEffectString();
+				break;
+			case DamageType::Bad:
+				Interface_->ShowNotEffective();
+				break;
+			case DamageType::Nothing:
+				Interface_->ShowFailed();
+				break;
+			default:
+				break;
+			}
+			CurrentFont_ = Battlefont::None;
+			PlayerFirst_ = !PlayerFirst_;
+			return true;
+		}
+		//효과는 대단했다
+		break; 
+	case Battlefont::Effect:
+		break;
+	default:
+		break;
+	}
+	return false;
+}
+
+BattleManager::BattleTurn::BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, SkillType _Skill)
+	: AttPokemon_(_Att)
+	, DefPokemon_(_Def)
+	, FinalDamage_(0)
+	, Critical_(false)
+	, DamageType_(DamageType::Nomal)
+	, SkillType_(_Skill)
+{
+
 }
