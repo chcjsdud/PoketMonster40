@@ -269,6 +269,8 @@ void PlayerRed::Start()
 	ShadowRender_->SetPivot({ 0, 20 });
 	ShadowRender_->Off();
 
+	RedCollision_ = CreateCollision("RedColBox", { 60,60 });
+	
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);

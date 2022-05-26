@@ -18,6 +18,7 @@ enum class NPCDir
 
 };
 // Ό³Έν :
+class GameEngineCollision;
 class NPCBase : public GameEngineActor
 {
 public:
@@ -39,10 +40,11 @@ protected:
 	void NPCMove();
 	void NPCMoveAnim();
 	bool IsInside(float4 _LeftTop, float4 _RightBot);
-	PokemonTileMap*		CurrentTileMap_;
-	GameEngineRenderer* NPCRender_;
-	std::string			NPCAnimationName_;
-	std::string			NPCChangeDirText_;
+	PokemonTileMap*			CurrentTileMap_;
+	GameEngineRenderer*		NPCRender_;
+	GameEngineCollision*	NPCCollision_;
+	std::string				NPCAnimationName_;
+	std::string				NPCChangeDirText_;
 
 	float4 InSideLeftTop_;
 	float4 InSideRightBot_;

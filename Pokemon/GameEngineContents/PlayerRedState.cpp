@@ -5,6 +5,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <GameEngine/GameEngineCollision.h>
 #include "Bush.h"
 
 void PlayerRed::IdleUpdate()
@@ -24,13 +25,18 @@ void PlayerRed::IdleUpdate()
 
 void PlayerRed::WalkUpdate()
 {
+	float4 MoveDir_ = float4::ZERO;
+	//if (true == RedCollision_->NextPosCollisionCheck("NPCColBox", MoveDir_ * 50, CollisionType::Rect, CollisionType::Rect))
+	//{
+	//	MoveDir_ = float4::ZERO;
+	//	return;
+	//}
 	if (false == WMenuUICheck_)
 	{
-		float4 MoveDir_ = float4::ZERO;
+		MoveDir_ = float4::ZERO;
 		return;
 	}
 	
-	float4 MoveDir_ = float4::ZERO;
 	if (true == GameEngineInput::GetInst()->IsPress("Up"))
 	{
 		MoveDir_ = float4::UP;
@@ -53,7 +59,11 @@ void PlayerRed::WalkUpdate()
 		ChangeState(RedState::Idle);
 		return;
 	}
-
+	if (true == RedCollision_->NextPosCollisionCheck("NPCColBox", MoveDir_ * 50))
+	{
+		MoveDir_ = float4::ZERO;
+		return;
+	}
 	//SetMove(MoveDir_ * GameEngineTime::GetDeltaTime() * 800);
 	if (GetAccTime() >= NextMoveTime_)
 	{

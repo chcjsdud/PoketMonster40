@@ -17,6 +17,7 @@ NPC4::~NPC4()
 
 void NPC4::Start()
 {
+	NPCBase::NPCCollision_ = CreateCollision("NPCColBox", { 60,60 });
 	{
 		GameEngineImage*
 		// Idle
@@ -50,12 +51,12 @@ void NPC4::Start()
 	//SetPosition(RoomTileMap1::GetInst()->GetWorldPostion(8, 4));
 	
 	NPCBase::InSideLeftTop_ = { 16,96 };
-	NPCBase::InSideRightBot_ = { 30,100 };
+	NPCBase::InSideRightBot_ = { 30,102 };
 	//NPCBase::InSideLeftTop_ = { 3,3 };
 	//NPCBase::InSideRightBot_ = { 8,6 };
 
 	CurrentTileMap_ = WorldTileMap1::GetInst();
-	SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(20, 100));
+	SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(22, 101));
 
 	NPCBase::IsInside(NPCBase::InSideLeftTop_, NPCBase::InSideRightBot_);
 	
