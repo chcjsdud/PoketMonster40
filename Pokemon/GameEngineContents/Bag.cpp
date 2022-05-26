@@ -39,6 +39,7 @@ Bag::Bag()
 
 Bag::~Bag()
 {
+	DestroyBag();
 }
 
 void Bag::Start()
@@ -1039,6 +1040,7 @@ void Bag::DestroyBag()
 	DownArrow_->Death();
 
 	SelectArrow_->Death(); //아이템 선택 화살표
+
 
 	{
 		std::vector<Item*>::iterator StartIter = ItemList_.begin();

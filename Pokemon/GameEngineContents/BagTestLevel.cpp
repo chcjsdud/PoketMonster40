@@ -15,14 +15,6 @@ BagTestLevel::~BagTestLevel()
 
 void BagTestLevel::Loading()
 {
-	//_CrtSetBreakAlloc(276692);
-	//_CrtSetBreakAlloc(276479);
-	//_CrtSetBreakAlloc(276474);
-	//_CrtSetBreakAlloc(276469);
-	//_CrtSetBreakAlloc(276464);
-	//_CrtSetBreakAlloc(258444);
-	//_CrtSetBreakAlloc(162742);
-
 	Bag_ = CreateActor<Bag>();
 	Bag_->BagInit();
 
@@ -58,7 +50,6 @@ void BagTestLevel::Update()
 
 void BagTestLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-
 
 }
 
