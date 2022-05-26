@@ -299,7 +299,7 @@ private:
 	BattlePage CurrentBattlePage_;
 	Battlefont CurrentFont_;
 
-	bool CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn);
+	bool CheckBattle(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn);
 
 	float IsEffect(DamageType _DamgeType);
 
@@ -314,7 +314,7 @@ private:
 	class BattleTurn
 	{
 	public:
-		BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, SkillType _Skill);
+		BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, PokemonSkillInfo* _Skill);
 
 		~BattleTurn() {}
 
@@ -327,6 +327,7 @@ private:
 		PokemonBattleState* const DefPokemon_;
 
 		DamageType DamageType_;
+		PokemonSkillInfo* Skill_;
 		const SkillType SkillType_;
 		int FinalDamage_;
 		bool Critical_;

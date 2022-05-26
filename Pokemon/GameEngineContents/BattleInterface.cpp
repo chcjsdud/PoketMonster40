@@ -28,6 +28,7 @@ BattleInterface::BattleInterface()
 	, Fonts(nullptr)
 	, PlayerEnd(false)
 	, BallLerp(0.0f)
+	, EmptyString_(false)
 {
 
 }
@@ -201,26 +202,37 @@ void BattleInterface::Update()
 
 bool BattleInterface::BattleKey()
 {
-	if (GameEngineInput::GetInst()->IsDown("SSelect"))
+	if (EmptyString_ == false)
 	{
-		if (DownFont_->IsEnd())
+		if (GameEngineInput::GetInst()->IsDown("SSelect"))
 		{
-			DownFont_->EndFont();
-			return true;
+			if (DownFont_->IsEnd())
+			{
+				DownFont_->EndFont();
+				return true;
+			}
+			else
+			{
+				DownFont_->SkipCharAnimation();
+				return false;
+			}
 		}
-		else
-		{
-			DownFont_->SkipCharAnimation();
-			return false;
-		}
+	}
+	else
+	{
+		EmptyString_ = false;
+		return true;
 	}
 	return false;
 }
 
 void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString(_AttPokemon + " Used\\"+ _AttSkill + "!");
+
+		DownFont_->EndFont();
+		DownFont_->ShowString(_AttPokemon + " Used\\"+ _AttSkill + "!");
+
+
 }
 
 void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)

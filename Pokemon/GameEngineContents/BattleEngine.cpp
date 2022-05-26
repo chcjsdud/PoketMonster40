@@ -75,7 +75,7 @@ int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Pokemo
 		}
 	}
 
-	int FinalDamage = (static_cast<int>(floor(floor(floor((floor(floor(static_cast<float>(static_cast<int>((static_cast<float>(( AttLevel * 2 / 5 ) + 2 ) * SkillPower) * AttPower) / 50 ) / DefDefence ) * Mod1 ) + 2.0f ) * Critical )
+	int FinalDamage = (static_cast<int>(floor(floor(floor(floor(floor(floor(static_cast<float>(static_cast<int>(floor(static_cast<float>(( AttLevel * 2 / 5 ) + 2 ) * SkillPower) * AttPower) / 50 ) / DefDefence ) * Mod1 ) + 2.0f ) * Critical )
 	* SameType) * CompareType) * RandomValue) / 100);
 	
 	

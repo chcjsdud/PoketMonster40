@@ -106,11 +106,18 @@ public:
 	void ShowNotEffective();
 	void ShowFailed();
 
+	// string 없을때 호출해서 생략시키는 함수
+	inline void SetEmptyString()
+	{
+		EmptyString_ = true;
+	}
+
 	inline bool IsEndString()
 	{
 		return DownFont_->IsEnd();
 	}
-
+private:
+	bool EmptyString_;
 };
 
 // 장중혁 : Test

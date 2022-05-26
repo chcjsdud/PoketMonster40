@@ -565,9 +565,9 @@ bool BattleManager::Update()
 		case BattleOrderMenu::Fight:
 			if (FristTurn_ == nullptr)
 			{
-				FristTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill->GetSkillType());
+				FristTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill);
 			}
-			if (CheckFont(CurrentTurn, AfterTrun, CurrentPokemonSkill, FristTurn_))
+			if (CheckBattle(CurrentTurn, AfterTrun, CurrentPokemonSkill, FristTurn_))
 			{
 				delete FristTurn_;
 				FristTurn_ = nullptr;
@@ -590,9 +590,9 @@ bool BattleManager::Update()
 		case BattleOrderMenu::Fight:
 			if (SecondTurn_ == nullptr)
 			{
-				SecondTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill->GetSkillType());
+				SecondTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill);
 			}
-			if (CheckFont(CurrentTurn, AfterTrun, CurrentPokemonSkill, SecondTurn_))
+			if (CheckBattle(CurrentTurn, AfterTrun, CurrentPokemonSkill, SecondTurn_))
 			{
 				delete SecondTurn_;
 				SecondTurn_ = nullptr;
@@ -616,19 +616,41 @@ bool BattleManager::Update()
 	return false;
 }
 
-bool BattleManager::CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn)
+bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _Def, PokemonSkillInfo* _Skill, BattleTurn* _Turn)
 {
+	SkillType AttSkillType = _Turn->SkillType_;
+
 
 	switch (CurrentFont_)
 	{
 	case Battlefont::None:
-		Interface_->ShowUsedSkillString(_CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), _Skill->GetNameConstRef());
-		_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _AfterTrun);
-		_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_CurrentTurn, _AfterTrun, _Skill, _Turn->DamageType_);
-		CurrentFont_ = Battlefont::Wait;
+		Interface_->ShowUsedSkillString(_Att->GetPokemon()->GetInfo()->GetNameConstRef(), _Skill->GetNameConstRef());
+		CurrentFont_ = Battlefont::Att;
 		break;
 
 	case Battlefont::Att:
+	{
+		switch (AttSkillType)
+		{
+		case SkillType::Physical:
+		case SkillType::Special:
+		{
+			//이펙트
+			//포켓몬 흔들고 체력 다는 효과 추가
+			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
+			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
+			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
+			Interface_->SetEmptyString();
+			CurrentFont_ = Battlefont::Wait;
+		}
+		break;
+		case SkillType::Status:
+			break;
+		default:
+			break;
+		}
+	}
+
 		// 어택 모션
 		break;
 	case Battlefont::Wait:
@@ -639,19 +661,36 @@ bool BattleManager::CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleSta
 		}
 		else
 		{
-			switch (_Turn->DamageType_)
 			{
-			case DamageType::Great:
-				Interface_->ShowSupperEffectString();
+				switch (AttSkillType)
+				{
+				case SkillType::Physical:
+				case SkillType::Special:
+				{
+					switch (_Turn->DamageType_)
+					{
+					case DamageType::Nomal:
+						Interface_->SetEmptyString();
+						break;
+					case DamageType::Great:
+						Interface_->ShowSupperEffectString();
+						break;
+					case DamageType::Bad:
+						Interface_->ShowNotEffective();
+						break;
+					case DamageType::Nothing:
+						Interface_->ShowFailed();
+						break;
+					default:
+						break;
+					}
+				}
 				break;
-			case DamageType::Bad:
-				Interface_->ShowNotEffective();
-				break;
-			case DamageType::Nothing:
-				Interface_->ShowFailed();
-				break;
-			default:
-				break;
+				case SkillType::Status:
+					break;
+				default:
+					break;
+				}
 			}
 			CurrentFont_ = Battlefont::None;
 			PlayerFirst_ = !PlayerFirst_;
@@ -667,13 +706,13 @@ bool BattleManager::CheckFont(PokemonBattleState* _CurrentTurn, PokemonBattleSta
 	return false;
 }
 
-BattleManager::BattleTurn::BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, SkillType _Skill)
+BattleManager::BattleTurn::BattleTurn(PokemonBattleState* const _Att, PokemonBattleState* const _Def, PokemonSkillInfo* _Skill)
 	: AttPokemon_(_Att)
 	, DefPokemon_(_Def)
 	, FinalDamage_(0)
 	, Critical_(false)
 	, DamageType_(DamageType::Nomal)
-	, SkillType_(_Skill)
+	, SkillType_(_Skill->GetSkillType())
+	, Skill_(_Skill)
 {
-
 }
