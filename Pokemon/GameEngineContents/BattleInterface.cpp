@@ -103,7 +103,7 @@ void BattleInterface::Update()
 	if (PlayerStopCheck->GetPlayerStop() == true && OneTalk == false)
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
-		Fonts->ShowString("Wild Bulbarsaur\\is appear!!\\Go!!\\Charizard!!", false);
+		Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
 		OneTalk = true;
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
@@ -136,21 +136,25 @@ void BattleInterface::Update()
 				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
 				{
 					BattleUnitRenderer::PlayerRenderer_->Off();
+					Fonts->EndFont();
 				}
 			}
 			// 모든 대화가 끝났을 때 x 키누르면 종료
-			else if (GameEngineInput::GetInst()->IsDown("X") == true)
-			{
-				Fonts->EndFont();
-			}
+			//else if (GameEngineInput::GetInst()->IsDown("X") == true)
+			//{
+			//	Fonts->EndFont();
+			//}
 		}
 
 		if (PlayerEnd == true)
 		{
 			//플레이어 무빙
 			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*900.0f),31.0f});
-
-			MonsterBall->On();
+			if (MonsterBall->IsUpdate() == false)
+			{
+				MonsterBall->On();
+			}
+			
 			MonsterBall->SetPivot({-500.0f,-250.0f + (GameEngineTime::GetDeltaTime()*100.0f)});
 		}
 	}
