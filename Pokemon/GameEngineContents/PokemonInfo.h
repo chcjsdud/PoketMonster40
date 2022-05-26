@@ -5,7 +5,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngineBase/GameEngineNameObject.h>
 
-class PokemonSkill;
+class PokemonSkillInfo;
 class PokemonInfo : public GameEngineNameObject
 {
 public:
@@ -232,9 +232,9 @@ public:
 
 	
 	//스킬 관련 함수
-	void AddMySkill(PokemonSkill* _Skill);
+	void AddMySkill(PokemonSkillInfo* _Skill);
 
-	std::vector<PokemonSkill*>& GetSkill()
+	std::vector<PokemonSkillInfo*>& GetSkill()
 	{
 		return MySkills_;
 	}
@@ -276,7 +276,7 @@ private:
 	std::string MyProfile_; //도감 혹은 상세메뉴 이미지
 	std::string MyIcon_; //지닌 포켓몬 아이콘
 
-	std::vector<PokemonSkill*> MySkills_;
+	std::vector<PokemonSkillInfo*> MySkills_;
 	int MySkillCount_;
 
 	Item* MyItem_;

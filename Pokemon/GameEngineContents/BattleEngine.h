@@ -1,8 +1,9 @@
 #pragma once
 #include <GameEngineBase/GameEngineRandom.h>
 #include "BattleLevel.h"
-#include "PokemonSkill.h"
+#include "PokemonSkillInfo.h"
 // Ό³Έν :
+enum class DamageType;
 class BattleEngine
 {
 private:
@@ -18,7 +19,7 @@ private:
 
 public:
 	static bool ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* _Poe);
-	static int AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill* _Skill, const DamgeType& _DamgeType);
-	static DamgeType ComparePokemonType(const PokemonType& _Attack, const PokemonType& _Defend);
+	static int AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkillInfo* _Skill, const DamageType& _DamgeType);
+	static DamageType ComparePokemonType(const PokemonBattleState* _Attack, const PokemonBattleState* _Defend);
 
 };

@@ -142,16 +142,16 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
 	ItemPreview_->SetPivot({ -400, 225 });
 
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().FindItem("Potion"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().FindItem("PokeBall"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
 
 	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
 	BagDialog_->SetPivot({ 335, 190 });
@@ -177,7 +177,66 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
+	BagRedrerer_->Death();
+	BagName_->Death();
+	BagDialog_->Death();
+	DialogBox_->Death();
+	DialogArrow_->Death();
 
+	LeftArrow_->Death();
+	RightArrow_->Death();
+	UpArrow_->Death();
+	DownArrow_->Death();
+
+	SelectArrow_->Death(); //아이템 선택 화살표
+
+	{
+		std::vector<Item*>::iterator StartIter = ItemList_.begin();
+		std::vector<Item*>::iterator EndIter = ItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+			}
+		}
+	}
+
+	{
+		std::vector<Item*>::iterator StartIter = KeyItemList_.begin();
+		std::vector<Item*>::iterator EndIter = KeyItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+	{
+		std::vector<Item*>::iterator StartIter = BallList_.begin();
+		std::vector<Item*>::iterator EndIter = BallList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+	ItemPreview_->Death(); //현재 선택한 아이템 이미지
+
+	DestroyFonts();
+
+	CurrentItem_ = nullptr;
+	CurrentPokemon_ = nullptr;
 }
 
 
@@ -395,11 +454,11 @@ void Bag::ShowItemInfo()
 	}
 
 	//아이템 정보
-	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(ItemList_[SelectIndex_]->GetInfo()->GetNameCopy() + ".bmp");
 
 	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
 	DescFont->SetPosition({ 150, 460.f });
-	DescFont->ShowString(ItemList_[SelectIndex_]->GetDesc(), true);
+	DescFont->ShowString(ItemList_[SelectIndex_]->GetInfo()->GetDesc(), true);
 	ItemDescFonts_.push_back(DescFont);
 }
 
@@ -438,11 +497,11 @@ void Bag::ShowKeyItemInfo()
 		return;
 	}
 
-	ItemPreview_->SetImage(KeyItemList_[SelectIndex_]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(KeyItemList_[SelectIndex_]->GetInfo()->GetNameCopy() + ".bmp");
 
 	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
 	DescFont->SetPosition({ 150, 460.f });
-	DescFont->ShowString(KeyItemList_[SelectIndex_]->GetDesc(), true);
+	DescFont->ShowString(KeyItemList_[SelectIndex_]->GetInfo()->GetDesc(), true);
 	ItemDescFonts_.push_back(DescFont);
 }
 
@@ -481,11 +540,11 @@ void Bag::ShowBallInfo()
 		return;
 	}
 
-	ItemPreview_->SetImage(BallList_[SelectIndex_]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(BallList_[SelectIndex_]->GetInfo()->GetNameCopy() + ".bmp");
 
 	GameEngineContentFont* DescFont = GetLevel()->CreateActor<GameEngineContentFont>();
 	DescFont->SetPosition({ 150, 460.f });
-	DescFont->ShowString(BallList_[SelectIndex_]->GetDesc(), true);
+	DescFont->ShowString(BallList_[SelectIndex_]->GetInfo()->GetDesc(), true);
 	ItemDescFonts_.push_back(DescFont);
 }
 
@@ -538,21 +597,21 @@ void Bag::OnDialog()
 		{
 			return;
 		}
-		SelcetFont->ShowString(ItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		SelcetFont->ShowString(ItemList_[SelectIndex_]->GetInfo()->GetNameConstRef() + " is \\Selected.", true);
 		break;
 	case ItemType::KEYITEM:
 		if (KeyItemList_.size() == 0)
 		{
 			return;
 		}
-		SelcetFont->ShowString(KeyItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		SelcetFont->ShowString(KeyItemList_[SelectIndex_]->GetInfo()->GetNameConstRef() + " is \\Selected.", true);
 		break;
 	case ItemType::BALL:
 		if (BallList_.size() == 0)
 		{
 			return;
 		}
-		SelcetFont->ShowString(BallList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		SelcetFont->ShowString(BallList_[SelectIndex_]->GetInfo()->GetNameConstRef() + " is \\Selected.", true);
 		break;
 	}
 
@@ -785,7 +844,7 @@ void Bag::ShowItemList()
 		DownArrow_->SetOrder(5);
 	}
 
-	ItemPreview_->SetImage(ItemList_[0]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(ItemList_[0]->GetInfo()->GetNameCopy() + ".bmp");
 
 	ShowFonts(ItemList_);
 }
@@ -814,7 +873,7 @@ void Bag::ShowKeyItemList()
 		DownArrow_->SetOrder(5);
 	}
 
-	ItemPreview_->SetImage(KeyItemList_[0]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(KeyItemList_[0]->GetInfo()->GetNameCopy() + ".bmp");
 
 	ShowFonts(KeyItemList_);
 }
@@ -843,7 +902,7 @@ void Bag::ShowBallList()
 		DownArrow_->SetOrder(5);
 	}
 
-	ItemPreview_->SetImage(BallList_[0]->GetNameCopy() + ".bmp");
+	ItemPreview_->SetImage(BallList_[0]->GetInfo()->GetNameCopy() + ".bmp");
 
 	ShowFonts(BallList_);
 }
@@ -911,14 +970,14 @@ void Bag::ShowFonts(std::vector<Item*>& _List)
 {
 	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>();
 	BeginFont->SetPosition({ 380, 40.f });
-	BeginFont->ShowString(_List[0]->GetNameCopy(), true);
+	BeginFont->ShowString(_List[0]->GetInfo()->GetNameCopy(), true);
 	ItemNameFonts_.push_back(BeginFont);
 
 	if (1 < _List.size())
 	{
 		for (int i = 1; i < _List.size(); ++i)
 		{
-			if (_List[i - 1]->GetNameConstRef() == _List[i]->GetNameConstRef())
+			if (_List[i - 1]->GetInfo()->GetNameConstRef() == _List[i]->GetInfo()->GetNameConstRef())
 			{
 				DestroyOverlapFonts();
 
@@ -932,7 +991,7 @@ void Bag::ShowFonts(std::vector<Item*>& _List)
 
 			GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
 			Fonts->SetPosition(ItemNameFonts_.back()->GetPosition() + float4{ 0, 65.f });
-			Fonts->ShowString(_List[i]->GetNameCopy(), true);
+			Fonts->ShowString(_List[i]->GetInfo()->GetNameCopy(), true);
 			ItemNameFonts_.push_back(Fonts);
 		}
 	}
@@ -948,6 +1007,7 @@ void Bag::DestroyFonts()
 	DestroyNameFonts();
 	DestroyDescFonts();
 	DestroyOverlapFonts();
+	DestroyDialogFonts();
 }
 
 void Bag::DestroyNameFonts()

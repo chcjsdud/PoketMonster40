@@ -1,9 +1,8 @@
 #pragma once
 #include "PokemonInfo.h"
-#include <GameEngine/GameEngineActor.h>
 #include "PokemonInfoManager.h"
 
-class Pokemon : public GameEngineActor
+class Pokemon
 {
 public:
 	Pokemon();
@@ -13,9 +12,6 @@ public:
 	Pokemon(Pokemon&& _Other) noexcept = delete;
 	Pokemon& operator=(const Pokemon& _Other) = delete;
 	Pokemon& operator=(Pokemon&& _Other) noexcept = delete;
-
-	void Start() override;
-	void Update() override;
 
 	inline PokemonInfo* GetInfo()
 	{
@@ -29,6 +25,7 @@ public:
 
 
 protected:
+
 
 private:
 	PokemonInfo* MyInfo_;

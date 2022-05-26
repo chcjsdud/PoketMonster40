@@ -4,10 +4,10 @@
 #include "ContentEnum.h"
 #include <GameEngineBase/GameEngineString.h>
 
-class Item;
+class ItemInfo;
 class Pokemon;
 class PokemonInfo;
-class PokemonSkill;
+class PokemonSkillInfo;
 class PokemonInfoManager
 {
 	// ¿Â¡ﬂ«ı : Debug
@@ -46,48 +46,22 @@ public:
 	void Update();
 	
 	PokemonInfo* FindPokemonInfo(const std::string& _Key);
-	PokemonSkill* FindSkill(const std::string& _Key);
-	Item* FindItem(const std::string& _Key);
-
-	template<typename ItemKind>
-	Item* CreateItem(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc)
-	{
-		Item* NewItem = new ItemKind();
-		std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-		NewItem->SetName(Key);
-		NewItem->SetValue(_Value);
-		NewItem->SetDesc(_Desc);
-
-		AllItemList_.insert(std::make_pair(Key, NewItem));
-		return NewItem;
-	}
-
-	template<typename SkillKind>
-	PokemonSkill* CreateSkill(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
-	{
-		PokemonSkill* NewSkill = new SkillKind();
-		std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-		NewSkill->SetName(Key);
-		NewSkill->SetValue(_Value);
-		NewSkill->SetPP(_PP);
-		NewSkill->SetType(_Type);
-		NewSkill->SetSkillType(_SkillType);
-
-		AllPokemonSkillList_.insert(std::make_pair(Key, NewSkill));
-
-		return NewSkill;
-	}
+	PokemonSkillInfo* FindSkillInfo(const std::string& _Key);
+	ItemInfo* FindItemInfo(const std::string& _Key);
 
 protected:
 
 private:
 	std::map<std::string, PokemonInfo*> AllPokemonInfoList_;
-	std::map<std::string, PokemonSkill*> AllPokemonSkillList_;
-	std::map<std::string, Item*> AllItemList_;
+	std::map<std::string, PokemonSkillInfo*> AllSkillInfoList_;
+	std::map<std::string, ItemInfo*> AllItemInfoList_;
+
+	PokemonInfo* CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
+	PokemonSkillInfo* CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType);
+	ItemInfo* CreateItemInfo(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc);
 
 	Pokemon* CreatePokemon(const std::string& _Name);
-	PokemonInfo* CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
+	class PokemonSkill* CreatePokemonSkill(const std::string& _Name);
+	class Item* CreateItem(const std::string& _Name);
 };
 

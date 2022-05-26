@@ -1,56 +1,34 @@
 #pragma once
-#include <GameEngineBase/GameEngineNameObject.h>
-#include <GameEngine/GameEngineImage.h>
-#include <string>
-#include "ContentEnum.h"
+#include "ItemInfo.h"
 
-class Item : public GameEngineNameObject
+class ItemInfo;
+class Item
 {
 public:
+	// constrcuter destructer
 	Item();
 	~Item();
 
+	// delete Function
 	Item(const Item& _Other) = delete;
 	Item(Item&& _Other) noexcept = delete;
 	Item& operator=(const Item& _Other) = delete;
 	Item& operator=(Item&& _Other) noexcept = delete;
 
-	inline void SetValue(int _Value)
+	inline void SetInfo(ItemInfo* _Info)
 	{
-		Value_ = _Value;
+		MyInfo_ = _Info;
 	}
 
-	inline int GetValue()
+	inline ItemInfo* GetInfo()
 	{
-		return Value_;
-	}
-
-	inline void SetType(ItemType _Type)
-	{
-		Type_ = _Type;
-	}
-
-	inline ItemType GetType()
-	{
-		return Type_;
-	}
-
-	inline void SetDesc(const std::string& _Desc)
-	{
-		Desc_ = _Desc;
-	}
-
-	inline std::string& GetDesc()
-	{
-		return Desc_;
+		return MyInfo_;
 	}
 
 protected:
-	virtual void Use() = 0;
+	virtual void Use() {}
 
 private:
-	int Value_; //상처약이라면 회복될 수치
-	ItemType Type_;
-	std::string Desc_;
+	ItemInfo* MyInfo_;
 };
 
