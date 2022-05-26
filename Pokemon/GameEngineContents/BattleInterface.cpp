@@ -6,10 +6,12 @@
 #include "BattleEngine.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "BattleUnitRenderer.h"
+#include <GameEngineBase/GameEngineMath.h>
+#include <GameEngine/GameEngineImageManager.h>
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
-	,CurOrder(BattleOrder::None)
+	, CurOrder(BattleOrder::None)
 	, InterfaceImage(nullptr)
 	, Select(nullptr)
 	, MyHPUI(nullptr)
@@ -25,6 +27,7 @@ BattleInterface::BattleInterface()
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, PlayerEnd(false)
+	, BallLerp(0.0f)
 {
 
 }
@@ -79,9 +82,13 @@ void BattleInterface::Start()
 	PlayerStopCheck = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
-	MonsterBall = CreateRenderer("MonsterBall4.bmp", 99);
+	MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
 	MonsterBall->Off();
-	MonsterBall->SetPivot({ -500.0f,-250.0f });
+	MonsterBall->SetPivot({ -520.0f,-270.0f });
+
+	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
+	Image->CutCount(6, 1);
+	MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 }
 
 void BattleInterface::Render()
@@ -110,6 +117,8 @@ void BattleInterface::Update()
 
 	{
 		float Move = BattleUnitRenderer::PlayerRenderer_->GetPivot().x;
+		float BallMoveY = MonsterBall->GetPivot().y;
+		float BallMoveX = MonsterBall->GetPivot().x;
 		//현재 플레이어 렌더 위치(x)를 가져옴
 
 		// 폰트 출력이 완료되고 키입력 대기
@@ -129,6 +138,8 @@ void BattleInterface::Update()
 			if (GameEngineInput::GetInst()->IsDown("Z") == true)
 			{
 				PlayerEnd = true;
+				Fonts->EndFont();
+
 				//애니메이션체인지
 				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
 				//이때 플레이어가 왼쪽으로 빠져야함
@@ -136,26 +147,36 @@ void BattleInterface::Update()
 				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
 				{
 					BattleUnitRenderer::PlayerRenderer_->Off();
-					Fonts->EndFont();
 				}
 			}
-			// 모든 대화가 끝났을 때 x 키누르면 종료
-			//else if (GameEngineInput::GetInst()->IsDown("X") == true)
-			//{
-			//	Fonts->EndFont();
-			//}
 		}
 
 		if (PlayerEnd == true)
 		{
+			BallLerp += GameEngineTime::GetDeltaTime();
 			//플레이어 무빙
 			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*900.0f),31.0f});
 			if (MonsterBall->IsUpdate() == false)
 			{
 				MonsterBall->On();
+				MonsterBall->ChangeAnimation("BallRoll");
 			}
-			
-			MonsterBall->SetPivot({-500.0f,-250.0f + (GameEngineTime::GetDeltaTime()*100.0f)});
+
+			{	//볼 던지기 무빙
+				if (BallLerp <= 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
+				}
+
+				if (BallLerp > 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
+					if (MonsterBall->GetPivot().y > 1000.0f)
+					{
+						MonsterBall->Off();
+					}
+				}
+			}
 		}
 	}
 

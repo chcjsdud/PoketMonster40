@@ -67,6 +67,7 @@ private:
 	GameEngineRenderer* BattleCommend;
 	
 	GameEngineRenderer* MonsterBall;
+	float BallLerp;
 	
 	BattleInterface* MainInterface;
 	
