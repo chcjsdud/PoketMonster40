@@ -23,7 +23,7 @@ Bag::Bag()
 	, SelectArrow_(nullptr)
 	, SelectIndex_(0)
 	, ItemPreview_(nullptr)
-	, ItemNameFonts_{nullptr}
+	, ItemNameFonts_{}
 	, BagIndex_(0)
 	, BagMoveTime_(0.f)
 	, IsMove_(false)
@@ -108,135 +108,12 @@ void Bag::Update()
 
 void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-	BagType_ = ItemType::ITEM;
-	SelectIndex_ = 0;
-	BagIndex_ = 0;
 
-	IsDialogOn_ = false;
-	DialogIndex_ = 0;
-
-	SetPosition(GameEngineWindow::GetScale().Half());
-	CreateRenderer("Bag_Back.bmp");
-
-	BagRedrerer_ = CreateRenderer("Bag_LeftOpen.bmp");
-	BagRedrerer_->SetPivot({ -317, -40 });
-
-	BagName_ = CreateRenderer("Bag_Items.bmp");
-	BagName_->SetPivot({ -314, -258 });
-
-	LeftArrow_ = CreateRenderer("Bag_LeftArrow.bmp");
-	LeftArrow_->SetPivot({ -436, -25 });
-	LeftArrow_->SetOrder(-1);
-	RightArrow_ = CreateRenderer("Bag_RightArrow.bmp");
-	RightArrow_->SetPivot({ -200, -25 });
-	UpArrow_ = CreateRenderer("Bag_UpArrow.bmp");
-	UpArrow_->SetPivot({ 150, -280 });
-	UpArrow_->SetOrder(-1);
-	DownArrow_ = CreateRenderer("Bag_DownArrow.bmp");
-	DownArrow_->SetPivot({ 150, 90 });
-	DownArrow_->SetOrder(-1);
-
-	SelectArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	SelectArrow_->SetPivot({ -107, -250 });
-
-	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
-	ItemPreview_->SetPivot({ -400, 225 });
-
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-
-	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
-	BagDialog_->SetPivot({ 335, 190 });
-	BagDialog_->Off();
-
-	DialogBox_ = CreateRenderer("DialogBox_LogBox.bmp");
-	DialogBox_->SetPivot({ -80, 224 });
-	DialogBox_->Off();
-
-	DialogArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	DialogArrow_->SetPivot({ 240, 130 });
-	DialogArrow_->Off();
-
-	ShowItemList();
-	ShowItemInfo();
-
-	HideFonts();
-
-	ChangeBag();
-	
-	CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
 }
 
 void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
-	BagRedrerer_->Death();
-	BagName_->Death();
-	BagDialog_->Death();
-	DialogBox_->Death();
-	DialogArrow_->Death();
-
-	LeftArrow_->Death();
-	RightArrow_->Death();
-	UpArrow_->Death();
-	DownArrow_->Death();
-
-	SelectArrow_->Death(); //아이템 선택 화살표
-
-	{
-		std::vector<Item*>::iterator StartIter = ItemList_.begin();
-		std::vector<Item*>::iterator EndIter = ItemList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-			}
-		}
-	}
-
-	{
-		std::vector<Item*>::iterator StartIter = KeyItemList_.begin();
-		std::vector<Item*>::iterator EndIter = KeyItemList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
-	{
-		std::vector<Item*>::iterator StartIter = BallList_.begin();
-		std::vector<Item*>::iterator EndIter = BallList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
-	ItemPreview_->Death(); //현재 선택한 아이템 이미지
-
-	DestroyFonts();
-
-	CurrentItem_ = nullptr;
-	CurrentPokemon_ = nullptr;
+	
 }
 
 
@@ -907,6 +784,69 @@ void Bag::ShowBallList()
 	ShowFonts(BallList_);
 }
 
+void Bag::BagInit()
+{
+	BagType_ = ItemType::ITEM;
+	SelectIndex_ = 0;
+	BagIndex_ = 0;
+
+	IsDialogOn_ = false;
+	DialogIndex_ = 0;
+
+	SetPosition(GameEngineWindow::GetScale().Half());
+	CreateRenderer("Bag_Back.bmp");
+
+	BagRedrerer_ = CreateRenderer("Bag_LeftOpen.bmp");
+	BagRedrerer_->SetPivot({ -317, -40 });
+
+	BagName_ = CreateRenderer("Bag_Items.bmp");
+	BagName_->SetPivot({ -314, -258 });
+
+	LeftArrow_ = CreateRenderer("Bag_LeftArrow.bmp");
+	LeftArrow_->SetPivot({ -436, -25 });
+	LeftArrow_->SetOrder(-1);
+	RightArrow_ = CreateRenderer("Bag_RightArrow.bmp");
+	RightArrow_->SetPivot({ -200, -25 });
+	UpArrow_ = CreateRenderer("Bag_UpArrow.bmp");
+	UpArrow_->SetPivot({ 150, -280 });
+	UpArrow_->SetOrder(-1);
+	DownArrow_ = CreateRenderer("Bag_DownArrow.bmp");
+	DownArrow_->SetPivot({ 150, 90 });
+	DownArrow_->SetOrder(-1);
+
+	SelectArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
+	SelectArrow_->SetPivot({ -107, -250 });
+
+	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
+	ItemPreview_->SetPivot({ -400, 225 });
+
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+
+	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
+	BagDialog_->SetPivot({ 335, 190 });
+	BagDialog_->Off();
+
+	DialogBox_ = CreateRenderer("DialogBox_LogBox.bmp");
+	DialogBox_->SetPivot({ -80, 224 });
+	DialogBox_->Off();
+
+	DialogArrow_ = CreateRenderer("Bag_CurrentArrow.bmp");
+	DialogArrow_->SetPivot({ 240, 130 });
+	DialogArrow_->Off();
+
+	ShowItemList();
+	ShowItemInfo();
+
+	HideFonts();
+
+	ChangeBag();
+
+	CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
+}
+
 void Bag::UpFonts()
 {
 	if (7 > ItemNameFonts_.size())
@@ -1073,5 +1013,78 @@ void Bag::DestroyDialogFonts()
 	}
 
 	DialogFonts_.clear();
+}
+
+void Bag::DestroyBag()
+{
+	BagRedrerer_->Death();
+	BagName_->Death();
+	BagDialog_->Death();
+	DialogBox_->Death();
+	DialogArrow_->Death();
+
+	LeftArrow_->Death();
+	RightArrow_->Death();
+	UpArrow_->Death();
+	DownArrow_->Death();
+
+	SelectArrow_->Death(); //아이템 선택 화살표
+
+	{
+		std::vector<Item*>::iterator StartIter = ItemList_.begin();
+		std::vector<Item*>::iterator EndIter = ItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+	ItemList_.clear();
+
+	{
+		std::vector<Item*>::iterator StartIter = KeyItemList_.begin();
+		std::vector<Item*>::iterator EndIter = KeyItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+	KeyItemList_.clear();
+
+	{
+		std::vector<Item*>::iterator StartIter = BallList_.begin();
+		std::vector<Item*>::iterator EndIter = BallList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if ((*StartIter) != nullptr)
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+	BallList_.clear();
+
+	ItemPreview_->Death(); //현재 선택한 아이템 이미지
+
+	DestroyFonts();
+
+	CurrentItem_ = nullptr;
+
+	delete CurrentPokemon_; //받아올 때는 지우자
+	CurrentPokemon_ = nullptr;
 }
 

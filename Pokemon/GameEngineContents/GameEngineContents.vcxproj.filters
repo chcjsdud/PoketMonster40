@@ -136,6 +136,9 @@
     <ClCompile Include="PokemonSkill.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="TestActor.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -276,6 +279,9 @@
     </ClInclude>
     <ClInclude Include="PokemonSkill.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActor.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,16 +14,18 @@ PokemonInfo::PokemonInfo()
 	, Def_(0)
 	, SpAtt_(0)
 	, SpDef_(0)
+	, Speed_(0)
+	, IsFaint_(false)
 	, IsPlayer_(false)
 	, IsGender_(false)
 	, BattleBack_()
 	, BattleFront_()
 	, MyProfile_()
 	, MyIcon_()
-	, MySkills_{nullptr}
+	, MySkills_{}
 	, MySkillCount_(0)
+	, MyItem_(nullptr)
 {
-	MySkills_.resize(4);
 	MySkillCount_ = 0;
 }
 

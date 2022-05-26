@@ -14,6 +14,9 @@ public:
 	Bag& operator=(const Bag& _Other) = delete;
 	Bag& operator=(Bag&& _Other) noexcept = delete;
 
+	void BagInit();
+	void DestroyBag();
+
 	void MoveBag(); //아이템 타입 이동
 	void ChangeBag();
 	void ShowItemList();
@@ -42,6 +45,10 @@ public:
 	void DestroyOverlapFonts(); //아이템 중복 삭제
 	void DestroyDialogFonts(); //다이얼로그 삭제
 
+	inline void SetCurrentPokemon(class Pokemon* _Pokemon)
+	{
+		CurrentPokemon_ = _Pokemon;
+	}
 
 protected:
 	void Start() override;
@@ -93,6 +100,6 @@ private:
 	int DialogIndex_;
 
 	Item* CurrentItem_;
-	class Pokemon* CurrentPokemon_;
+	Pokemon* CurrentPokemon_;
 };
 

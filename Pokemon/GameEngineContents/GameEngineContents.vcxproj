@@ -302,6 +302,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TestActor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="TitleBackground.h">
       <SubType>
       </SubType>
@@ -463,6 +467,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Tackle.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="TestActor.cpp">
       <SubType>
       </SubType>
     </ClCompile>
