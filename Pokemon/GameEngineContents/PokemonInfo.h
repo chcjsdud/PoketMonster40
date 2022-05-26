@@ -238,6 +238,16 @@ public:
 	{
 		return MySkills_;
 	}
+	
+	inline void SetMyItem(class Item* _Item)
+	{
+		MyItem_ = _Item;
+	}
+	
+	inline Item* GetMyItem()
+	{
+		return MyItem_;
+	}
 
 protected:
 
@@ -268,5 +278,7 @@ private:
 
 	std::vector<PokemonSkill*> MySkills_;
 	int MySkillCount_;
+
+	Item* MyItem_;
 };
 
