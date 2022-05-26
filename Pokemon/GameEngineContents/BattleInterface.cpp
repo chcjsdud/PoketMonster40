@@ -79,6 +79,9 @@ void BattleInterface::Start()
 	PlayerStopCheck = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
+	MonsterBall = CreateRenderer("MonsterBall4.bmp", 99);
+	MonsterBall->Off();
+	MonsterBall->SetPivot({ -500.0f,-250.0f });
 }
 
 void BattleInterface::Render()
@@ -144,8 +147,11 @@ void BattleInterface::Update()
 
 		if (PlayerEnd == true)
 		{
+			//플레이어 무빙
 			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*900.0f),31.0f});
-			//플레이어 무빙 설정
+
+			MonsterBall->On();
+			MonsterBall->SetPivot({-500.0f,-250.0f + (GameEngineTime::GetDeltaTime()*100.0f)});
 		}
 	}
 

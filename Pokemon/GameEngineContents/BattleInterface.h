@@ -66,6 +66,7 @@ private:
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
 	
+	GameEngineRenderer* MonsterBall;
 	
 	BattleInterface* MainInterface;
 	
