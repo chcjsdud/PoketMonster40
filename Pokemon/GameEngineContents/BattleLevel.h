@@ -5,6 +5,7 @@
 #include "BattleInterface.h"
 #include "BattleEnum.h"
 #include "Pokemon.h"
+#include <set>
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
@@ -204,8 +205,10 @@ private:
 	//현재 랭크 상태
 	std::map<PokemonAbility, int> CurrentRank_;
 
+
 	// PokemonSkill 상속에 virtual 함수 Ing, End 필요
 	std::list<PokemonBattleState::ApplySkill*> AllCurrentApplySkill_;
+	std::set<StatusEffect> ApplyStatus_;
 
 	// 현재 적용받는 스킬들
 	class ApplySkill
@@ -233,13 +236,23 @@ private:
 			return LeftTurn_;
 		}
 
+		inline PokemonSkill* GetSkill() const
+		{
+			return Skill_;
+		}
+
+		inline PokemonBattleState* GetPokemon() const
+		{
+			return CastPokemon_;
+		}
+
 		void Update() const
 		{
 			//Skill_->;
 		}
 	private:
-		const PokemonBattleState* CastPokemon_;
-		const PokemonSkill* Skill_;
+		PokemonBattleState* const CastPokemon_;
+		PokemonSkill* const Skill_;
 		int LeftTurn_;
 	};
 
@@ -279,6 +292,7 @@ private:
 
 	bool Critical_;
 	bool PlayerFirst_;
+	bool Action_;
 
 public:
 	bool Update();

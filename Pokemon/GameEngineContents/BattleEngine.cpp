@@ -1,4 +1,5 @@
 #include "BattleEngine.h"
+#include <GameEngineBase/GameEngineDebug.h>
 
 
 BattleEngine::BattleEngine()
@@ -21,16 +22,54 @@ bool BattleEngine::ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* 
 	return PlayerSpeed >= PoeSpeed ? true : false;
 }
 
-float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill& _Skill, const DamgeType& _DamgeType)
+float BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkill* _Skill, const DamgeType& _DamgeType)
 {
-	//SkillType SkillType = _Skill.GetSkillType();
-	//_Att->Pokemon_->GetInfo()->GetSkill;
-	//if (SkillType == )
-	//{
+	//_Att->Pokemon_->GetInfo()->GetSkill();
+	PokemonInfo* AttPlayerInfo = _Att->Pokemon_->GetInfo();
+	PokemonInfo* DefPlayerInfo = _Def->Pokemon_->GetInfo();
+	SkillType SkillType = _Skill->GetSkillType();
 
-	//}
-	//_Att->Pokemon_->GetInfo()->
-	//// int _Att->
+	int AttLevel = _Att->Pokemon_->GetInfo()->GetMyLevel();
+	int SkillPower = _Skill->GetValue();
+
+	int AttPower = SkillType == SkillType::Physical ? AttPlayerInfo->GetAtt() * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::Att) 
+		: AttPlayerInfo->GetSpAtt() * const_cast<PokemonBattleState*>(_Att)->GetRank(PokemonAbility::SpAtt);
+
+	int DefDefence = SkillType == SkillType::Physical ? DefPlayerInfo->GetDef() * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::Def)
+		: DefPlayerInfo->GetSpDef() * const_cast<PokemonBattleState*>(_Def)->GetRank(PokemonAbility::SpDef);
+
+	float Mod1 = 1.0;
+	{
+		for (auto& ApplySkill : _Att->AllCurrentApplySkill_)
+		{
+			
+		}
+	}
+
+	float Critical = 1.0f;
+	int RandomValue = (GameEngineRandom::GetInst_->RandomInt(217, 255) * 100) / 255;
+	float SameType = _Att->Pokemon_->GetInfo()->GetMyType() == _Skill->GetType() ? 1.5f : 1.0f;
+	float CompareType = 1.0f;
+	switch (_DamgeType)
+	{
+	case DamgeType::Great:
+		CompareType = 2.0f;
+		break;
+	case DamgeType::Nomal:
+		CompareType = 1.0f;
+		break;
+	case DamgeType::Bad:
+		CompareType = 0.5f;
+		break;
+	case DamgeType::Nothing:
+		CompareType = 0.0f;
+		break;
+	default:
+		break;
+	}
+	//float FinalDamage = (((( AttLevel * 2 / 5 ) + 2 ) * SkillPower * AttPower / 50 ) / DefDefence ) *
+	
+	
 	return 1.0f;
 }
 
