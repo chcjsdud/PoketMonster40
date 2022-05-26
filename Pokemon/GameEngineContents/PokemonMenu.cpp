@@ -9,7 +9,7 @@
 #include <GameEngine/GameEngine.h>
 
 
-PokemonMenu::PokemonMenu():
+PokemonMenu::PokemonMenu() :
 	BackgroundRenderer_(nullptr),
 	PokemonNumber_(0),
 	DialogRenderer_(nullptr),
@@ -18,7 +18,10 @@ PokemonMenu::PokemonMenu():
 	RememberOrder_(0),
 	CurState_(PokemonMenuType::SelectPokemon),
 	CurTickTime_(0),
-	CanJump_{false,}
+	CanJump_{ false, },
+	SwitchingTime_(0),
+	IsSwitchingStart_(true),
+	IsSwitchingTurn_(false)
 {
 	PokemonRenderer_.resize(6);
 	PokemonNameFonts_.reserve(6);
@@ -51,23 +54,39 @@ void PokemonMenu::Update()
 
 void PokemonMenu::Render()
 {
+	if (CurState_ == PokemonMenuType::Switching)
+	{
+		return;
+	}
 	UpdateRenderInfo();
-
 	//아이콘 점프 업데이트 
 	IconJump();
+
 
 	//포켓몬 이미지 선택 렌더링
 	if (CurrentOrder_ == 0) //선택된 경우
 	{
 		BoxRenderer_[0]->SetPivot({ 8,72 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스ㅇ
+		//상태가 Switch면 Swith쪽 이미지로 바꾼다
+		if (CurState_ == PokemonMenuType::SelectSwitch)
+		{
+			BoxRenderer_[0]->SetImage("PoketmonMenu_26.bmp");
+		}
 		IconJumpOn(0);
 	}
-	
 	else
 	{
 		BoxRenderer_[0]->SetPivot({ 8,80 });
+		//체인지1로 선택된 경우 이미지 변경
 		BoxRenderer_[0]->SetImage("PoketmonMenu_14.bmp"); //커다란 박스
+		if (CurState_ == PokemonMenuType::SelectSwitch)
+		{
+			if (0 == ChangePokemonNumber_1)
+			{
+				BoxRenderer_[0]->SetImage("PoketmonMenu_25.bmp");
+			}
+		}
 		IconJumpOff(0);
 	}
 
@@ -77,12 +96,26 @@ void PokemonMenu::Render()
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-60 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_13.bmp"); //작은 박스
+
+			//상태가 Switch면 Swith쪽 이미지로 바꾼다
+			if (CurState_ == PokemonMenuType::SelectSwitch)
+			{
+				BoxRenderer_[i]->SetImage("PoketmonMenu_24.bmp");
+			}
 			IconJumpOn(i);
 		}
 		else //선택 안된 경우
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-56 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_12.bmp"); //작은 박스
+			//Switch상태일 경우
+			if (CurState_ == PokemonMenuType::SelectSwitch)
+			{
+				if (i == ChangePokemonNumber_1)
+				{
+					BoxRenderer_[i]->SetImage("PoketmonMenu_23.bmp");
+				}
+			}
 			IconJumpOff(i);
 		}	
 	}
@@ -222,6 +255,14 @@ void PokemonMenu::UpdateRenderInfo()
 				GenderRenderer_[i]->SetPivot({ 636,static_cast<float>(+96 * i) });
 			}
 		}
+		//HP 렌더러
+		{		
+			HpRenderer_[0]->SetPivot({ 128,236 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				HpRenderer_[i]->SetPivot({ 736,static_cast<float>(-24 + 96 * i) });
+			}
+		}
 
 	}
 }
@@ -244,6 +285,9 @@ void PokemonMenu::ChangeState(PokemonMenuType _Type)
 	case PokemonMenu::PokemonMenuType::SelectSwitch:
 		SelectSwitchStart();
 		break;
+	case PokemonMenu::PokemonMenuType::Switching:
+		SwitchingStart();
+		break;
 	default:
 		break;
 	}
@@ -262,6 +306,9 @@ void PokemonMenu::UpdateState()
 		break;
 	case PokemonMenu::PokemonMenuType::SelectSwitch:
 		SelectSwitchUpdate();
+		break;
+	case PokemonMenu::PokemonMenuType::Switching:
+		SwitchingUpdate();
 		break;
 	default:
 		break;
@@ -338,11 +385,13 @@ void PokemonMenu::SelectPokemonUpdate()
 	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
 		ChangeState(PokemonMenuType::SelectAction);
+		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonMenuType::SelectPokemon);
+		return;
 	}
 }
 
@@ -381,9 +430,11 @@ void PokemonMenu::SelectActionUpdate()
 		case 1:
 			ChangePokemonNumber_1 = CurrentOrder_;
 			ChangeState(PokemonMenuType::SelectSwitch);
+			return;
 			break;
 		case 3:
 			ChangeState(PokemonMenuType::SelectPokemon);
+			return;
 			break;
 
 		default:
@@ -483,60 +534,28 @@ void PokemonMenu::SelectSwitchUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
+		//현재 캔슬 버튼 위치면, ChangeState
+		if (CurrentOrder_ == PokemonNumber_)
+		{
+			ChangeState(PokemonMenuType::SelectPokemon);
+			return;
+		}
+		else
+		{
+			ChangePokemonNumber_2 = CurrentOrder_;
+			if (ChangePokemonNumber_1 != ChangePokemonNumber_2)
+			{
+				ChangeState(PokemonMenuType::Switching);
+				return;
+			}
+
+		}
+
+		//이거 따로 셋팅
 		ChangePokemonNumber_2 = CurrentOrder_;
 		if (ChangePokemonNumber_1 != ChangePokemonNumber_2)
 		{
-			{
-				//Info 변경
-				PokemonInfo* temp = PokemonList_[ChangePokemonNumber_1];
-				PokemonList_[ChangePokemonNumber_1] = PokemonList_[ChangePokemonNumber_2];
-				PokemonList_[ChangePokemonNumber_2] = temp;
-			}
-
-			//포켓몬 아이콘 변경
-			{
-				GameEngineRenderer* temp = PokemonRenderer_[ChangePokemonNumber_1];
-				PokemonRenderer_[ChangePokemonNumber_1] = PokemonRenderer_[ChangePokemonNumber_2];
-				PokemonRenderer_[ChangePokemonNumber_2] = temp;
-			}
-
-			//젠더 아이콘 변경
-			{
-				GameEngineRenderer* temp = GenderRenderer_[ChangePokemonNumber_1];
-				GenderRenderer_[ChangePokemonNumber_1] = GenderRenderer_[ChangePokemonNumber_2];
-				GenderRenderer_[ChangePokemonNumber_2] = temp;
-			}
-
-			//Fonts변경
-			{
-				//이름
-				{
-					auto* temp = PokemonNameFonts_[ChangePokemonNumber_1];
-					PokemonNameFonts_[ChangePokemonNumber_1] = PokemonNameFonts_[ChangePokemonNumber_2];
-					PokemonNameFonts_[ChangePokemonNumber_2] = temp;
-				}
-
-				//레벨
-				{
-					auto* temp = PokemonLevelFonts_[ChangePokemonNumber_1];
-					PokemonLevelFonts_[ChangePokemonNumber_1] = PokemonLevelFonts_[ChangePokemonNumber_2];
-					PokemonLevelFonts_[ChangePokemonNumber_2] = temp;
-				}
-
-				//현재 체력
-				{
-					auto* temp = CurHpFonts_[ChangePokemonNumber_1];
-					CurHpFonts_[ChangePokemonNumber_1] = CurHpFonts_[ChangePokemonNumber_2];
-					CurHpFonts_[ChangePokemonNumber_2] = temp;
-				}
-
-				//최대 체력
-				{
-					auto* temp = MaxHpFonts_[ChangePokemonNumber_1];
-					MaxHpFonts_[ChangePokemonNumber_1] = MaxHpFonts_[ChangePokemonNumber_2];
-					MaxHpFonts_[ChangePokemonNumber_2] = temp;
-				}
-			}
+			
 
 		}
 	}
@@ -547,6 +566,161 @@ void PokemonMenu::SelectSwitchUpdate()
 	}
 }
 
+void PokemonMenu::SwitchingStart()
+{
+	SwitchingTime_ = 0;
+	IsSwitchingStart_ = true;
+	IsSwitchingTurn_ = false;
+}
+
+void PokemonMenu::SwitchingUpdate()
+{
+	float Speed = 1350.0f;
+	float SwitchingTimeAcc = 0.7f;
+	if (IsSwitchingStart_ == true)
+	{
+		SwitchingTime_ += GameEngineTime::GetDeltaTime();
+	}
+	else
+	{
+		SwitchingTime_ -= GameEngineTime::GetDeltaTime();
+	}
+
+	if (SwitchingTime_ <= 0 && IsSwitchingStart_ == false)
+	{
+		ChangeState(PokemonMenuType::SelectPokemon);
+		return;
+	}
+
+	if (SwitchingTime_ >= 0.5f)
+	{
+		IsSwitchingStart_ = false;
+
+		//이 시점에서 포켓몬의 정보가 바뀐다
+		if (IsSwitchingTurn_ == false)
+		{
+			IsSwitchingTurn_ = true;
+			{
+				//Info 변경
+				PokemonInfo* temp = PokemonList_[ChangePokemonNumber_1];
+				PokemonList_[ChangePokemonNumber_1] = PokemonList_[ChangePokemonNumber_2];
+				PokemonList_[ChangePokemonNumber_2] = temp;
+			}
+
+			//포켓몬 아이콘 변경
+			{
+				GameEngineRenderer* temp = PokemonRenderer_[ChangePokemonNumber_1];
+				float4 Pos_1 = PokemonRenderer_[ChangePokemonNumber_1]->GetPivot();
+				PokemonRenderer_[ChangePokemonNumber_1]->SetPivot(PokemonRenderer_[ChangePokemonNumber_2]->GetPivot());
+				PokemonRenderer_[ChangePokemonNumber_2]->SetPivot(Pos_1);
+				PokemonRenderer_[ChangePokemonNumber_1] = PokemonRenderer_[ChangePokemonNumber_2];
+				PokemonRenderer_[ChangePokemonNumber_2] = temp;
+
+			}
+
+			//젠더 아이콘 변경
+			{
+				GameEngineRenderer* temp = GenderRenderer_[ChangePokemonNumber_1];
+				float4 Pos_1 = GenderRenderer_[ChangePokemonNumber_1]->GetPivot();
+				GenderRenderer_[ChangePokemonNumber_1]->SetPivot(GenderRenderer_[ChangePokemonNumber_2]->GetPivot());
+				GenderRenderer_[ChangePokemonNumber_2]->SetPivot(Pos_1);
+				GenderRenderer_[ChangePokemonNumber_1] = GenderRenderer_[ChangePokemonNumber_2];
+				GenderRenderer_[ChangePokemonNumber_2] = temp;
+			}
+
+			//HP렌더러 변경
+			{
+				GameEngineRenderer* temp = HpRenderer_[ChangePokemonNumber_1];
+				float4 Pos_1 = HpRenderer_[ChangePokemonNumber_1]->GetPivot();
+				HpRenderer_[ChangePokemonNumber_1]->SetPivot(HpRenderer_[ChangePokemonNumber_2]->GetPivot());
+				HpRenderer_[ChangePokemonNumber_2]->SetPivot(Pos_1);
+				HpRenderer_[ChangePokemonNumber_1] = HpRenderer_[ChangePokemonNumber_2];
+				HpRenderer_[ChangePokemonNumber_2] = temp;
+			}
+
+			//Fonts변경
+			{
+				//이름
+				{
+					auto* temp = PokemonNameFonts_[ChangePokemonNumber_1];
+					float4 Pos_1 = PokemonNameFonts_[ChangePokemonNumber_1]->GetPosition();
+					PokemonNameFonts_[ChangePokemonNumber_1]->SetPosition(PokemonNameFonts_[ChangePokemonNumber_2]->GetPosition());
+					PokemonNameFonts_[ChangePokemonNumber_2]->SetPosition(Pos_1);
+					PokemonNameFonts_[ChangePokemonNumber_1] = PokemonNameFonts_[ChangePokemonNumber_2];
+					PokemonNameFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//레벨
+				{
+					auto* temp = PokemonLevelFonts_[ChangePokemonNumber_1];
+					float4 Pos_1 = PokemonLevelFonts_[ChangePokemonNumber_1]->GetPosition();
+					PokemonLevelFonts_[ChangePokemonNumber_1]->SetPosition(PokemonLevelFonts_[ChangePokemonNumber_2]->GetPosition());
+					PokemonLevelFonts_[ChangePokemonNumber_2]->SetPosition(Pos_1);
+					PokemonLevelFonts_[ChangePokemonNumber_1] = PokemonLevelFonts_[ChangePokemonNumber_2];
+					PokemonLevelFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//현재 체력
+				{
+					auto* temp = CurHpFonts_[ChangePokemonNumber_1];
+					float4 Pos_1 = CurHpFonts_[ChangePokemonNumber_1]->GetPosition();
+					CurHpFonts_[ChangePokemonNumber_1]->SetPosition(CurHpFonts_[ChangePokemonNumber_2]->GetPosition());
+					CurHpFonts_[ChangePokemonNumber_2]->SetPosition(Pos_1);
+					CurHpFonts_[ChangePokemonNumber_1] = CurHpFonts_[ChangePokemonNumber_2];
+					CurHpFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//최대 체력
+				{
+					auto* temp = MaxHpFonts_[ChangePokemonNumber_1];
+					float4 Pos_1 = MaxHpFonts_[ChangePokemonNumber_1]->GetPosition();
+					MaxHpFonts_[ChangePokemonNumber_1]->SetPosition(MaxHpFonts_[ChangePokemonNumber_2]->GetPosition());
+					MaxHpFonts_[ChangePokemonNumber_2]->SetPosition(Pos_1);
+					MaxHpFonts_[ChangePokemonNumber_1] = MaxHpFonts_[ChangePokemonNumber_2];
+					MaxHpFonts_[ChangePokemonNumber_2] = temp;
+				}
+			}
+
+		}
+	}
+
+	if (IsSwitchingStart_ == true)
+	{
+		if (ChangePokemonNumber_1 == 0)
+		{
+			MoveAllRenderer(ChangePokemonNumber_1, Speed* SwitchingTimeAcc);
+			MoveAllRenderer(ChangePokemonNumber_2, Speed);
+		}
+		else if (ChangePokemonNumber_2 == 0)
+		{
+			MoveAllRenderer(ChangePokemonNumber_2, Speed * SwitchingTimeAcc);
+			MoveAllRenderer(ChangePokemonNumber_1, Speed);
+		}
+		else
+		{
+			MoveAllRenderer(ChangePokemonNumber_1, Speed);
+			MoveAllRenderer(ChangePokemonNumber_2, Speed);
+		}
+	}
+	else
+	{
+		if (ChangePokemonNumber_1 == 0)
+		{
+			MoveAllRenderer(ChangePokemonNumber_1, -Speed * SwitchingTimeAcc);
+			MoveAllRenderer(ChangePokemonNumber_2,- Speed);
+		}
+		else if (ChangePokemonNumber_2 == 0)
+		{
+			MoveAllRenderer(ChangePokemonNumber_2, -Speed * SwitchingTimeAcc);
+			MoveAllRenderer(ChangePokemonNumber_1, -Speed);
+		}
+		else
+		{
+			MoveAllRenderer(ChangePokemonNumber_1,- Speed);
+			MoveAllRenderer(ChangePokemonNumber_2, -Speed);
+		}
+	}
+}
 
 
 void PokemonMenu::InitRenderer()
@@ -825,6 +999,33 @@ void PokemonMenu::InitFont()
 
 }
 
+
+void PokemonMenu::MoveAllRenderer(int _index, float _Speed)
+{
+	if (_index == 0)
+	{
+		BoxRenderer_[0]->SetPivot(float4(BoxRenderer_[0]->GetPivot().x - GameEngineTime::GetDeltaTime() * _Speed, BoxRenderer_[0]->GetPivot().y));
+		CurHpFonts_[0]->SetMove(float4::LEFT * GameEngineTime::GetDeltaTime() * _Speed);
+		MaxHpFonts_[0]->SetMove(float4::LEFT * GameEngineTime::GetDeltaTime() * _Speed);
+		PokemonRenderer_[0]->SetPivot(float4(PokemonRenderer_[0]->GetPivot().x - GameEngineTime::GetDeltaTime() * _Speed, PokemonRenderer_[0]->GetPivot().y));
+		PokemonLevelFonts_[0]->SetMove(float4::LEFT * GameEngineTime::GetDeltaTime() * _Speed);
+		HpRenderer_[0]->SetPivot(float4(HpRenderer_[0]->GetPivot().x - GameEngineTime::GetDeltaTime() * _Speed, HpRenderer_[0]->GetPivot().y));
+		PokemonNameFonts_[0] -> SetMove(float4::LEFT * GameEngineTime::GetDeltaTime() * _Speed);
+		GenderRenderer_[0]->SetPivot(float4(GenderRenderer_[0]->GetPivot().x - GameEngineTime::GetDeltaTime() * _Speed, GenderRenderer_[0]->GetPivot().y));
+	}
+	else
+	{
+		BoxRenderer_[_index]->SetPivot(float4(BoxRenderer_[_index]->GetPivot().x + GameEngineTime::GetDeltaTime() * _Speed, BoxRenderer_[_index]->GetPivot().y));
+		CurHpFonts_[_index]->SetMove(float4::RIGHT * GameEngineTime::GetDeltaTime() * _Speed);
+		MaxHpFonts_[_index]->SetMove(float4::RIGHT * GameEngineTime::GetDeltaTime() * _Speed);
+		PokemonRenderer_[_index]->SetPivot(float4(PokemonRenderer_[_index]->GetPivot().x + GameEngineTime::GetDeltaTime() * _Speed, PokemonRenderer_[_index]->GetPivot().y));
+		PokemonLevelFonts_[_index]->SetMove(float4::RIGHT * GameEngineTime::GetDeltaTime() * _Speed);
+		HpRenderer_[_index]->SetPivot(float4(HpRenderer_[_index]->GetPivot().x + GameEngineTime::GetDeltaTime() * _Speed, HpRenderer_[_index]->GetPivot().y));
+		PokemonNameFonts_[_index]->SetMove(float4::RIGHT * GameEngineTime::GetDeltaTime() * _Speed);
+		GenderRenderer_[_index]->SetPivot(float4(GenderRenderer_[_index]->GetPivot().x + GameEngineTime::GetDeltaTime() * _Speed, GenderRenderer_[_index]->GetPivot().y));
+	}
+
+}
 
 void PokemonMenu::IconJump()
 {

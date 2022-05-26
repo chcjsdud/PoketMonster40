@@ -10,6 +10,7 @@ class PokemonMenu : public GameEngineActor
 		SelectPokemon,
 		SelectAction,
 		SelectSwitch,
+		Switching,
 		Max
 	};
 public:
@@ -42,6 +43,9 @@ private:
 	void SelectSwitchStart();
 	void SelectSwitchUpdate();
 
+	void SwitchingStart();
+	void SwitchingUpdate();
+
 	PokemonMenuType CurState_;
 
 	void InitRenderer();
@@ -72,6 +76,12 @@ private:
 	std::vector<GameEngineRenderer*> PokemonRenderer_;
 	GameEngineRenderer* HpRenderer_[6];
 	GameEngineRenderer* GenderRenderer_[6];
+
+	//Switching 연출관련
+	float SwitchingTime_;
+	bool IsSwitchingStart_;
+	bool IsSwitchingTurn_;
+	void MoveAllRenderer(int _index, float _Speed);
 
 	//포켓몬 아이콘 관련
 	float CurTickTime_;
