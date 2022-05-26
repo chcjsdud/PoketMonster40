@@ -55,8 +55,9 @@ void BattleInterface::Start()
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
-	
+	InterfaceImage->Off();
 	Select = CreateRenderer("Select.bmp", 3);
+	Select->Off();
 
 	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp",2);
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",2);
@@ -176,6 +177,12 @@ void BattleInterface::Update()
 						MonsterBall->Off();
 					}
 				}
+
+				if (BallLerp > 2.0f)
+				{
+					InterfaceImage->On();
+					Select->On();
+				}
 			}
 		}
 	}
@@ -232,46 +239,48 @@ void BattleInterface::ShowNotEffective()
 
 bool BattleInterface::MoveKey()
 {
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-	{	//Fight에서 Pokemon으로
-		GetSelect()->SetPivot({ -190.0f,35.0f });
-	}
+	if (InterfaceImage->IsUpdate()==true)
+	{
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+		{	//Fight에서 Pokemon으로
+			GetSelect()->SetPivot({ -190.0f,35.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-	{	//Pokemon에서 Fight로
-		GetSelect()->SetPivot({ -190.0f,-25.0f });
-	}
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+		{	//Pokemon에서 Fight로
+			GetSelect()->SetPivot({ -190.0f,-25.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-	{	//Fight에서 Bag으로
-		GetSelect()->SetPivot({ 30.0f,-25.0f });
-	}
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+		{	//Fight에서 Bag으로
+			GetSelect()->SetPivot({ 30.0f,-25.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-	{	//Bag에서 Fight로
-		GetSelect()->SetPivot({ -190.0f,-25.0f });
-	}
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+		{	//Bag에서 Fight로
+			GetSelect()->SetPivot({ -190.0f,-25.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-	{	//Bag에서 Run으로
-		GetSelect()->SetPivot({ 30.0f,35.0f });
-	}
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+		{	//Bag에서 Run으로
+			GetSelect()->SetPivot({ 30.0f,35.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-	{	//Run에서 Bag으로
-		GetSelect()->SetPivot({ 30.0f,-25.0f });
-	}
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+		{	//Run에서 Bag으로
+			GetSelect()->SetPivot({ 30.0f,-25.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-	{	//Pokemon에서 Run으로
-		GetSelect()->SetPivot({ 30.0f,35.0f });
-	}
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+		{	//Pokemon에서 Run으로
+			GetSelect()->SetPivot({ 30.0f,35.0f });
+		}
 
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-	{	//Run에서 Pokemon으로
-		GetSelect()->SetPivot({ -190.0f,35.0f });
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+		{	//Run에서 Pokemon으로
+			GetSelect()->SetPivot({ -190.0f,35.0f });
+		}
 	}
-
 
 
 	// 장중혁 : Debug
@@ -320,29 +329,32 @@ void BattleInterface::OrderCheck()
 
 void BattleInterface::SelectOrder()
 {
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-	{	//싸우다 선택
-		CurOrder = BattleOrder::Fight;
-	}
-
-	if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-	{	//포켓몬 선택
-		CurOrder = BattleOrder::Pokemon;
-	}
-
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-	{	//가방 선택
-		CurOrder = BattleOrder::Bag;
-	}
-	
-	if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+	if (InterfaceImage->IsUpdate() == true)
 	{
-		CurOrder = BattleOrder::Run;
-	}
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+		{	//싸우다 선택
+			CurOrder = BattleOrder::Fight;
+		}
 
-	if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
-	{
-		BattleCommend->Off();
-		CurOrder = BattleOrder::None;
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+		{	//포켓몬 선택
+			CurOrder = BattleOrder::Pokemon;
+		}
+
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+		{	//가방 선택
+			CurOrder = BattleOrder::Bag;
+		}
+
+		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+		{
+			CurOrder = BattleOrder::Run;
+		}
+
+		if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
+		{
+			BattleCommend->Off();
+			CurOrder = BattleOrder::None;
+		}
 	}
 }
