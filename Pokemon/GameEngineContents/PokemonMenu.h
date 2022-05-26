@@ -28,7 +28,7 @@ protected:
 	void Render() override;
 
 private:
-
+	void UpdateRenderInfo();
 	//Fsm
 	void ChangeState(PokemonMenuType _Type);
 	void UpdateState();
@@ -51,14 +51,15 @@ private:
 
 
 	//폰트 
-	std::list<GameEngineContentFont*> AllFonts_; //나중에 OffUI일때 모든 폰트 삭제하기
 	std::vector<GameEngineContentFont*> CurHpFonts_; //나중에 OffUi할 때 모든 폰트 클리어하기
+	std::vector< GameEngineContentFont*> PokemonNameFonts_;
+	std::vector< GameEngineContentFont*> PokemonLevelFonts_;
+	std::vector< GameEngineContentFont*> MaxHpFonts_;
 
 	GameEngineContentFont* DialogFont_;
 	GameEngineContentFont* SwitchFont_;
 	GameEngineContentFont* QuestionFont_;
 	void InitFont();
-	void UpdateFont();
 
 	//렌더러
 	GameEngineRenderer* MenuArrowRenderer_;
@@ -74,9 +75,10 @@ private:
 
 	//포켓몬 아이콘 관련
 	float CurTickTime_;
-	bool IsJump_;
-	void IconJump(GameEngineRenderer* _Render);
-	void ResetJump();
+	bool CanJump_[6]; //On일경우 점프를 반복
+	void IconJump();
+	void IconJumpOn(int _PokemonOrder);
+	void IconJumpOff(int _PokemonOrder);
 
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
 	//가지고 있는 포켓몬 수

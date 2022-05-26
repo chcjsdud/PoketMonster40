@@ -18,9 +18,11 @@ PokemonMenu::PokemonMenu():
 	RememberOrder_(0),
 	CurState_(PokemonMenuType::SelectPokemon),
 	CurTickTime_(0),
-	IsJump_(0)
+	CanJump_{false,}
 {
 	PokemonRenderer_.resize(6);
+	PokemonNameFonts_.reserve(6);
+	PokemonLevelFonts_.reserve(6);
 }
 
 PokemonMenu::~PokemonMenu()
@@ -43,41 +45,30 @@ void PokemonMenu::Start()
 
 void PokemonMenu::Update()
 {
-	UpdateState();	
-
+	UpdateState();
 
 }
 
 void PokemonMenu::Render()
 {
-	//포켓몬 렌더 피벗 정보 업데이트
-	{
-		//포켓몬
-		{
-			PokemonRenderer_[0]->SetPivot({ 65,200 });
-			for (size_t i = 1; i < PokemonNumber_; i++)
-			{
-				PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
-			}
-		}
+	UpdateRenderInfo();
 
-		//체력
-		{
+	//아이콘 점프 업데이트 
+	IconJump();
 
-		}
-		
-	}
 	//포켓몬 이미지 선택 렌더링
 	if (CurrentOrder_ == 0) //선택된 경우
 	{
 		BoxRenderer_[0]->SetPivot({ 8,72 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_15.bmp"); //커다란 박스ㅇ
+		IconJumpOn(0);
 	}
 	
 	else
 	{
 		BoxRenderer_[0]->SetPivot({ 8,80 });
 		BoxRenderer_[0]->SetImage("PoketmonMenu_14.bmp"); //커다란 박스
+		IconJumpOff(0);
 	}
 
 	for (int i = 1; i < 6; i++)
@@ -86,11 +77,13 @@ void PokemonMenu::Render()
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-60 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_13.bmp"); //작은 박스
+			IconJumpOn(i);
 		}
 		else //선택 안된 경우
 		{
 			BoxRenderer_[i]->SetPivot({ 352,static_cast<float>(-56 + 96 * i) });
 			BoxRenderer_[i]->SetImage("PoketmonMenu_12.bmp"); //작은 박스
+			IconJumpOff(i);
 		}	
 	}
 	if (CurrentOrder_ == PokemonNumber_)
@@ -172,6 +165,67 @@ void PokemonMenu::Render()
 
 
 
+void PokemonMenu::UpdateRenderInfo()
+{
+	//포켓몬 렌더 정보 업데이트
+	{
+		//포켓몬
+		{
+			PokemonRenderer_[0]->SetPivot({ 65,200 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
+			}
+		}
+
+		//이름
+		{
+			PokemonNameFonts_[0]->SetPosition({ 75,126 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				PokemonNameFonts_[i]->SetPosition({ 416,static_cast<float>(-60 + 96 * i) });
+			}
+		}
+
+		//레벨
+		{
+			PokemonLevelFonts_[0]->SetPosition({ 190,175 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				PokemonLevelFonts_[i]->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
+			}
+		}
+
+		//현재 체력
+		{
+			CurHpFonts_[0]->SetPosition({ 150,248 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				CurHpFonts_[i]->SetPosition({ 760,static_cast<float>(-16 + 96 * i) });
+			}
+		}
+
+		//최대 체력
+		{
+			MaxHpFonts_[0]->SetPosition({ 260,248 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				MaxHpFonts_[i]->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
+			}
+		}
+
+		//젠더
+		{
+			GenderRenderer_[0]->SetPivot({ 268,186 });
+			for (size_t i = 1; i < PokemonNumber_; i++)
+			{
+				GenderRenderer_[i]->SetPivot({ 636,static_cast<float>(+96 * i) });
+			}
+		}
+
+	}
+}
+
 void PokemonMenu::ChangeState(PokemonMenuType _Type)
 {
 	if (CurState_ == _Type)
@@ -228,14 +282,6 @@ void PokemonMenu::SelectPokemonStart()
 
 	//퀘스쳔 폰트 제거
 	{
-		for (GameEngineContentFont* i : AllFonts_)
-		{
-			if (i == QuestionFont_)
-			{
-				AllFonts_.remove(i);
-				break;
-			}
-		}
 		QuestionFont_->ClearCurrentFonts();
 	}
 
@@ -252,7 +298,6 @@ void PokemonMenu::SelectPokemonUpdate()
 		}
 		else
 		{
-			ResetJump();
 			CurrentOrder_++;
 		}
 	}
@@ -265,7 +310,6 @@ void PokemonMenu::SelectPokemonUpdate()
 		}
 		else
 		{
-			ResetJump();
 			CurrentOrder_--;
 		}
 	}
@@ -274,7 +318,6 @@ void PokemonMenu::SelectPokemonUpdate()
 	{
 		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
 		{
-			ResetJump();
 			RememberOrder_ = CurrentOrder_;
 			CurrentOrder_ = 0;
 		}
@@ -286,10 +329,8 @@ void PokemonMenu::SelectPokemonUpdate()
 		{
 			if (RememberOrder_ == 0)
 			{
-				ResetJump();
 				RememberOrder_ = 1;
 			}
-			ResetJump();
 			CurrentOrder_ = RememberOrder_;
 		}
 	}
@@ -319,7 +360,6 @@ void PokemonMenu::SelectActionStart()
 		QuestionFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 		QuestionFont_->SetPosition({ 16,540 });
 		QuestionFont_->ShowString("What do " + PokemonList_[CurrentOrder_]->GetNameCopy(), true);
-		AllFonts_.push_back(QuestionFont_);
 	}
 
 	SelectActionOrder_ = 0;
@@ -390,14 +430,6 @@ void PokemonMenu::SelectSwitchStart()
 
 	//퀘스쳔 폰트 제거
 	{
-		for (GameEngineContentFont* i : AllFonts_)
-		{
-			if (i == QuestionFont_)
-			{
-				AllFonts_.remove(i);
-				break;
-			}
-		}
 		QuestionFont_->ClearCurrentFonts();
 	}
 }
@@ -412,7 +444,6 @@ void PokemonMenu::SelectSwitchUpdate()
 		}
 		else
 		{
-			ResetJump();
 			CurrentOrder_++;
 		}
 	}
@@ -425,7 +456,6 @@ void PokemonMenu::SelectSwitchUpdate()
 		}
 		else
 		{
-			ResetJump();
 			CurrentOrder_--;
 		}
 	}
@@ -434,7 +464,6 @@ void PokemonMenu::SelectSwitchUpdate()
 	{
 		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
 		{
-			ResetJump();
 			RememberOrder_ = CurrentOrder_;
 			CurrentOrder_ = 0;
 		}
@@ -446,10 +475,8 @@ void PokemonMenu::SelectSwitchUpdate()
 		{
 			if (RememberOrder_ == 0)
 			{
-				ResetJump();
 				RememberOrder_ = 1;
 			}
-			ResetJump();
 			CurrentOrder_ = RememberOrder_;
 		}
 	}
@@ -466,11 +493,49 @@ void PokemonMenu::SelectSwitchUpdate()
 				PokemonList_[ChangePokemonNumber_2] = temp;
 			}
 
-			//Renderer 변경
+			//포켓몬 아이콘 변경
 			{
 				GameEngineRenderer* temp = PokemonRenderer_[ChangePokemonNumber_1];
 				PokemonRenderer_[ChangePokemonNumber_1] = PokemonRenderer_[ChangePokemonNumber_2];
 				PokemonRenderer_[ChangePokemonNumber_2] = temp;
+			}
+
+			//젠더 아이콘 변경
+			{
+				GameEngineRenderer* temp = GenderRenderer_[ChangePokemonNumber_1];
+				GenderRenderer_[ChangePokemonNumber_1] = GenderRenderer_[ChangePokemonNumber_2];
+				GenderRenderer_[ChangePokemonNumber_2] = temp;
+			}
+
+			//Fonts변경
+			{
+				//이름
+				{
+					auto* temp = PokemonNameFonts_[ChangePokemonNumber_1];
+					PokemonNameFonts_[ChangePokemonNumber_1] = PokemonNameFonts_[ChangePokemonNumber_2];
+					PokemonNameFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//레벨
+				{
+					auto* temp = PokemonLevelFonts_[ChangePokemonNumber_1];
+					PokemonLevelFonts_[ChangePokemonNumber_1] = PokemonLevelFonts_[ChangePokemonNumber_2];
+					PokemonLevelFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//현재 체력
+				{
+					auto* temp = CurHpFonts_[ChangePokemonNumber_1];
+					CurHpFonts_[ChangePokemonNumber_1] = CurHpFonts_[ChangePokemonNumber_2];
+					CurHpFonts_[ChangePokemonNumber_2] = temp;
+				}
+
+				//최대 체력
+				{
+					auto* temp = MaxHpFonts_[ChangePokemonNumber_1];
+					MaxHpFonts_[ChangePokemonNumber_1] = MaxHpFonts_[ChangePokemonNumber_2];
+					MaxHpFonts_[ChangePokemonNumber_2] = temp;
+				}
 			}
 
 		}
@@ -595,8 +660,16 @@ void PokemonMenu::GetPlayerPokemon()
 		PokemonInfo* Squirtle = PokemonInfoManager::GetInst().FindPokemonInfo("Squirtle"); //Bulbasaur
 		PokemonInfo* Bulbasaur = PokemonInfoManager::GetInst().FindPokemonInfo("Bulbasaur");
 		Charmander->PlusHp(-10);
+		Charmander->SetMyLevel(2);
+		Charmander->SetGender(true);
+		Charmander->SetMaxHp(115);
 		Squirtle->PlusHp(-50);
+		Squirtle->SetMyLevel(4);
+		Squirtle->SetMaxHp(170);
 		Bulbasaur->PlusHp(-90);
+		Bulbasaur->SetMyLevel(10);
+		Bulbasaur->SetGender(true);
+		Bulbasaur->SetMaxHp(150);
 
 		PokemonList_.push_back(Charmander);
 		PokemonList_.push_back(Squirtle);
@@ -645,14 +718,6 @@ void PokemonMenu::ChangeHp(int _PokemonIndex, int _value)
 	PokemonInfo* CurPokemonInfo = PokemonList_[_PokemonIndex];
 	CurPokemonInfo->PlusHp(_value);
 	//현재 폰트 업데이트
-	for (GameEngineContentFont* i : AllFonts_)
-	{
-		if (i == CurHpFonts_[_PokemonIndex])
-		{
-			AllFonts_.remove(i);
-			break;
-		}
-	}
 	CurHpFonts_[_PokemonIndex]->ClearCurrentFonts();
 
 	GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
@@ -666,7 +731,6 @@ void PokemonMenu::ChangeHp(int _PokemonIndex, int _value)
 	}
 	NewFonts->ShowString(std::to_string(PokemonList_[_PokemonIndex]->GetHp()), true);
 
-	AllFonts_.push_back(NewFonts);
 	CurHpFonts_[_PokemonIndex] = NewFonts;
 }
 
@@ -679,7 +743,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 75,126 });
 			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
-			AllFonts_.push_back(NewFonts);
+			PokemonNameFonts_.push_back(NewFonts);
 		}
 
 		//레벨
@@ -687,7 +751,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 190,175 });
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMyLevel()), true);
-			AllFonts_.push_back(NewFonts);
+			PokemonLevelFonts_.push_back(NewFonts);
 		}
 
 		//현재 체력
@@ -695,7 +759,6 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 150,248 });
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
-			AllFonts_.push_back(NewFonts);
 			CurHpFonts_.push_back(NewFonts);
 		}
 
@@ -704,7 +767,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 260,248 });
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMaxHp()), true);
-			AllFonts_.push_back(NewFonts);
+			MaxHpFonts_.push_back(NewFonts);
 		}
 
 	}
@@ -718,7 +781,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 416,static_cast<float>(-60 + 96 * i )});
 			NewFonts->ShowString(PokemonList_[i]->GetNameCopy(), true);
-			AllFonts_.push_back(NewFonts);
+			PokemonNameFonts_.push_back(NewFonts);
 		}
 
 		//레벨
@@ -726,7 +789,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
-			AllFonts_.push_back(NewFonts);
+			PokemonLevelFonts_.push_back(NewFonts);
 		}
 
 		//현재 체력
@@ -734,7 +797,6 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * i)});
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetHp()), true);
-			AllFonts_.push_back(NewFonts);
 			CurHpFonts_.push_back(NewFonts);
 		}
 
@@ -743,7 +805,7 @@ void PokemonMenu::InitFont()
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 			NewFonts->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMaxHp()), true);
-			AllFonts_.push_back(NewFonts);
+			MaxHpFonts_.push_back(NewFonts);
 		}
 
 	}
@@ -752,7 +814,6 @@ void PokemonMenu::InitFont()
 		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
 		DialogFont_->SetPosition({ 16,540 });
 		DialogFont_->ShowString("Choose a pokemon", true);
-		AllFonts_.push_back(DialogFont_);
 	}
 	//swtich 문구
 	{
@@ -760,128 +821,57 @@ void PokemonMenu::InitFont()
 		SwitchFont_->SetPosition({ 16,540});
 		SwitchFont_->ShowString("Move to Where?", true);
 		SwitchFont_->Off();
-		AllFonts_.push_back(SwitchFont_);
 	}
 
 }
 
-void PokemonMenu::UpdateFont()
-{
-		//첫번째 포켓몬 폰트
-	{
-		//이름
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 75,126 });
-			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
-			AllFonts_.push_back(NewFonts);
-		}
 
-		//레벨
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 190,175 });
-			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMyLevel()), true);
-			AllFonts_.push_back(NewFonts);
-		}
-
-		//현재 체력
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 150,248 });
-			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
-			AllFonts_.push_back(NewFonts);
-			CurHpFonts_.push_back(NewFonts);
-		}
-
-		//최대 체력
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 260,248 });
-			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMaxHp()), true);
-			AllFonts_.push_back(NewFonts);
-		}
-
-	}
-	
-	//2째 ~ 그뒤 포켓몬
-	for (int i = 1; i < PokemonList_.size(); i++)
-	{
-		//PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
-		//이름
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 416,static_cast<float>(-60 + 96 * i )});
-			NewFonts->ShowString(PokemonList_[i]->GetNameCopy(), true);
-			AllFonts_.push_back(NewFonts);
-		}
-
-		//레벨
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
-			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
-			AllFonts_.push_back(NewFonts);
-		}
-
-		//현재 체력
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * i)});
-			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetHp()), true);
-			AllFonts_.push_back(NewFonts);
-			CurHpFonts_.push_back(NewFonts);
-		}
-
-		//최대 체력
-		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-			NewFonts->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
-			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMaxHp()), true);
-			AllFonts_.push_back(NewFonts);
-		}
-
-	}
-	//포켓몬을 골라주세요 폰트
-	{
-		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-		DialogFont_->SetPosition({ 16,540 });
-		DialogFont_->ShowString("Choose a pokemon", true);
-		AllFonts_.push_back(DialogFont_);
-	}
-	//swtich 문구
-	{
-		SwitchFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(UIRenderType::Font));
-		SwitchFont_->SetPosition({ 16,540});
-		SwitchFont_->ShowString("Move to Where?", true);
-		SwitchFont_->Off();
-		AllFonts_.push_back(SwitchFont_);
-	}
-}
-
-void PokemonMenu::IconJump(GameEngineRenderer* _Render)
+void PokemonMenu::IconJump()
 {
 	CurTickTime_ += GameEngineTime::GetDeltaTime();
-	if (CurTickTime_ > 0.15f)
+	//점프
+	if (CurTickTime_ < 0.15f)
 	{
-		CurTickTime_ = 0;
-		if (IsJump_ == true)
+		if (CanJump_[0] == true)
 		{
-			_Render->SetPivot({ _Render->GetPivot().x,_Render->GetPivot().y + 30});
-			IsJump_ = false;	
+			PokemonRenderer_[0]->SetPivot({ 65,170 });
 		}
-		else
+		for (size_t i = 1; i < PokemonNumber_; i++)
 		{
-			_Render->SetPivot({ _Render->GetPivot().x,_Render->GetPivot().y - 30 });
-			IsJump_ = true;
+			if (CanJump_[i] == true)
+			{
+				PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(10 + 96 * i) });
+			}
 		}
 	}
+	else if (CurTickTime_ >= 0.15f && CurTickTime_ < 0.3f)	//착지
+	{
+		if (CanJump_[0] == true)
+		{
+			PokemonRenderer_[0]->SetPivot({ 65,200 });
+		}
+		for (size_t i = 1; i < PokemonNumber_; i++)
+		{
+			PokemonRenderer_[i]->SetPivot({ 406, static_cast<float>(40 + 96 * i) });
+		}
+	}
+	else //다시 점프하게 시간 초기화
+	{
+		CurTickTime_ = 0;
+	}
+
+
 }
 
-void PokemonMenu::ResetJump()
+
+void PokemonMenu::IconJumpOn(int _PokemonOrder)
 {
-	IsJump_ = false;
-	CurTickTime_ = 0;
+	CanJump_[_PokemonOrder] = true;
+}
+
+void PokemonMenu::IconJumpOff(int _PokemonOrder)
+{
+	CanJump_[_PokemonOrder] = false;
 }
 
 
