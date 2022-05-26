@@ -200,6 +200,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="CenterChoiceOption.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="ContentEnum.h">
       <SubType>
       </SubType>
@@ -298,6 +302,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ShopChoiceOption.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Tackle.h">
       <SubType>
       </SubType>
@@ -368,6 +376,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Bush.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="CenterChoiceOption.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -463,6 +475,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="RoomTileMap8.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ShopChoiceOption.cpp">
       <SubType>
       </SubType>
     </ClCompile>

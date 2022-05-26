@@ -53,6 +53,7 @@ PlayerRed::PlayerRed()
 	, IsInteraction_(false)
 	, IsBush_(false)
 	, IsBushEventReady_(false)
+	, IsDebugRun_(false)
 	, BushActor_(nullptr)
 	, NextTileMap_()
 {
@@ -251,6 +252,7 @@ void PlayerRed::Start()
 	}
 
 	GameEngineInput::GetInst()->CreateKey("JBMTest", 'L');
+	GameEngineInput::GetInst()->CreateKey("JBMDebugRun", VK_SPACE);
 	GameEngineInput::GetInst()->CreateKey("WMenuUI", 'P');
 	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp", 20);
 	WMenuUIRender_->Off();
@@ -317,7 +319,15 @@ void PlayerRed::Update()
 	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
 	{
 		CurrentTileMap_ = WorldTileMap1::GetInst();
-		SetPosition(CurrentTileMap_->GetWorldPostion(25, 57));
+		SetPosition(CurrentTileMap_->GetWorldPostion(23, 31));
+	}
+	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
+	{
+		IsDebugRun_ = true;
+	}
+	if (true == GameEngineInput::GetInst()->IsUp("JBMDebugRun"))
+	{
+		IsDebugRun_ = false;
 	}
 }
 
@@ -362,8 +372,16 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		IsBush_ = BushTileCheck(NextIndex.X, NextIndex.Y + 1);
 		IsBushEventReady_ = true;
 		ShadowRender_->On();
-		NextMoveTime_ = GetAccTime() + 0.51f;
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
+		
+		if (true == IsDebugRun_)
+		{
+			NextMoveTime_ = GetAccTime() + 0.26f;
+		}
+		else
+		{
+			NextMoveTime_ = GetAccTime() + 0.51f;
+		}
 		break;
 	default:
 		break;
@@ -433,26 +451,11 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			NextTilePos_ = { 23, 31 };
 			return true;
 		}
-
-		if (_X == 7 && _Y == 1)
-		{
-			// 치료 구현 및 추가필요
-			NextTileMap_ = WorldTileMap1::GetInst();
-			NextTilePos_ = { 23, 31 };
-			return true;
-		}
 	}
 	else if (RoomTileMap6::GetInst() == CurrentTileMap_) // 상점
 	{
 		if (_X == 4 && _Y == 6)
 		{
-			NextTileMap_ = WorldTileMap1::GetInst();
-			NextTilePos_ = { 33, 24 };
-			return true;
-		}
-		if (_X == 3 && _Y == 1)
-		{
-			// 상점 구현 및 추가필요
 			NextTileMap_ = WorldTileMap1::GetInst();
 			NextTilePos_ = { 33, 24 };
 			return true;
@@ -706,6 +709,10 @@ void PlayerRed::MoveAnim()
 {
 	if (true == IsMove_)
 	{
+		if (true == IsDebugRun_)
+		{
+			LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
+		}
 		LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
 		LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
@@ -735,6 +742,10 @@ void PlayerRed::MoveAnim()
 	}
 	if (true == IsJump_)
 	{
+		if (true == IsDebugRun_)
+		{
+			LerpTime_ += GameEngineTime::GetDeltaTime() * 2.0f;
+		}
 		LerpTime_ += GameEngineTime::GetDeltaTime() * 2.0f;
 		LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
 		LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
@@ -925,13 +936,14 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	}
 	else if (RoomTileMap5::GetInst() == CurrentTileMap_) // 치료소
 	{
-		if (_X == 7 && _Y == 7)
-		{
-			return true;
-		}
-
 		if (_X == 7 && _Y == 1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Welcome to our POKEMON CENTER!");
+			TmpText->AddText("Would you like me to heal your");
+			TmpText->AddText("POKEMON back to perfect health?");
+			TmpText->Setting();
 			return true;
 		}
 	}
@@ -943,6 +955,11 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 		}
 		if (_X == 3 && _Y == 1)
 		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Hi, there!");
+			TmpText->AddText("May I help you?");
+			TmpText->Setting();
 			return true;
 		}
 	}
@@ -988,6 +1005,61 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 			TmpText->SetPosition(GetPosition());
 			TmpText->AddText("OAK POKEMON RESEARCH LAB");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 18 && _Y == 75)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("ROUTE 1");
+			TmpText->AddText("PALLET TOWN - VIRIDIAN CITY");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 21 && _Y == 30)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Heal Your POKEMON!");
+			TmpText->AddText("POKEMON CENTER");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 22 && _Y == 30)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Heal Your POKEMON!");
+			TmpText->AddText("POKEMON CENTER");
+			TmpText->Setting();
+			return true;
+		}
+
+		if (_X == 31 && _Y == 23)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("All your item needs fulfilled!");
+			TmpText->AddText("POKEMON MART");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 32 && _Y == 23)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("All your item needs fulfilled!");
+			TmpText->AddText("POKEMON MART");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 17 && _Y == 20)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("VIRIDIAN CITY");
+			TmpText->AddText("The Eternally Green Paradise");
 			TmpText->Setting();
 			return true;
 		}

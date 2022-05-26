@@ -67,7 +67,14 @@ void PlayerRed::WalkUpdate()
 	//SetMove(MoveDir_ * GameEngineTime::GetDeltaTime() * 800);
 	if (GetAccTime() >= NextMoveTime_)
 	{
-		NextMoveTime_ = GetAccTime() + 0.26f;
+		if (true == IsDebugRun_)
+		{
+			NextMoveTime_ = GetAccTime() + 0.13f;
+		}
+		else
+		{
+			NextMoveTime_ = GetAccTime() + 0.26f;
+		}
 		PlayerSetMove(MoveDir_ * 50);
 	}
 }

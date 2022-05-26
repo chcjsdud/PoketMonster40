@@ -58,7 +58,6 @@ public:
 
 		return TileState::False;
 	}
-
 protected:
 	GameEngineRendererTileMap TileMap_;
 	GameEngineImage* ColMap_;

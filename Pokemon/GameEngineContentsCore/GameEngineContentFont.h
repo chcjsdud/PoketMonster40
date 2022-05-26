@@ -126,6 +126,11 @@ public:
 		Off();
 	}
 
+	const std::string& GetCurrentString() 
+	{
+		return CurrentString_;
+	}
+
 protected:
 	void Update() override;
 	void Start() override;

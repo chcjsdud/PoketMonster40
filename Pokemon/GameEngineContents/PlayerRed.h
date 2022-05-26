@@ -95,6 +95,7 @@ private:
 	bool IsInteraction_;
 	bool IsBush_;
 	bool IsBushEventReady_;
+	bool IsDebugRun_;
 
 	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;

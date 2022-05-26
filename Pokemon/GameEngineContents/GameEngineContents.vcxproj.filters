@@ -130,6 +130,12 @@
     <ClCompile Include="Bush.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="ShopChoiceOption.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CenterChoiceOption.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Item.cpp">
       <Filter>Global</Filter>
     </ClCompile>
@@ -271,6 +277,12 @@
     <ClInclude Include="Bush.h">
       <Filter>WorldMap</Filter>
     </ClInclude>
+    <ClInclude Include="ShopChoiceOption.h">
+      <Filter>WorldMap\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CenterChoiceOption.h">
+      <Filter>WorldMap\UI</Filter>
+    </ClInclude>
     <ClInclude Include="BattleUnitRenderer.h">
       <Filter>Battle</Filter>
     </ClInclude>
@@ -320,6 +332,9 @@
     </Filter>
     <Filter Include="Player">
       <UniqueIdentifier>{f926ead9-5592-4656-ab47-65ada2e6c63a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldMap\UI">
+      <UniqueIdentifier>{b3b1a769-900c-4746-87ba-1ec67e9e5604}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

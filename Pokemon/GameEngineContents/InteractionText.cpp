@@ -2,17 +2,27 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include "PlayerRed.h"
+#include "ShopChoiceOption.h"
+#include "CenterChoiceOption.h"
 
 InteractionText::InteractionText() 
 	: UIRenderer_(nullptr)
 	, ArrowRenderer_(nullptr)
 	, Fonts(nullptr)
 	, IsSetting_(false)
+	, IsShop_(false)
+	, IsCenter_(false)
+	, IsChoice_(false)
 {
 }
 
 InteractionText::~InteractionText() 
 {
+}
+
+void InteractionText::AddText(const std::string& _Text)
+{
+	TextVector_.push_back(_Text);
 }
 
 void InteractionText::Setting()
@@ -35,6 +45,30 @@ void InteractionText::Setting()
 	IsSetting_ = true;	
 }
 
+void InteractionText::ClearText()
+{
+	TextVector_.clear();
+	Fonts->ClearCurrentFonts();
+}
+
+void InteractionText::ChoiceEnd()
+{
+	IsChoice_ = false;
+	IsCenter_ = false;
+	IsShop_ = false;
+
+	if (Fonts->IsWait())
+	{
+		Fonts->NextString();
+	}
+	if (Fonts->IsEnd())
+	{
+		PlayerRed::MainRed_->SetInteraction(false);
+		Fonts->EndFont();
+		Death();
+	}
+}
+
 void InteractionText::Start()
 {
 	
@@ -42,14 +76,30 @@ void InteractionText::Start()
 
 void InteractionText::Update()
 {
-	if (false == IsSetting_)
+	if (false == IsSetting_ || true == IsChoice_)
 	{
 		return;
+	}
+	
+	std::string TmpString = Fonts->GetCurrentString();
+	if (Fonts->GetCurrentString() == "May I help you?")
+	{
+		IsShop_ = true;
+	}
+	else if (Fonts->GetCurrentString() == "Is there anything else I can do?")
+	{
+		IsShop_ = true;
+	}
+	else if (Fonts->GetCurrentString() == "perfect health?")
+	{
+		IsCenter_ = true;
 	}
 
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
 	{
+		MakeChoiceOption();
+
 		// Z 키 입력시 다음 문장 출력
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
@@ -59,6 +109,8 @@ void InteractionText::Update()
 	// 다음 문장이 없을 때 == 끝났을 때
 	if (Fonts->IsEnd())
 	{
+		MakeChoiceOption();
+
 		// 대화가 끝났을 때 z 키누르면 종료
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
@@ -69,7 +121,22 @@ void InteractionText::Update()
 	}
 }
 
-void InteractionText::AddText(const std::string& _Text)
+void InteractionText::MakeChoiceOption()
 {
-	TextVector_.push_back(_Text);
+	if (true == IsCenter_)
+	{
+		CenterChoiceOption* TmpOption = GetLevel()->CreateActor<CenterChoiceOption>();
+		TmpOption->SetPosition(GetPosition());
+		TmpOption->SetParent(this);
+		IsChoice_ = true;
+		return;
+	}
+	if (true == IsShop_)
+	{
+		ShopChoiceOption* TmpOption = GetLevel()->CreateActor<ShopChoiceOption>();
+		TmpOption->SetPosition(GetPosition());
+		TmpOption->SetParent(this);
+		IsChoice_ = true;
+		return;
+	}
 }

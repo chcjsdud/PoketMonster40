@@ -81,6 +81,9 @@ void GameEngineContentFont::Update()
 							break;
 						case '\"':
 							break;
+						case '-':
+							StringForRendererName = "Dash.bmp";
+							break;
 						default:
 							MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
 								break;
@@ -174,6 +177,9 @@ void GameEngineContentFont::Update()
 						break;
 					case '\"':
 						break;
+					case '-':
+						StringForRendererName = "Dash.bmp";
+						break;
 					default:
 						MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
 						break;
@@ -185,7 +191,7 @@ void GameEngineContentFont::Update()
 				CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_)};
 				AllFontRenderer_.push_back(CurrentRenderer);
 				CurrentWaitTime_ = OriginalWaitTime_;
-
+				
 			}
 
 			// 아래는 예외처리

@@ -19,7 +19,9 @@ public:
 	InteractionText& operator=(InteractionText&& _Other) noexcept = delete;
 
 	void AddText(const std::string& _Text);
+	void ClearText();
 	void Setting();
+	void ChoiceEnd();
 
 protected:
 
@@ -29,8 +31,12 @@ private:
 	GameEngineRenderer* ArrowRenderer_;
 	class GameEngineContentFont* Fonts;
 	bool IsSetting_;
+	bool IsShop_;
+	bool IsCenter_;
+	bool IsChoice_;
 
 	void Start() override;
 	void Update() override;
+	void MakeChoiceOption();
 };
 
