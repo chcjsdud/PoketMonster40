@@ -6,6 +6,8 @@
 #include "PokemonInfoManager.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "Item.h"
+#include "Pokemon.h"
+#include "PokemonInfoManager.h"
 
 Bag::Bag()
 	: BagType_(ItemType::ITEM)
@@ -48,6 +50,7 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("DownArrow", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
 		GameEngineInput::GetInst()->CreateKey("DialogOn", VK_LCONTROL);
+		GameEngineInput::GetInst()->CreateKey("Select", VK_TAB);
 	}
 }
 
@@ -59,7 +62,7 @@ void Bag::Update()
 		MoveItem();
 	}
 
-	OnDialog();
+	ActiveDialog();
 	MoveDialog();
 
 	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
@@ -154,7 +157,7 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BagDialog_->SetPivot({ 335, 190 });
 	BagDialog_->Off();
 
-	DialogBox_ = CreateRenderer("AA.bmp");
+	DialogBox_ = CreateRenderer("DialogBox_LogBox.bmp");
 	DialogBox_->SetPivot({ -80, 224 });
 	DialogBox_->Off();
 
@@ -168,6 +171,8 @@ void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	HideFonts();
 
 	ChangeBag();
+	
+	CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
 }
 
 void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
@@ -484,150 +489,113 @@ void Bag::ShowBallInfo()
 	ItemDescFonts_.push_back(DescFont);
 }
 
-void Bag::OnDialog()
+void Bag::ActiveDialog()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
 		&& false == IsDialogOn_)
 	{
-		if (ItemNameFonts_.size() - 1 == SelectIndex_)
-		{
-			return;
-		}
- 
-		DestroyDialogFonts();
-
-		IsDialogOn_ = true;
-		BagDialog_->On();
-		DialogBox_->On();
-		DialogArrow_->On();
-
-		DialogIndex_ = 0;
-
-		switch (DialogIndex_)
-		{
-		case 0:
-			DialogArrow_->SetPivot({ 240, 130 });
-			break;
-		case 1:
-			DialogArrow_->SetPivot({ 240, 190 });
-			break;
-		case 2:
-			DialogArrow_->SetPivot({ 240, 250 });
-			break;
-		case 3:
-			DialogArrow_->SetPivot({ 240, 310 });
-			break;
-		}
-
-		DestroyDescFonts();
-
-		GameEngineContentFont* SelcetFont = GetLevel()->CreateActor<GameEngineContentFont>();
-		SelcetFont->SetPosition({ 170, 480.f });
-
-		switch (BagType_)
-		{
-		case ItemType::ITEM:
-			if (ItemList_.size() == 0)
-			{
-				return;
-			}
-			SelcetFont->ShowString(ItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
-			break;
-		case ItemType::KEYITEM:
-			if (KeyItemList_.size() == 0)
-			{
-				return;
-			}
-			SelcetFont->ShowString(KeyItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
-			break;
-		case ItemType::BALL:
-			if (BallList_.size() == 0)
-			{
-				return;
-			}
-			SelcetFont->ShowString(BallList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
-			break;
-		}
-
-		DialogFonts_.push_back(SelcetFont);
-
-		if ("BattleLevel" != GetLevel()->GetNameConstRef())
-		{
-			GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
-			Give->SetPosition({ 730, 420.f });
-			Give->ShowString("GIVE", true);
-			DialogFonts_.push_back(Give);
-
-			GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>();
-			Toss->SetPosition({ 730, 480.f });
-			Toss->ShowString("TOSS", true);
-			DialogFonts_.push_back(Toss);
-
-			GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
-			Cancle->SetPosition({ 730, 540.f });
-			Cancle->ShowString("CANCLE", true);
-			DialogFonts_.push_back(Cancle);
-		}
-
-		else
-		{
-			GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
-			Give->SetPosition({ 730, 420.f });
-			Give->ShowString("GIVE", true);
-			DialogFonts_.push_back(Give);
-
-			GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>();
-			Toss->SetPosition({ 730, 480.f });
-			Toss->ShowString("TOSS", true);
-			DialogFonts_.push_back(Toss);
-
-			GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
-			Cancle->SetPosition({ 730, 540.f });
-			Cancle->ShowString("CANCLE", true);
-			DialogFonts_.push_back(Cancle);
-		}
-
-		UpArrow_->Off();
-		DownArrow_->Off();
-		RightArrow_->Off();
-		LeftArrow_->Off();
+		OnDialog();
 	}
 
 	else if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
 		&& true == IsDialogOn_)
 	{
-		IsDialogOn_ = false;
-		BagDialog_->Off();
-		DialogBox_->Off();
-		DialogArrow_->Off();
-
-		LeftArrow_->On();
-		RightArrow_->On();
-
-		DestroyDialogFonts();
-
-		switch (BagType_)
-		{
-		case ItemType::ITEM:
-			LeftArrow_->SetOrder(-1);
-			ShowItemList();
-			ShowItemInfo();
-			break;
-
-		case ItemType::KEYITEM:
-			LeftArrow_->SetOrder(5);
-			RightArrow_->SetOrder(5);
-			ShowKeyItemList();
-			ShowKeyItemInfo();
-			break;
-
-		case ItemType::BALL:
-			RightArrow_->SetOrder(-1);
-			ShowBallList();
-			ShowBallInfo();
-			break;
-		}
+		CloseDialog();
 	}
+}
+
+void Bag::OnDialog()
+{
+	if (ItemNameFonts_.size() - 1 == SelectIndex_)
+	{
+		return;
+	}
+
+	DestroyDialogFonts();
+	DestroyDescFonts();
+
+	IsDialogOn_ = true;
+	BagDialog_->On();
+	DialogBox_->On();
+	DialogArrow_->On();
+
+	DialogIndex_ = 0;
+
+	DialogArrow_->SetPivot({ 240, 130 });
+
+	if ("BattleLevel" == GetLevel()->GetNameConstRef())
+	{
+		DialogArrow_->SetPivot({ 240, 190 });
+	}
+
+	GameEngineContentFont* SelcetFont = GetLevel()->CreateActor<GameEngineContentFont>();
+	SelcetFont->SetPosition({ 170, 480.f });
+
+	switch (BagType_)
+	{
+	case ItemType::ITEM:
+		if (ItemList_.size() == 0)
+		{
+			return;
+		}
+		SelcetFont->ShowString(ItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		break;
+	case ItemType::KEYITEM:
+		if (KeyItemList_.size() == 0)
+		{
+			return;
+		}
+		SelcetFont->ShowString(KeyItemList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		break;
+	case ItemType::BALL:
+		if (BallList_.size() == 0)
+		{
+			return;
+		}
+		SelcetFont->ShowString(BallList_[SelectIndex_]->GetNameConstRef() + " is \\Selected.", true);
+		break;
+	}
+
+	DialogFonts_.push_back(SelcetFont);
+
+	if ("BattleLevel" != GetLevel()->GetNameConstRef())
+	{
+		GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
+		Give->SetPosition({ 730, 420.f });
+		Give->ShowString("GIVE", true);
+		DialogFonts_.push_back(Give);
+
+		GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>();
+		Toss->SetPosition({ 730, 480.f });
+		Toss->ShowString("TOSS", true);
+		DialogFonts_.push_back(Toss);
+
+		GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
+		Cancle->SetPosition({ 730, 540.f });
+		Cancle->ShowString("CANCLE", true);
+		DialogFonts_.push_back(Cancle);
+	}
+
+	else if ("BattleLevel" == GetLevel()->GetNameConstRef())
+	{
+		BagDialog_->SetImage("DialogBox_Bag_Battle.bmp");
+		BagDialog_->SetPivot({ 335, 215 });
+
+		GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>();
+		Give->SetPosition({ 730, 480.f });
+		Give->ShowString("USE", true);
+		DialogFonts_.push_back(Give);
+
+		GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>();
+		Cancle->SetPosition({ 730, 540.f });
+		Cancle->ShowString("CANCLE", true);
+		DialogFonts_.push_back(Cancle);
+	}
+
+	UpArrow_->Off();
+	DownArrow_->Off();
+	RightArrow_->Off();
+	LeftArrow_->Off();
 }
 
 void Bag::MoveDialog()
@@ -636,14 +604,8 @@ void Bag::MoveDialog()
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
 		{
-			if ("BattleLevel" != GetLevel()->GetNameConstRef()
-				&& DialogIndex_ == 2)
-			{
-				return;
-			}
-
-			else if ("BattleLevel" == GetLevel()->GetNameConstRef()
-				&& DialogIndex_ == 3)
+			if ("BattleLevel" == GetLevel()->GetNameConstRef()
+				&& DialogIndex_ >= 1)
 			{
 				return;
 			}
@@ -653,19 +615,27 @@ void Bag::MoveDialog()
 			switch (DialogIndex_)
 			{
 			case 0:
+				if ("BattleLevel" == GetLevel()->GetNameConstRef())
+				{
+					DialogArrow_->SetPivot({ 240, 190 });
+					break;
+				}
 				DialogArrow_->SetPivot({ 240, 130 });
 				break;
 			case 1:
+				if ("BattleLevel" == GetLevel()->GetNameConstRef())
+				{
+					DialogArrow_->SetPivot({ 240, 250 });
+					break;
+				}
 				DialogArrow_->SetPivot({ 240, 190 });
 				break;
 			case 2:
-				DialogArrow_->SetPivot({ 240, 250 }); 
-				break;
-			case 3:
-				DialogArrow_->SetPivot({ 240, 310 });
+				DialogArrow_->SetPivot({ 240, 250 });
 				break;
 			}
 		}
+
 
 		else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
 		{
@@ -679,19 +649,114 @@ void Bag::MoveDialog()
 			switch (DialogIndex_)
 			{
 			case 0:
+				if ("BattleLevel" == GetLevel()->GetNameConstRef())
+				{
+					DialogArrow_->SetPivot({ 240, 190 });
+					break;
+				}
 				DialogArrow_->SetPivot({ 240, 130 });
 				break;
 			case 1:
+				if ("BattleLevel" == GetLevel()->GetNameConstRef())
+				{
+					DialogArrow_->SetPivot({ 240, 250 });
+					break;
+				}
 				DialogArrow_->SetPivot({ 240, 190 });
 				break;
 			case 2:
 				DialogArrow_->SetPivot({ 240, 250 });
 				break;
-			case 3:
-				DialogArrow_->SetPivot({ 240, 310 });
-				break;
 			}
 		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("Select"))
+		{
+			SelectDialog();
+		}
+	}
+}
+
+void Bag::SelectDialog()
+{
+	switch (DialogIndex_)
+	{
+	case 0:
+		if ("BattleLevel" == GetLevel()->GetNameConstRef())
+		{
+			//Use
+			break;
+		}
+		//Give
+		if (ItemType::KEYITEM == BagType_)
+		{
+			return;
+		}
+		if (ItemType::ITEM == BagType_)
+		{
+			CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
+		}
+		if (ItemType::BALL == BagType_)
+		{
+			CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
+		}
+		break;
+	case 1:
+		if ("BattleLevel" == GetLevel()->GetNameConstRef())
+		{
+			CloseDialog();
+		}
+		//Toss
+		if (ItemType::KEYITEM == BagType_)
+		{
+			return;
+		}
+		if (ItemType::ITEM == BagType_)
+		{
+			ItemList_.pop_back();
+		}
+		if (ItemType::BALL == BagType_)
+		{
+			BallList_.pop_back();
+		}
+		break;
+	case 2:
+		CloseDialog();
+	}
+}
+
+void Bag::CloseDialog()
+{
+	IsDialogOn_ = false;
+	BagDialog_->Off();
+	DialogBox_->Off();
+	DialogArrow_->Off();
+
+	LeftArrow_->On();
+	RightArrow_->On();
+
+	DestroyDialogFonts();
+
+	switch (BagType_)
+	{
+	case ItemType::ITEM:
+		LeftArrow_->SetOrder(-1);
+		ShowItemList();
+		ShowItemInfo();
+		break;
+
+	case ItemType::KEYITEM:
+		LeftArrow_->SetOrder(5);
+		RightArrow_->SetOrder(5);
+		ShowKeyItemList();
+		ShowKeyItemInfo();
+		break;
+
+	case ItemType::BALL:
+		RightArrow_->SetOrder(-1);
+		ShowBallList();
+		ShowBallInfo();
+		break;
 	}
 }
 

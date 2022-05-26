@@ -12,6 +12,7 @@ class PokemonInfoManager
 {
 	// ¿Â¡ﬂ«ı : Debug
 	friend class BattleLevel;
+	friend class Bag;
 	//
 
 private:

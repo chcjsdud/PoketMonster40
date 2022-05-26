@@ -26,8 +26,11 @@ public:
 	void ShowKeyItemInfo();
 	void ShowBallInfo();
 
-	void OnDialog(); //다이얼로그 메뉴 이동
+	void ActiveDialog(); //다이얼로그 활성화 체크
 	void MoveDialog();
+	void SelectDialog();
+	void OnDialog();
+	void CloseDialog();
 
 	void UpFonts(); //아이템이 5개 이상일 경우 폰트 움직임
 	void DownFonts();
