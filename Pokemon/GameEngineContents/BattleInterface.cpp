@@ -265,6 +265,18 @@ void BattleInterface::ShowFailed()
 	DownFont_->ShowString("But it failed!");
 }
 
+void BattleInterface::ShowRankDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
+{
+	DownFont_->EndFont();
+	DownFont_->ShowString("But it failed!");
+}
+
+void BattleInterface::ShowRankUp(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
+{
+
+}
+
+
 bool BattleInterface::MoveKey()
 {
 	if (InterfaceImage->IsUpdate()==true)

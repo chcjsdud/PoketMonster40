@@ -645,6 +645,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		}
 		break;
 		case SkillType::Status:
+			// 꼬리흔들기 등 이펙트 구현, 포켓몬에게 랭크 적용
 			break;
 		default:
 			break;
@@ -687,6 +688,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				}
 				break;
 				case SkillType::Status:
+					
 					break;
 				default:
 					break;

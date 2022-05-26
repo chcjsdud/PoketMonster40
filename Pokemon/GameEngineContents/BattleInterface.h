@@ -105,6 +105,9 @@ public:
 	void ShowCriticalHitString();
 	void ShowNotEffective();
 	void ShowFailed();
+	void ShowRankDown(const std::string& _Pokemon, enum class PokemonAbility _Ability, int _Rank);
+	void ShowRankUp(const std::string& _Pokemon, enum class PokemonAbility _Ability, int _Rank);
+
 
 	// string 없을때 호출해서 생략시키는 함수
 	inline void SetEmptyString()
