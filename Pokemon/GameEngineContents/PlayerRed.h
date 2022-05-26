@@ -23,6 +23,7 @@ enum class RedDir
 class Bush;
 class Pokemon;
 class PokemonTileMap;
+class GameEngineCollision;
 class PlayerRed : public GameEngineActor
 {
 public:
@@ -68,11 +69,12 @@ private:
 	std::string		AnimationName_;
 	std::string		ChangeDirText_;
 
-	GameEngineRenderer* RedRender_;
-	GameEngineRenderer* ShadowRender_;
-	GameEngineRenderer* FadeRender_;
-	GameEngineRenderer* FadeRightRender_;
-	GameEngineRenderer* FadeLeftRender_;
+	GameEngineRenderer*		RedRender_;
+	GameEngineRenderer*		ShadowRender_;
+	GameEngineRenderer*		FadeRender_;
+	GameEngineRenderer*		FadeRightRender_;
+	GameEngineRenderer*		FadeLeftRender_;
+	GameEngineCollision*	RedCollision_;
 	bool IsFadeIn_;
 	bool IsFadeOut_;
 	bool IsFadeRL_;

@@ -65,6 +65,12 @@ void PokemonEngine::GameLoop()
 	{
 		ChangeLevel("Battle");
 	}
+
+	// 충돌체 체크용
+	if (GameEngineInput::GetInst()->IsDown("test") == true)
+	{
+		GameEngineLevel::IsDebugModeSwitch();
+	}
 }
 
 void PokemonEngine::GameEnd() 
@@ -107,6 +113,8 @@ void PokemonEngine::InitKey()
 	GameEngineInput::GetInst()->CreateKey("WoldMapTest", VK_NUMPAD0); //월드맵 레벨로 텔포용 키
 
 	GameEngineInput::GetInst()->CreateKey("Battle", VK_RETURN);
+	
+	GameEngineInput::GetInst()->CreateKey("test", 'M'); // 충돌체 체크용 키
 }
 
 

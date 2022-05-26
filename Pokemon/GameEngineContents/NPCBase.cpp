@@ -1,6 +1,7 @@
 #include "NPCBase.h"
 #include "PlayerRed.h"
 #include <GameEngineBase/GameEngineRandom.h>
+#include <GameEngine/GameEngineCollision.h>
 
 NPCBase::NPCBase() 
 	: NPCLerpTime_(0)
@@ -17,6 +18,7 @@ NPCBase::~NPCBase()
 
 void NPCBase::Start()
 {
+	//NPCCollision_ = CreateCollision("NPCColBox", { 64,64 });
 }
 
 void NPCBase::Update()
@@ -88,6 +90,13 @@ void NPCBase::NPCMove()
 		NPCMoveDir_ = float4::RIGHT;
 	}
 
+	// 간혹 Red랑 겹치는 문제 존재. 일정시간 지나면 NPC도 Red도 각자 갈 길 감.
+	if (true == NPCBase::NPCCollision_->NextPosCollisionCheck("RedColBox", NPCMoveDir_ * 50))
+	{
+		NPCMoveDir_ = float4::ZERO;
+		return;
+	}
+	
 	if (GetAccTime() >= NPCNextMoveTime_)
 	{
 		NPCNextMoveTime_ = GetAccTime() + 0.5f;
@@ -159,11 +168,11 @@ void NPCBase::NPCMoveAnim()
 
 bool NPCBase::IsInside(float4 _LeftTop, float4 _RightBot)
 {
-	if (CurrentTileMap_->GetWorldPostion(_LeftTop.x, _LeftTop.y).x > GoalPos_.x || CurrentTileMap_->GetWorldPostion(_RightBot.x, _RightBot.y).x < GoalPos_.x)
+	if (CurrentTileMap_->GetWorldPostion(static_cast<int>(_LeftTop.x), static_cast<int>(_LeftTop.y)).x > GoalPos_.x || CurrentTileMap_->GetWorldPostion(static_cast<int>(_RightBot.x), static_cast<int>(_RightBot.y)).x < GoalPos_.x)
 	{
 		return false;
 	}
-	if (CurrentTileMap_->GetWorldPostion(_LeftTop.x, _LeftTop.y).y > GoalPos_.y || CurrentTileMap_->GetWorldPostion(_RightBot.x, _RightBot.y).y < GoalPos_.y)
+	if (CurrentTileMap_->GetWorldPostion(static_cast<int>(_LeftTop.x), static_cast<int>(_LeftTop.y)).y > GoalPos_.y || CurrentTileMap_->GetWorldPostion(static_cast<int>(_RightBot.x), static_cast<int>(_RightBot.y)).y < GoalPos_.y)
 	{
 		return false;
 	}
