@@ -23,7 +23,7 @@ bool BattleEngine::ComareSpeed(PokemonBattleState* _Player, PokemonBattleState* 
 	return PlayerSpeed >= PoeSpeed ? true : false;
 }
 
-int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkillInfo* _Skill, const DamgeType& _DamgeType)
+int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const PokemonBattleState* _Def, PokemonSkillInfo* _Skill, const DamageType& _DamageType)
 {
 	//_Att->Pokemon_->GetInfo()->GetSkill();
 	PokemonInfo* AttPlayerInfo = _Att->Pokemon_->GetInfo();
@@ -56,7 +56,7 @@ int BattleEngine::AttackCalculation(const PokemonBattleState* _Att, const Pokemo
 	float CompareType = 1.0f;
 
 	{
-	switch (_DamgeType)
+	switch (_DamageType)
 	{
 		case DamageType::Great:
 			CompareType = 2.0f;

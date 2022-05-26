@@ -20,7 +20,6 @@ class BattleEngine;
 class BattleData;
 class BattleManager;
 class PokemonBattleState;
-class BattleManager::BattleTurn;
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
@@ -296,22 +295,10 @@ private:
 	bool PlayerFirst_;
 	bool Action_;
 
-	BattleManager::BattleTurn* FristTurn_;
+	//BattleManager::BattleTurn* FristTurn_;
 
 public:
 	bool Update();
-
-	class BattleTurn
-	{
-	public:
-		BattleTurn();
-		~BattleTurn() {}
-
-		BattleTurn(const BattleTurn& _Other) = delete;
-		BattleTurn(BattleTurn&& _Other) noexcept = delete;
-		BattleTurn& operator=(const BattleTurn& _Other) = delete;
-		BattleTurn& operator=(BattleTurn&& _Other) noexcept = delete;
-	};
 };
 
 enum class DamageType

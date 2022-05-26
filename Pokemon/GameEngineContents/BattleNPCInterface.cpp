@@ -10,11 +10,4 @@ BattleNPCInterface::BattleNPCInterface()
 
 BattleNPCInterface::~BattleNPCInterface() 
 {
-	for (auto* Pokemon : CurrentPossessionPokemons_)
-	{
-		if (Pokemon != nullptr)
-		{
-			Pokemon->Death();
-		}
-	}
 }

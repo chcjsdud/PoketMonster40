@@ -190,11 +190,6 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	// ÀåÁßÇõ : Debug
 	{
-		Opponent_->GetPokemonList()[0]->Death();
-		for (auto& iter : PlayerRed_->GetPokemonList())
-		{
-			iter->Death();
-		}
 		std::vector<Pokemon*>& AA = PlayerRed_->GetPokemonList();
 		Opponent_->Death();
 		delete BattleData_;
@@ -471,8 +466,8 @@ void PokemonBattleState::Update()
 }
 
 BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level)
-	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkillInfo("_PlayerSkill"))
-	, PoeSkill_(PokemonInfoManager::GetInst().FindSkillInfo("_PoeSkill"))
+	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkillInfo(_PlayerSkill))
+	, PoeSkill_(PokemonInfoManager::GetInst().FindSkillInfo(_PoeSkill))
 	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
 	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
 	, Select_(BattleOrderMenu::Fight)
@@ -539,7 +534,7 @@ bool BattleManager::Update()
 				if (Action_ == false)
 				{
 					Interface_->ShowUsedSkillString(CurrentTurn->GetPokemon()->GetInfo()->GetNameConstRef(), CurrentPokemonSkill->GetNameConstRef());
-					DamageType DamageType = BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun);
+					//DamageType DamageType = BattleEngine::ComparePokemonType(CurrentTurn, AfterTrun);
 
 					Action_ = true;
 				}
