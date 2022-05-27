@@ -21,6 +21,7 @@
 #include "Bush.h"
 
 #include "Bag.h"
+#include "PokemonMenu.h"
 
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 bool PlayerRed::WMenuUICheck_ = true;
@@ -61,6 +62,7 @@ PlayerRed::PlayerRed()
 	, IsPokemonMenuOn_(false)
 	, BushActor_(nullptr)
 	, NextTileMap_()
+	, ChildUI_(nullptr)
 {
 	MainRed_ = this;
 }
@@ -321,7 +323,8 @@ void PlayerRed::Update()
 	FadeIn();
 	FadeOut();
 	FadeRL();
-	ActiveBag();
+	UIUpdate();
+	//ActiveBag();
 	//Camera();
 	InteractionUpdate();
 
@@ -347,7 +350,7 @@ void PlayerRed::Render()
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
 	if (true == IsFadeIn_ || true == IsInteraction_
-		|| true == IsBagOn_)
+		|| ChildUI_ != nullptr)
 	{
 		return;
 	}
@@ -1173,6 +1176,36 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 	return false;
 }
 
+
+void PlayerRed::UIUpdate()
+{
+	if (ChildUI_ == nullptr)
+	{
+		if (true == GameEngineInput::GetInst()->IsDown("BagOn")) // 가방열기
+		{
+			Bag_ = GetLevel()->CreateActor<Bag>(50);
+			Bag_->SetPosition(GetPosition());
+			Bag_->BagInit();
+		}
+
+		if (true == GameEngineInput::GetInst()->IsDown("BagClose")) //포켓몬 메뉴 열기
+		{
+			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+
+		}
+	}
+	else //UI창이 뜬 경우
+	{
+		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
+		{
+			ChildUI_->Death();
+			ChildUI_ = nullptr;
+		}
+	}
+
+}
 
 void PlayerRed::ActiveBag()
 {

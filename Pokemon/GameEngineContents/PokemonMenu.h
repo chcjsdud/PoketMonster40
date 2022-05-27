@@ -11,6 +11,14 @@ class PokemonMenu : public GameEngineActor
 		SelectAction,
 		SelectSwitch,
 		Switching,
+		OpeningChildUI,
+		Max
+	};
+
+	enum class ChildUIType
+	{
+		None,
+		PokemonSummaryMenu,
 		Max
 	};
 public:
@@ -22,6 +30,9 @@ public:
 	PokemonMenu(const PokemonMenu&& _Other) noexcept = delete;
 	PokemonMenu& operator=(const PokemonMenu& _Ohter) = delete;
 	PokemonMenu& operator=(const PokemonMenu&& _Other) noexcept = delete;
+
+	void InitPokemonMenu();
+	void DestroyPokemonMenu();
 
 protected:
 	void Start() override;
@@ -45,6 +56,9 @@ private:
 
 	void SwitchingStart();
 	void SwitchingUpdate();
+
+	void OpeningChildUIStart();
+	void OpeningChildUIUpdate();
 
 	PokemonMenuType CurState_;
 
@@ -89,6 +103,14 @@ private:
 	void IconJump();
 	void IconJumpOn(int _PokemonOrder);
 	void IconJumpOff(int _PokemonOrder);
+
+	//자식 UI로 이동 관련
+	GameEngineActor* ChildUIActor_;
+	ChildUIType CurChildUIType_;
+	PokemonMenuType PrevMenuType_;
+
+	//On관련
+	bool IsOn_;
 
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
 	//가지고 있는 포켓몬 수
