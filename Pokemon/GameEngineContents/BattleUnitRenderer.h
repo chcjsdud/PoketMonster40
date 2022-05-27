@@ -51,5 +51,10 @@ public:
 	{
 		return PlayerStop;
 	}
+
+	GameEngineRenderer* GetPlayerCurrentPokemon()
+	{
+		return PlayerCurrentPokemon_;
+	}
 };
 
