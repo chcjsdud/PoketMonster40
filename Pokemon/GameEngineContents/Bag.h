@@ -25,9 +25,7 @@ public:
 
 	void MoveItem(); //아이템 이동
 	void MoveSelectArrow();
-	void ShowItemInfo(); //현재 선택한 아이템의 정보
-	void ShowKeyItemInfo();
-	void ShowBallInfo();
+	void ShowItemInfo(std::vector<class Item*>& _List); //현재 선택한 아이템의 정보
 
 	void ActiveDialog(); //다이얼로그 활성화 체크
 	void MoveDialog();
@@ -38,7 +36,7 @@ public:
 	void UpFonts(); //아이템이 5개 이상일 경우 폰트 움직임
 	void DownFonts();
 	void HideFonts();
-	void ShowFonts(std::vector<class Item*>& _Fonts);
+	void ShowFonts(std::vector<class Item*>& _List);
 	void DestroyFonts(); //전체 폰트 삭제
 	void DestroyNameFonts(); //아이템 이름 삭제
 	void DestroyDescFonts(); //아이템 내용 삭제
@@ -53,9 +51,6 @@ public:
 protected:
 	void Start() override;
 	void Update() override;
-
-	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
-	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
 private:
 	ItemType BagType_;

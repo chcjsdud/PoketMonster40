@@ -15,23 +15,23 @@ BagTestLevel::~BagTestLevel()
 
 void BagTestLevel::Loading()
 {
-	Bag_ = CreateActor<Bag>();
-	Bag_->BagInit();
+	//Bag_ = CreateActor<Bag>();
+	//Bag_->BagInit();
 
-	TestActor* Actor = CreateActor<TestActor>();
-	GameEngineRenderer* Renderer = Actor->CreateRenderer("WorldMaps.bmp");
-	Renderer->SetPivot({ GameEngineWindow ::GetScale().Half()});
+	//TestActor* Actor = CreateActor<TestActor>();
+	//GameEngineRenderer* Renderer = Actor->CreateRenderer("WorldMaps.bmp");
+	//Renderer->SetPivot({ GameEngineWindow ::GetScale().Half()});
 
-	if (false == GameEngineInput::GetInst()->IsKey("Close"))
-	{
-		GameEngineInput::GetInst()->CreateKey("Close", VK_ESCAPE);
-		GameEngineInput::GetInst()->CreateKey("On", 'S');
-	}
+	//if (false == GameEngineInput::GetInst()->IsKey("Close"))
+	//{
+	//	GameEngineInput::GetInst()->CreateKey("Close", VK_ESCAPE);
+	//	GameEngineInput::GetInst()->CreateKey("On", 'S');
+	//}
 }
 
 void BagTestLevel::Update()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("Close")
+	/*if (true == GameEngineInput::GetInst()->IsDown("Close")
 		&& Bag_ != nullptr)
 	{
 		Bag_->DestroyBag();
@@ -44,7 +44,7 @@ void BagTestLevel::Update()
 	{
 		Bag_ = CreateActor<Bag>();
 		Bag_->BagInit();
-	}
+	}*/
 
 }
 
