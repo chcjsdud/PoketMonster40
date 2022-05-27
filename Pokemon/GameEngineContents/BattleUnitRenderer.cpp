@@ -43,7 +43,6 @@ void BattleUnitRenderer::Start()
 void BattleUnitRenderer::Update()
 {
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	DoomChit();
 	if (FirstMove == true)
 	{
 		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;

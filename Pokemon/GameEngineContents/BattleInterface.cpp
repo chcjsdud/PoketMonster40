@@ -29,6 +29,7 @@ BattleInterface::BattleInterface()
 	, PlayerEnd(false)
 	, BallLerp(0.0f)
 	, EmptyString_(false)
+	, MonsterBall(nullptr)
 {
 
 }
@@ -105,8 +106,6 @@ void BattleInterface::Render()
 void BattleInterface::Update()
 {
 	//MoveKey();
-
-	DoomChit();
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
@@ -188,11 +187,17 @@ void BattleInterface::Update()
 				if (BallLerp > 2.0f)
 				{
 					BattleUnit->GetPlayerCurrentPokemon()->On();
-					InterfaceImage->On();
-					Select->On();
 					MyHPUI->On();
 					MyHP->On();
 					EXP->On();
+				}
+
+				if (BallLerp > 3.0f)
+				{
+					InterfaceImage->On();
+					Select->On();
+					DoomChit();
+					BattleUnit->DoomChit();
 				}
 			}
 		}
