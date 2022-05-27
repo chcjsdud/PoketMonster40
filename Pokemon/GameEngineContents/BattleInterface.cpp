@@ -23,7 +23,7 @@ BattleInterface::BattleInterface()
 	, MainInterface(nullptr)
 	, DownFont_(nullptr)
 	, Level_(nullptr)
-	, PlayerStopCheck(nullptr)
+	, BattleUnit(nullptr)
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, PlayerEnd(false)
@@ -86,7 +86,7 @@ void BattleInterface::Start()
 	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
 
 	//김예나:테스트 코드
-	PlayerStopCheck = Level_->CreateActor<BattleUnitRenderer>();
+	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
 	MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
@@ -114,7 +114,7 @@ void BattleInterface::Update()
 		OrderCheck();
 	}
 
-	if (PlayerStopCheck->GetPlayerStop() == true && OneTalk == false)
+	if (BattleUnit->GetPlayerStop() == true && OneTalk == false)
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
 		Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
@@ -152,7 +152,6 @@ void BattleInterface::Update()
 				//애니메이션체인지
 				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
 				//이때 플레이어가 왼쪽으로 빠져야함
-
 				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
 				{
 					BattleUnitRenderer::PlayerRenderer_->Off();
@@ -188,6 +187,7 @@ void BattleInterface::Update()
 
 				if (BallLerp > 2.0f)
 				{
+					BattleUnit->GetPlayerCurrentPokemon()->On();
 					InterfaceImage->On();
 					Select->On();
 					MyHPUI->On();
