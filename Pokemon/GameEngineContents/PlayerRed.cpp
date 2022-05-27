@@ -20,6 +20,8 @@
 #include "InteractionText.h"
 #include "Bush.h"
 
+#include "Bag.h"
+
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 bool PlayerRed::WMenuUICheck_ = true;
 PlayerRed::PlayerRed()
@@ -40,6 +42,7 @@ PlayerRed::PlayerRed()
 	, Alpha_()
 	, MyPokemonList_{}
 	, MyItemList_{}
+	, Bag_(nullptr)
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
 	, IsFadeRL_(false)
@@ -54,6 +57,8 @@ PlayerRed::PlayerRed()
 	, IsBush_(false)
 	, IsBushEventReady_(false)
 	, IsDebugRun_(false)
+	, IsBagOn_(false)
+	, IsPokemonMenuOn_(false)
 	, BushActor_(nullptr)
 	, NextTileMap_()
 {
@@ -254,6 +259,9 @@ void PlayerRed::Start()
 	GameEngineInput::GetInst()->CreateKey("JBMTest", 'L');
 	GameEngineInput::GetInst()->CreateKey("JBMDebugRun", VK_SPACE);
 	GameEngineInput::GetInst()->CreateKey("WMenuUI", 'P');
+	GameEngineInput::GetInst()->CreateKey("BagOn", VK_LSHIFT);
+	GameEngineInput::GetInst()->CreateKey("BagClose", VK_ESCAPE);
+
 	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp", 20);
 	WMenuUIRender_->Off();
 	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp", 20);
@@ -313,6 +321,7 @@ void PlayerRed::Update()
 	FadeIn();
 	FadeOut();
 	FadeRL();
+	ActiveBag();
 	//Camera();
 	InteractionUpdate();
 
@@ -337,7 +346,8 @@ void PlayerRed::Render()
 
 void PlayerRed::PlayerSetMove(float4 _Value)
 {
-	if (true == IsFadeIn_ || true == IsInteraction_)
+	if (true == IsFadeIn_ || true == IsInteraction_
+		|| true == IsBagOn_)
 	{
 		return;
 	}
@@ -1161,4 +1171,222 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 	}
 
 	return false;
+}
+
+
+void PlayerRed::ActiveBag()
+{
+	if (true == GameEngineInput::GetInst()->IsDown("BagClose")
+		&& Bag_ != nullptr)
+	{
+		Bag_->DestroyBag();
+		Bag_->Death();
+		Bag_ = nullptr;
+
+		IsBagOn_ = false;
+	}
+
+	else if (true == GameEngineInput::GetInst()->IsDown("BagOn")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		&& Bag_ == nullptr)
+	{
+		Bag_ = GetLevel()->CreateActor<Bag>(50);
+		Bag_->SetPosition(GetPosition());
+		Bag_->BagInit();
+
+		IsBagOn_ = true;
+	}
 }

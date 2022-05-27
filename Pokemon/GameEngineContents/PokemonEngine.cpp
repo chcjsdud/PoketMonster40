@@ -50,10 +50,10 @@ void PokemonEngine::GameLoop()
 		ChangeLevel("UITestLevel");
 	}
 
-	if (GameEngineInput::GetInst()->IsDown("Bag") == true)
-	{
-		ChangeLevel("BagTestLevel");
-	}
+	//if (GameEngineInput::GetInst()->IsDown("Bag") == true)
+	//{
+	//	ChangeLevel("BagTestLevel");
+	//}
 
 	if (GameEngineInput::GetInst()->IsDown("WoldMapTest") == true)
 	{

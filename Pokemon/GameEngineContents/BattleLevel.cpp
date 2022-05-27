@@ -102,7 +102,6 @@ void BattleLevel::Update()
 			{
 				EndBattlePage();
 			}
-
 		}
 		return;
 		break;
@@ -640,9 +639,10 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
 			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
 			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
-			Interface_->SetEmptyString();
+			Interface_->SetEmptyString(); // 디버깅
 			CurrentFont_ = Battlefont::Wait;
 		}
+
 		break;
 		case SkillType::Status:
 			// 꼬리흔들기 등 이펙트 구현, 포켓몬에게 랭크 적용
