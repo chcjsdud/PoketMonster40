@@ -33,9 +33,9 @@ public:
 	inline TileState CanMove(int _X, int _Y, float4 _Dir = float4::ZERO)
 	{
 		// Å¸ÀÏ¸ÊÀ» ¹ş¾î³µÀ»¶§
-		if (TileMap_.GetMaxX() <= _X || TileMap_.GetMaxY() <= _Y)
+		if (TileMap_.GetMaxX() <= _X || TileMap_.GetMaxY() <= _Y || _X < 0 || _Y < 0)
 		{
-			return TileState::False;
+ 			return TileState::False;
 		}
 
 		float4 TestPos = TileMap_.GetWorldPostion(_X, _Y);

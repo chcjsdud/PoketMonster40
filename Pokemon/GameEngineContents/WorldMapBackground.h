@@ -20,6 +20,7 @@ protected:
 
 private:
 	GameEngineRenderer* WorldMap1_;
+	GameEngineRenderer* WorldMap2_;
 	GameEngineRenderer* RoomsRenderer_;
 	GameEngineRenderer* Rooms2Renderer_;
 

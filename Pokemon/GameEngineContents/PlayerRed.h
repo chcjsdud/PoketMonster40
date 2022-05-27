@@ -83,7 +83,7 @@ private:
 	float LerpY_;
 	float LerpTime_;
 	float FadeTime_;
-	UINT Alpha_;
+	float Alpha_;
 	
 	// 타일맵 및 이동관련
 	PokemonTileMap* CurrentTileMap_;
@@ -116,7 +116,7 @@ private:
 
 	void PlayerSetMove(float4 _Value);
 	bool PlayerMoveTileCheck(int _X, int _Y);
-	void MoveTile(PokemonTileMap& _Tile, float4 _Pos);
+	void MoveTile(PokemonTileMap* _Tile, float4 _Pos);
 	
 	void Camera();
 	void WMenuUISelect();

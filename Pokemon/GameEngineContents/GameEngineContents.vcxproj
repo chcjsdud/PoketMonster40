@@ -344,6 +344,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="WorldTileMap1.h" />
+    <ClInclude Include="WorldTileMap2.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bag.cpp">
@@ -523,6 +527,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="WorldTileMap1.cpp" />
+    <ClCompile Include="WorldTileMap2.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameEngineBase\GameEngineBase.vcxproj">

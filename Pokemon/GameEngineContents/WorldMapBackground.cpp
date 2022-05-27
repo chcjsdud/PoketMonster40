@@ -17,8 +17,10 @@ WorldMapBackground::~WorldMapBackground()
 void WorldMapBackground::Start()
 {
 	//WorldMap1_ = CreateRenderer("Test3.bmp");
-	WorldMap1_ = CreateRenderer("Test3_NoFlower.bmp");
+	WorldMap1_ = CreateRenderer("WorldMap1.bmp");
 	WorldMap1_->SetPivot({1000, -1800});
+	WorldMap2_ = CreateRenderer("WorldMap2.bmp");
+	WorldMap2_->SetPivot({ -2525, -3993 });
 	RoomsRenderer_ = CreateRenderer("Rooms1.bmp");
 	RoomsRenderer_->SetPivot({-2500, 0});
 	Rooms2Renderer_ = CreateRenderer("Rooms2.bmp");

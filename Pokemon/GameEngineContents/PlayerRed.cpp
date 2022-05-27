@@ -16,6 +16,7 @@
 #include "RoomTileMap7.h"
 #include "RoomTileMap8.h"
 #include "WorldTileMap1.h"
+#include "WorldTileMap2.h"
 
 #include "InteractionText.h"
 #include "Bush.h"
@@ -162,10 +163,10 @@ void PlayerRed::FadeIn()
 
 	if (true == IsFadeIn_)
 	{
-		Alpha_ += 2;
+		Alpha_ += 255 * GameEngineTime::GetDeltaTime() * 1.0f;
 
 		FadeRender_->On();
-		FadeRender_->SetAlpha(Alpha_);
+		FadeRender_->SetAlpha(static_cast<unsigned int>(Alpha_));
 
 		if (255 <= Alpha_)
 		{
@@ -194,15 +195,15 @@ void PlayerRed::FadeOut()
 {
 	if (true == IsFadeOut_)
 	{
-		Alpha_ -= 1;
-
-		FadeRender_->SetAlpha(Alpha_);
+		Alpha_ -= 255 * GameEngineTime::GetDeltaTime() * 1.0f;
 
 		if (0 >= Alpha_)
 		{
 			Alpha_ = 0;
 			IsFadeOut_ = false;
 		}
+
+		FadeRender_->SetAlpha(static_cast<unsigned int>(Alpha_));
 	}
 }
 
@@ -282,7 +283,7 @@ void PlayerRed::Start()
 	ShadowRender_->Off();
 
 	RedCollision_ = CreateCollision("RedColBox", { 60,60 });
-	
+
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
@@ -315,7 +316,7 @@ void PlayerRed::Start()
 void PlayerRed::Update()
 {
 	DirAnimationCheck();
-	Camera();
+	//Camera();
 	StateUpdate();
 	IsWMenuKey();
 	WMenuUISelect();
@@ -323,6 +324,7 @@ void PlayerRed::Update()
 	FadeIn();
 	FadeOut();
 	FadeRL();
+	Camera();
 	UIUpdate();
 	//ActiveBag();
 	//Camera();
@@ -386,7 +388,7 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		IsBushEventReady_ = true;
 		ShadowRender_->On();
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
-		
+
 		if (true == IsDebugRun_)
 		{
 			NextMoveTime_ = GetAccTime() + 0.26f;
@@ -536,13 +538,39 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			NextTilePos_ = { 4, 5 };
 			return true;
 		}
+
+		// 월드맵 타일 변경
+		for (int y = 20; y <= 23; y++)
+		{
+			if (_X == -1 && _Y == y) 
+			{
+				IsMove_ = true;
+				CurrentTileMap_ = WorldTileMap2::GetInst();
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
+				return false;
+			}
+		}
+	}
+	else if (WorldTileMap2::GetInst() == CurrentTileMap_)
+	{
+		// 월드맵 타일 변경
+		for (int y = 16; y <= 19; y++)
+		{
+			if (_X == 66 && _Y == y)
+			{
+				IsMove_ = true;
+				CurrentTileMap_ = WorldTileMap1::GetInst();
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
+				return false;
+			}
+		}
 	}
 	return false;
 }
 
-void PlayerRed::MoveTile(PokemonTileMap& _Tile, float4 _Pos)
+void PlayerRed::MoveTile(PokemonTileMap* _Tile, float4 _Pos)
 {
-	CurrentTileMap_ = &_Tile;
+	CurrentTileMap_ = _Tile;
 	SetPosition(CurrentTileMap_->GetWorldPostion(_Pos.ix(), _Pos.iy()));
 }
 
@@ -1076,6 +1104,19 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->Setting();
 			return true;
 		}
+		if (_X == 17 && _Y == 35)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("TRAINER TIPS");
+			TmpText->AddText("");
+			TmpText->AddText("The battle moves of POKEMON are");
+			TmpText->AddText("limited by their POWER POINTS, PP.");
+			TmpText->AddText("To replenish PP, rest your tired");
+			TmpText->AddText("POKEMON at a POKEMON CENTER.");
+			TmpText->Setting();
+			return true;
+		}
 	}
 	return false;
 }
@@ -1084,88 +1125,121 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 {
 	if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
-		for (int y = 79; y <= 83; y++)
 		{
-			for (int x = 21; x <= 22; x++)
+			float4 LeftTop = { 21, 79 };
+			float4 RightBot = { 22, 83 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 78; y <= 79; y++)
 		{
-			for (int x = 24; x <= 28; x++)
+			float4 LeftTop = { 24, 78 };
+			float4 RightBot = { 28, 79 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 76; y <= 77; y++)
 		{
-			for (int x = 26; x <= 30; x++)
+			float4 LeftTop = { 26, 76 };
+			float4 RightBot = { 30, 77 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 78; y <= 79; y++)
 		{
-			for (int x = 11; x <= 17; x++)
+			float4 LeftTop = { 11, 78 };
+			float4 RightBot = { 17, 79 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 76; y <= 77; y++)
 		{
-			for (int x = 13; x <= 19; x++)
+			float4 LeftTop = { 13, 76 };
+			float4 RightBot = { 19, 77 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 68; y <= 72; y++)
 		{
-			for (int x = 21; x <= 26; x++)
+			float4 LeftTop = { 21, 68 };
+			float4 RightBot = { 26, 72 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 57; y <= 61; y++)
 		{
-			for (int x = 25; x <= 30; x++)
+			float4 LeftTop = { 25, 57 };
+			float4 RightBot = { 30, 61 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}
 			}
 		}
 
-		for (int y = 50; y <= 54; y++)
 		{
-			for (int x = 19; x <= 30; x++)
+			float4 LeftTop = { 19, 50 };
+			float4 RightBot = { 30, 54 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
-				if (_X == x && _Y == y)
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					return true;
+				}
+			}
+		}
+	}
+	else if (WorldTileMap2::GetInst() == CurrentTileMap_)
+	{
+		{
+			float4 LeftTop = { 49, 19 };
+			float4 RightBot = { 54, 23 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					return true;
+				}
+			}
+		}
+		{
+			float4 LeftTop = { 30, 19 };
+			float4 RightBot = { 36, 23 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					return true;
 				}

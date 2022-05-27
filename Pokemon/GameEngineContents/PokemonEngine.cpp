@@ -170,6 +170,19 @@ void PokemonEngine::ResourcesLoad()
 			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
 		}
 	}
+
+	{
+		GameEngineDirectory ResourcesDirectory;
+		ResourcesDirectory.MoveParent("Pokemon");
+		ResourcesDirectory.Move("Resources");
+		ResourcesDirectory.Move("UI");
+		ResourcesDirectory.Move("ChoiceOption");
+		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
+		for (int i = 0; i < AllFileVec.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
+		}
+	}
 }
 
 void PokemonEngine::ImageCut()

@@ -16,10 +16,10 @@ void WorldTileMap1::Start()
 	Inst_ = this;
 	SetPosition({ -474, -5689 });
 	TileMap_.TileRangeSetting(70, 111, { 64, 64 });
-	ColMap_ = GameEngineImageManager::GetInst()->Find("ColMap.bmp");
+	ColMap_ = GameEngineImageManager::GetInst()->Find("ColMap1.bmp");
 
 	//for (int y = 20; y < 80; y++)
-	//{
+	//{	
 	//	for (int x = 10; x < 40; x++)
 	//	{
 	//		if (x % 2 == 0 && y % 2 != 0)

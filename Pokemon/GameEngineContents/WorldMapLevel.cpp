@@ -3,6 +3,7 @@
 #include "PlayerRed.h"
 #include "NPC4.h"
 #include "WorldTileMap1.h"
+#include "WorldTileMap2.h"
 #include "RoomTileMap1.h"
 #include "RoomTileMap2.h"
 #include "RoomTileMap3.h"
@@ -24,6 +25,7 @@ void WorldMapLevel::Loading()
 {
 	CreateActor<WorldMapBackground>();
 	CreateActor<WorldTileMap1>();
+	CreateActor<WorldTileMap2>();
 	CreateActor<RoomTileMap1>();
 	CreateActor<RoomTileMap2>();
 	CreateActor<RoomTileMap3>();

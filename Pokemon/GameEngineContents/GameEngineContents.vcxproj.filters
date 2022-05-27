@@ -145,6 +145,9 @@
     <ClCompile Include="TestActor.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="WorldTileMap2.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
     <ClCompile Include="PokemonSummaryMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -297,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="TestActor.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTileMap2.h">
+      <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
     <ClInclude Include="PokemonSummaryMenu.h">
       <Filter>UI</Filter>

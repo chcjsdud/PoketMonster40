@@ -21,14 +21,14 @@ void CenterChoiceOption::SetParent(InteractionText* _Parent)
 
 void CenterChoiceOption::Start()
 {
-	UIRenderer_ = CreateRenderer("DialogBox_Bag.bmp");
-	UIRenderer_->SetPivot({ 250, 150 });
+	UIRenderer_ = CreateRenderer("ChoiceOption1.bmp");
+	UIRenderer_->SetPivot({ 250, 30 });
 
-	ArrowRenderer_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	ArrowRenderer_->SetPivot({ 200, 150 });
+	ArrowRenderer_ = CreateRenderer("ChoiceOption_Arrow.bmp");
+	ArrowRenderer_->SetPivot({ 200, 0 });
 
-	ArrowPos_.push_back({ 200, 100 });
-	ArrowPos_.push_back({ 200, 200 });
+	ArrowPos_.push_back({ 200, 0 });
+	ArrowPos_.push_back({ 200, 60 });
 }
 
 void CenterChoiceOption::Update()

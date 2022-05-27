@@ -21,15 +21,15 @@ void ShopChoiceOption::SetParent(InteractionText* _Parent)
 
 void ShopChoiceOption::Start()
 {
-	UIRenderer_ = CreateRenderer("DialogBox_Bag.bmp");
-	UIRenderer_->SetPivot({ -250, -150 });
+	UIRenderer_ = CreateRenderer("ChoiceOption2.bmp");
+	UIRenderer_->SetPivot({ -225, -190 });
 
-	ArrowRenderer_ = CreateRenderer("Bag_CurrentArrow.bmp");
-	ArrowRenderer_->SetPivot({ -200, -150 });
+	ArrowRenderer_ = CreateRenderer("ChoiceOption_Arrow.bmp");
+	ArrowRenderer_->SetPivot({ -165, -190 });
 
-	ArrowPos_.push_back({-200, -250});
-	ArrowPos_.push_back({-200, -150});
-	ArrowPos_.push_back({-200, -50});
+	ArrowPos_.push_back({-400, -250});
+	ArrowPos_.push_back({-400, -190 });
+	ArrowPos_.push_back({-400, -120});
 }
 
 void ShopChoiceOption::Update()
