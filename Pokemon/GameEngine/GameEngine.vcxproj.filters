@@ -18,7 +18,7 @@
       <Filter>Object\Actor\SubObject</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineEnum.h">
-      <Filter>Global</Filter>
+      <Filter>Object\Global</Filter>
     </ClInclude>
     <ClInclude Include="GameEngineActorSubObject.h">
       <Filter>Object\Actor\SubObject</Filter>
@@ -85,11 +85,11 @@
     <Filter Include="Object\Actor\SubObject">
       <UniqueIdentifier>{843d7910-18cf-4607-b3cf-207d5dd8ca46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Global">
-      <UniqueIdentifier>{61f840a0-bab3-44fd-a379-e315fda223ac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents">
       <UniqueIdentifier>{20b92071-b3cb-4b03-94a0-409172801c5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Global">
+      <UniqueIdentifier>{61f840a0-bab3-44fd-a379-e315fda223ac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

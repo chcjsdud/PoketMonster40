@@ -422,13 +422,13 @@ void Bag::OnDialog()
 		BagDialog_->SetImage("DialogBox_Bag_Battle.bmp");
 		BagDialog_->SetPivot({ 335, 215 });
 
-		GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>(55);
-		Give->SetPosition(GetPosition() + float4{ 100, 500 });
-		Give->ShowString("USE", true);
-		DialogFonts_.push_back(Give);
+		GameEngineContentFont* Use = GetLevel()->CreateActor<GameEngineContentFont>(55);
+		Use->SetPosition(GetPosition() + float4{ 250, 130 });
+		Use->ShowString("USE", true);
+		DialogFonts_.push_back(Use);
 
 		GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>(55);
-		Cancle->SetPosition(GetPosition() + float4{ 100, 500 });
+		Cancle->SetPosition(GetPosition() + float4{ 250, 190 });
 		Cancle->ShowString("CANCLE", true);
 		DialogFonts_.push_back(Cancle);
 	}
@@ -436,7 +436,7 @@ void Bag::OnDialog()
 	UpArrow_->Off();
 	DownArrow_->Off();
 	RightArrow_->Off();
-	LeftArrow_->Off();
+	LeftArrow_->Off();	
 }
 
 void Bag::MoveDialog()

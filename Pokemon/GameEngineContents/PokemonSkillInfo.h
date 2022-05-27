@@ -65,6 +65,16 @@ public:
 		return Effect_;
 	}
 
+	inline void SetDesc(const std::string& _Desc)
+	{ 
+		Desc_ = _Desc;
+	}
+
+	inline const std::string& GetDesc()
+	{
+		return Desc_;
+	}
+
 protected:	
 
 private:
@@ -75,5 +85,6 @@ private:
 	PokemonType Type_; // 스킬 자체 속성 (노말, 불 등
 
 	std::string Effect_;
+	std::string Desc_; //스킬 효과 내용
 };
 

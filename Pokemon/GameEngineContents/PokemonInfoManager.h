@@ -49,6 +49,10 @@ public:
 	PokemonSkillInfo* FindSkillInfo(const std::string& _Key);
 	ItemInfo* FindItemInfo(const std::string& _Key);
 
+	Pokemon* CreatePokemon(const std::string& _Name);
+	class PokemonSkill* CreatePokemonSkill(const std::string& _Name);
+	class Item* CreateItem(const std::string& _Name);
+
 protected:
 
 private:
@@ -57,11 +61,9 @@ private:
 	std::map<std::string, ItemInfo*> AllItemInfoList_;
 
 	PokemonInfo* CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed);
-	PokemonSkillInfo* CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType);
+	PokemonSkillInfo* CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType, const std::string& _Desc);
 	ItemInfo* CreateItemInfo(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc);
 
-	Pokemon* CreatePokemon(const std::string& _Name);
-	class PokemonSkill* CreatePokemonSkill(const std::string& _Name);
-	class Item* CreateItem(const std::string& _Name);
+	void CreateRandomNature(PokemonInfo* _Pokemon);
 };
 

@@ -5,6 +5,9 @@
 #include "MonsterBall.h"
 #include "Potion.h"
 #include "Tackle.h"
+#include "ContentEnum.h"
+#include "GameEngineBase/GameEngineRandom.h"
+
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
 
@@ -61,19 +64,14 @@ PokemonInfoManager::~PokemonInfoManager()
 void PokemonInfoManager::Reset()
 {
 	{
-		PokemonSkillInfo* Tackle = CreateSkillInfo("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical);
-		PokemonSkillInfo* TailWhip = CreateSkillInfo("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status);
-		PokemonSkillInfo* Scratch = CreateSkillInfo("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical);
-		PokemonSkillInfo* Growl = CreateSkillInfo("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status);
-
 		//Tackle: 몸통박치기
-		//CreateSkillInfo<Tackle>("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical);
+		PokemonSkillInfo* Tackle = CreateSkillInfo("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical, "A physical attack in which the user charges,\\full body, into the foe.");
 		////Tail Whip: 꼬리 흔들기 
-		//CreateSkillInfo<Tackle>("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status);
+		PokemonSkillInfo* TailWhip = CreateSkillInfo("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status, "Lowers the opponent's Pokémon's Defense by 1 stage.");
 		////Scratch: 할퀴기
-		//CreateSkillInfo<Tackle>("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical);
+		PokemonSkillInfo* Scratch = CreateSkillInfo("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical, "Hard, pointed, and sharp claws rake the foe.");
 		////Scratch: 울음소리 
-		//CreateSkillInfo<Tackle>("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status);
+		PokemonSkillInfo* Growl = CreateSkillInfo("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status, "The user growls in a cute way, making the foe lower its Attack. stat.");
 	}
 
 	{
@@ -160,6 +158,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
 	NewPokemon->SetInfo(MyInfo);
+	CreateRandomNature(MyInfo);
 
 	return NewPokemon;
 }
@@ -191,7 +190,91 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, Poke
 	return NewPokemonInfo;
 }
 
-PokemonSkillInfo* PokemonInfoManager::CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType)
+void PokemonInfoManager::CreateRandomNature(PokemonInfo* _Pokemon)
+{
+	int RandomNature = GameEngineRandom::GetInst_->RandomInt(0, static_cast<int>(PokemonNature::End));
+
+	switch (RandomNature)
+	{
+	case static_cast<int>(PokemonNature::Quirky):
+		_Pokemon->SetNature("Quirky");
+		break;
+	case static_cast<int>(PokemonNature::Bold):
+		_Pokemon->SetNature("Bold");
+		break;
+	case static_cast<int>(PokemonNature::Modest):
+		_Pokemon->SetNature("Modest");
+		break;
+	case static_cast<int>(PokemonNature::Calm):
+		_Pokemon->SetNature("Calm");
+		break;
+	case static_cast<int>(PokemonNature::Timid):
+		_Pokemon->SetNature("Timid");
+		break;
+	case static_cast<int>(PokemonNature::Lonely):
+		_Pokemon->SetNature("Lonely");
+		break;
+	case static_cast<int>(PokemonNature::Bashful):
+		_Pokemon->SetNature("Bashful");
+		break;
+	case static_cast<int>(PokemonNature::Mild):
+		_Pokemon->SetNature("Mild");
+		break;
+	case static_cast<int>(PokemonNature::Gentle):
+		_Pokemon->SetNature("Gentle");
+		break;
+	case static_cast<int>(PokemonNature::Hasty):
+		_Pokemon->SetNature("Hasty");
+		break;
+	case static_cast<int>(PokemonNature::Adamant):
+		_Pokemon->SetNature("Adamant");
+		break;
+	case static_cast<int>(PokemonNature::Impish):
+		_Pokemon->SetNature("Impish");
+		break;
+	case static_cast<int>(PokemonNature::Hardy):
+		_Pokemon->SetNature("Hardy");
+		break;
+	case static_cast<int>(PokemonNature::Careful):
+		_Pokemon->SetNature("Careful");
+		break;
+	case static_cast<int>(PokemonNature::Jolly):
+		_Pokemon->SetNature("Jolly");
+		break;
+	case static_cast<int>(PokemonNature::Naughty):
+		_Pokemon->SetNature("Naughty");
+		break;
+	case static_cast<int>(PokemonNature::Lax):
+		_Pokemon->SetNature("Lax");
+		break;
+	case static_cast<int>(PokemonNature::Rash):
+		_Pokemon->SetNature("Rash");
+		break;
+	case static_cast<int>(PokemonNature::Docile):
+		_Pokemon->SetNature("Docile");
+		break;
+	case static_cast<int>(PokemonNature::Naive):
+		_Pokemon->SetNature("Naive");
+		break;
+	case static_cast<int>(PokemonNature::Brave):
+		_Pokemon->SetNature("Brave");
+		break;
+	case static_cast<int>(PokemonNature::Relaxed):
+		_Pokemon->SetNature("Relaxed");
+		break;
+	case static_cast<int>(PokemonNature::Quiet):
+		_Pokemon->SetNature("Quiet");
+		break;
+	case static_cast<int>(PokemonNature::Sassy):
+		_Pokemon->SetNature("Sassy");
+		break;
+	case static_cast<int>(PokemonNature::Serious):
+		_Pokemon->SetNature("Serious");
+		break;
+	}
+}
+
+PokemonSkillInfo* PokemonInfoManager::CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType, const std::string& _Desc)
 {
 	PokemonSkillInfo* NewSkill = new PokemonSkillInfo();
 	std::string Key = GameEngineString::ToUpperReturn(_Key);
@@ -201,6 +284,7 @@ PokemonSkillInfo* PokemonInfoManager::CreateSkillInfo(const std::string& _Key, i
 	NewSkill->SetPP(_PP);
 	NewSkill->SetType(_Type);
 	NewSkill->SetSkillType(_SkillType);
+	NewSkill->SetDesc(_Desc);
 
 	AllSkillInfoList_.insert(std::make_pair(Key, NewSkill));
 
