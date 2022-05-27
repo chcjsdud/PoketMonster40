@@ -228,11 +228,8 @@ bool BattleInterface::BattleKey()
 
 void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
-
 		DownFont_->EndFont();
-		DownFont_->ShowString(_AttPokemon + " Used\\"+ _AttSkill + "!");
-
-
+		DownFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
 }
 
 void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
@@ -244,7 +241,7 @@ void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 void BattleInterface::ShowSupperEffectString()
 {
 	DownFont_->EndFont();
-	DownFont_->ShowString("It's Super effective!");
+	DownFont_->ShowString("It's Supe\\effective!");
 }
 
 void BattleInterface::ShowCriticalHitString()
@@ -256,7 +253,7 @@ void BattleInterface::ShowCriticalHitString()
 void BattleInterface::ShowNotEffective()
 {
 	DownFont_->EndFont();
-	DownFont_->ShowString("It's not Very effective;");
+	DownFont_->ShowString("It's not Very\\effective;");
 }
 
 void BattleInterface::ShowFailed()
@@ -265,16 +262,71 @@ void BattleInterface::ShowFailed()
 	DownFont_->ShowString("But it failed!");
 }
 
-void BattleInterface::ShowRankDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
+void BattleInterface::ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
 {
 	DownFont_->EndFont();
-	DownFont_->ShowString("But it failed!");
+	std::string Rankfont = _Pokemon;
+	Rankfont += " is\\";
+	Rankfont += AbilityString(_Ability);
+	Rankfont += RankString(_Rank);
+	DownFont_->ShowString(Rankfont);
 }
 
-void BattleInterface::ShowRankUp(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
+std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 {
-
+	switch (_Ability)
+	{
+	case PokemonAbility::Att:
+		return "ATTACK";
+			break;
+	case PokemonAbility::Def:
+		return "DEFENSE";
+		break;
+	case PokemonAbility::SpAtt:
+		return "SPECIAL ATTACK";
+		break;
+	case PokemonAbility::SpDef:
+		return "SPECIAL DEFENSE";
+		break;
+	case PokemonAbility::Speed:
+		return "SPEED";
+		break;
+	case PokemonAbility::Accuracy:
+		return "ACCURACY";
+		break;
+	case PokemonAbility::Evasion:
+		return "EVASION";
+		break;
+	default:
+		break;
+	}
 }
+
+std::string BattleInterface::RankString(int _Rank)
+{
+	switch (_Rank)
+	{
+	case 1:
+		return " rose!";
+		break;
+	case 2:
+		return " sharply rose!";
+		break;
+	case 3:
+		return " rose drastically!";
+		break;
+	case -1:
+		return " fell!";
+		break;
+	case -2:
+		return " harshly fell!";
+		break;
+	case -3:
+		return " severely fell!";
+		break;
+	}
+}
+
 
 
 bool BattleInterface::MoveKey()

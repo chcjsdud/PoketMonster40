@@ -301,9 +301,6 @@ private:
 
 	bool CheckBattle(PokemonBattleState* _CurrentTurn, PokemonBattleState* _AfterTrun, PokemonSkillInfo* _Skill, BattleTurn* _Turn);
 
-	float IsEffect(DamageType _DamgeType);
-
-
 	bool PlayerFirst_;
 
 	BattleTurn* FristTurn_;
