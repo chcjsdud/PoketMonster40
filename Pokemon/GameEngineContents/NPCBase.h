@@ -32,17 +32,31 @@ public:
 	NPCBase& operator=(const NPCBase& _Other) = delete;
 	NPCBase& operator=(NPCBase&& _Other) noexcept = delete;
 
+	static NPCBase* NPC_;
+	
 	void Start() override;
 	void Update() override;
 	void Render() override;
 
+	bool IsTalk_;
+
+	inline void SetNPCInteraction(const bool _Value)
+	{
+		IsTalk_ = _Value;
+	}
+
 protected:
 	void NPCMove();
 	void NPCMoveAnim();
+	void NPCInteractDir();
 	bool IsInside(float4 _LeftTop, float4 _RightBot);
 	PokemonTileMap*			CurrentTileMap_;
 	GameEngineRenderer*		NPCRender_;
 	GameEngineCollision*	NPCCollision_;
+	GameEngineCollision*	NPCUpCollision_;
+	GameEngineCollision*	NPCDownCollision_;
+	GameEngineCollision*	NPCRightCollision_;
+	GameEngineCollision*	NPCLeftCollision_;
 	std::string				NPCAnimationName_;
 	std::string				NPCChangeDirText_;
 

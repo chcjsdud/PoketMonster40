@@ -1,15 +1,19 @@
 #include "NPCBase.h"
 #include "PlayerRed.h"
 #include <GameEngineBase/GameEngineRandom.h>
+#include <GameEngineBase/GameEngineInput.h>
 #include <GameEngine/GameEngineCollision.h>
 
+NPCBase* NPCBase::NPC_ = nullptr;
 NPCBase::NPCBase() 
 	: NPCLerpTime_(0)
 	, NPCNextMoveTime_(0)
 	, NPCLerpX_(0)
 	, NPCLerpY_(0)
 	, IsMove_()
+	, IsTalk_(false)
 {
+	NPC_ = this;
 }
 
 NPCBase::~NPCBase() 
@@ -35,7 +39,9 @@ void NPCBase::Render()
 
 void NPCBase::NPCMove()
 {
-	if (false == PlayerRed::WMenuUICheck_)
+	NPCInteractDir();
+	
+	if (false == PlayerRed::WMenuUICheck_ || true == IsTalk_)
 	{
 		NPCMoveDir_ = float4::ZERO;
 		return;
@@ -163,6 +169,66 @@ void NPCBase::NPCMoveAnim()
 			NPCAnimationName_ = "Idle";
 			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
 		}
+	}
+}
+
+void NPCBase::NPCInteractDir()
+{
+	if (NPCUpCollision_->CollisionCheck("RedFrontColBox"))
+	{
+		if (true == GameEngineInput::GetInst()->IsPress("Z"))
+		{
+			State_ = NPCState::Idle;
+			CurrentDir_ = NPCDir::Up;
+			NPCAnimationName_ = "Idle";
+			NPCChangeDirText_ = "Up";
+			NPCMoveDir_ = float4::ZERO;
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
+			return;
+		}
+		return;
+	}
+	else if (NPCDownCollision_->CollisionCheck("RedFrontColBox"))
+	{
+		if (true == GameEngineInput::GetInst()->IsPress("Z"))
+		{
+			State_ = NPCState::Idle;
+			CurrentDir_ = NPCDir::Down;
+			NPCAnimationName_ = "Idle";
+			NPCChangeDirText_ = "Down";
+			NPCMoveDir_ = float4::ZERO;
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
+			return;
+		}
+		return;
+	}
+	else if (NPCRightCollision_->CollisionCheck("RedFrontColBox"))
+	{
+		if (true == GameEngineInput::GetInst()->IsPress("Z"))
+		{
+			State_ = NPCState::Idle;
+			CurrentDir_ = NPCDir::Right;
+			NPCAnimationName_ = "Idle";
+			NPCChangeDirText_ = "Right";
+			NPCMoveDir_ = float4::ZERO;
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
+			return;
+		}
+		return;
+	}
+	else if (NPCLeftCollision_->CollisionCheck("RedFrontColBox"))
+	{
+		if (true == GameEngineInput::GetInst()->IsPress("Z"))
+		{
+			State_ = NPCState::Idle;
+			CurrentDir_ = NPCDir::Left;
+			NPCAnimationName_ = "Idle";
+			NPCChangeDirText_ = "Left";
+			NPCMoveDir_ = float4::ZERO;
+			NPCRender_->ChangeAnimation(NPCAnimationName_ + NPCChangeDirText_);
+			return;
+		}
+		return;
 	}
 }
 
