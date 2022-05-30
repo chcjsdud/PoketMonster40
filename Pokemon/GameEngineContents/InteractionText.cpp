@@ -2,6 +2,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include "PlayerRed.h"
+#include "NPCBase.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
 
@@ -115,6 +116,7 @@ void InteractionText::Update()
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
 			PlayerRed::MainRed_->SetInteraction(false);
+			NPCBase::NPC_->SetNPCInteraction(false);
 			Fonts->EndFont();
 			Death();
 		}

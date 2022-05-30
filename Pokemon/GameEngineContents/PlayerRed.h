@@ -75,6 +75,7 @@ private:
 	GameEngineRenderer*		FadeRightRender_;
 	GameEngineRenderer*		FadeLeftRender_;
 	GameEngineCollision*	RedCollision_;
+	GameEngineCollision*	RedFrontCollision_;
 	bool IsFadeIn_;
 	bool IsFadeOut_;
 	bool IsFadeRL_;
@@ -128,6 +129,7 @@ private:
 
 	// 상호작용
 	void InteractionUpdate();
+	bool InteractionNPC();
 	bool InteractTileCheck(int _X, int _Y, RedDir _Dir);
 
 	// 수풀

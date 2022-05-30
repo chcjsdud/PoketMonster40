@@ -18,6 +18,10 @@ NPC4::~NPC4()
 void NPC4::Start()
 {
 	NPCBase::NPCCollision_ = CreateCollision("NPCColBox", { 60,60 });
+	NPCBase::NPCUpCollision_ = CreateCollision("NPC4DirZColBox", { 20,5 }, { 0,-32 });
+	NPCBase::NPCDownCollision_ = CreateCollision("NPC4DirZColBox", { 20,5 }, { 0,32 });
+	NPCBase::NPCRightCollision_ = CreateCollision("NPC4DirZColBox", { 5,20 }, { 32,0 });
+	NPCBase::NPCLeftCollision_ = CreateCollision("NPC4DirZColBox", { 5,20 }, { -32,0 });
 	{
 		GameEngineImage*
 		// Idle
@@ -67,4 +71,3 @@ void NPC4::Update()
 	NPCBase::NPCMoveAnim();
 	NPCBase::NPCMove();
 }
-

@@ -6,6 +6,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <GameEngine/GameEngineCollision.h>
 
 #include "RoomTileMap1.h"
 #include "RoomTileMap2.h"
@@ -20,6 +21,7 @@
 
 #include "InteractionText.h"
 #include "Bush.h"
+#include "NPCBase.h"
 
 #include "Bag.h"
 #include "PokemonMenu.h"
@@ -130,21 +132,29 @@ void PlayerRed::DirAnimationCheck()
 	{
 		CheckDir_ = RedDir::Up;
 		ChangeDirText_ = "Up";
+		RedFrontCollision_->SetScale({ 20,5 });
+		RedFrontCollision_->SetPivot({ 0,-32 });
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Down"))
 	{
 		CheckDir_ = RedDir::Down;
 		ChangeDirText_ = "Down";
+		RedFrontCollision_->SetScale({ 20,5 });
+		RedFrontCollision_->SetPivot({ 0,32 });
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Right"))
 	{
 		CheckDir_ = RedDir::Right;
 		ChangeDirText_ = "Right";
+		RedFrontCollision_->SetScale({ 5,20 });
+		RedFrontCollision_->SetPivot({ 32,0 });
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Left"))
 	{
 		CheckDir_ = RedDir::Left;
 		ChangeDirText_ = "Left";
+		RedFrontCollision_->SetScale({ 5,20 });
+		RedFrontCollision_->SetPivot({ -32,0 });
 	}
 
 	if (CheckDir_ != CurrentDir_)
@@ -283,7 +293,8 @@ void PlayerRed::Start()
 	ShadowRender_->Off();
 
 	RedCollision_ = CreateCollision("RedColBox", { 60,60 });
-
+	RedFrontCollision_ = CreateCollision("RedFrontColBox", { 20,5 }, { 0,-32 });
+	
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
@@ -834,6 +845,7 @@ void PlayerRed::InteractionUpdate()
 		return;
 	}
 
+	// z키 누르면 잠깐 멈추듯 버벅거리는 현상, 눌리지 않았을 때만 return해서 그런 거 같음.
 	if (false == GameEngineInput::GetInst()->IsDown("Z"))
 	{
 		return;
@@ -846,6 +858,40 @@ void PlayerRed::InteractionUpdate()
 	{
 		IsInteraction_ = true;
 	}
+	if (true == InteractionNPC())
+	{
+		IsInteraction_ = true;
+	}
+}
+
+bool PlayerRed::InteractionNPC()
+{
+	std::vector<GameEngineCollision*> TmpVector;
+	if (true == GameEngineInput::GetInst()->IsPress("Z")&& RedCollision_->CollisionResult("NPC4DirZColBox", TmpVector))
+	{
+		//WMenuUICheck_ = false;
+		for (size_t i = 0; i < TmpVector.size(); i++)
+		{
+			NPCBase* Newnpc = dynamic_cast<NPCBase*>(TmpVector[i]->GetActor());
+			if (nullptr == Newnpc)
+			{
+				continue;
+			}
+
+			Newnpc->IsTalk_ = true;
+		}
+				
+		InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+		TmpText->SetPosition(GetPosition());
+		TmpText->AddText("Technology is incredible!");
+		TmpText->AddText("");
+		TmpText->AddText("You can now store and recall items");
+		TmpText->AddText("and POKEMON as data via PC.");
+		TmpText->Setting();
+		
+		return true;
+	}
+	return false;
 }
 
 bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
