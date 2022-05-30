@@ -32,6 +32,12 @@ private:
 
 	GameEngineRenderer* OpponentRenderer_;
 
+	//김예나 : 5월28일 옮기기용 포인터///////////////////////
+	class BattleInterface* BattleInter;
+
+	GameEngineRenderer* MonsterBall;
+	float BallLerp;
+	//////////////////////////////////////////////////////
 
 	float4 PlayerPokemonPos_;
 	float4 OpponentPokemonPos_;

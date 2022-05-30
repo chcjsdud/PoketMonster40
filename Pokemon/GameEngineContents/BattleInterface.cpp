@@ -86,17 +86,12 @@ void BattleInterface::Start()
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
 	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
 
+	//동원씨 도움 RegistActor=이미 만들어진 Actor를 Level에 등록
+	GetLevel()->RegistActor("BattleInterface", this);
 	//김예나:테스트 코드
 	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
-	MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
-	MonsterBall->Off();
-	MonsterBall->SetPivot({ -520.0f,-270.0f });
-
-	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
-	Image->CutCount(6, 1);
-	MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 }
 
 void BattleInterface::Render()
@@ -122,11 +117,6 @@ void BattleInterface::Update()
 	}
 
 	{
-		float Move = BattleUnitRenderer::PlayerRenderer_->GetPivot().x;
-		float BallMoveY = MonsterBall->GetPivot().y;
-		float BallMoveX = MonsterBall->GetPivot().x;
-		//현재 플레이어 렌더 위치(x)를 가져옴
-
 		// 폰트 출력이 완료되고 키입력 대기
 		if (Fonts->IsWait())
 		{
@@ -147,58 +137,6 @@ void BattleInterface::Update()
 			{
 				PlayerEnd = true;
 				Fonts->EndFont();
-
-				//애니메이션체인지
-				BattleUnitRenderer::PlayerRenderer_->ChangeAnimation("Go");
-				//이때 플레이어가 왼쪽으로 빠져야함
-				if (BattleUnitRenderer::PlayerRenderer_->GetPivot().x < -960.0f)
-				{
-					BattleUnitRenderer::PlayerRenderer_->Off();
-				}
-			}
-		}
-
-		if (PlayerEnd == true)
-		{
-			BallLerp += GameEngineTime::GetDeltaTime();
-			//플레이어 무빙
-			BattleUnitRenderer::PlayerRenderer_->SetPivot({Move-(GameEngineTime::GetDeltaTime()*900.0f),31.0f});
-			if (MonsterBall->IsUpdate() == false)
-			{
-				MonsterBall->On();
-				MonsterBall->ChangeAnimation("BallRoll");
-			}
-
-			{	//볼 던지기 무빙
-				if (BallLerp <= 1.0f)
-				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
-				}
-
-				if (BallLerp > 1.0f)
-				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
-					if (MonsterBall->GetPivot().y > 1000.0f)
-					{
-						MonsterBall->Off();
-					}
-				}
-
-				if (BallLerp > 2.0f)
-				{
-					BattleUnit->GetPlayerCurrentPokemon()->On();
-					MyHPUI->On();
-					MyHP->On();
-					EXP->On();
-				}
-
-				if (BallLerp > 3.0f)
-				{
-					InterfaceImage->On();
-					Select->On();
-					DoomChit();
-					BattleUnit->DoomChit();
-				}
 			}
 		}
 	}

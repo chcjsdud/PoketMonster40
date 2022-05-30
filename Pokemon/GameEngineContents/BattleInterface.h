@@ -39,18 +39,6 @@ public:
 	BattleInterface& operator=(const BattleInterface& _Other) = delete;
 	BattleInterface& operator=(BattleInterface&& _Other) noexcept = delete;
 
-	GameEngineRenderer* GetSelect()
-	{
-		return Select;
-	}
-	GameEngineRenderer* GetEnemyHPUI()
-	{
-		return EnemyHPUI;
-	}
-	GameEngineRenderer* GetMyHPUI()
-	{
-		return MyHPUI;
-	}
 
 protected:
 	void Start() override;
@@ -78,7 +66,6 @@ private:
 	float TimeCheck;
 
 
-	void DoomChit();
 	void OrderCheck();
 	void SelectOrder();
 
@@ -96,7 +83,36 @@ private:
 	bool OneTalk;
 
 public:
+	void DoomChit();
 	bool MoveKey();
+	bool GetPlayerEnd()
+	{
+		return PlayerEnd;
+	}
+	GameEngineRenderer* GetEnemyHPUI()
+	{
+		return EnemyHPUI;
+	}
+	GameEngineRenderer* GetMyHPUI()
+	{
+		return MyHPUI;
+	}
+	GameEngineRenderer* GetMyHP()
+	{
+		return MyHP;
+	}
+	GameEngineRenderer* GetEXP()
+	{
+		return EXP;
+	}
+	GameEngineRenderer* GetInterfaceImage()
+	{
+		return InterfaceImage;
+	}
+	GameEngineRenderer* GetSelect()
+	{
+		return Select;
+	}
 
 	// ¿Â¡ﬂ«ı : test
 	bool BattleKey();
