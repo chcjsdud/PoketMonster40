@@ -5,13 +5,13 @@
 #include <GameEngine/GameEngineCollision.h>
 
 NPCBase* NPCBase::NPC_ = nullptr;
+bool NPCBase::IsTalk_ = false;
 NPCBase::NPCBase() 
 	: NPCLerpTime_(0)
 	, NPCNextMoveTime_(0)
 	, NPCLerpX_(0)
 	, NPCLerpY_(0)
 	, IsMove_()
-	, IsTalk_(false)
 {
 	NPC_ = this;
 }

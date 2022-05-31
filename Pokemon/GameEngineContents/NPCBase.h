@@ -33,12 +33,11 @@ public:
 	NPCBase& operator=(NPCBase&& _Other) noexcept = delete;
 
 	static NPCBase* NPC_;
-	
+	static bool IsTalk_;
+
 	void Start() override;
 	void Update() override;
 	void Render() override;
-
-	bool IsTalk_;
 
 	inline void SetNPCInteraction(const bool _Value)
 	{

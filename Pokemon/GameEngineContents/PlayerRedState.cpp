@@ -26,13 +26,6 @@ void PlayerRed::IdleUpdate()
 void PlayerRed::WalkUpdate()
 {
 	float4 MoveDir_ = float4::ZERO;
-	if (true == RedFrontCollision_->CollisionCheck("NPC4DirZColBox") && true == GameEngineInput::GetInst()->IsPress("Z"))
-	{
-		MoveDir_ = float4::ZERO;
-		WMenuUICheck_ = false;
-		RedFrontCollision_->Off();
-		return;
-	}
 	if (false == WMenuUICheck_)
 	{
 		MoveDir_ = float4::ZERO;

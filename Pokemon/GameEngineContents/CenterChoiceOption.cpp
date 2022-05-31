@@ -69,9 +69,11 @@ void CenterChoiceOption::SelectIndex()
 		ParentText_->ClearText();
 		ParentText_->AddText("Okay, I'll take your POKEMON for a");
 		ParentText_->AddText("few seconds.");
+		// Left 전환 후 포켓볼 -> Down 전환
 		ParentText_->AddText("Thank you for waiting.");
 		ParentText_->AddText("We've restored your POKEMON to");
 		ParentText_->AddText("full health.");
+		// Amin 후 다시 Down 전환
 		ParentText_->AddText("We hope to see you again!");
 		ParentText_->Setting();
 	}
