@@ -174,7 +174,8 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
 	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
 	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
-	NewPokemon->GetInfo()->SetPokemonImage(_Name);
+	NewPokemon->GetInfo()->SetSkill(MyInfo->GetSkill()); //깊은 복사로 바꿔야함!!!!
+	NewPokemon->GetInfo()->SetPokemonImage(_Name); 
 
 	CreateRandomNature(MyInfo);
 

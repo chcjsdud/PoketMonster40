@@ -244,7 +244,13 @@ public:
 	//스킬 관련 함수
 	void AddMySkill(PokemonSkillInfo* _Skill);
 
-	std::vector<PokemonSkillInfo*>& GetSkill()
+
+	inline void SetSkill(std::vector<PokemonSkillInfo*>& _Skills)
+	{
+		MySkills_ = _Skills;
+	}
+
+	inline std::vector<PokemonSkillInfo*>& GetSkill()
 	{
 		return MySkills_;
 	}
