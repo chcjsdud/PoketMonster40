@@ -56,7 +56,6 @@ private:
 	GameEngineRenderer* BattleCommend;
 	
 	BattleInterface* MainInterface;
-	
 
 	BattleOrder CurOrder;
 

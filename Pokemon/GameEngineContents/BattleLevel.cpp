@@ -198,6 +198,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 
 		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 		RefreshPokemon();
+
 	}
 }
 

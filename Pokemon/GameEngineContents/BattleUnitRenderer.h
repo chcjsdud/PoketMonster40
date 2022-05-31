@@ -24,6 +24,11 @@ public:
 protected:
 	void Start() override;
 	void Update() override;
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
+	
+
 
 private:
 	GameEngineRenderer* PlayerCurrentPokemon_;
@@ -51,16 +56,14 @@ private:
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
 	float TimeCheck;
 
+	class BattleLevel* Level_;
+	class BattleData* BattleDataR_;
 public:
 	void DoomChit();
-	bool GetPlayerStop()
+	bool GetPlayerStop() const
 	{
 		return PlayerStop;
 	}
 
-	GameEngineRenderer* GetPlayerCurrentPokemon()
-	{
-		return PlayerCurrentPokemon_;
-	}
 };
 

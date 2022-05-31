@@ -8,6 +8,7 @@
 #include "BattleUnitRenderer.h"
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngine/GameEngineImageManager.h>
+#include "BattleLevel.h"
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
@@ -90,6 +91,7 @@ void BattleInterface::Start()
 	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
+
 }
 
 void BattleInterface::Render()

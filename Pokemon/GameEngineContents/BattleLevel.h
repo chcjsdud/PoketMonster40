@@ -45,6 +45,11 @@ public:
 		return BState_;
 	}
 
+	inline BattleData* GetBattleData() const
+	{
+		return BattleData_;
+	}
+
 
 public:
 	inline void OpenningEnd()

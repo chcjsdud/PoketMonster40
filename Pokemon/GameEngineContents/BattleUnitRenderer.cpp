@@ -2,6 +2,7 @@
 #include "GameEngineBase/GameEngineWindow.h"
 #include "GameEngineBase/GameEngineTime.h"
 #include <GameEngine/GameEngineImageManager.h>
+#include "BattleLevel.h"
 
 #include "BattleInterface.h"
 
@@ -20,6 +21,8 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerStop(false)
 	, TimeCheck(0.0f)
 	, MonsterBall(nullptr)
+	, BattleDataR_(nullptr)
+	, Level_(nullptr)
 {
 }
 
@@ -29,11 +32,14 @@ BattleUnitRenderer::~BattleUnitRenderer()
 
 void BattleUnitRenderer::Start()
 {
-	SetPosition({ GameEngineWindow::GetScale().Half() });
-	PlayerCurrentPokemon_ = CreateRenderer("SquirtleB.bmp", 3, RenderPivot::CENTER, PlayerPokemonPos_);
-	PlayerCurrentPokemon_->Off();
 
-	PoeCurrentPokemon_ = CreateRenderer("BulbasaurF.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
+	Level_ = dynamic_cast<BattleLevel*>(GetLevel());
+
+	SetPosition({ GameEngineWindow::GetScale().Half() });
+	//PlayerCurrentPokemon_ = CreateRenderer("SquirtleB.bmp", 3, RenderPivot::CENTER, PlayerPokemonPos_);
+	//PlayerCurrentPokemon_->Off();
+
+	//PoeCurrentPokemon_ = CreateRenderer("BulbasaurF.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
 
 	PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
 	
@@ -141,5 +147,24 @@ void BattleUnitRenderer::DoomChit()
 	if ((int)TimeCheck % 2 == 1)
 	{
 		PlayerCurrentPokemon_->SetPivot({ -220, 61 });
+	}
+}
+
+void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+	BattleDataR_ = Level_->GetBattleData();
+	{
+		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
+			, 3 , RenderPivot::CENTER ,PlayerPokemonPos_);
+		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
+			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
+	}
+}
+void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+	BattleDataR_ = nullptr;
+	{
+		PlayerCurrentPokemon_->Death();
+		PoeCurrentPokemon_->Death();
 	}
 }
