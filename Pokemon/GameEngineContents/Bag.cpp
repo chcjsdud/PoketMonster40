@@ -7,6 +7,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include "Item.h"
 #include "Pokemon.h"
+#include "PokemonMenu.h"
 #include "PokemonInfoManager.h"
 
 Bag::Bag()
@@ -29,10 +30,10 @@ Bag::Bag()
 	, IsMove_(false)
 	, ArrowMoveTime_(0.f)
 	, IsArrowSync_(false)
-	, IsDialogOn_(false)
 	, DialogIndex_(0)
 	, CurrentItem_(nullptr)
 	, CurrentPokemon_(nullptr)
+	, ChildUI_(nullptr)
 {
 
 }
@@ -51,65 +52,58 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
 		GameEngineInput::GetInst()->CreateKey("DialogOn", VK_LCONTROL);
 		GameEngineInput::GetInst()->CreateKey("Select", VK_TAB);
-		GameEngineInput::GetInst()->CreateKey("Close", 'c');
+		GameEngineInput::GetInst()->CreateKey("Close", 'x');
 	}
+
+	
 }
 
 void Bag::Update()
 {
-	if (false == IsDialogOn_)
+	switch (BagState_)
 	{
+	case BagState::ListMenu:
 		MoveBag();
 		MoveItem();
-	}
-
-	if (true == GameEngineInput::GetInst()->IsDown("Close"))
-	{
-		Off();
-	}
-
-	ActiveDialog();
-	MoveDialog();
-
-	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
-
-	if (true == IsMove_)
-	{
-		BagMoveTime_ += GameEngineTime::GetDeltaTime();
-
-		if (0.1f <= BagMoveTime_)
+		ActiveDialog();
+		MoveArrow();
+		
+		if (true == IsMove_)
 		{
-			IsMove_ = false;
-			BagMoveTime_ = 0.f;
+			BagMoveTime_ += GameEngineTime::GetDeltaTime();
 
-			ChangeBag();
+			if (0.1f <= BagMoveTime_)
+			{
+				IsMove_ = false;
+				BagMoveTime_ = 0.f;
+
+				ChangeBag();
+			}
 		}
+
+		if (true == GameEngineInput::GetInst()->IsDown("Close"))
+		{
+			DestroyBag();
+			Off();
+		}
+		break;
+
+	case BagState::DialogMenu:
+		MoveDialog();
+		break;
+
+	case BagState::ItemGive:
+		if (nullptr == ChildUI_)
+		{
+			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+		}
+		break;
+
+	case BagState::ItemToss:
+		break;
 	}
-
-	if (0.3f <= ArrowMoveTime_
-		&& false == IsArrowSync_)
-	{
-		IsArrowSync_ = true;
-		ArrowMoveTime_ = 0.f;
-
-		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ 15, 0 });
-		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ -15, 0 });
-		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, -15 });
-		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, 15 });
-	}
-
-	if (0.3f <= ArrowMoveTime_
-		&& true == IsArrowSync_)
-	{
-		IsArrowSync_ = false;
-		ArrowMoveTime_ = 0.f;
-
-		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ -15, 0 });
-		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ 15, 0 });
-		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, 15 });
-		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, -15 });
-	}
-
 }
 
 
@@ -144,6 +138,36 @@ void Bag::MoveBag()
 			BagType_ = static_cast<ItemType>(BagIndex_);
 		}
 	}
+}
+
+void Bag::MoveArrow()
+{
+	ArrowMoveTime_ += GameEngineTime::GetDeltaTime();
+
+	if (0.3f <= ArrowMoveTime_
+		&& false == IsArrowSync_)
+	{
+		IsArrowSync_ = true;
+		ArrowMoveTime_ = 0.f;
+
+		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ 15, 0 });
+		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ -15, 0 });
+		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, -15 });
+		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, 15 });
+	}
+
+	if (0.3f <= ArrowMoveTime_
+		&& true == IsArrowSync_)
+	{
+		IsArrowSync_ = false;
+		ArrowMoveTime_ = 0.f;
+
+		RightArrow_->SetPivot(RightArrow_->GetPivot() + float4{ -15, 0 });
+		LeftArrow_->SetPivot(LeftArrow_->GetPivot() + float4{ 15, 0 });
+		UpArrow_->SetPivot(UpArrow_->GetPivot() + float4{ 0, 15 });
+		DownArrow_->SetPivot(DownArrow_->GetPivot() + float4{ 0, -15 });
+	}
+
 }
 
 void Bag::ChangeBag()
@@ -337,16 +361,34 @@ void Bag::ShowItemInfo(std::vector<class Item*>& _List)
 
 void Bag::ActiveDialog()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
-		&& false == IsDialogOn_)
+	if (true == GameEngineInput::GetInst()->IsDown("DialogOn"))
 	{
-		OnDialog();
-	}
+		if (ItemType::ITEM == BagType_)
+		{
+			if (0 == ItemList_.size())
+			{
+				return;
+			}
+		}
 
-	else if (true == GameEngineInput::GetInst()->IsDown("DialogOn")
-		&& true == IsDialogOn_)
-	{
-		CloseDialog();
+		if (ItemType::KEYITEM == BagType_)
+		{
+			if (0 == KeyItemList_.size())
+			{
+				return;
+			}
+		}
+
+		if (ItemType::BALL == BagType_)
+		{
+			if (0 == BallList_.size())
+			{
+				return;
+			}
+		}
+
+		OnDialog();
+		BagState_ = BagState::DialogMenu;
 	}
 }
 
@@ -360,7 +402,6 @@ void Bag::OnDialog()
 	DestroyDialogFonts();
 	DestroyDescFonts();
 
-	IsDialogOn_ = true;
 	BagDialog_->On();
 	DialogBox_->On();
 	DialogArrow_->On();
@@ -446,80 +487,83 @@ void Bag::OnDialog()
 
 void Bag::MoveDialog()
 {
-	if (true == IsDialogOn_)
+	if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
 	{
-		if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
+		if ("BattleLevel" == GetLevel()->GetNameConstRef()
+			&& DialogIndex_ >= 1)
 		{
-			if ("BattleLevel" == GetLevel()->GetNameConstRef()
-				&& DialogIndex_ >= 1)
-			{
-				return;
-			}
+			return;
+		}
 
-			++DialogIndex_;
+		++DialogIndex_;
 
-			switch (DialogIndex_)
+		switch (DialogIndex_)
+		{
+		case 0:
+			if ("BattleLevel" == GetLevel()->GetNameConstRef())
 			{
-			case 0:
-				if ("BattleLevel" == GetLevel()->GetNameConstRef())
-				{
-					DialogArrow_->SetPivot({ 240, 190 });
-					break;
-				}
-				DialogArrow_->SetPivot({ 240, 130 });
-				break;
-			case 1:
-				if ("BattleLevel" == GetLevel()->GetNameConstRef())
-				{
-					DialogArrow_->SetPivot({ 240, 250 });
-					break;
-				}
 				DialogArrow_->SetPivot({ 240, 190 });
 				break;
-			case 2:
+			}
+			DialogArrow_->SetPivot({ 240, 130 });
+			break;
+		case 1:
+			if ("BattleLevel" == GetLevel()->GetNameConstRef())
+			{
 				DialogArrow_->SetPivot({ 240, 250 });
 				break;
 			}
+			DialogArrow_->SetPivot({ 240, 190 });
+			break;
+		case 2:
+			DialogArrow_->SetPivot({ 240, 250 });
+			break;
+		}
+	}
+
+
+	else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
+	{
+		if (0 == DialogIndex_)
+		{
+			return;
 		}
 
+		--DialogIndex_;
 
-		else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
+		switch (DialogIndex_)
 		{
-			if (0 == DialogIndex_)
+		case 0:
+			if ("BattleLevel" == GetLevel()->GetNameConstRef())
 			{
-				return;
-			}
-
-			--DialogIndex_;
-
-			switch (DialogIndex_)
-			{
-			case 0:
-				if ("BattleLevel" == GetLevel()->GetNameConstRef())
-				{
-					DialogArrow_->SetPivot({ 240, 190 });
-					break;
-				}
-				DialogArrow_->SetPivot({ 240, 130 });
-				break;
-			case 1:
-				if ("BattleLevel" == GetLevel()->GetNameConstRef())
-				{
-					DialogArrow_->SetPivot({ 240, 250 });
-					break;
-				}
 				DialogArrow_->SetPivot({ 240, 190 });
 				break;
-			case 2:
+			}
+			DialogArrow_->SetPivot({ 240, 130 });
+			break;
+		case 1:
+			if ("BattleLevel" == GetLevel()->GetNameConstRef())
+			{
 				DialogArrow_->SetPivot({ 240, 250 });
 				break;
 			}
+			DialogArrow_->SetPivot({ 240, 190 });
+			break;
+		case 2:
+			DialogArrow_->SetPivot({ 240, 250 });
+			break;
 		}
+	}
 
-		else if (true == GameEngineInput::GetInst()->IsDown("Select"))
-		{
-			SelectDialog();
-		}
+	else if (true == GameEngineInput::GetInst()->IsDown("Select"))
+	{
+		SelectDialog();
+	}
+
+	else if (true == GameEngineInput::GetInst()->IsDown("DialogOn"))
+	{
+		CloseDialog();
+		BagState_ = BagState::ListMenu;
 	}
 }
 
@@ -533,6 +577,7 @@ void Bag::SelectDialog()
 			//Use
 			break;
 		}
+
 		//Give
 		if (ItemType::KEYITEM == BagType_)
 		{
@@ -547,14 +592,19 @@ void Bag::SelectDialog()
 				break;
 			}
 
+			if (ChildUI_ == nullptr)
+			{
+				BagState_ = BagState::ItemGive;
+			}
+
 			CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
 			Item* NewItem = ItemList_.back();
 			delete NewItem;
 			NewItem = nullptr;
 			ItemList_.pop_back();
 			ShowFonts(ItemList_);
-			//포켓몬 스탯창 가기
 		}
+
 		if (ItemType::BALL == BagType_)
 		{
 			if (0 == BallList_.size())
@@ -563,13 +613,18 @@ void Bag::SelectDialog()
 				break;
 			}
 
+			//포켓몬 스탯창 가기
+			if (ChildUI_ == nullptr)
+			{
+				BagState_ = BagState::ItemGive;
+			}
+
 			CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
 			Item* NewItem = BallList_.back();
 			delete NewItem;
 			NewItem = nullptr;
 			BallList_.pop_back();
 			ShowFonts(BallList_);
-			//포켓몬 스탯창 가기
 		}
 		break;
 	case 1:
@@ -601,7 +656,6 @@ void Bag::SelectDialog()
 
 void Bag::CloseDialog()
 {
-	IsDialogOn_ = false;
 	BagDialog_->Off();
 	DialogBox_->Off();
 	DialogArrow_->Off();
@@ -728,7 +782,6 @@ void Bag::BagInit()
 	SelectIndex_ = 0;
 	BagIndex_ = 0;
 
-	IsDialogOn_ = false;
 	DialogIndex_ = 0;
 
 	CreateRenderer("Bag_Back.bmp");

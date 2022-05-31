@@ -3,6 +3,14 @@
 #include "ContentEnum.h"
 #include <vector>
 
+enum class BagState
+{
+	ListMenu,
+	DialogMenu,
+	ItemGive,
+	ItemToss
+};
+
 class Bag : public GameEngineActor
 {
 public:
@@ -18,6 +26,7 @@ public:
 	void DestroyBag();
 
 	void MoveBag(); //아이템 타입 이동
+	void MoveArrow();
 	void ChangeBag();
 	void ShowItemList();
 	void ShowKeyItemList();
@@ -54,6 +63,7 @@ protected:
 
 private:
 	ItemType BagType_;
+	BagState BagState_;
 
 	class GameEngineRenderer* BagRedrerer_;
 	GameEngineRenderer* BagName_;
@@ -90,11 +100,12 @@ private:
 	float ArrowMoveTime_;
 	bool IsArrowSync_;
 
-	//다이얼로그 상자 켜짐
-	bool IsDialogOn_;
+	//다이얼로그 상자 인덱스
 	int DialogIndex_;
 
 	Item* CurrentItem_;
 	Pokemon* CurrentPokemon_;
+
+	GameEngineActor* ChildUI_;
 };
 
