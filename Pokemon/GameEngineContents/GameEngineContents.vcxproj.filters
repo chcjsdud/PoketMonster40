@@ -157,6 +157,9 @@
     <ClCompile Include="FadeActor.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="NPC6.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -318,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="FadeActor.h">
       <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC6.h">
+      <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
