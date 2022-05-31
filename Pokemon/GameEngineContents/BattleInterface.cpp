@@ -395,3 +395,13 @@ void BattleInterface::SelectOrder()
 		}
 	}
 }
+
+void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+
+}
+
+void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+
+}

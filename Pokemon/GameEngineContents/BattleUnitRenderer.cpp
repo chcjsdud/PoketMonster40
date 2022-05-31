@@ -36,13 +36,6 @@ void BattleUnitRenderer::Start()
 
 	SetPosition({ GameEngineWindow::GetScale().Half() });
 
-	//MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
-	//MonsterBall->Off();
-	//MonsterBall->SetPivot({ -220.0f,-30.0f });
-	//GameEngineImage* Image1 = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
-	//Image1->CutCount(6, 1);
-	//MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
-
 	//µ¿¿ø¾¾ µµ¿ò
 	BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
 }
@@ -169,6 +162,10 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BattleDataR_ = nullptr;
 	{
+		PlayerTime_ = 0.0f;
+		BattleInter->SetPlayerEnd(false);
+		PlayerStop = false;
+		FirstMove = true;
 		BallLerp = 0.0f;
 		PlayerCurrentPokemon_->Death();
 		PoeCurrentPokemon_->Death();
