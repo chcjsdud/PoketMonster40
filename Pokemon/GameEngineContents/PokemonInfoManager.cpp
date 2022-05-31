@@ -157,7 +157,25 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	Pokemon* NewPokemon = new Pokemon();
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
-	NewPokemon->SetInfo(MyInfo);
+	NewPokemon->SetInfo(new PokemonInfo());
+	NewPokemon->GetInfo()->SetName(_Name);
+	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
+	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
+	NewPokemon->GetInfo()->SetMyLevel(MyInfo->GetMyLevel());
+	NewPokemon->GetInfo()->SetMyMaxLevel(MyInfo->GetMyMaxLevel());
+	NewPokemon->GetInfo()->SetHp(MyInfo->GetHp());
+	NewPokemon->GetInfo()->SetMaxHp(MyInfo->GetMaxHp());
+	NewPokemon->GetInfo()->SetExp(MyInfo->GetExp());
+	NewPokemon->GetInfo()->SetMaxExp(MyInfo->GetMaxExp());
+	NewPokemon->GetInfo()->SetAtt(MyInfo->GetAtt());
+	NewPokemon->GetInfo()->SetDef(MyInfo->GetDef());
+	NewPokemon->GetInfo()->SetSpAtt(MyInfo->GetSpAtt());
+	NewPokemon->GetInfo()->SetSpDef(MyInfo->GetSpDef());
+	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
+	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
+	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
+	NewPokemon->GetInfo()->SetPokemonImage(_Name);
+
 	CreateRandomNature(MyInfo);
 
 	return NewPokemon;
