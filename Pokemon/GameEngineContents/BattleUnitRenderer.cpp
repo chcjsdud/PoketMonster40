@@ -32,28 +32,16 @@ BattleUnitRenderer::~BattleUnitRenderer()
 
 void BattleUnitRenderer::Start()
 {
-
 	Level_ = dynamic_cast<BattleLevel*>(GetLevel());
 
 	SetPosition({ GameEngineWindow::GetScale().Half() });
-	//PlayerCurrentPokemon_ = CreateRenderer("SquirtleB.bmp", 3, RenderPivot::CENTER, PlayerPokemonPos_);
-	//PlayerCurrentPokemon_->Off();
 
-	//PoeCurrentPokemon_ = CreateRenderer("BulbasaurF.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
-
-	PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
-	
-	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
-	Image->CutCount(5, 1);
-
-	PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
-
-	MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
-	MonsterBall->Off();
-	MonsterBall->SetPivot({ -220.0f,-30.0f });
-	GameEngineImage* Image1 = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
-	Image1->CutCount(6, 1);
-	MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
+	//MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
+	//MonsterBall->Off();
+	//MonsterBall->SetPivot({ -220.0f,-30.0f });
+	//GameEngineImage* Image1 = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
+	//Image1->CutCount(6, 1);
+	//MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 
 	//동원씨 도움
 	BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
@@ -64,6 +52,7 @@ void BattleUnitRenderer::Update()
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (FirstMove == true)
 	{
+		TimeCheck = 0.0f;
 		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
 		PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
 
@@ -73,7 +62,6 @@ void BattleUnitRenderer::Update()
 		{
 			MoveSpeed = 0.0f;
 			PlayerStop = true;
-			
 			FirstMove = false;
 		}
 	}
@@ -152,19 +140,39 @@ void BattleUnitRenderer::DoomChit()
 
 void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	FirstMove = true;
+
 	BattleDataR_ = Level_->GetBattleData();
-	{
+	{	//플레이어
+		PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
+		Image->CutCount(5, 1);
+		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
+
+		//푸키먼
 		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
 			, 3 , RenderPivot::CENTER ,PlayerPokemonPos_);
 		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
 			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
+
+		//볼
+		MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
+		MonsterBall->Off();
+		MonsterBall->SetPivot({ -220.0f,-30.0f });
+		GameEngineImage* Image1 = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
+		Image1->CutCount(6, 1);
+		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
+
 	}
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BattleDataR_ = nullptr;
 	{
+		BallLerp = 0.0f;
 		PlayerCurrentPokemon_->Death();
 		PoeCurrentPokemon_->Death();
+		PlayerRenderer_->Death();
+		MonsterBall->Death();
 	}
 }

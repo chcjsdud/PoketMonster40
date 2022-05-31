@@ -81,9 +81,13 @@ private:
 public:
 	void DoomChit();
 	bool MoveKey();
-	bool GetPlayerEnd()
+	bool GetPlayerEnd() const
 	{
 		return PlayerEnd;
+	}
+	void SetPlayerEnd(bool Value)
+	{
+		PlayerEnd = Value;
 	}
 	GameEngineRenderer* GetEnemyHPUI()
 	{
