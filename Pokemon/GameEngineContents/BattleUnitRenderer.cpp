@@ -17,7 +17,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, OpponentPokemonPos_({ -450, -105 })//200,-105
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
-	, MoveSpeed(200.0f)
+	, MoveSpeed(900.0f)//원래는200
 	, PlayerStop(false)
 	, TimeCheck(0.0f)
 	, MonsterBall(nullptr)
@@ -38,6 +38,9 @@ void BattleUnitRenderer::Start()
 
 	//동원씨 도움
 	BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
+
+	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
+	Image->CutCount(5, 1);
 }
 
 void BattleUnitRenderer::Update()
@@ -134,12 +137,12 @@ void BattleUnitRenderer::DoomChit()
 void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	FirstMove = true;
+	MoveSpeed = 900.0f;//원래는200
 
 	BattleDataR_ = Level_->GetBattleData();
 	{	//플레이어
 		PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
-		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
-		Image->CutCount(5, 1);
+
 		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
 
 		//푸키먼

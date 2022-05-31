@@ -115,6 +115,7 @@ public:
 	{
 		return Select;
 	}
+	void StartTalk();
 
 	// ¿Â¡ﬂ«ı : test
 	bool BattleKey();

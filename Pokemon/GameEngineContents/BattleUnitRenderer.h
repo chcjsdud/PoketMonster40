@@ -64,6 +64,10 @@ public:
 	{
 		return PlayerStop;
 	}
+	void SetPlayerStop(bool Value)
+	{
+		PlayerStop = Value;
+	}
 
 };
 

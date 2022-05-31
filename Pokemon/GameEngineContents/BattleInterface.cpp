@@ -111,7 +111,8 @@ void BattleInterface::Update()
 	if (BattleUnit->GetPlayerStop() == true && OneTalk == false)
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
-		Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
+		//Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
+		StartTalk();
 		OneTalk = true;
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
@@ -380,6 +381,7 @@ void BattleInterface::SelectOrder()
 		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//가방 선택
 			CurOrder = BattleOrder::Bag;
+
 		}
 
 		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -398,10 +400,25 @@ void BattleInterface::SelectOrder()
 
 void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
-
+	OneTalk = false;
 }
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
+	OneTalk = true;
+	BattleUnit->SetPlayerStop(false);
+	PlayerEnd = false;
+	BattleCommend->Off();
+	InterfaceImage->Off();
+	Select->Off();
+	MyHPUI->Off();
+	EnemyHPUI->Off();
+	MyHP->Off();
+	EnemyHP->Off();
+	EXP->Off();
+}
 
+void BattleInterface::StartTalk()
+{
+	Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
 }

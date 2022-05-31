@@ -204,7 +204,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 
 void BattleLevel::ShowOpenning()
 {
-
+	//bool 값을 넣어서 한번만 실행되도록..
 }
 
 
