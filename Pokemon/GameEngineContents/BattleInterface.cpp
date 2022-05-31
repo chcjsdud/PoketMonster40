@@ -8,6 +8,7 @@
 #include "BattleUnitRenderer.h"
 #include <GameEngineBase/GameEngineMath.h>
 #include <GameEngine/GameEngineImageManager.h>
+#include "BattleLevel.h"
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
@@ -27,9 +28,8 @@ BattleInterface::BattleInterface()
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, PlayerEnd(false)
-	, BallLerp(0.0f)
 	, EmptyString_(false)
-	, MonsterBall(nullptr)
+	
 {
 
 }
@@ -58,7 +58,7 @@ void BattleInterface::Start()
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
 	InterfaceImage->Off();
-	Select = CreateRenderer("Select.bmp", 3);
+	Select = CreateRenderer("Select.bmp", 5);
 	Select->Off();
 
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",2);
@@ -84,7 +84,6 @@ void BattleInterface::Start()
 	EXP->SetPivot({48.0f,-170.0f});
 	BattleCommend->SetPivot({-240.0f,0.0f});
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
-	//Player->SetPivot({ -450.0f,-180.0f });//멈출위치
 
 	//동원씨 도움 RegistActor=이미 만들어진 Actor를 Level에 등록
 	GetLevel()->RegistActor("BattleInterface", this);
@@ -92,6 +91,7 @@ void BattleInterface::Start()
 	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
 	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
 	Fonts->SetPosition({ 50, 485 });
+
 }
 
 void BattleInterface::Render()
@@ -369,6 +369,7 @@ void BattleInterface::SelectOrder()
 		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//싸우다 선택
 			CurOrder = BattleOrder::Fight;
+			GetSelect()->SetPivot({-680.0f,-30.0f});//기술1번 위치
 		}
 
 		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -389,6 +390,7 @@ void BattleInterface::SelectOrder()
 		if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
 		{
 			BattleCommend->Off();
+			GetSelect()->SetPivot({ -190.0f,-25.0f });
 			CurOrder = BattleOrder::None;
 		}
 	}

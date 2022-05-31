@@ -151,6 +151,9 @@
     <ClCompile Include="PokemonSummaryMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="NPC7.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
     <ClCompile Include="FadeActor.cpp">
       <Filter>Global</Filter>
     </ClCompile>
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="PokemonSummaryMenu.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC7.h">
+      <Filter>NPC</Filter>
     </ClInclude>
     <ClInclude Include="FadeActor.h">
       <Filter>Global</Filter>

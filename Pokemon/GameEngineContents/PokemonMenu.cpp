@@ -225,34 +225,34 @@ void PokemonMenu::UpdateRenderInfo()
 			PokemonNameFonts_[0]->SetPosition(GetPosition()+float4 ( 75, 126 ));
 			for (size_t i = 1; i < PokemonNumber_; i++)
 			{
-				PokemonNameFonts_[i]->SetPosition({ 416,static_cast<float>(-60 + 96 * i) });
+				PokemonNameFonts_[i]->SetPosition(GetPosition() +float4( 416,static_cast<float>(-60 + 96 * i) ));
 			}
 		}
 
 		//레벨
 		{
-			PokemonLevelFonts_[0]->SetPosition({ 190,175 });
+			PokemonLevelFonts_[0]->SetPosition(GetPosition()  +float4( 190,175 ));
 			for (size_t i = 1; i < PokemonNumber_; i++)
 			{
-				PokemonLevelFonts_[i]->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
+				PokemonLevelFonts_[i]->SetPosition(GetPosition()  + float4( 540,static_cast<float>(-16 + 96 * i) ));
 			}
 		}
 
 		//현재 체력
 		{
-			CurHpFonts_[0]->SetPosition({ 150,248 });
+			CurHpFonts_[0]->SetPosition(GetPosition() +float4( 150,248 ));
 			for (size_t i = 1; i < PokemonNumber_; i++)
 			{
-				CurHpFonts_[i]->SetPosition({ 760,static_cast<float>(-16 + 96 * i) });
+				CurHpFonts_[i]->SetPosition(GetPosition() + float4( 760,static_cast<float>(-16 + 96 * i) ));
 			}
 		}
 
 		//최대 체력
 		{
-			MaxHpFonts_[0]->SetPosition({ 260,248 });
+			MaxHpFonts_[0]->SetPosition(GetPosition() +float4( 260,248 ));
 			for (size_t i = 1; i < PokemonNumber_; i++)
 			{
-				MaxHpFonts_[i]->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
+				MaxHpFonts_[i]->SetPosition(GetPosition() +float4( 870,static_cast<float>(-16 + 96 * i) ));
 			}
 		}
 
@@ -345,6 +345,7 @@ void PokemonMenu::SelectPokemonStart()
 	//퀘스쳔 폰트 제거
 	{
 		QuestionFont_->ClearCurrentFonts();
+		QuestionFont_ = nullptr;
 	}
 
 
@@ -900,17 +901,17 @@ void PokemonMenu::GetPlayerPokemon()
 		PokemonInfo* Charmander = PokemonInfoManager::GetInst().FindPokemonInfo("Charmander");
 		PokemonInfo* Squirtle = PokemonInfoManager::GetInst().FindPokemonInfo("Squirtle"); //Bulbasaur
 		PokemonInfo* Bulbasaur = PokemonInfoManager::GetInst().FindPokemonInfo("Bulbasaur");
-		Charmander->PlusHp(-10);
-		Charmander->SetMyLevel(2);
-		Charmander->SetGender(true);
-		Charmander->SetMaxHp(115);
-		Squirtle->PlusHp(-50);
-		Squirtle->SetMyLevel(4);
-		Squirtle->SetMaxHp(170);
-		Bulbasaur->PlusHp(-90);
-		Bulbasaur->SetMyLevel(10);
-		Bulbasaur->SetGender(true);
-		Bulbasaur->SetMaxHp(150);
+		//Charmander->PlusHp(-10);
+		//Charmander->SetMyLevel(2);
+		//Charmander->SetGender(true);
+		//Charmander->SetMaxHp(115);
+		//Squirtle->PlusHp(-50);
+		//Squirtle->SetMyLevel(4);
+		//Squirtle->SetMaxHp(170);
+		//Bulbasaur->PlusHp(-90);
+		//Bulbasaur->SetMyLevel(10);
+		//Bulbasaur->SetGender(true);
+		//Bulbasaur->SetMaxHp(150);
 
 		PokemonList_.push_back(Charmander);
 		PokemonList_.push_back(Squirtle);
@@ -981,7 +982,7 @@ void PokemonMenu::InitFont()
 	{
 		//이름
 		{
-			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(100);
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 			NewFonts->SetPosition(GetPosition());
 			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
 			PokemonNameFonts_.push_back(NewFonts);
@@ -998,7 +999,7 @@ void PokemonMenu::InitFont()
 		//현재 체력
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 150,248 });
+			NewFonts->SetPosition(GetPosition() +float4( 150,248 ));
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetHp()), true);
 			CurHpFonts_.push_back(NewFonts);
 		}
@@ -1006,7 +1007,7 @@ void PokemonMenu::InitFont()
 		//최대 체력
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 260,248 });
+			NewFonts->SetPosition(GetPosition() +float4( 260,248 ));
 			NewFonts->ShowString(std::to_string(PokemonList_[0]->GetMaxHp()), true);
 			MaxHpFonts_.push_back(NewFonts);
 		}
@@ -1020,7 +1021,7 @@ void PokemonMenu::InitFont()
 		//이름
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 416,static_cast<float>(-60 + 96 * i )});
+			NewFonts->SetPosition(GetPosition() +float4( 416,static_cast<float>(-60 + 96 * i )));
 			NewFonts->ShowString(PokemonList_[i]->GetNameCopy(), true);
 			PokemonNameFonts_.push_back(NewFonts);
 		}
@@ -1028,7 +1029,7 @@ void PokemonMenu::InitFont()
 		//레벨
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 540,static_cast<float>(-16 + 96 * i) });
+			NewFonts->SetPosition(GetPosition() +float4(  540, static_cast<float>(-16 + 96 * i) ));
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMyLevel()), true);
 			PokemonLevelFonts_.push_back(NewFonts);
 		}
@@ -1036,7 +1037,7 @@ void PokemonMenu::InitFont()
 		//현재 체력
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 760,static_cast<float>(-16 + 96 * i)});
+			NewFonts->SetPosition(GetPosition() +float4( 760,static_cast<float>(-16 + 96 * i)));
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetHp()), true);
 			CurHpFonts_.push_back(NewFonts);
 		}
@@ -1044,7 +1045,7 @@ void PokemonMenu::InitFont()
 		//최대 체력
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-			NewFonts->SetPosition({ 870,static_cast<float>(-16 + 96 * i) });
+			NewFonts->SetPosition(GetPosition() +float4( 870,static_cast<float>(-16 + 96 * i) ));
 			NewFonts->ShowString(std::to_string(PokemonList_[i]->GetMaxHp()), true);
 			MaxHpFonts_.push_back(NewFonts);
 		}
@@ -1053,13 +1054,13 @@ void PokemonMenu::InitFont()
 	//포켓몬을 골라주세요 폰트
 	{
 		DialogFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-		DialogFont_->SetPosition({ 16,540 });
+		DialogFont_->SetPosition(GetPosition() +float4( 16,540 ));
 		DialogFont_->ShowString("Choose a pokemon", true);
 	}
 	//swtich 문구
 	{
 		SwitchFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-		SwitchFont_->SetPosition({ 16,540});
+		SwitchFont_->SetPosition(GetPosition() +float4( 16,540));
 		SwitchFont_->ShowString("Move to Where?", true);
 		SwitchFont_->Off();
 	}
@@ -1155,6 +1156,28 @@ void PokemonMenu::DestroyPokemonMenu()
 	for (GameEngineContentFont* i : PokemonNameFonts_)
 	{
 		i->ClearCurrentFonts();
+	}
+
+	for (GameEngineContentFont* i : CurHpFonts_)
+	{
+		i->ClearCurrentFonts();
+	}
+
+	for (GameEngineContentFont* i : PokemonLevelFonts_)
+	{
+		i->ClearCurrentFonts();
+	}
+
+	for (GameEngineContentFont* i : MaxHpFonts_)
+	{
+		i->ClearCurrentFonts();
+	}
+
+	DialogFont_->ClearCurrentFonts();
+	SwitchFont_->ClearCurrentFonts();
+	if (QuestionFont_ != nullptr)
+	{
+		QuestionFont_->ClearCurrentFonts();
 	}
 }
 

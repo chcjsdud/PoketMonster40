@@ -55,11 +55,7 @@ private:
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
 	
-	GameEngineRenderer* MonsterBall;
-	float BallLerp;
-	
 	BattleInterface* MainInterface;
-	
 
 	BattleOrder CurOrder;
 
@@ -85,9 +81,13 @@ private:
 public:
 	void DoomChit();
 	bool MoveKey();
-	bool GetPlayerEnd()
+	bool GetPlayerEnd() const
 	{
 		return PlayerEnd;
+	}
+	void SetPlayerEnd(bool Value)
+	{
+		PlayerEnd = Value;
 	}
 	GameEngineRenderer* GetEnemyHPUI()
 	{
