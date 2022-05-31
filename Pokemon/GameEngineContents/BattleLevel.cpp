@@ -43,7 +43,7 @@ BattleLevel::~BattleLevel()
 	if (Opponent_ != nullptr)
 	{
 		delete Opponent_->GetPokemonList()[0];
-		delete PlayerRed_->GetPokemonList().front();
+//		delete PlayerRed_->GetPokemonList().front();
 		PlayerRed_ = nullptr;
 		Opponent_ = nullptr;
 	}
@@ -92,7 +92,7 @@ void BattleLevel::Update()
 	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
-			StartBattlePage("Tackle", "Scratch");
+			StartBattlePage("Scratch", "Scratch");
 		}
 		break;
 	case BattleState::BattlePage:
@@ -194,12 +194,13 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 	{
 		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
 		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
-		PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
+		//PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
 
 		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 		RefreshPokemon();
-
 	}
+
+
 }
 
 void BattleLevel::ShowOpenning()
@@ -215,11 +216,11 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	// 장중혁 : Debug
 	{
-		for (auto& Iter : PlayerRed_->GetPokemonList())
-		{
-			delete Iter;
-		}
-			PlayerRed_->GetPokemonList().clear();
+		//for (auto& Iter : PlayerRed_->GetPokemonList())
+		//{
+		//	delete Iter;
+		//}
+			//PlayerRed_->GetPokemonList().clear();
 		for (auto& Iter : Opponent_->GetPokemonList())
 		{
 			delete Iter;
@@ -628,6 +629,9 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		CurrentFont_ = Battlefont::Att;
 		break;
 
+	case Battlefont::Miss:
+		break;
+
 	case Battlefont::Att:
 	{
 		switch (AttSkillType)
@@ -637,6 +641,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		{
 			//이펙트
 			//포켓몬 흔들고 체력 다는 효과 추가
+
 			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
 			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
 			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
@@ -660,6 +665,10 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		{
 			Interface_->ShowCriticalHitString();
 			FristTurn_->Critical_ = false;
+		}
+		else if (/*추가 랭크 적용*/false)
+		{
+
 		}
 		else
 		{

@@ -3,6 +3,8 @@
 #include "GameEngineBase/GameEngineTime.h"
 #include <GameEngine/GameEngineImageManager.h>
 #include "BattleLevel.h"
+#include <tchar.h>
+#include <GameEngine/GameEngine.h>
 
 #include "BattleInterface.h"
 
@@ -11,7 +13,6 @@ GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
 BattleUnitRenderer::BattleUnitRenderer() 
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
-	, OpponentRenderer_(nullptr)
 	, FirstMove(true)
 	, PlayerPokemonPos_({ -220, 63 })
 	, OpponentPokemonPos_({ -450, -105 })//200,-105
@@ -118,6 +119,78 @@ void BattleUnitRenderer::Update()
 				}
 			}
 		}
+	}
+
+}
+
+void BattleUnitRenderer::Render()
+{
+	ShowDebugValue();
+}
+
+void BattleUnitRenderer::ShowDebugValue()
+{
+	Pokemon* PlayerPokemon = BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon();
+	Pokemon* PoePokemon = BattleDataR_->GetCurrentPoePokemon()->GetPokemon();
+
+
+	// Play Hp
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "HP : %d", PlayerPokemon->GetInfo()->GetHp());
+		TextOut(GameEngine::BackBufferDC(), PlayerCurrentPokemon_->GetSortingPivot().ix()
+			, PlayerCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+	}
+	// Play Att
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "Att : %d", PlayerPokemon->GetInfo()->GetAtt());
+		TextOut(GameEngine::BackBufferDC(), PlayerCurrentPokemon_->GetSortingPivot().ix()
+			, PlayerCurrentPokemon_->GetSortingPivot().iy() + 15, Text, static_cast<int>(strlen(Text)));
+	}
+	// Play Def
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "Def : %d", PlayerPokemon->GetInfo()->GetDef());
+		TextOut(GameEngine::BackBufferDC(), PlayerCurrentPokemon_->GetSortingPivot().ix()
+			, PlayerCurrentPokemon_->GetSortingPivot().iy() + 30, Text, static_cast<int>(strlen(Text)));
+	}
+	// Play Speed
+	{
+		char Text[15] = { 0 };
+		sprintf_s(Text, "Speed : %d", PlayerPokemon->GetInfo()->GetSpeed());
+		TextOut(GameEngine::BackBufferDC(), PlayerCurrentPokemon_->GetSortingPivot().ix()
+			, PlayerCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
+	}
+
+
+	// Poe Hp
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "HP : %d", PoePokemon->GetInfo()->GetHp());
+		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+			, PoeCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+	}
+	// Poe Att
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "Att : %d", PoePokemon->GetInfo()->GetAtt());
+		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+			, PoeCurrentPokemon_->GetSortingPivot().iy() + 15, Text, static_cast<int>(strlen(Text)));
+	}
+	// Poe Def
+	{
+		char Text[10] = { 0 };
+		sprintf_s(Text, "Def : %d", PoePokemon->GetInfo()->GetDef());
+		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+			, PoeCurrentPokemon_->GetSortingPivot().iy() + 30, Text, static_cast<int>(strlen(Text)));
+	}
+	// Poe Speed
+	{
+		char Text[15] = { 0 };
+		sprintf_s(Text, "Speed : %d", PoePokemon->GetInfo()->GetSpeed());
+		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+			, PoeCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
 	}
 }
 

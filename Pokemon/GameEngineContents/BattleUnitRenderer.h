@@ -1,6 +1,8 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "Pokemon.h"
 
 // 설명 : BattleLevel에서 생성되는 인터페이스를 제외한 모든 렌더러를 가지고 있는 Actor
@@ -24,6 +26,7 @@ public:
 protected:
 	void Start() override;
 	void Update() override;
+	void Render() override;
 	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
@@ -35,7 +38,7 @@ private:
 	GameEngineRenderer* PoeCurrentPokemon_;
 
 
-	GameEngineRenderer* OpponentRenderer_;
+	//* OpponentRenderer_;
 
 	//김예나 : 5월28일 옮기기용 포인터///////////////////////
 	class BattleInterface* BattleInter;

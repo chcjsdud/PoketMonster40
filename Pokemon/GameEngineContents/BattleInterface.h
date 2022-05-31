@@ -2,6 +2,7 @@
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "Pokemon.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
@@ -72,12 +73,11 @@ private:
 	// 생성한 Level
 	class BattleLevel* Level_;
 
-	// Font
-	GameEngineContentFont* DownFont_;
-
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
 	class BattleUnitRenderer* BattleUnit;
+	GameEngineContentFont* BattleFont_;
+
 	bool OneTalk;
 
 public:
@@ -91,27 +91,27 @@ public:
 	{
 		PlayerEnd = Value;
 	}
-	GameEngineRenderer* GetEnemyHPUI()
+	GameEngineRenderer* GetEnemyHPUI() const
 	{
 		return EnemyHPUI;
 	}
-	GameEngineRenderer* GetMyHPUI()
+	GameEngineRenderer* GetMyHPUI() const
 	{
 		return MyHPUI;
 	}
-	GameEngineRenderer* GetMyHP()
+	GameEngineRenderer* GetMyHP() const
 	{
 		return MyHP;
 	}
-	GameEngineRenderer* GetEXP()
+	GameEngineRenderer* GetEXP() const
 	{
 		return EXP;
 	}
-	GameEngineRenderer* GetInterfaceImage()
+	GameEngineRenderer* GetInterfaceImage() const
 	{
 		return InterfaceImage;
 	}
-	GameEngineRenderer* GetSelect()
+	GameEngineRenderer* GetSelect() const
 	{
 		return Select;
 	}
@@ -126,6 +126,14 @@ public:
 	void ShowNotEffective();
 	void ShowFailed();
 	void ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank);
+	
+	//
+	GameEngineContentFont* Skill0Font_;
+	GameEngineContentFont* Skill1Font_;
+	GameEngineContentFont* Skill2Font_;
+	GameEngineContentFont* Skill3Font_;
+	//
+
 	std::string AbilityString(PokemonAbility _Ability);
 	std::string RankString(int _Rank);
 
@@ -138,8 +146,11 @@ public:
 
 	inline bool IsEndString()
 	{
-		return DownFont_->IsEnd();
+		return Fonts->IsEnd();
 	}
+
+	void ShowPokemonSkill(Pokemon* _Pokemon);
+	
 private:
 	bool EmptyString_;
 };

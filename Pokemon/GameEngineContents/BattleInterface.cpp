@@ -22,13 +22,17 @@ BattleInterface::BattleInterface()
 	, EXP(nullptr)
 	, BattleCommend(nullptr)
 	, MainInterface(nullptr)
-	, DownFont_(nullptr)
 	, Level_(nullptr)
 	, BattleUnit(nullptr)
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, PlayerEnd(false)
 	, EmptyString_(false)
+	, Skill0Font_(nullptr)
+	, Skill1Font_(nullptr)
+	, Skill2Font_(nullptr)
+	, Skill3Font_(nullptr)
+	, BattleFont_(nullptr)
 	
 {
 
@@ -44,8 +48,18 @@ void BattleInterface::Start()
 	// 饭骇 积己
 	Level_ = dynamic_cast<BattleLevel*>(GetLevel());
 	// 迄飘 积己
-	DownFont_ = Level_->CreateActor<GameEngineContentFont>(10);
-	DownFont_->SetPosition({ 50, 485 });
+	BattleFont_ = Level_->CreateActor<GameEngineContentFont>(10);
+	BattleFont_->SetPosition({ 50, 485 });
+	{
+		Skill0Font_ = Level_->CreateActor<GameEngineContentFont>(10);
+		Skill0Font_->SetPosition({ 50, 485 });
+		Skill1Font_ = Level_->CreateActor<GameEngineContentFont>(10);
+		Skill1Font_->SetPosition({ 350, 485 });
+		Skill2Font_ = Level_->CreateActor<GameEngineContentFont>(10);
+		Skill2Font_->SetPosition({ 50, 550 });
+		Skill3Font_ = Level_->CreateActor<GameEngineContentFont>(10);
+		Skill3Font_->SetPosition({ 350, 550 });
+	}
 	// 虐 积己
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
@@ -142,6 +156,14 @@ void BattleInterface::Update()
 		}
 	}
 
+	if (CurOrder == BattleOrder::Fight)
+	{
+		Skill0Font_->ClearCurrentFonts();
+		Skill1Font_->ClearCurrentFonts();
+		Skill2Font_->ClearCurrentFonts();
+		Skill3Font_->ClearCurrentFonts();
+		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
+	}
 }
 
 bool BattleInterface::BattleKey()
@@ -150,16 +172,16 @@ bool BattleInterface::BattleKey()
 	{
 		if (GameEngineInput::GetInst()->IsDown("SSelect"))
 		{
-			if (DownFont_->IsEnd())
+			if (BattleFont_->IsEnd())
 			{
-				DownFont_->EndFont();
+				BattleFont_->EndFont();
 				return true;
 			}
-			else
-			{
-				DownFont_->SkipCharAnimation();
-				return false;
-			}
+			//else
+			//{
+			//	Fonts->SkipCharAnimation();
+			//	return false;
+			//}
 		}
 	}
 	else
@@ -172,48 +194,48 @@ bool BattleInterface::BattleKey()
 
 void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
-		DownFont_->EndFont();
-		DownFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
 }
 
 void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
 }
 
 void BattleInterface::ShowSupperEffectString()
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString("It's Supe\\effective!");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("It's Supe\\effective!");
 }
 
 void BattleInterface::ShowCriticalHitString()
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString("A critical hit!");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("A critical hit!");
 }
 
 void BattleInterface::ShowNotEffective()
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString("It's not Very\\effective;");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("It's not Very\\effective;");
 }
 
 void BattleInterface::ShowFailed()
 {
-	DownFont_->EndFont();
-	DownFont_->ShowString("But it failed!");
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("But it failed!");
 }
 
 void BattleInterface::ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
 {
-	DownFont_->EndFont();
+	BattleFont_->EndFont();
 	std::string Rankfont = _Pokemon;
 	Rankfont += " is\\";
 	Rankfont += AbilityString(_Ability);
 	Rankfont += RankString(_Rank);
-	DownFont_->ShowString(Rankfont);
+	BattleFont_->ShowString(Rankfont);
 }
 
 std::string BattleInterface::AbilityString(PokemonAbility _Ability)
@@ -244,6 +266,7 @@ std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 	default:
 		break;
 	}
+	return "Null";
 }
 
 std::string BattleInterface::RankString(int _Rank)
@@ -269,6 +292,7 @@ std::string BattleInterface::RankString(int _Rank)
 		return " severely fell!";
 		break;
 	}
+	return "Null";
 }
 
 

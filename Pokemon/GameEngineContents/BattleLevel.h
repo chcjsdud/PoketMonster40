@@ -93,7 +93,6 @@ private:
 	bool OneTalk;
 
 
-
 private:
 	// 플레이어 및 NPC
 	PlayerRed* PlayerRed_;
@@ -130,6 +129,8 @@ public:
 	{
 		return PoeCurrentPokemonInBattle_;
 	}
+
+
 
 private:
 
@@ -367,6 +368,7 @@ enum class BattlePage
 enum class Battlefont
 {
 	None,
+	Miss,
 	Att,
 	Wait,
 	Effect
