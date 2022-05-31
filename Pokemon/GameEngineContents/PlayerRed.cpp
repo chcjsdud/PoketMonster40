@@ -46,7 +46,6 @@ PlayerRed::PlayerRed()
 	, Alpha_()
 	, MyPokemonList_{}
 	, MyItemList_{}
-	, Bag_(nullptr)
 	, IsFadeIn_(false)
 	, IsFadeOut_(false)
 	, IsFadeRL_(false)
@@ -61,7 +60,6 @@ PlayerRed::PlayerRed()
 	, IsBush_(false)
 	, IsBushEventReady_(false)
 	, IsDebugRun_(false)
-	, IsBagOn_(false)
 	, IsPokemonMenuOn_(false)
 	, BushActor_(nullptr)
 	, NextTileMap_()
@@ -1303,9 +1301,9 @@ void PlayerRed::UIUpdate()
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("BagOn")) // 가방열기
 		{
-			Bag_ = GetLevel()->CreateActor<Bag>(50);
-			Bag_->SetPosition(GetPosition());
-			Bag_->BagInit();
+			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
+			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<Bag*>(ChildUI_)->BagInit();
 		}
 
 		if (true == GameEngineInput::GetInst()->IsDown("BagClose")) //포켓몬 메뉴 열기
@@ -1323,223 +1321,5 @@ void PlayerRed::UIUpdate()
 			ChildUI_->Death();
 			ChildUI_ = nullptr;
 		}
-	}
-
-}
-
-void PlayerRed::ActiveBag()
-{
-	if (true == GameEngineInput::GetInst()->IsDown("BagClose")
-		&& Bag_ != nullptr)
-	{
-		Bag_->DestroyBag();
-		Bag_->Death();
-		Bag_ = nullptr;
-
-		IsBagOn_ = false;
-	}
-
-	else if (true == GameEngineInput::GetInst()->IsDown("BagOn")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		&& Bag_ == nullptr)
-	{
-		Bag_ = GetLevel()->CreateActor<Bag>(50);
-		Bag_->SetPosition(GetPosition());
-		Bag_->BagInit();
-
-		IsBagOn_ = true;
 	}
 }

@@ -39,7 +39,6 @@ Bag::Bag()
 
 Bag::~Bag()
 {
-	DestroyBag();
 }
 
 void Bag::Start()
@@ -52,6 +51,7 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
 		GameEngineInput::GetInst()->CreateKey("DialogOn", VK_LCONTROL);
 		GameEngineInput::GetInst()->CreateKey("Select", VK_TAB);
+		GameEngineInput::GetInst()->CreateKey("Close", 'c');
 	}
 }
 
@@ -61,6 +61,11 @@ void Bag::Update()
 	{
 		MoveBag();
 		MoveItem();
+	}
+
+	if (true == GameEngineInput::GetInst()->IsDown("Close"))
+	{
+		Off();
 	}
 
 	ActiveDialog();
@@ -160,8 +165,8 @@ void Bag::ChangeBag()
 		BagRedrerer_->SetPivot({ -317, -48 });
 		BagName_->SetImage("Bag_KeyItems.bmp");
 
-		LeftArrow_->SetOrder(5);
-		RightArrow_->SetOrder(5);
+		LeftArrow_->SetOrder(55);
+		RightArrow_->SetOrder(55);
 		ShowKeyItemList();
 		ShowItemInfo(KeyItemList_);
 		break;
@@ -615,8 +620,8 @@ void Bag::CloseDialog()
 		break;
 
 	case ItemType::KEYITEM:
-		LeftArrow_->SetOrder(5);
-		RightArrow_->SetOrder(5);
+		LeftArrow_->SetOrder(55);
+		RightArrow_->SetOrder(55);
 		ShowKeyItemList();
 		ShowItemInfo(KeyItemList_);
 		break;

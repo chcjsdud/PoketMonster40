@@ -97,7 +97,6 @@ private:
 	bool IsBush_;
 	bool IsBushEventReady_;
 	bool IsDebugRun_;
-	bool IsBagOn_;
 	bool IsPokemonMenuOn_;
 
 	GameEngineRenderer* WMenuUIRender_;
@@ -107,9 +106,6 @@ private:
 	//레드의 포켓몬과 아이템
 	std::vector<Pokemon*> MyPokemonList_;
 	std::vector<std::string> MyItemList_;
-
-	//이삭 : 인벤토리
-	class Bag* Bag_;
 
 	void Start() override;
 	void Update() override;
@@ -156,7 +152,4 @@ private:
 	GameEngineActor* ChildUI_;
 
 	void UIUpdate(); 
-		
-	//가방 열고 닫기
-	void ActiveBag();
 };
