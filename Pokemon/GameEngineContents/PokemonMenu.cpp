@@ -343,11 +343,7 @@ void PokemonMenu::SelectPokemonStart()
 	SelectDialogRenderer_->Off();
 	MenuArrowRenderer_->Off();
 
-	//퀘스쳔 폰트 제거
-	{
-		QuestionFont_->ClearCurrentFonts();
-		QuestionFont_ = nullptr;
-	}
+
 
 
 }
@@ -433,7 +429,7 @@ void PokemonMenu::SelectActionStart()
 	//폰트 초기화
 	{
 		QuestionFont_ = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(GetOrder()));
-		QuestionFont_->SetPosition({ 16,540 });
+		QuestionFont_->SetPosition(GetPosition()+float4 ( 16, 540 ));
 		QuestionFont_->ShowString("What do " + PokemonList_[CurrentOrder_]->GetNameCopy(), true);
 	}
 
@@ -446,6 +442,11 @@ void PokemonMenu::SelectActionUpdate()
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonMenuType::SelectPokemon);
+		//퀘스쳔 폰트 제거
+		{
+			QuestionFont_->ClearCurrentFonts();
+			QuestionFont_ = nullptr;
+		}
 		//ChangeHp(0, 1);
 	}
 
@@ -454,6 +455,11 @@ void PokemonMenu::SelectActionUpdate()
 		switch (SelectActionOrder_)
 		{
 		case 0:
+			//퀘스쳔 폰트 제거
+		{
+			QuestionFont_->ClearCurrentFonts();
+			QuestionFont_ = nullptr;
+		}
 			PrevMenuType_ = PokemonMenuType::SelectAction;
 			CurChildUIType_ = ChildUIType::PokemonSummaryMenu;
 			ChangeState(PokemonMenuType::OpeningChildUI);
@@ -711,6 +717,15 @@ void PokemonMenu::SwitchingUpdate()
 					MaxHpFonts_[ChangePokemonNumber_1] = MaxHpFonts_[ChangePokemonNumber_2];
 					MaxHpFonts_[ChangePokemonNumber_2] = temp;
 				}
+
+				//포켓몬 위치 변경
+				{
+					std::vector<Pokemon*>& Group = PlayerRed::MainRed_->GetPokemonList();
+					Pokemon* a = Group[ChangePokemonNumber_1];
+					Pokemon* b = Group[ChangePokemonNumber_2];
+					Group[ChangePokemonNumber_1] = b;
+					Group[ChangePokemonNumber_2] = a;
+				}
 			}
 
 		}
@@ -766,8 +781,9 @@ void PokemonMenu::OpeningChildUIStart()
 	{
 
 	case PokemonMenu::ChildUIType::PokemonSummaryMenu:
-		ChildUIActor_ = GetLevel()->CreateActor<PokemonSummaryMenu>(GetOrder()+10, "PokemonSummaryMenu"); //렌더오더 설정 나중에 해주기
+		ChildUIActor_ = GetLevel()->CreateActor<PokemonSummaryMenu>(GetOrder()+10, "PokemonSummaryMenu"); 
 		ChildUIActor_->SetPosition(GetPosition());
+		dynamic_cast<PokemonSummaryMenu*>(ChildUIActor_)->InitPokemonSummaryMenu(CurrentOrder_);
 		break;
 	default:
 		break;
