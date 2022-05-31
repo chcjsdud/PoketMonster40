@@ -65,6 +65,8 @@ private:
 	ItemType BagType_;
 	BagState BagState_;
 
+	class FadeActor* FadeActor_;
+
 	class GameEngineRenderer* BagRedrerer_;
 	GameEngineRenderer* BagName_;
 	GameEngineRenderer* BagDialog_;

@@ -9,9 +9,12 @@
 #include "Pokemon.h"
 #include "PokemonMenu.h"
 #include "PokemonInfoManager.h"
+#include "FadeActor.h"
 
 Bag::Bag()
 	: BagType_(ItemType::ITEM)
+	, BagState_(BagState::ListMenu)
+	, FadeActor_(nullptr)
 	, BagRedrerer_(nullptr)
 	, BagName_(nullptr)
 	, BagDialog_(nullptr)
@@ -54,8 +57,6 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("Select", VK_TAB);
 		GameEngineInput::GetInst()->CreateKey("Close", 'x');
 	}
-
-	
 }
 
 void Bag::Update()
@@ -95,6 +96,7 @@ void Bag::Update()
 	case BagState::ItemGive:
 		if (nullptr == ChildUI_)
 		{
+			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
@@ -835,7 +837,8 @@ void Bag::BagInit()
 	ChangeBag();
 
 	CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
-
+	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
+	FadeActor_->SetPosition(GetPosition());
 }
 
 void Bag::UpFonts()
@@ -1089,5 +1092,12 @@ void Bag::DestroyBag()
 
 	delete CurrentPokemon_; //받아올 때는 지우자
 	CurrentPokemon_ = nullptr;
+
+	FadeActor_->Death();
+
+	if (nullptr != ChildUI_)
+	{
+		ChildUI_->Death();
+	}
 }
 

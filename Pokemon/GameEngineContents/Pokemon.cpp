@@ -7,5 +7,10 @@ Pokemon::Pokemon()
 
 Pokemon::~Pokemon() 
 {
+	if (nullptr != MyInfo_)
+	{
+		delete MyInfo_;
+		MyInfo_ = nullptr;
+	}
 }
 
