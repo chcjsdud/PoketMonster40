@@ -55,9 +55,6 @@ private:
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
 	
-	GameEngineRenderer* MonsterBall;
-	float BallLerp;
-	
 	BattleInterface* MainInterface;
 	
 
