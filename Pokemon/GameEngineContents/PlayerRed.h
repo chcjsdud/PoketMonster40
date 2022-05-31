@@ -152,4 +152,5 @@ private:
 	class FadeActor* FadeActor_;
 
 	void UIUpdate(); 
+	void InitMyPokemon();
 };

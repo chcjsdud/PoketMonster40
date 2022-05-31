@@ -27,6 +27,10 @@
 #include "PokemonMenu.h"
 #include "FadeActor.h"
 
+#include "PokemonInfoManager.h"
+#include "PokemonInfo.h"
+#include "Pokemon.h"
+
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 bool PlayerRed::WMenuUICheck_ = true;
 PlayerRed::PlayerRed()
@@ -321,6 +325,10 @@ void PlayerRed::Start()
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
+
+
+	//UI
+	InitMyPokemon();
 
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition());
@@ -1333,4 +1341,29 @@ void PlayerRed::UIUpdate()
 			ChildUI_ = nullptr;
 		}
 	}
+}
+
+void PlayerRed::InitMyPokemon()
+{
+	//
+	Pokemon* Charmander = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
+	Charmander->GetInfo()->PlusHp(-10);
+	Charmander->GetInfo()->SetMyLevel(2);
+	Charmander->GetInfo()->SetGender(true);
+
+	Pokemon* Squirtle = PokemonInfoManager::GetInst().CreatePokemon("Squirtle");
+	Squirtle->GetInfo()->PlusHp(-50);
+	Squirtle->GetInfo()->SetMyLevel(4);
+	Squirtle->GetInfo() -> SetMaxHp(170);
+
+	Pokemon* Bulbasaur = PokemonInfoManager::GetInst().CreatePokemon("Bulbasaur");
+	Bulbasaur->GetInfo()->PlusHp(-90);
+	Bulbasaur->GetInfo()->SetMyLevel(10);
+	Bulbasaur->GetInfo()->SetGender(true);
+	Bulbasaur->GetInfo()->SetMaxHp(150);
+
+	MyPokemonList_.push_back(Charmander);
+	MyPokemonList_.push_back(Squirtle);
+	MyPokemonList_.push_back(Bulbasaur);
+
 }

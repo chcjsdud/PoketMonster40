@@ -9,6 +9,7 @@
 #include <GameEngine/GameEngine.h>
 #include "PokemonSummaryMenu.h"
 #include <GameEngineBase/GameEngineWindow.h>
+#include "PlayerRed.h"
 
 //렌더오더 설정 나중에 해주기
 
@@ -408,7 +409,6 @@ void PokemonMenu::SelectPokemonUpdate()
 		else
 		{
 			DestroyPokemonMenu();
-			Off();
 			return;
 		}
 
@@ -416,7 +416,7 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
-		ChangeState(PokemonMenuType::SelectPokemon);
+		DestroyPokemonMenu();
 		return;
 	}
 }
@@ -891,6 +891,27 @@ void PokemonMenu::InitRenderer()
 	MenuArrowRenderer_->SetTransColor(RGB(255, 0, 255));
 	MenuArrowRenderer_->Off();
 
+	//포켓몬 이름의 아이콘 애니메이션을 추가해 준다
+	for (int i = 0; i < PokemonList_.size(); i++)
+	{
+		PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
+		PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
+	}
+
+	//포켓몬의 성별을 렌더러에 업데이트 해준다
+	for (int i = 0; i < PokemonList_.size(); i++)
+	{
+		if (PokemonList_[i]->GetGender() == true) //수컷
+		{
+			GenderRenderer_[i]->SetImage("PoketmonMenu_20.bmp");
+		}
+		else
+		{
+			GenderRenderer_[i]->SetImage("PoketmonMenu_21.bmp");
+		}
+
+	}
+
 }
 
 void PokemonMenu::GetPlayerPokemon()
@@ -898,53 +919,17 @@ void PokemonMenu::GetPlayerPokemon()
 
 	//여기서 플레이어 리스트를 분해하고 포캐몬 개수만큼 PokemonNumber을 올려준다.
 	{
-		PokemonInfo* Charmander = PokemonInfoManager::GetInst().FindPokemonInfo("Charmander");
-		PokemonInfo* Squirtle = PokemonInfoManager::GetInst().FindPokemonInfo("Squirtle"); //Bulbasaur
-		PokemonInfo* Bulbasaur = PokemonInfoManager::GetInst().FindPokemonInfo("Bulbasaur");
-		//Charmander->PlusHp(-10);
-		//Charmander->SetMyLevel(2);
-		//Charmander->SetGender(true);
-		//Charmander->SetMaxHp(115);
-		//Squirtle->PlusHp(-50);
-		//Squirtle->SetMyLevel(4);
-		//Squirtle->SetMaxHp(170);
-		//Bulbasaur->PlusHp(-90);
-		//Bulbasaur->SetMyLevel(10);
-		//Bulbasaur->SetGender(true);
-		//Bulbasaur->SetMaxHp(150);
-
-		PokemonList_.push_back(Charmander);
-		PokemonList_.push_back(Squirtle);
-		PokemonList_.push_back(Bulbasaur);
-		PokemonNumber_ = 3;
-
-		//포켓몬 이름의 아이콘 애니메이션을 추가해 준다
-		for (int i = 0; i < PokemonList_.size(); i++)
+		std::vector<Pokemon*>& Group = PlayerRed::MainRed_->GetPokemonList();
+		for (Pokemon* i : Group)
 		{
-			PokemonRenderer_[i]->CreateAnimation(PokemonList_[i]->GetMyIcon(), PokemonList_[i]->GetNameCopy(), 0, 1, 0.3f, true);
-			PokemonRenderer_[i]->ChangeAnimation(PokemonList_[i]->GetNameCopy());
-		}
-
-		//포켓몬의 성별을 렌더러에 업데이트 해준다
-		for (int i = 0; i < PokemonList_.size(); i++)
-		{
-			if (PokemonList_[i]->GetGender() == true) //수컷
-			{
-				GenderRenderer_[i]->SetImage("PoketmonMenu_20.bmp");
-			}
-			else
-			{
-				GenderRenderer_[i]->SetImage("PoketmonMenu_21.bmp");
-			}
-			
+			PokemonList_.push_back(i->GetInfo());
+			PokemonNumber_++;
 		}
 	}
 }
 
 void PokemonMenu::OnUI()
 {
-	GetPlayerPokemon();
-	InitFont();
 	for (int i = 0; i < PokemonNumber_; i++)
 	{
 		BoxRenderer_[i]->On();
@@ -1143,10 +1128,12 @@ void PokemonMenu::IconJumpOff(int _PokemonOrder)
 	CanJump_[_PokemonOrder] = false;
 }
 
+
 void PokemonMenu::InitPokemonMenu()
 {
-
+	GetPlayerPokemon();
 	InitRenderer();
+	InitFont();
 	OnUI();
 	IsOn_ = true;
 }
@@ -1179,6 +1166,7 @@ void PokemonMenu::DestroyPokemonMenu()
 	{
 		QuestionFont_->ClearCurrentFonts();
 	}
+	Off();
 }
 
 

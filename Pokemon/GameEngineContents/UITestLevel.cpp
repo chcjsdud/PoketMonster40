@@ -15,7 +15,7 @@ UITestLevel::~UITestLevel()
 
 void UITestLevel::Loading()
 {
-	PokemonMenu_ = CreateActor<PokemonMenu>(0, "PokemonMenu");
+	//PokemonMenu_ = CreateActor<PokemonMenu>(0, "PokemonMenu");
 	//CreateActor<PokemonSummaryMenu>(0, "PokemonSummaryMenu");
 }
 
