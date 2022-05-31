@@ -149,7 +149,7 @@ public:
 		return Fonts->IsEnd();
 	}
 
-	void ShowPokemonSkill(Pokemon* _Pokemon);
+	void ShowPokemonSkill(Pokemon* _Pokemon) {}
 	
 private:
 	bool EmptyString_;

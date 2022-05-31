@@ -61,6 +61,8 @@ private:
 
 	class BattleLevel* Level_;
 	class BattleData* BattleDataR_;
+
+	void ShowDebugValue();
 public:
 	void DoomChit();
 	bool GetPlayerStop() const
