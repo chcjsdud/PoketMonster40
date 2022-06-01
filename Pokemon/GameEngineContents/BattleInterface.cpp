@@ -28,10 +28,6 @@ BattleInterface::BattleInterface()
 	, Fonts(nullptr)
 	, PlayerEnd(false)
 	, EmptyString_(false)
-	, Skill0Font_(nullptr)
-	, Skill1Font_(nullptr)
-	, Skill2Font_(nullptr)
-	, Skill3Font_(nullptr)
 	, BattleFont_(nullptr)
 	
 {
@@ -51,14 +47,20 @@ void BattleInterface::Start()
 	BattleFont_ = Level_->CreateActor<GameEngineContentFont>(10);
 	BattleFont_->SetPosition({ 50, 485 });
 	{
-		Skill0Font_ = Level_->CreateActor<GameEngineContentFont>(10);
-		Skill0Font_->SetPosition({ 50, 485 });
-		Skill1Font_ = Level_->CreateActor<GameEngineContentFont>(10);
-		Skill1Font_->SetPosition({ 350, 485 });
-		Skill2Font_ = Level_->CreateActor<GameEngineContentFont>(10);
-		Skill2Font_->SetPosition({ 50, 550 });
-		Skill3Font_ = Level_->CreateActor<GameEngineContentFont>(10);
-		Skill3Font_->SetPosition({ 350, 550 });
+		
+		GameEngineContentFont* index = nullptr;
+		index = Level_->CreateActor<GameEngineContentFont>(10);
+		index->SetPosition({ 50, 485 });
+		AllSkillFont_.push_back(index);
+		index = Level_->CreateActor<GameEngineContentFont>(10);
+		index->SetPosition({ 350, 485 });
+		AllSkillFont_.push_back(index);
+		index = Level_->CreateActor<GameEngineContentFont>(10);
+		index->SetPosition({ 50, 550 });
+		AllSkillFont_.push_back(index);
+		index = Level_->CreateActor<GameEngineContentFont>(10);
+		index->SetPosition({ 350, 550 });
+		AllSkillFont_.push_back(index);
 	}
 	// Å° »ý¼º
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
@@ -156,14 +158,35 @@ void BattleInterface::Update()
 		}
 	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		AllSkillFont_[i]->ClearCurrentFonts();
+	}
+
 	if (CurOrder == BattleOrder::Fight)
 	{
-		Skill0Font_->ClearCurrentFonts();
-		Skill1Font_->ClearCurrentFonts();
-		Skill2Font_->ClearCurrentFonts();
-		Skill3Font_->ClearCurrentFonts();
 		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
 	}
+}
+
+
+void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
+{
+	std::vector<PokemonSkillInfo*>& Skill = _Pokemon->GetInfo()->GetSkill();
+
+	AllSkillFont_;
+	for (int i = 0; i < 4; i++)
+	{
+		if (Skill[i] == nullptr)
+		{
+			AllSkillFont_[i]->ShowString("-");
+		}
+		else
+		{
+			AllSkillFont_[i]->ShowString(Skill[i]->GetNameConstRef(), true);
+		}
+	}
+
 }
 
 bool BattleInterface::BattleKey()
