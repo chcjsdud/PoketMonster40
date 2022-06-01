@@ -4,6 +4,7 @@
 #include "ContentEnum.h"
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngineBase/GameEngineNameObject.h>
+#include "PokemonSkillInfo.h"
 
 class PokemonSkillInfo;
 class PokemonInfo : public GameEngineNameObject
@@ -244,10 +245,18 @@ public:
 	//스킬 관련 함수
 	void AddMySkill(PokemonSkillInfo* _Skill);
 
-
 	inline void SetSkill(std::vector<PokemonSkillInfo*>& _Skills)
 	{
-		MySkills_ = _Skills;
+		for (int i = 0; i < _Skills.size(); i++)
+		{
+			if (nullptr != _Skills[i])
+			{
+				PokemonSkillInfo* Skill = new PokemonSkillInfo();
+
+				*Skill = *_Skills[i];
+				MySkills_.push_back(Skill);
+			}
+		}
 	}
 
 	inline std::vector<PokemonSkillInfo*>& GetSkill()

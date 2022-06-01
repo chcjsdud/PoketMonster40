@@ -1321,6 +1321,7 @@ void PlayerRed::UIUpdate()
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("BagOn")) // 가방열기
 		{
+			FadeActor_->SetPosition(GetPosition());
 			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
 			ChildUI_->SetPosition(GetPosition());
@@ -1329,6 +1330,7 @@ void PlayerRed::UIUpdate()
 
 		if (true == GameEngineInput::GetInst()->IsDown("BagClose")) //포켓몬 메뉴 열기
 		{
+			FadeActor_->SetPosition(GetPosition());
 			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
@@ -1339,6 +1341,7 @@ void PlayerRed::UIUpdate()
 	{
 		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
 		{
+			FadeActor_->SetPosition(GetPosition());
 			FadeActor_->FadeOut();
 
 			ChildUI_->Death();

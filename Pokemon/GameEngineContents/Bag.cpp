@@ -81,12 +81,6 @@ void Bag::Update()
 				ChangeBag();
 			}
 		}
-
-		if (true == GameEngineInput::GetInst()->IsDown("Close"))
-		{
-			DestroyBag();
-			Off();
-		}
 		break;
 
 	case BagState::DialogMenu:
@@ -94,17 +88,24 @@ void Bag::Update()
 		break;
 
 	case BagState::ItemGive:
-		//if (nullptr == ChildUI_)
-		//{
-		//	FadeActor_->FadeOut();
-		//	ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-		//	ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
-		//	dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
-		//}
+		if (nullptr == ChildUI_)
+		{
+			FadeActor_->FadeOut();
+			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+		}
 		break;
 
 	case BagState::ItemToss:
 		break;
+	}
+
+
+	if (true == GameEngineInput::GetInst()->IsDown("Close"))
+	{
+		DestroyBag();
+		Off();
 	}
 }
 
