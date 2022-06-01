@@ -5,7 +5,10 @@
 // #pragma comment(lib, "msimg32.lib")
 
 GameEngineImage::GameEngineImage()
-	:ImageDC_(nullptr)
+	: ImageDC_(nullptr)
+	, OldBitMap_()
+	, Info_()
+	, BitMap_()
 {
 }
 

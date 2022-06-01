@@ -151,6 +151,9 @@
     <ClCompile Include="PokemonSummaryMenu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="WorldTileMap3.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
     <ClCompile Include="NPC7.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="PokemonSummaryMenu.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldTileMap3.h">
+      <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
     <ClInclude Include="NPC7.h">
       <Filter>NPC</Filter>

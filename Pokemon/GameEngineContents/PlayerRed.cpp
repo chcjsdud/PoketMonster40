@@ -18,6 +18,7 @@
 #include "RoomTileMap8.h"
 #include "WorldTileMap1.h"
 #include "WorldTileMap2.h"
+#include "WorldTileMap3.h"
 
 #include "InteractionText.h"
 #include "Bush.h"
@@ -301,7 +302,7 @@ void PlayerRed::Start()
 
 	RedCollision_ = CreateCollision("RedColBox", { 60,60 });
 	RedFrontCollision_ = CreateCollision("RedFrontColBox", { 20,5 }, { 0,-32 });
-	
+
 	RedRender_ = CreateRenderer();
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
@@ -357,8 +358,8 @@ void PlayerRed::Update()
 
 	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
 	{
-		CurrentTileMap_ = WorldTileMap1::GetInst();
-		SetPosition(CurrentTileMap_->GetWorldPostion(23, 31));
+		CurrentTileMap_ = WorldTileMap3::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
 	}
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
@@ -564,10 +565,10 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			return true;
 		}
 
-		// 월드맵 타일 변경
+		// 월드맵2로 타일 변경
 		for (int y = 20; y <= 23; y++)
 		{
-			if (_X == -1 && _Y == y) 
+			if (_X == -1 && _Y == y)
 			{
 				IsMove_ = true;
 				CurrentTileMap_ = WorldTileMap2::GetInst();
@@ -575,10 +576,22 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				return false;
 			}
 		}
+
+		// 월드맵3으로 타일 변경
+		for (int x = 13; x <= 22; x++)
+		{
+			if (_X == x && _Y == -1)
+			{
+				IsMove_ = true;
+				CurrentTileMap_ = WorldTileMap3::GetInst();
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
+				return false;
+			}
+		}
 	}
 	else if (WorldTileMap2::GetInst() == CurrentTileMap_)
 	{
-		// 월드맵 타일 변경
+		// 월드맵1로 타일 변경
 		for (int y = 16; y <= 19; y++)
 		{
 			if (_X == 66 && _Y == y)
@@ -586,6 +599,54 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
+				return false;
+			}
+		}
+	}
+	else if (WorldTileMap3::GetInst() == CurrentTileMap_)
+	{
+		// 월드맵1로 타일 변경
+		for (int x = 17; x <= 26; x++)
+		{
+			if (_X == x && _Y == 119)
+			{
+				IsMove_ = true;
+				CurrentTileMap_ = WorldTileMap1::GetInst();
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
+				return false;
+			}
+		}
+
+		// 월드맵4로 가야되는데 우선 위로 이동
+		for (int x = 18; x <= 19; x++)
+		{
+			if (_X == x && _Y == 94)
+			{
+				NextTileMap_ = WorldTileMap3::GetInst();
+				NextTilePos_ = { static_cast<float>(x), 56 };
+				return true;
+			}
+		}
+
+		// 월드맵4로 가야되는데 우선 아래로 이동
+		for (int x = 18; x <= 19; x++)
+		{
+			if (_X == x && _Y == 57)
+			{
+				NextTileMap_ = WorldTileMap3::GetInst();
+				NextTilePos_ = { static_cast<float>(x), 95 };
+				return true;
+			}
+		}
+
+		// 다른방 가야하는데 우선 위로 이동
+		for (int x = 17; x <= 26; x++)
+		{
+			if (_X == x && _Y == 94)
+			{
+				IsMove_ = true;
+				CurrentTileMap_ = WorldTileMap1::GetInst();
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
@@ -881,7 +942,7 @@ void PlayerRed::InteractionUpdate()
 bool PlayerRed::InteractionNPC()
 {
 	std::vector<GameEngineCollision*> TmpVector;
-	if (true == GameEngineInput::GetInst()->IsPress("Z")&& RedCollision_->CollisionResult("NPC4DirZColBox", TmpVector))
+	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPC4DirZColBox", TmpVector))
 	{
 		//WMenuUICheck_ = false;
 		for (size_t i = 0; i < TmpVector.size(); i++)
@@ -894,7 +955,7 @@ bool PlayerRed::InteractionNPC()
 
 			Newnpc->IsTalk_ = true;
 		}
-				
+
 		InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 		TmpText->SetPosition(GetPosition());
 		TmpText->AddText("Technology is incredible!");
@@ -902,7 +963,7 @@ bool PlayerRed::InteractionNPC()
 		TmpText->AddText("You can now store and recall items");
 		TmpText->AddText("and POKEMON as data via PC.");
 		TmpText->Setting();
-		
+
 		return true;
 	}
 	return false;
@@ -1297,6 +1358,32 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 		{
 			float4 LeftTop = { 30, 19 };
 			float4 RightBot = { 36, 23 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					return true;
+				}
+			}
+		}
+	}
+	else if (WorldTileMap3::GetInst() == CurrentTileMap_)
+	{
+		{
+			float4 LeftTop = { 19, 99 };
+			float4 RightBot = { 25, 103 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					return true;
+				}
+			}
+		}
+
+		{
+			float4 LeftTop = { 15, 45 };
+			float4 RightBot = { 21, 51 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())

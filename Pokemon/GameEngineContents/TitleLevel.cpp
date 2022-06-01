@@ -4,6 +4,7 @@
 #include <string>
 #include <GameEngineBase/GameEngineInput.h>
 #include "Pokemon.h"
+#include "PokemonEngine.h"
 
 TitleLevel::TitleLevel() 
 	: Fonts(nullptr)
@@ -30,6 +31,14 @@ void TitleLevel::Loading()
 
 void TitleLevel::Update()
 {
+	PokemonEngine* TmpEngine = dynamic_cast<PokemonEngine*>(&GameEngine::GetInst());
+	if (nullptr != TmpEngine)
+	{
+		if (true == GameEngineInput::GetInst()->IsDown("Z"))
+		{
+			TmpEngine->ChangeLevel("WorldMap");
+		}
+	}
 
 	{
 		// 폰트 출력이 완료되고 키입력 대기
