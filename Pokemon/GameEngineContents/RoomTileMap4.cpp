@@ -23,11 +23,11 @@ void RoomTileMap4::Start()
 		{
 			if (x % 2 == 0 && y % 2 != 0)
 			{
-				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 10);
+				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
 			}
 			else if (x % 2 != 0 && y % 2 == 0)
 			{
-				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 10);
+				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
 			}
 		}
 	}

@@ -19,9 +19,12 @@ private:
 	GameEngineRenderer* Renderer;
 
 public:
+	Tile()
+		: Renderer(nullptr)
+	{
+	}
 	virtual ~Tile()
 	{
-
 	}
 
 	GameEngineRenderer* GetRenderer()
