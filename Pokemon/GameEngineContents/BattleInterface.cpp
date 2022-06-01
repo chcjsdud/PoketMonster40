@@ -72,9 +72,9 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 'H');
 	//
 
-	InterfaceImage = CreateRenderer("Battle_Select.bmp",2);
+	InterfaceImage = CreateRenderer("Battle_Select.bmp",5);
 	InterfaceImage->Off();
-	Select = CreateRenderer("Select.bmp", 5);
+	Select = CreateRenderer("Select.bmp", 7);
 	Select->Off();
 
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp",2);
@@ -87,7 +87,7 @@ void BattleInterface::Start()
 	MyHP->Off();
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
 	EXP->Off();
-	BattleCommend = CreateRenderer("BattleCommend4.bmp", 4);
+	BattleCommend = CreateRenderer("BattleCommend4.bmp", 6);
 	//Player = CreateRenderer("Player.bmp",0);
 
 	//=========랜더러 위치 설정==========//
@@ -105,7 +105,7 @@ void BattleInterface::Start()
 	GetLevel()->RegistActor("BattleInterface", this);
 	//김예나:테스트 코드
 	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
-	Fonts = Level_->CreateActor<GameEngineContentFont>(3);
+	Fonts = Level_->CreateActor<GameEngineContentFont>(8);
 	Fonts->SetPosition({ 50, 485 });
 
 }

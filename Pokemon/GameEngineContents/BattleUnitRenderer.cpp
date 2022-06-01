@@ -15,7 +15,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)//º´¹®¾¾ µµ¿ò
 	, FirstMove(true)
-	, PlayerPokemonPos_({ -220, 63 })
+	, PlayerPokemonPos_({ -220, 43 })
 	, OpponentPokemonPos_({ -450, -105 })//200,-105
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
