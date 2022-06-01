@@ -72,8 +72,8 @@ void TitleLevel::Update()
 
 void TitleLevel::LevelChangeStart(GameEngineLevel* _NextLevel)
 {
-	BgmPlayer = GameEngineSound::SoundPlayControl("Title.wav");
-	BgmPlayer.Volume(0.1f);
+	BgmPlayer = GameEngineSound::SoundPlayControl("Title(recorder).wav");
+	BgmPlayer.Volume(0.5f);
 }
 void TitleLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)
 {
