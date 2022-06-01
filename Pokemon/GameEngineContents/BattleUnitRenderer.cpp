@@ -13,6 +13,7 @@ GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
 BattleUnitRenderer::BattleUnitRenderer() 
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
+	//, OpponentRenderer_(nullptr)
 	, FirstMove(true)
 	, PlayerPokemonPos_({ -220, 63 })
 	, OpponentPokemonPos_({ -450, -105 })//200,-105

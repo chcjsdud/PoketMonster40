@@ -13,6 +13,7 @@
 #include "MonsterBall.h"
 #include "Potion.h"
 #include <GameEngineBase/GameEngineRandom.h>
+#include <GameEngineBase/GameEngineSound.h>
 
 PokemonEngine::PokemonEngine() 
 {
@@ -207,6 +208,19 @@ void PokemonEngine::ResourcesLoad()
 		for (int i = 0; i < AllFileVec.size(); i++)
 		{
 			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
+		}
+	}
+
+	{	//김예나 : 6월1일 브금 리소스 폴더 추가
+		GameEngineDirectory ResourcesDirectory;
+		ResourcesDirectory.MoveParent("Pokemon");
+		ResourcesDirectory.Move("Resources");
+		ResourcesDirectory.Move("useSong");
+		std::vector<GameEngineFile> AllImageFileList = ResourcesDirectory.GetAllFile();
+
+		for (size_t i = 0; i < AllImageFileList.size(); i++)
+		{
+			GameEngineSound::LoadRes(AllImageFileList[i].GetFullPath());
 		}
 	}
 }

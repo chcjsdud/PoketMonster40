@@ -175,6 +175,10 @@ void GameEngineSoundPlayer::Stop()
 	ControlHandle_->stop();
 }
 
+void GameEngineSoundPlayer::Volume(float _Value)
+{
+	ControlHandle_->setVolume(_Value);
+}
 
 GameEngineSoundPlayer::GameEngineSoundPlayer() 
 	: Sound_(nullptr)
