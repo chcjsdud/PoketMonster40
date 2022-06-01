@@ -1,5 +1,6 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
+#include <GameEngineBase/GameEngineSound.h>
 #include "BattleNPCInterface.h"
 #include "PlayerRed.h"
 #include "BattleInterface.h"
@@ -71,6 +72,8 @@ protected:
 private:
 	BattleInterface* Interface_;
 	BattleState BState_;
+
+	GameEngineSoundPlayer BgmPlayer;
 
 
 	// ¿ÀÇÁ´× °ü·Ã
