@@ -128,10 +128,8 @@ public:
 	void ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank);
 	
 	//
-	GameEngineContentFont* Skill0Font_;
-	GameEngineContentFont* Skill1Font_;
-	GameEngineContentFont* Skill2Font_;
-	GameEngineContentFont* Skill3Font_;
+	std::vector<GameEngineContentFont*> AllSkillFont_;
+	void ShowPokemonSkill(Pokemon* _Pokemon);
 	//
 
 	std::string AbilityString(PokemonAbility _Ability);
@@ -149,7 +147,6 @@ public:
 		return Fonts->IsEnd();
 	}
 
-	void ShowPokemonSkill(Pokemon* _Pokemon) {}
 	
 private:
 	bool EmptyString_;
