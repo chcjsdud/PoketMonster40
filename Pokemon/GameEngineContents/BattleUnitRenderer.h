@@ -37,8 +37,8 @@ private:
 	GameEngineRenderer* PlayerCurrentPokemon_;
 	GameEngineRenderer* PoeCurrentPokemon_;
 
-
-	//* OpponentRenderer_;
+	//병문씨가 도움주신 변수
+	GameEngineRenderer* OpponentRenderer_;
 
 	//김예나 : 5월28일 옮기기용 포인터///////////////////////
 	class BattleInterface* BattleInter;

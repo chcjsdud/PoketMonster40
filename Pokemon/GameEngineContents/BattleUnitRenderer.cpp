@@ -13,7 +13,7 @@ GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
 BattleUnitRenderer::BattleUnitRenderer() 
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
-	//, OpponentRenderer_(nullptr)
+	, OpponentRenderer_(nullptr)//병문씨 도움
 	, FirstMove(true)
 	, PlayerPokemonPos_({ -220, 63 })
 	, OpponentPokemonPos_({ -450, -105 })//200,-105
@@ -41,8 +41,18 @@ void BattleUnitRenderer::Start()
 	//동원씨 도움
 	BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
 
-	GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
-	Image->CutCount(5, 1);
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Player.bmp");
+		Image->CutCount(1, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("PlayerAnimation.bmp");
+		Image->CutCount(5, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
+		Image->CutCount(6, 1);
+	}
 }
 
 void BattleUnitRenderer::Update()
@@ -214,39 +224,48 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MoveSpeed = 900.0f;//원래는200
 
 	BattleDataR_ = Level_->GetBattleData();
-	{	//플레이어
+	
+	// 장병문 : 처음 한번만 만들기 Start에서 하는게 더 좋아보이는데 PlayerCurrentPokemon_ 올리면 문제생겨서 일단 여기둠
+	// 추후에 수정필요할듯
+	if (nullptr == PlayerRenderer_)
+	{
+		//플레이어
 		PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
-
+		PlayerRenderer_->CreateAnimation("Player.bmp", "Stop", 0, 0, 0.1f, false);
 		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
 
 		//푸키먼
 		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
-			, 3 , RenderPivot::CENTER ,PlayerPokemonPos_);
+			, 3, RenderPivot::CENTER, PlayerPokemonPos_);
 		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
 			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
 
 		//볼
 		MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
-		MonsterBall->Off();
-		MonsterBall->SetPivot({ -220.0f,-30.0f });
-		GameEngineImage* Image1 = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
-		Image1->CutCount(6, 1);
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
-
+		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 	}
+
+	PlayerRenderer_->On();
+	PlayerRenderer_->ChangeAnimation("Stop");
+	PlayerCurrentPokemon_->Off();
+	PoeCurrentPokemon_->On();
+	MonsterBall->Off();
+	MonsterBall->SetPivot({ -220.0f,-30.0f });
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
 	BattleDataR_ = nullptr;
 	{
+		BattleDataR_ = nullptr;
 		PlayerTime_ = 0.0f;
 		BattleInter->SetPlayerEnd(false);
 		PlayerStop = false;
 		FirstMove = true;
 		BallLerp = 0.0f;
-		PlayerCurrentPokemon_->Death();
-		PoeCurrentPokemon_->Death();
-		PlayerRenderer_->Death();
-		MonsterBall->Death();
+		PlayerCurrentPokemon_->Off();
+		PoeCurrentPokemon_->Off();
+		PlayerRenderer_->Off();
+		MonsterBall->Off();
 	}
 }
