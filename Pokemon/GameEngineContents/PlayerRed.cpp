@@ -352,7 +352,6 @@ void PlayerRed::Update()
 	FadeRL();
 	Camera();
 	UIUpdate();
-	//ActiveBag();
 	//Camera();
 	InteractionUpdate();
 
@@ -699,12 +698,17 @@ void PlayerRed::Camera()
 	}
 }
 
+GameEngineRenderer* Renderer_;
+
 void PlayerRed::WMenuUISelect()
 {
 	if (false == WMenuUICheck_)
 	{
+		Renderer_ = CreateRenderer("WMenuUI_Dex.bmp");
+
 		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
+			Renderer_->SetOrder(100);
 			WMenuArrowRender_->SetPivot({ 240,100 });
 			return;
 		}
@@ -716,7 +720,11 @@ void PlayerRed::WMenuUISelect()
 
 		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Z"))
 		{
-			GameEngine::GetInst().ChangeLevel("UITestLevel");
+			FadeActor_->SetPosition(GetPosition());
+			FadeActor_->FadeOut();
+			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
 			return;
 		}
 		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Up"))
@@ -732,7 +740,11 @@ void PlayerRed::WMenuUISelect()
 
 		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Z"))
 		{
-			GameEngine::GetInst().ChangeLevel("BagTestLevel");
+			FadeActor_->SetPosition(GetPosition());
+			FadeActor_->FadeOut();
+			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
+			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<Bag*>(ChildUI_)->BagInit();
 			return;
 		}
 		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Up"))
@@ -1395,11 +1407,6 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 	}
 
 	return false;
-}
-
-void Func()
-{
-
 }
 
 void PlayerRed::UIUpdate()
