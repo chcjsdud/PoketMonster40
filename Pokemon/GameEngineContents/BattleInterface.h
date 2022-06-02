@@ -144,7 +144,7 @@ public:
 private:
 	bool EmptyString_;
 	int SkillUIPos_;
-	std::string RandomPoeSkill(Pokemon* _Pokemon);
+	PokemonSkillInfo* RandomPoeSkill(Pokemon* _Pokemon);
 
 	void Reset();
 };

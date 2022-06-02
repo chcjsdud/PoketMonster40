@@ -93,7 +93,7 @@ void BattleLevel::Update()
 	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
-			StartBattlePage("Scratch", "Scratch");
+			//StartBattlePage("Scratch", "Scratch");
 		}
 		break;
 	case BattleState::BattlePage:
@@ -116,46 +116,10 @@ void BattleLevel::Update()
 	}
 }
 
-void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill)
+void BattleLevel::StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill)
 {
 	RefreshPokemon();
-	{
-		std::string Player = GameEngineString::ToUpperReturn(_PlayerSkill);
-		std::string Poe = GameEngineString::ToUpperReturn(_PoeSkill);
-		bool Bool = false;
-		std::vector<PokemonSkillInfo*>& PlayerSkill = PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
-		std::vector<PokemonSkillInfo*>& PoeSkill = PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetSkill();
-		for (auto& Skill : PlayerSkill)
-		{
-			if (Skill == nullptr)
-			{
-				continue;
-			}
-			if (Skill->GetNameConstRef() == Player)
-			{
-				Bool = true;
-				break;
-			}
-		}
 
-		for (auto& Skill : PoeSkill)
-		{
-			if (Skill == nullptr)
-			{
-				continue;
-			}
-			if (Skill->GetNameConstRef() == Poe)
-			{
-				Bool = true;
-				break;
-			}
-		}
-
-		if (Bool == false)
-		{
-			MsgBoxAssert("해당 포켓몬은 스킬을 가지고 있지 않습니다");
-		}
-	}
 
 	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, this);
 	BState_ = BattleState::BattlePage;
@@ -507,9 +471,9 @@ void PokemonBattleState::Update()
 	}
 }
 
-BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level)
-	: PlayerSkill_(PokemonInfoManager::GetInst().FindSkillInfo(_PlayerSkill))
-	, PoeSkill_(PokemonInfoManager::GetInst().FindSkillInfo(_PoeSkill))
+BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill, BattleLevel* _Level)
+	: PlayerSkill_(_PlayerSkill)
+	, PoeSkill_(_PoeSkill)
 	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
 	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
 	, Select_(BattleOrder::Fight)

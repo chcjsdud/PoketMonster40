@@ -118,12 +118,6 @@ void BattleInterface::Render()
 void BattleInterface::Update()
 {
 
-	if (CurOrder == BattleOrder::Fight)
-	{
-		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
-		ShowAndCheckSkillPos();
-	}
-
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
@@ -257,9 +251,12 @@ void BattleInterface::ShowAndCheckSkillPos()
 		{
 		case BattleOrder::Fight:
 		{
-			std::string PlayerSkill = Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetNameConstRef();
-			std::string PoeSkill = RandomPoeSkill(Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon());
-			Level_->StartBattlePage(PlayerSkill, PoeSkill);
+			if (Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill().size() == 0)
+			{
+				MsgBoxAssert("스킬이 없습니다")
+			}
+			Level_->StartBattlePage(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()
+				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()));
 		}
 		break;
 		case BattleOrder::Pokemon:
@@ -288,28 +285,23 @@ void BattleInterface::ShowAndCheckSkillPos()
 
 }
 
-std::string BattleInterface::RandomPoeSkill(Pokemon* _Pokemon)
+PokemonSkillInfo* BattleInterface::RandomPoeSkill(Pokemon* _Pokemon)
 {
-	while (true)
+	if (_Pokemon->GetInfo()->GetSkill().size() == 0)
 	{
-		int Skillint = GameEngineRandom::GetRandom()->RandomInt(0, 3);
-		if (_Pokemon->GetInfo()->GetSkill()[Skillint] == nullptr)
-		{
-			continue;
-		}
-		else
-		{
-			return _Pokemon->GetInfo()->GetSkill()[Skillint]->GetNameConstRef();
-		}
+		MsgBoxAssert("적 스킬이 Null입니다")
 	}
-
-
+	else
+	{
+		return _Pokemon->GetInfo()->GetSkill()[GameEngineRandom::GetRandom()->RandomInt(0, (size_t)(_Pokemon->GetInfo()->GetSkill().size() - 1))]->GetInfo();
+	}
+	return nullptr;
 }
 
 
 void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 {
-	std::vector<PokemonSkillInfo*>& Skill = _Pokemon->GetInfo()->GetSkill();
+	std::vector<PokemonSkill*>& Skill = _Pokemon->GetInfo()->GetSkill();
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -318,13 +310,16 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 			return;
 		}
 
-		if (Skill[i] == nullptr)
+		for (int i = 0; i < 4; i++)
 		{
-			AllSkillFont_[i]->ShowString("-");
-		}
-		else
-		{
-			AllSkillFont_[i]->ShowString(Skill[i]->GetNameConstRef(), true);
+			if (Skill.size() > i)
+			{
+				AllSkillFont_[i]->ShowString(Skill[i]->GetInfo()->GetNameConstRef(), true);
+			}
+			else
+			{
+				AllSkillFont_[i]->ShowString("-");
+			}
 		}
 	}
 
@@ -465,47 +460,34 @@ bool BattleInterface::MoveKey()
 {
 	if (InterfaceImage->IsUpdate() == true)
 	{
-		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-		{	//Fight에서 Pokemon으로
-			Select->SetPivot({ -190.0f,35.0f });
+		switch (CurOrder)
+		{
+		case BattleOrder::Fight:
+			break;
+		case BattleOrder::Bag:
+			break;
+		case BattleOrder::Pokemon:
+			break;
+		case BattleOrder::Run:
+			break;
+		case BattleOrder::None:
+			break;
+		default:
+			break;
 		}
+		if (CurOrder == BattleOrder::None)
+		{
+			
+		}
+		
 
-		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-		{	//Pokemon에서 Fight로
-			Select->SetPivot({ -190.0f,-25.0f });
-		}
-
-		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-		{	//Fight에서 Bag으로
-			Select->SetPivot({ 30.0f,-25.0f });
-		}
-
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-		{	//Bag에서 Fight로
-			Select->SetPivot({ -190.0f,-25.0f });
-		}
-
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-		{	//Bag에서 Run으로
-			Select->SetPivot({ 30.0f,35.0f });
-		}
-
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-		{	//Run에서 Bag으로
-			Select->SetPivot({ 30.0f,-25.0f });
-		}
-
-		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-		{	//Pokemon에서 Run으로
-			Select->SetPivot({ 30.0f,35.0f });
-		}
-
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-		{	//Run에서 Pokemon으로
-			Select->SetPivot({ -190.0f,35.0f });
-		}
 	}
 
+	if (CurOrder == BattleOrder::Fight)
+	{
+		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
+		ShowAndCheckSkillPos();
+	}
 
 	// 장중혁 : Debug
 	if (GameEngineInput::GetInst()->IsDown("StartBattlePage"))

@@ -113,7 +113,7 @@ private:
 	void RefreshPokemon();
 
 
-	void StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill);
+	void StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill);
 	void EndBattlePage();
 };
 
@@ -276,7 +276,7 @@ class BattleManager
 	class BattleTurn;
 	friend BattleLevel;
 private:
-	BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level);
+	BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo*  _PoeSkill, BattleLevel* _Level);
 	//BattleManager(const std::string& _PlayerItem, const std::string& _PoeSkill);
 	~BattleManager()
 	{
