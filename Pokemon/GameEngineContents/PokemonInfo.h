@@ -41,6 +41,15 @@ public:
 	}
 
 
+	inline void SetMyId(int _id)
+	{
+		Id_ = _id;
+	}
+
+	inline int GetMyId()
+	{
+		return Id_;
+	}
 
 	//능력치 관련 함수
 	inline int GetMyLevel()
@@ -278,6 +287,7 @@ private:
 	PokemonType Type_;
 	StatusEffect Effect_; //상태이상
 
+	int Id_;
 	int Lv_;
 	int MaxLv_;
 	int Hp_;

@@ -20,6 +20,20 @@ PokemonInfoManager::PokemonInfoManager()
 PokemonInfoManager::~PokemonInfoManager() 
 {
 	{
+		std::map<int, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
+		std::map<int, Pokemon*>::iterator EndIter = AllPokemonList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if (nullptr != StartIter->second)
+			{
+				delete StartIter->second;
+				StartIter->second = nullptr;
+			}
+		}
+	}
+
+	{
 		std::map<std::string, PokemonInfo*>::iterator StartIter = AllPokemonInfoList_.begin();
 		std::map<std::string, PokemonInfo*>::iterator EndIter = AllPokemonInfoList_.end();
 
@@ -125,6 +139,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 
 	//정보를 복사
 	NewPokemon->GetInfo()->SetName(_Name);
+	NewPokemon->GetInfo()->SetMyId(10000 + PokemonId_);
 	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
 	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
 	NewPokemon->GetInfo()->SetMyLevel(MyInfo->GetMyLevel());
@@ -145,7 +160,46 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 
 	CreateRandomNature(MyInfo);
 
+	++PokemonId_;
+
 	return NewPokemon;
+}
+
+void PokemonInfoManager::DestroyPokemon(int _Id)
+{
+	std::map<int, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
+	std::map<int, Pokemon*>::iterator EndIter = AllPokemonList_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != StartIter->second)
+		{
+			if (_Id == (*StartIter->second).GetInfo()->GetMyId())
+			{
+				delete StartIter->second;
+				StartIter->second = nullptr;
+			}
+		}
+	}
+}
+
+Pokemon* PokemonInfoManager::FindPokemon(int _Id)
+{
+	std::map<int, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
+	std::map<int, Pokemon*>::iterator EndIter = AllPokemonList_.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != StartIter->second)
+		{
+			if (_Id == (*StartIter->second).GetInfo()->GetMyId())
+			{
+				return StartIter->second;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 PokemonSkill* PokemonInfoManager::CreatePokemonSkill(const std::string& _Name)
@@ -195,6 +249,7 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, Poke
 	PokemonInfo* NewPokemonInfo = new PokemonInfo();
 
 	NewPokemonInfo->SetName(_Key);
+	NewPokemonInfo->SetMyId(0);
 	NewPokemonInfo->SetMyType(_Type);
 	NewPokemonInfo->SetStatusEffect(StatusEffect::NONE);
 	NewPokemonInfo->SetMyLevel(_Lv);

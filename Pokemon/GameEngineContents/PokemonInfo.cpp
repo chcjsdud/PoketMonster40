@@ -31,6 +31,7 @@ PokemonInfo::PokemonInfo()
 
 PokemonInfo::~PokemonInfo() 
 {
+	//자신이 가지고 있는 스킬을 삭제(이 스킬은 인포매니저에서 삭제해주지 않는다)
 	std::vector<PokemonSkill*>::iterator StartIter = MySkills_.begin();
 	std::vector<PokemonSkill*>::iterator EndIter = MySkills_.end();
 

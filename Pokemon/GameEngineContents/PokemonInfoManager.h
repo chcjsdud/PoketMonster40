@@ -49,6 +49,8 @@ public:
 	ItemInfo* FindItemInfo(const std::string& _Key);
 
 	Pokemon* CreatePokemon(const std::string& _Name);
+	void DestroyPokemon(int _Id);
+	Pokemon* FindPokemon(int _Id);
 	class PokemonSkill* CreatePokemonSkill(const std::string& _Name);
 	class Item* CreateItem(const std::string& _Name);
 
@@ -57,6 +59,7 @@ protected:
 private:
 	static int PokemonId_;
 
+	std::map<int, Pokemon*> AllPokemonList_;
 	std::map<std::string, PokemonInfo*> AllPokemonInfoList_;
 	std::map<std::string, PokemonSkillInfo*> AllSkillInfoList_;
 	std::map<std::string, ItemInfo*> AllItemInfoList_;
