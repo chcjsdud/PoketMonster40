@@ -414,10 +414,53 @@ void BattleInterface::SelectOrder()
 {
 	if (InterfaceImage->IsUpdate() == true)
 	{
-		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-		{	//싸우다 선택
-			CurOrder = BattleOrder::Fight;
-			GetSelect()->SetPivot({-680.0f,-30.0f});//기술1번 위치
+		{
+			if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+			{	//싸우다 선택
+				CurOrder = BattleOrder::Fight;
+				GetSelect()->SetPivot({ -680.0f,-30.0f });//기술1번 위치
+			}
+			////////////////////////////////////////////////////////////////
+			//싸우다 안의 선택매뉴 조작(기술이 null이면 해당 기술칸으로 이동못하게 추가해야함)
+			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+			{	//1번기술에서 3번기술로
+				GetSelect()->SetPivot({ -680.0f,30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+			{	//3번기술에서 1번기술로
+				GetSelect()->SetPivot({ -680.0f,-30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+			{	//1번기술에서 2번기술로
+				GetSelect()->SetPivot({ -380.0f,-30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+			{	//2번기술에서 1번기술로
+				GetSelect()->SetPivot({ -680.0f,-30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+			{	//2번기술에서 4번기술로
+				GetSelect()->SetPivot({ -380.0f,30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+			{	//4번기술에서 2번기술로
+				GetSelect()->SetPivot({ -380.0f,-30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+			{	//4번기술에서 3번기술로
+				GetSelect()->SetPivot({ -680.0f,30.0f });
+			}
+
+			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+			{	//3번기술에서 4번기술로
+				GetSelect()->SetPivot({ -380.0f,30.0f });
+			}
 		}
 
 		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
