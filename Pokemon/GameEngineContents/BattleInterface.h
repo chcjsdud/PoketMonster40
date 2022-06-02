@@ -2,21 +2,13 @@
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+#include "BattleEnum.h"
 #include "Pokemon.h"
 
 //선생님은 생략된 것들도 명시적으로 칠 것이다
 //직접 만들지 않아도 자동으로 생략되어 생성되 있는것들
 
 //설명 : 전투 선택지를 띄우는 인터페이스
-
-enum class BattleOrder
-{
-	Fight,
-	Pokemon,
-	Bag,
-	Run,
-	None
-};
 
 enum class PokemonAbility;
 enum class FightString;
@@ -28,10 +20,10 @@ public:
 	BattleInterface();
 	//디폴트 소멸자
 	~BattleInterface();
-	
-	
+
+
 	//======아래것들은 명시적으로 안쓰겠습니다(delete)======
-	
+
 	//디폴트 복사 생성자
 	BattleInterface(const BattleInterface& _Other) = delete;
 	//RValue Reference 생성자 (나중에 배울것)
@@ -57,7 +49,7 @@ private:
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend;
-	
+
 	BattleInterface* MainInterface;
 
 	BattleOrder CurOrder;
@@ -126,7 +118,7 @@ public:
 	void ShowNotEffective();
 	void ShowFailed();
 	void ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank);
-	
+
 	//
 	std::vector<GameEngineContentFont*> AllSkillFont_;
 	void ShowPokemonSkill(Pokemon* _Pokemon);
@@ -148,10 +140,11 @@ public:
 		return Fonts->IsEnd();
 	}
 
-	
+
 private:
 	bool EmptyString_;
 	int SkillUIPos_;
+	std::string RandomPoeSkill(Pokemon* _Pokemon);
 
 	void Reset();
 };

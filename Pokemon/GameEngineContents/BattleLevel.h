@@ -30,9 +30,9 @@ public:
 	BattleLevel();
 	//디폴트 소멸자
 	~BattleLevel();
-	
+
 	//======아래것들은 명시적으로 안쓰겠습니다(delete)======
-	
+
 	//디폴트 복사 생성자
 	BattleLevel(const BattleLevel& _Other) = delete;
 	//RValue Reference 생성자 (나중에 배울것)
@@ -59,7 +59,7 @@ public:
 	}
 	inline void EnddingEnd()
 	{
-		EnddingEnd_ = true;	
+		EnddingEnd_ = true;
 	}
 
 protected:
@@ -80,12 +80,12 @@ private:
 	void ShowOpenning();
 	bool OpenningEnd_;
 	//
-	
+
 	// 엔딩 관련
 	void ShowEndding();
 	bool EnddingEnd_;
 	//
-	
+
 
 
 
@@ -107,9 +107,11 @@ private:
 
 	BattleData* BattleData_;
 	BattleManager* BattleManager_;
-	
+
+	BattleOrder CurrentSelect_;
+
 	void RefreshPokemon();
-	
+
 
 	void StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill);
 	void EndBattlePage();
@@ -276,7 +278,7 @@ class BattleManager
 private:
 	BattleManager(const std::string& _PlayerSkill, const std::string& _PoeSkill, BattleLevel* _Level);
 	//BattleManager(const std::string& _PlayerItem, const std::string& _PoeSkill);
-	~BattleManager() 
+	~BattleManager()
 	{
 		if (FristTurn_ != nullptr)
 		{
@@ -300,11 +302,11 @@ private:
 
 	PokemonSkillInfo* const PlayerSkill_;
 	PokemonSkillInfo* const PoeSkill_;
-	
+
 	PokemonBattleState* const PlayCurrentPokemon_;
 	PokemonBattleState* const PoeCurrentPokemon_;
 
-	const BattleOrderMenu Select_;
+	const BattleOrder Select_;
 	BattlePage CurrentBattlePage_;
 	Battlefont CurrentFont_;
 
@@ -333,7 +335,7 @@ private:
 		PokemonBattleState* const DefPokemon_;
 
 		DamageType DamageType_;
-		PokemonSkillInfo* Skill_;
+		PokemonSkillInfo* const Skill_;
 		const SkillType SkillType_;
 		int FinalDamage_;
 		bool Critical_;

@@ -1,11 +1,12 @@
 #pragma once
 
-enum class BattleOrderMenu
+enum class BattleOrder
 {
 	Fight,
-	Item,
+	Bag,
 	Pokemon,
-	Run
+	Run,
+	None
 };
 
 enum class BattleState

@@ -29,12 +29,13 @@ BattleLevel::BattleLevel()
 	, Fonts(nullptr)
 	, BattleData_(nullptr)
 	, BattleManager_(nullptr)
+	, CurrentSelect_(BattleOrder::None)
 {
 
 }
 
 BattleLevel::~BattleLevel()
-{	
+{
 	if (BattleData_ != nullptr)
 	{
 		delete BattleData_;
@@ -43,7 +44,7 @@ BattleLevel::~BattleLevel()
 	if (Opponent_ != nullptr)
 	{
 		delete Opponent_->GetPokemonList()[0];
-//		delete PlayerRed_->GetPokemonList().front();
+		//		delete PlayerRed_->GetPokemonList().front();
 		PlayerRed_ = nullptr;
 		Opponent_ = nullptr;
 	}
@@ -113,7 +114,7 @@ void BattleLevel::Update()
 		}
 		break;
 	}
-} 
+}
 
 void BattleLevel::StartBattlePage(const std::string& _PlayerSkill, const std::string& _PoeSkill)
 {
@@ -172,7 +173,7 @@ void BattleLevel::EndBattlePage()
 
 }
 
-void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
+void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	//김예나 : 이 브금은 실제론 월드맵에서 전투 걸렸을때부터 시작되야 합니다.
 	BgmPlayer = GameEngineSound::SoundPlayControl("Wild_Battle.mp3");
@@ -180,7 +181,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel * _PrevLevel)
 
 	if (PlayerRed_ == nullptr)
 	{
-		PlayerRed_  = PlayerRed::MainRed_;
+		PlayerRed_ = PlayerRed::MainRed_;
 	}
 
 	//BState_ = BattleState::Openning
@@ -230,7 +231,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		{
 			delete Iter;
 		}
-			Opponent_->GetPokemonList().clear();
+		Opponent_->GetPokemonList().clear();
 
 		Opponent_->Death();
 		delete BattleData_;
@@ -294,7 +295,7 @@ BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _
 {
 	// PlayerCurrentPokemonInBattle_ = _Player->GetPlayerPokemon
 	PoeNPC_ = dynamic_cast<BattleNPCInterface*>(_Level->FindActor("WildPokemon"));
-	
+
 	{
 		// Player
 		size_t PokemonInt = PlayerPokemonList_.size();
@@ -511,7 +512,7 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 	, PoeSkill_(PokemonInfoManager::GetInst().FindSkillInfo(_PoeSkill))
 	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
 	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
-	, Select_(BattleOrderMenu::Fight)
+	, Select_(BattleOrder::Fight)
 	, CurrentBattlePage_(BattlePage::FirstBattle)
 	, PlayerFirst_(false)
 	, Interface_(_Level->Interface_)
@@ -519,36 +520,32 @@ BattleManager::BattleManager(const std::string& _PlayerSkill, const std::string&
 	, FristTurn_(nullptr)
 	, SecondTurn_(nullptr)
 {
-	if (PlayerSkill_ == nullptr || PoeSkill_ == nullptr)
-	{
-		MsgBoxAssert("스킬명이 일치하지 않습니다")
-	}
 
 	switch (Select_)
 	{
-	case BattleOrderMenu::Run:
-	case BattleOrderMenu::Fight:
+	case BattleOrder::Run:
+	case BattleOrder::Fight:
 		PlayerFirst_ = BattleEngine::ComareSpeed(PlayCurrentPokemon_, PoeCurrentPokemon_);
 		break;
-	case BattleOrderMenu::Item:
+	case BattleOrder::Bag:
 		break;
-	case BattleOrderMenu::Pokemon:
+	case BattleOrder::Pokemon:
 		break;
 
 	default:
 		break;
 	}
-	
+
 
 }
 
 bool BattleManager::Update()
 {
-	PokemonBattleState* CurrentTurn = nullptr;
-	PokemonSkillInfo* CurrentPokemonSkill = nullptr;
+	PokemonBattleState* CurrentTurn = PlayerFirst_ == true ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
+	PokemonSkillInfo* CurrentPokemonSkill = PlayerFirst_ == true ? PlayerSkill_ : PoeSkill_;
 
-	PokemonBattleState* AfterTrun = nullptr;
-	PokemonSkillInfo* AfterPokemonSkill = nullptr;
+	PokemonBattleState* AfterTrun = PlayerFirst_ == false ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
+	PokemonSkillInfo* AfterPokemonSkill = PlayerFirst_ == false ? PlayerSkill_ : PoeSkill_;
 	if (PlayerFirst_ == true)
 	{
 		CurrentTurn = PlayCurrentPokemon_;
@@ -568,7 +565,7 @@ bool BattleManager::Update()
 	case BattlePage::FirstBattle:
 		switch (Select_)
 		{
-		case BattleOrderMenu::Fight:
+		case BattleOrder::Fight:
 			if (FristTurn_ == nullptr)
 			{
 				FristTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill);
@@ -580,11 +577,11 @@ bool BattleManager::Update()
 				CurrentBattlePage_ = BattlePage::SecondBattle;
 			}
 			break;
-		case BattleOrderMenu::Item:
+		case BattleOrder::Bag:
 			break;
-		case BattleOrderMenu::Pokemon:
+		case BattleOrder::Pokemon:
 			break;
-		case BattleOrderMenu::Run:
+		case BattleOrder::Run:
 			break;
 		default:
 			break;
@@ -593,7 +590,7 @@ bool BattleManager::Update()
 	case BattlePage::SecondBattle:
 		switch (Select_)
 		{
-		case BattleOrderMenu::Fight:
+		case BattleOrder::Fight:
 			if (SecondTurn_ == nullptr)
 			{
 				SecondTurn_ = new BattleTurn(CurrentTurn, AfterTrun, CurrentPokemonSkill);
@@ -605,11 +602,11 @@ bool BattleManager::Update()
 				CurrentBattlePage_ = BattlePage::End;
 			}
 			break;
-		case BattleOrderMenu::Item:
+		case BattleOrder::Bag:
 			break;
-		case BattleOrderMenu::Pokemon:
+		case BattleOrder::Pokemon:
 			break;
-		case BattleOrderMenu::Run:
+		case BattleOrder::Run:
 			break;
 		default:
 			break;
@@ -663,8 +660,8 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		}
 	}
 
-		// 어택 모션
-		break;
+	// 어택 모션
+	break;
 	case Battlefont::Wait:
 		if (_Turn->Critical_ == true)
 		{
@@ -703,7 +700,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				}
 				break;
 				case SkillType::Status:
-					
+
 					break;
 				default:
 					break;
@@ -714,7 +711,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			return true;
 		}
 		//효과는 대단했다
-		break; 
+		break;
 	case Battlefont::Effect:
 		break;
 	default:
