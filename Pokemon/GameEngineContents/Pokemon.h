@@ -15,12 +15,7 @@ public:
 
 	inline PokemonInfo* GetInfo()
 	{
-		return MyInfo_;
-	}
-
-	inline void SetInfo(PokemonInfo* _Info)
-	{
-		MyInfo_ = _Info;
+		return &MyInfo_;
 	}
 
 
@@ -28,6 +23,6 @@ protected:
 
 
 private:
-	PokemonInfo* MyInfo_;
+	PokemonInfo MyInfo_;
 };
 

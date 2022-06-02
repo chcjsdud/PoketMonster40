@@ -1,16 +1,12 @@
 #include "Pokemon.h"
 
 Pokemon::Pokemon() 
-	: MyInfo_(nullptr)
+	:MyInfo_()
 {
 }
 
 Pokemon::~Pokemon() 
 {
-	if (nullptr != MyInfo_)
-	{
-		delete MyInfo_;
-		MyInfo_ = nullptr;
-	}
+
 }
 

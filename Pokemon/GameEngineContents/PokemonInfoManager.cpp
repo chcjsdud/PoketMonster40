@@ -59,6 +59,8 @@ PokemonInfoManager::~PokemonInfoManager()
 			}
 		}
 	}
+
+
 }
 
 void PokemonInfoManager::Reset()
@@ -157,7 +159,6 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	Pokemon* NewPokemon = new Pokemon();
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
-	NewPokemon->SetInfo(new PokemonInfo());
 	NewPokemon->GetInfo()->SetName(_Name);
 	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
 	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
