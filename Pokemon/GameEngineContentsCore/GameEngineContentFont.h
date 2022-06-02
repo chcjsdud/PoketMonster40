@@ -126,6 +126,24 @@ public:
 		Off();
 	}
 
+
+	// 폰트가 출력되어있는지 확인하는 함수
+	// true : 있음
+	// false : 없음
+	inline bool IsRendererFont()
+	{
+		if (AllFontRenderer_.empty())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	}
+
+
 	const std::string& GetCurrentString() 
 	{
 		return CurrentString_;

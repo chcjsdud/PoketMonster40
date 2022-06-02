@@ -29,7 +29,7 @@ BattleInterface::BattleInterface()
 	, PlayerEnd(false)
 	, EmptyString_(false)
 	, BattleFont_(nullptr)
-	
+	, SkillUIPos_(0)
 {
 
 }
@@ -116,7 +116,13 @@ void BattleInterface::Render()
 
 void BattleInterface::Update()
 {
-	//MoveKey();
+	// 폰트제거
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	AllSkillFont_[i]->ClearCurrentFonts();
+	//}
+
+
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
@@ -158,15 +164,120 @@ void BattleInterface::Update()
 		}
 	}
 
-	for (int i = 0; i < 4; i++)
-	{
-		AllSkillFont_[i]->ClearCurrentFonts();
-	}
-
+	
 	if (CurOrder == BattleOrder::Fight)
 	{
 		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
+		ShowAndCheckSkillPos();
+	
+
 	}
+}
+
+void BattleInterface::ShowAndCheckSkillPos()
+{
+	switch (SkillUIPos_)
+	{
+	case 0:
+		Select->SetPivot({ -680.0f,-30.0f });
+		break;
+	case 1:
+		Select->SetPivot({ -380.0f,-30.0f });
+		break;
+	case 2:
+		Select->SetPivot({ -680.0f,35.0f });
+		break;
+	case 3:
+		Select->SetPivot({ -380.0f,35.0f });
+		break;
+	default:
+		break;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("SDown"))
+	{
+		switch (SkillUIPos_)
+		{
+		case 0:
+			SkillUIPos_ = 2;
+			break;
+		case 1:
+			SkillUIPos_ = 3;
+			break;
+		case 2:
+			SkillUIPos_ = 0;
+			break;
+		case 3:
+			SkillUIPos_ = 1;
+			break;
+		default:
+			break;
+		}
+	}
+	
+	if (GameEngineInput::GetInst()->IsDown("SUp"))
+	{
+		switch (SkillUIPos_)
+		{
+		case 0:
+			SkillUIPos_ = 2;
+			break;
+		case 1:
+			SkillUIPos_ = 3;
+			break;
+		case 2:
+			SkillUIPos_ = 0;
+			break;
+		case 3:
+			SkillUIPos_ = 1;
+			break;
+		default:
+			break;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("SLeft"))
+	{
+		switch (SkillUIPos_)
+		{
+		case 0:
+			SkillUIPos_ = 1;
+			break;
+		case 1:
+			SkillUIPos_ = 0;
+			break;
+		case 2:
+			SkillUIPos_ = 3;
+			break;
+		case 3:
+			SkillUIPos_ = 2;
+			break;
+		default:
+			break;
+		}
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("SRight"))
+	{
+		switch (SkillUIPos_)
+		{
+		case 0:
+			SkillUIPos_ = 1;
+			break;
+		case 1:
+			SkillUIPos_ = 0;
+			break;
+		case 2:
+			SkillUIPos_ = 3;
+			break;
+		case 3:
+			SkillUIPos_ = 2;
+			break;
+		default:
+			break;
+		}
+	}
+
 }
 
 
@@ -174,9 +285,13 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 {
 	std::vector<PokemonSkillInfo*>& Skill = _Pokemon->GetInfo()->GetSkill();
 
-	AllSkillFont_;
 	for (int i = 0; i < 4; i++)
 	{
+		if (AllSkillFont_[i]->IsRendererFont())
+		{
+			return;
+		}
+
 		if (Skill[i] == nullptr)
 		{
 			AllSkillFont_[i]->ShowString("-");
@@ -414,53 +529,9 @@ void BattleInterface::SelectOrder()
 {
 	if (InterfaceImage->IsUpdate() == true)
 	{
-		{
-			if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-			{	//싸우다 선택
-				CurOrder = BattleOrder::Fight;
-				GetSelect()->SetPivot({ -680.0f,-30.0f });//기술1번 위치
-			}
-			////////////////////////////////////////////////////////////////
-			//싸우다 안의 선택매뉴 조작(기술이 null이면 해당 기술칸으로 이동못하게 추가해야함)
-			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-			{	//1번기술에서 3번기술로
-				GetSelect()->SetPivot({ -680.0f,30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-			{	//3번기술에서 1번기술로
-				GetSelect()->SetPivot({ -680.0f,-30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-			{	//1번기술에서 2번기술로
-				GetSelect()->SetPivot({ -380.0f,-30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-			{	//2번기술에서 1번기술로
-				GetSelect()->SetPivot({ -680.0f,-30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == -30.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
-			{	//2번기술에서 4번기술로
-				GetSelect()->SetPivot({ -380.0f,30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
-			{	//4번기술에서 2번기술로
-				GetSelect()->SetPivot({ -380.0f,-30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -380.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
-			{	//4번기술에서 3번기술로
-				GetSelect()->SetPivot({ -680.0f,30.0f });
-			}
-
-			if ((GetSelect()->GetPivot().x == -680.0f && GetSelect()->GetPivot().y == 30.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
-			{	//3번기술에서 4번기술로
-				GetSelect()->SetPivot({ -380.0f,30.0f });
-			}
+		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
+		{	//싸우다 선택
+			CurOrder = BattleOrder::Fight;
 		}
 
 		if ((GetSelect()->GetPivot().x == -190.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -471,7 +542,6 @@ void BattleInterface::SelectOrder()
 		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//가방 선택
 			CurOrder = BattleOrder::Bag;
-
 		}
 
 		if ((GetSelect()->GetPivot().x == 30.0f && GetSelect()->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -495,6 +565,19 @@ void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
+
+	Reset();
+
+}
+
+void BattleInterface::StartTalk()
+{
+	Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
+}
+
+
+void BattleInterface::Reset()
+{
 	OneTalk = true;
 	BattleUnit->SetPlayerStop(false);
 	PlayerEnd = false;
@@ -506,9 +589,7 @@ void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
 	MyHP->Off();
 	EnemyHP->Off();
 	EXP->Off();
-}
 
-void BattleInterface::StartTalk()
-{
-	Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
+	// 스킬 마우스포인터
+	SkillUIPos_ = 0;
 }

@@ -130,6 +130,7 @@ public:
 	//
 	std::vector<GameEngineContentFont*> AllSkillFont_;
 	void ShowPokemonSkill(Pokemon* _Pokemon);
+	void ShowAndCheckSkillPos();
 	//
 
 	std::string AbilityString(PokemonAbility _Ability);
@@ -150,6 +151,9 @@ public:
 	
 private:
 	bool EmptyString_;
+	int SkillUIPos_;
+
+	void Reset();
 };
 
 // ¿Â¡ﬂ«ı : Test
