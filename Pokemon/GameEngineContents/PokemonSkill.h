@@ -1,6 +1,6 @@
 #pragma once
+#include "PokemonSkillInfo.h"
 
-class PokemonSkillInfo;
 class PokemonSkill
 {
 public:
@@ -12,19 +12,19 @@ public:
 	PokemonSkill& operator=(const PokemonSkill& _Other) = delete;
 	PokemonSkill& operator=(PokemonSkill&& _Other) noexcept = delete;
 
-	inline void SetInfo(PokemonSkillInfo* _Info)
-	{
-		MyInfo_ = _Info;
-	}
+	//inline void SetInfo(PokemonSkillInfo _Info)
+	//{
+	//	MyInfo_ = _Info;
+	//}
 
 	inline PokemonSkillInfo* GetInfo()
 	{
-		return MyInfo_;
+		return &MyInfo_;
 	}
 
 protected:
 
 private:
-	PokemonSkillInfo* MyInfo_;
+	PokemonSkillInfo MyInfo_;
 };
 

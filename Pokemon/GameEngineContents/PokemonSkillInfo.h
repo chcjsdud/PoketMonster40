@@ -75,20 +75,20 @@ public:
 		return Desc_;
 	}
 
-	PokemonSkillInfo& operator=(const PokemonSkillInfo& _Other)
-	{
-		PokemonSkillInfo* NewSKill = new PokemonSkillInfo();
+	//PokemonSkillInfo& operator=(const PokemonSkillInfo& _Other)
+	//{
+	//	PokemonSkillInfo* NewSKill = new PokemonSkillInfo();
 
-		NewSKill->SetName(_Other.GetNameConstRef());
-		NewSKill->SetPP(_Other.PP_);
-		NewSKill->SetValue(_Other.Value_);
-		NewSKill->SetSkillType(_Other.SkillType_);
-		NewSKill->SetEffect(_Other.Effect_);
-		NewSKill->SetDesc(_Other.Desc_);
-		NewSKill->SetType(_Other.Type_);
+	//	NewSKill->SetName(_Other.GetNameConstRef());
+	//	NewSKill->SetPP(_Other.PP_);
+	//	NewSKill->SetValue(_Other.Value_);
+	//	NewSKill->SetSkillType(_Other.SkillType_);
+	//	NewSKill->SetEffect(_Other.Effect_);
+	//	NewSKill->SetDesc(_Other.Desc_);
+	//	NewSKill->SetType(_Other.Type_);
 
-		return *NewSKill;
-	}
+	//	return *NewSKill;
+	//}
 
 protected:	
 

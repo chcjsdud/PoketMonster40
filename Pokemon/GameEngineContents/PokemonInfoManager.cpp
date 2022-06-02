@@ -10,6 +10,7 @@
 
 
 PokemonInfoManager* PokemonInfoManager::Inst_ = new PokemonInfoManager();
+int PokemonInfoManager::PokemonId_ = 0;
 
 PokemonInfoManager::PokemonInfoManager() 
 {
@@ -80,27 +81,27 @@ void PokemonInfoManager::Reset()
 		//Charmander: 파이리
 		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
 		//스킬 초기화
-		CharmanderInfo->AddMySkill(FindSkillInfo("Scratch"));
-		CharmanderInfo->AddMySkill(FindSkillInfo("Growl"));
+		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
+		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Squirtle: 꼬부기
 		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
-		SquirtleInfo->AddMySkill(FindSkillInfo("Tackle"));
-		SquirtleInfo->AddMySkill(FindSkillInfo("TailWhip"));
+		SquirtleInfo->AddMySkill(CreatePokemonSkill("Tackle"));
+		SquirtleInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 
 		//Bulbasaur: 이상해씨
 		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
-		BulbasaurInfo->AddMySkill(FindSkillInfo("Tackle"));
-		BulbasaurInfo->AddMySkill(FindSkillInfo("Growl"));
+		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Tackle"));
+		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Pidgey: 구구
 		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
-		PidgeyInfo->AddMySkill(FindSkillInfo("Tackle"));
+		PidgeyInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 
 		//Rattata: 꼬렛
 		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
-		RattataInfo->AddMySkill(FindSkillInfo("Tackle"));
-		RattataInfo->AddMySkill(FindSkillInfo("TailWhip"));
+		RattataInfo->AddMySkill(CreatePokemonSkill("Tackle"));
+		RattataInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 	}
 
 	{
@@ -109,56 +110,20 @@ void PokemonInfoManager::Reset()
 	}
 }
 
-void PokemonInfoManager::Update()
-{
-	
-}
 
-PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string& _Key)
-{
-	std::map<std::string, PokemonInfo*>::iterator FindIter = AllPokemonInfoList_.find(_Key);
 
-	if (FindIter == AllPokemonInfoList_.end())
-	{
-		return nullptr;
-	}
 
-	return FindIter->second;
-}
+//////////////////////////////////////////////////객체//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PokemonSkillInfo* PokemonInfoManager::FindSkillInfo(const std::string& _Key)
-{
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-	std::map<std::string, PokemonSkillInfo*>::iterator FindIter = AllSkillInfoList_.find(Key);
-
-	if (FindIter == AllSkillInfoList_.end())
-	{
-		return nullptr;
-	}
-
-	return FindIter->second;
-}
-
-ItemInfo* PokemonInfoManager::FindItemInfo(const std::string& _Key)
-{
-	std::string Key = GameEngineString::ToUpperReturn(_Key);
-
-	std::map<std::string, ItemInfo*>::iterator FindIter = AllItemInfoList_.find(Key);
-
-	if (FindIter == AllItemInfoList_.end())
-	{
-		return nullptr;
-	}
-
-	return FindIter->second;
-}
-
+//정보를 바탕으로 한 객체 생성 함수
+//정보와 객체를 따로 둔 이유: 정보를 객체에게 전달해주어 객체를 메모리 주소와 관계없이 여러 개 생성할 수 있도록 함
 Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 {
 	Pokemon* NewPokemon = new Pokemon();
 	PokemonInfo* MyInfo = FindPokemonInfo(_Name);
 
+	//정보를 복사
 	NewPokemon->GetInfo()->SetName(_Name);
 	NewPokemon->GetInfo()->SetMyType(MyInfo->GetMyType());
 	NewPokemon->GetInfo()->SetStatusEffect(MyInfo->GetStatusEffect());
@@ -175,7 +140,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
 	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
 	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
-	NewPokemon->GetInfo()->SetSkill(MyInfo->GetSkill()); //깊은 복사로 바꿔야함!!!!
+	NewPokemon->GetInfo()->SetSkill(MyInfo->GetSkill());
 	NewPokemon->GetInfo()->SetPokemonImage(_Name); 
 
 	CreateRandomNature(MyInfo);
@@ -183,6 +148,48 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	return NewPokemon;
 }
 
+PokemonSkill* PokemonInfoManager::CreatePokemonSkill(const std::string& _Name)
+{
+	PokemonSkill* NewPokemonSkill = new PokemonSkill();
+	PokemonSkillInfo* MyInfo = FindSkillInfo(_Name);
+
+	NewPokemonSkill->GetInfo()->SetName(MyInfo->GetNameCopy());
+	NewPokemonSkill->GetInfo()->SetType(MyInfo->GetType());
+	NewPokemonSkill->GetInfo()->SetSkillType(MyInfo->GetSkillType());
+	NewPokemonSkill->GetInfo()->SetValue(MyInfo->GetValue());
+	NewPokemonSkill->GetInfo()->SetDesc(MyInfo->GetDesc());
+	NewPokemonSkill->GetInfo()->SetPP(MyInfo->GetPP());
+	NewPokemonSkill->GetInfo()->SetEffect(MyInfo->GetEffect());
+
+	return NewPokemonSkill;
+}
+
+Item* PokemonInfoManager::CreateItem(const std::string& _Name)
+{
+	Item* NewItem = new Item();
+	ItemInfo* MyInfo = FindItemInfo(_Name);
+
+	NewItem->GetInfo()->SetName(MyInfo->GetNameCopy());
+	NewItem->GetInfo()->SetType(MyInfo->GetType());
+	NewItem->GetInfo()->SetValue(MyInfo->GetValue());
+	NewItem->GetInfo()->SetDesc(MyInfo->GetDesc());
+
+	return NewItem;
+}
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////정보//////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//정보 생성 함수
+//포인터 선언 이유: 값형으로 바꿔보았으나 전투 쪽 복사 생성자 오류 및 관리 난이도 상승
 PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
 {
 	PokemonInfo* NewPokemonInfo = new PokemonInfo();
@@ -311,16 +318,6 @@ PokemonSkillInfo* PokemonInfoManager::CreateSkillInfo(const std::string& _Key, i
 	return NewSkill;
 }
 
-PokemonSkill* PokemonInfoManager::CreatePokemonSkill(const std::string& _Name)
-{
-	PokemonSkill* NewPokemonSkill = new PokemonSkill();
-	PokemonSkillInfo* MyInfo = FindSkillInfo(_Name);
-
-	NewPokemonSkill->SetInfo(MyInfo);
-
-	return NewPokemonSkill;
-}
-
 ItemInfo* PokemonInfoManager::CreateItemInfo(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc)
 {
 	ItemInfo* NewItem = new ItemInfo();
@@ -334,15 +331,45 @@ ItemInfo* PokemonInfoManager::CreateItemInfo(const std::string& _Key, int _Value
 	return NewItem;
 }
 
-Item* PokemonInfoManager::CreateItem(const std::string& _Name)
+
+
+//정보 찾는 함수
+PokemonInfo* PokemonInfoManager::FindPokemonInfo(const std::string& _Key)
 {
-	Item* NewItem = new Item();
-	ItemInfo* MyInfo = FindItemInfo(_Name);
+	std::map<std::string, PokemonInfo*>::iterator FindIter = AllPokemonInfoList_.find(_Key);
 
-	NewItem->SetInfo(MyInfo);
+	if (FindIter == AllPokemonInfoList_.end())
+	{
+		return nullptr;
+	}
 
-	return NewItem;
+	return FindIter->second;
 }
 
+PokemonSkillInfo* PokemonInfoManager::FindSkillInfo(const std::string& _Key)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Key);
 
+	std::map<std::string, PokemonSkillInfo*>::iterator FindIter = AllSkillInfoList_.find(Key);
 
+	if (FindIter == AllSkillInfoList_.end())
+	{
+		return nullptr;
+	}
+
+	return FindIter->second;
+}
+
+ItemInfo* PokemonInfoManager::FindItemInfo(const std::string& _Key)
+{
+	std::string Key = GameEngineString::ToUpperReturn(_Key);
+
+	std::map<std::string, ItemInfo*>::iterator FindIter = AllItemInfoList_.find(Key);
+
+	if (FindIter == AllItemInfoList_.end())
+	{
+		return nullptr;
+	}
+
+	return FindIter->second;
+}

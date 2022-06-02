@@ -15,20 +15,15 @@ public:
 	Item& operator=(const Item& _Other) = delete;
 	Item& operator=(Item&& _Other) noexcept = delete;
 
-	inline void SetInfo(ItemInfo* _Info)
-	{
-		MyInfo_ = _Info;
-	}
-
 	inline ItemInfo* GetInfo()
 	{
-		return MyInfo_;
+		return &MyInfo_;
 	}
 
 protected:
 	virtual void Use() {}
 
 private:
-	ItemInfo* MyInfo_;
+	ItemInfo MyInfo_;
 };
 

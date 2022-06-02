@@ -12,8 +12,7 @@ class PokemonInfoManager
 {
 	// ¿Â¡ﬂ«ı : Debug
 	friend class BattleLevel;
-	friend class Bag;
-	//
+	friend class Bag;	
 
 private:
 	static PokemonInfoManager* Inst_;
@@ -43,7 +42,7 @@ public:
 	PokemonInfoManager& operator=(PokemonInfoManager&& _Other) noexcept = delete;
 
 	void Reset();
-	void Update();
+	void Update() {}
 	
 	PokemonInfo* FindPokemonInfo(const std::string& _Key);
 	PokemonSkillInfo* FindSkillInfo(const std::string& _Key);
@@ -56,6 +55,8 @@ public:
 protected:
 
 private:
+	static int PokemonId_;
+
 	std::map<std::string, PokemonInfo*> AllPokemonInfoList_;
 	std::map<std::string, PokemonSkillInfo*> AllSkillInfoList_;
 	std::map<std::string, ItemInfo*> AllItemInfoList_;

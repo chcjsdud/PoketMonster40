@@ -1,7 +1,7 @@
 #include "Item.h"
 
 Item::Item() 
-	: MyInfo_(nullptr)
+	: MyInfo_()
 {
 }
 

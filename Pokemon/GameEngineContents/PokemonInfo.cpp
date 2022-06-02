@@ -27,12 +27,21 @@ PokemonInfo::PokemonInfo()
 	, MySkillCount_(0)
 	, MyItem_(nullptr)
 {
-	MySkills_.resize(4);
-	MySkillCount_ = 0;
 }
 
 PokemonInfo::~PokemonInfo() 
 {
+	std::vector<PokemonSkill*>::iterator StartIter = MySkills_.begin();
+	std::vector<PokemonSkill*>::iterator EndIter = MySkills_.end();
+
+	for (; StartIter != EndIter; StartIter++)
+	{
+		if (nullptr != (*StartIter))
+		{
+			delete (*StartIter);
+			(*StartIter) = nullptr;
+		}
+	}
 }
 
 void PokemonInfo::SetPokemonImage(const std::string _Name)
@@ -46,14 +55,14 @@ void PokemonInfo::SetPokemonImage(const std::string _Name)
 	MyIconImage->Cut({ MyIconImage->GetScale().Half().x,MyIconImage->GetScale().y });
 }
 
-void PokemonInfo::AddMySkill(PokemonSkillInfo* _Skill)
+void PokemonInfo::AddMySkill(PokemonSkill* _Skill)
 {
-	if (4 <= MySkillCount_)
+	if (4 <= MySkills_.size())
 	{
 		return;
 	}
 
-	switch (MySkillCount_)
+	switch (MySkills_.size() - 1)
 	{
 	case 0:
 		if (nullptr == MySkills_[0])

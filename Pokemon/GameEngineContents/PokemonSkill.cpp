@@ -1,6 +1,7 @@
 #include "PokemonSkill.h"
 
 PokemonSkill::PokemonSkill() 
+	: MyInfo_()
 {
 }
 
