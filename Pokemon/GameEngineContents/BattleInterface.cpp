@@ -293,7 +293,7 @@ PokemonSkillInfo* BattleInterface::RandomPoeSkill(Pokemon* _Pokemon)
 	}
 	else
 	{
-		return _Pokemon->GetInfo()->GetSkill()[GameEngineRandom::GetRandom()->RandomInt(0, (size_t)(_Pokemon->GetInfo()->GetSkill().size() - 1))]->GetInfo();
+		return _Pokemon->GetInfo()->GetSkill()[GameEngineRandom::GetRandom()->RandomInt(0, (int)(_Pokemon->GetInfo()->GetSkill().size()) - 1)]->GetInfo();
 	}
 	return nullptr;
 }
