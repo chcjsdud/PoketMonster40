@@ -87,6 +87,7 @@ private:
 	float Alpha_;
 	
 	// 타일맵 및 이동관련
+	PokemonTileMap* BeforeTileMap_;
 	PokemonTileMap* CurrentTileMap_;
 	PokemonTileMap* NextTileMap_;
 	float4 CurrentTilePos_;
@@ -113,7 +114,6 @@ private:
 
 	void PlayerSetMove(float4 _Value);
 	bool PlayerMoveTileCheck(int _X, int _Y);
-	void MoveTile(PokemonTileMap* _Tile, float4 _Pos);
 	
 	void Camera();
 	void WMenuUISelect();

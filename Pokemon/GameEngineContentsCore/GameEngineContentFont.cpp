@@ -84,6 +84,9 @@ void GameEngineContentFont::Update()
 						case '-':
 							StringForRendererName = "Dash.bmp";
 							break;
+						case ':':
+							StringForRendererName = "Colon.bmp";
+							break;
 						default:
 							MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
 								break;
@@ -179,6 +182,9 @@ void GameEngineContentFont::Update()
 						break;
 					case '-':
 						StringForRendererName = "Dash.bmp";
+						break;
+					case ':':
+						StringForRendererName = "Colon.bmp";
 						break;
 					default:
 						MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
