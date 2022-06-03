@@ -2,6 +2,7 @@
 #include <GameEngine/GameEngineActor.h>
 #include "ContentEnum.h"
 #include <vector>
+#include "Item.h"
 
 enum class BagState
 {
@@ -34,7 +35,7 @@ public:
 
 	void MoveItem(); //아이템 이동
 	void MoveSelectArrow();
-	void ShowItemInfo(std::vector<class Item*>& _List); //현재 선택한 아이템의 정보
+	void ShowItemInfo(std::vector<Item*>& _List); //현재 선택한 아이템의 정보
 
 	void ActiveDialog(); //다이얼로그 활성화 체크
 	void MoveDialog();
@@ -45,16 +46,41 @@ public:
 	void UpFonts(); //아이템이 5개 이상일 경우 폰트 움직임
 	void DownFonts();
 	void HideFonts();
-	void ShowFonts(std::vector<class Item*>& _List);
+	void ShowFonts(std::vector<Item*>& _List);
 	void DestroyFonts(); //전체 폰트 삭제
 	void DestroyNameFonts(); //아이템 이름 삭제
 	void DestroyDescFonts(); //아이템 내용 삭제
 	void DestroyOverlapFonts(); //아이템 중복 삭제
 	void DestroyDialogFonts(); //다이얼로그 삭제
 
+	void Use(std::vector<Item*>& _List);
+	void Give(std::vector<Item*>& _List);
+	void Toss(std::vector<Item*>& _List);
+
 	inline void SetCurrentPokemon(class Pokemon* _Pokemon)
 	{
 		CurrentPokemon_ = _Pokemon;
+	}
+
+	inline void SetPlayerItemList(std::vector<Item*>&_List)
+	{
+		for (int i = 0; i < _List.size(); ++i)
+		{
+			if (ItemType::ITEM == _List[i]->GetInfo()->GetType())
+			{
+				ItemList_.push_back(_List[i]);
+			}
+			
+			else if (ItemType::KEYITEM == _List[i]->GetInfo()->GetType())
+			{
+				KeyItemList_.push_back(_List[i]);
+			}
+
+			else if (ItemType::BALL == _List[i]->GetInfo()->GetType())
+			{
+				BallList_.push_back(_List[i]);
+			}
+		}
 	}
 
 protected:

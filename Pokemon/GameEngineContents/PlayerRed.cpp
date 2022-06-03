@@ -335,6 +335,13 @@ void PlayerRed::Start()
 
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition());
+
+
+	//플레이어 아이템
+	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
+	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
 }
 
 void PlayerRed::Update()
@@ -1593,6 +1600,7 @@ void PlayerRed::UIUpdate()
 			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
 			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(MyItemList_);
 			dynamic_cast<Bag*>(ChildUI_)->BagInit();
 		}
 

@@ -17,7 +17,9 @@ enum class PokemonType
 	BUG, //벌레
 	ROCK, //바위
 	GHOST, //고스트
-	DRAGON //드래곤
+	DRAGON, //드래곤
+	DARK, //악
+	STEEL //강철
 };
 
 //포켓몬 상태 이상

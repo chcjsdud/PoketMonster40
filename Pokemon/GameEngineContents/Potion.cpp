@@ -16,5 +16,6 @@ void Potion::Recovery(PokemonInfo* _MyPokemon)
 
 void Potion::Use()
 {
+	//상처약 기능
 }
 

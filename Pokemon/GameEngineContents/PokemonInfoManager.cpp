@@ -76,36 +76,6 @@ PokemonInfoManager::~PokemonInfoManager()
 		}
 	}
 
-	//게임의 모든 스킬 및 아이템 삭제
-	{
-		std::vector<PokemonSkill*>::iterator StartIter = AllPokemonSkillList_.begin();
-		std::vector<PokemonSkill*>::iterator EndIter = AllPokemonSkillList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if (nullptr != (*StartIter))
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
-	{
-		std::vector<Item*>::iterator StartIter = AllItemList_.begin();
-		std::vector<Item*>::iterator EndIter = AllItemList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if (nullptr != (*StartIter))
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
-
 
 
 }
@@ -428,6 +398,7 @@ ItemInfo* PokemonInfoManager::CreateItemInfo(const std::string& _Key, int _Value
 	NewItem->SetName(Key);
 	NewItem->SetValue(_Value);
 	NewItem->SetDesc(_Desc);
+	NewItem->SetType(_Type);
 
 	AllItemInfoList_.insert(std::make_pair(Key, NewItem));
 	return NewItem;

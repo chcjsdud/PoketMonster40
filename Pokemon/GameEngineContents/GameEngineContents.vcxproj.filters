@@ -360,9 +360,6 @@
     <Filter Include="WorldMap\TileMap\Base">
       <UniqueIdentifier>{0e063a61-ecff-4cac-921d-6054f0319a62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NPC">
-      <UniqueIdentifier>{e7be6c1a-1008-4b43-b5e6-bf71997e81d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Battle\Skill">
       <UniqueIdentifier>{c721bc5a-4542-48d6-a2be-bc721581844c}</UniqueIdentifier>
     </Filter>
@@ -371,6 +368,9 @@
     </Filter>
     <Filter Include="WorldMap\UI">
       <UniqueIdentifier>{b3b1a769-900c-4746-87ba-1ec67e9e5604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NPC">
+      <UniqueIdentifier>{e7be6c1a-1008-4b43-b5e6-bf71997e81d5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
