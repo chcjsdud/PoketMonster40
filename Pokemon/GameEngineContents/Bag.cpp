@@ -600,12 +600,12 @@ void Bag::SelectDialog()
 				BagState_ = BagState::ItemGive;
 			}
 
-			CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
-			Item* NewItem = ItemList_.back();
-			delete NewItem;
-			NewItem = nullptr;
-			ItemList_.pop_back();
-			ShowFonts(ItemList_);
+			//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
+			//Item* NewItem = ItemList_.back();
+			//delete NewItem;
+			//NewItem = nullptr;
+			//ItemList_.pop_back();
+			//ShowFonts(ItemList_);
 		}
 
 		if (ItemType::BALL == BagType_)
@@ -837,7 +837,7 @@ void Bag::BagInit()
 
 	ChangeBag();
 
-	CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
+	//CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition());
 }
@@ -1037,23 +1037,24 @@ void Bag::DestroyBag()
 
 	SelectArrow_->Death(); //아이템 선택 화살표
 
-	{
-		std::vector<Item*>::iterator StartIter = ItemList_.begin();
-		std::vector<Item*>::iterator EndIter = ItemList_.end();
+	//아이템은 아무데서나 지우면 안된다
+	//{
+	//	std::vector<Item*>::iterator StartIter = ItemList_.begin();
+	//	std::vector<Item*>::iterator EndIter = ItemList_.end();
 
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
+	//	for (; StartIter != EndIter; ++StartIter)
+	//	{
+	//		if ((*StartIter) != nullptr)
+	//		{
+	//			delete (*StartIter);
+	//			(*StartIter) = nullptr;
+	//		}
+	//	}
+	//}
 
-	ItemList_.clear();
+	//ItemList_.clear();
 
-	{
+	/*{
 		std::vector<Item*>::iterator StartIter = KeyItemList_.begin();
 		std::vector<Item*>::iterator EndIter = KeyItemList_.end();
 
@@ -1083,16 +1084,18 @@ void Bag::DestroyBag()
 		}
 	}
 
-	BallList_.clear();
+	BallList_.clear();*/
 
 	ItemPreview_->Death(); //현재 선택한 아이템 이미지
 
 	DestroyFonts();
 
-	CurrentItem_ = nullptr;
+	//아이템은 아무데서나 지우면 안된다
+	//CurrentItem_ = nullptr;
 
-	delete CurrentPokemon_; //받아올 때는 지우자
-	CurrentPokemon_ = nullptr;
+	//포켓몬은 아무데서나 지우면 안된다
+	//delete CurrentPokemon_; //받아올 때는 지우자
+	//CurrentPokemon_ = nullptr;
 
 	FadeActor_->Death();
 
