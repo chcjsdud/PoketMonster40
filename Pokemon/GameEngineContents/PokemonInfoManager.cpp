@@ -19,6 +19,7 @@ PokemonInfoManager::PokemonInfoManager()
 
 PokemonInfoManager::~PokemonInfoManager() 
 {
+	//게임의 모든 포켓몬 및 포켓몬, 스킬, 아이템 정보 삭제
 	{
 		std::map<int, Pokemon*>::iterator StartIter = AllPokemonList_.begin();
 		std::map<int, Pokemon*>::iterator EndIter = AllPokemonList_.end();
@@ -75,6 +76,7 @@ PokemonInfoManager::~PokemonInfoManager()
 		}
 	}
 
+	//게임의 모든 스킬 및 아이템 삭제
 	{
 		std::vector<PokemonSkill*>::iterator StartIter = AllPokemonSkillList_.begin();
 		std::vector<PokemonSkill*>::iterator EndIter = AllPokemonSkillList_.end();
@@ -89,7 +91,6 @@ PokemonInfoManager::~PokemonInfoManager()
 		}
 	}
 
-
 	{
 		std::vector<Item*>::iterator StartIter = AllItemList_.begin();
 		std::vector<Item*>::iterator EndIter = AllItemList_.end();
@@ -103,6 +104,10 @@ PokemonInfoManager::~PokemonInfoManager()
 			}
 		}
 	}
+
+
+
+
 }
 
 void PokemonInfoManager::Reset()
