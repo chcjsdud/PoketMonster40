@@ -1,6 +1,7 @@
 #include "CenterChoiceOption.h"
 #include <GameEngineBase/GameEngineInput.h>
 #include "InteractionText.h"
+#include "NPC6.h"
 
 CenterChoiceOption::CenterChoiceOption() 
 	: UIRenderer_(nullptr)
@@ -56,29 +57,6 @@ void CenterChoiceOption::Update()
 	}
 
 	ArrowRenderer_->SetPivot(ArrowPos_[CurrentIndex_]);
-
-	bool isOn_ = false;
-	if (GetAccTime() <= 2.0f && false == isOn_)
-	{
-		isOn_ = true;
-		ParentText_->ClearText();
-		ParentText_->AddText("1");
-		ParentText_->Setting();
-	}
-	else if (GetAccTime() <= 4.0f && true == isOn_)
-	{
-		isOn_ = false;
-		ParentText_->ClearText();
-		ParentText_->AddText("2");
-		ParentText_->Setting();
-	}
-	//else if (GetAccTime() <= 6.0f && false == isOn_)
-	//{
-	//	isOn_ = true;
-	//	ParentText_->ClearText();
-	//	ParentText_->AddText("3");
-	//	ParentText_->Setting();
-	//}
 }
 
 void CenterChoiceOption::SelectIndex()
@@ -92,13 +70,9 @@ void CenterChoiceOption::SelectIndex()
 		ParentText_->ClearText();
 		ParentText_->AddText("Okay, I'll take your POKEMON for a");
 		ParentText_->AddText("few seconds.");
-		// Left 전환 후 포켓볼 -> Down 전환
-		ParentText_->AddText("Thank you for waiting.");
-		ParentText_->AddText("We've restored your POKEMON to");
-		ParentText_->AddText("full health.");
-		// Amin 후 다시 Down 전환
-		ParentText_->AddText("We hope to see you again!");
 		ParentText_->Setting();
+		ParentText_->ZIgnore_ = true;
+		NPC6::Text_ = ParentText_;
 	}
 		break;
 	case 1:

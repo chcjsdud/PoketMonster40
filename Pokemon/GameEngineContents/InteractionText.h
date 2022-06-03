@@ -23,6 +23,10 @@ public:
 	void Setting();
 	void ChoiceEnd();
 
+	static bool IsCenterMove_;
+	static bool IsCenterAnim_;
+	bool ZIgnore_;
+
 protected:
 
 private:
@@ -38,5 +42,6 @@ private:
 	void Start() override;
 	void Update() override;
 	void MakeChoiceOption();
+	void WaitingMoveAnim();
 };
 

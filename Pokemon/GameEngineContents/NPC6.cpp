@@ -1,16 +1,82 @@
 #include "NPC6.h"
+#include <GameEngineBase/GameEngineTime.h>
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 
 #include "NPCBase.h"
 #include "RoomTileMap5.h"
+#include "InteractionText.h"
+
+bool NPC6::InteractionMove_ = false;
+bool NPC6::InteractionAnim_ = false;
+InteractionText* NPC6::Text_ = nullptr;
 
 NPC6::NPC6() 
+	: InteractionTime_(0.0f)
 {
 }
 
 NPC6::~NPC6() 
 {
+}
+
+void NPC6::InteractionMove()
+{
+	if (true == InteractionMove_)
+	{
+		InteractionTime_ += GameEngineTime::GetDeltaTime();
+
+		if (false == NPCRender_->IsAnimationName("IdleLeft"))
+		{
+			NPCRender_->ChangeAnimation("IdleLeft");
+		}
+
+		if (2.0f <= InteractionTime_)
+		{
+			NPCRender_->ChangeAnimation("IdleDown");
+			InteractionTime_ = 0.0f;
+			InteractionMove_ = false;
+			Text_->ClearText();
+			Text_->AddText("Thank you for waiting.");
+			Text_->AddText("We've restored your POKEMON to");
+			Text_->AddText("full health.");
+			Text_->Setting();
+			Text_->ZIgnore_ = false;
+			InteractionText::IsCenterMove_ = false;
+			return;
+		}
+	}
+}
+
+void NPC6::InteractionAnim()
+{
+	if (true == InteractionAnim_)
+	{
+		InteractionTime_ += GameEngineTime::GetDeltaTime();
+
+		if (nullptr == Text_)
+		{
+			return;
+		}
+
+		if (false == NPCRender_->IsAnimationName("Anim"))
+		{
+			NPCRender_->ChangeAnimation("Anim");
+		}
+
+		if (1.0f <= InteractionTime_)
+		{
+			NPCRender_->ChangeAnimation("IdleDown");
+			InteractionTime_ = 0.0f;
+			InteractionAnim_ = false;
+			Text_->ClearText();
+			Text_->AddText("We hope to see you again!");
+			Text_->Setting();
+			Text_->ZIgnore_ = false;
+			InteractionText::IsCenterAnim_ = false;
+			return;
+		}
+	}
 }
 
 void NPC6::Start()
@@ -64,5 +130,7 @@ void NPC6::Start()
 
 void NPC6::Update()
 {
+	InteractionMove();
+	InteractionAnim();
 }
 

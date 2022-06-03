@@ -3,9 +3,12 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include "PlayerRed.h"
 #include "NPCBase.h"
+#include "NPC6.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
 
+bool InteractionText::IsCenterMove_ = false;
+bool InteractionText::IsCenterAnim_ = false;
 InteractionText::InteractionText() 
 	: UIRenderer_(nullptr)
 	, ArrowRenderer_(nullptr)
@@ -14,6 +17,7 @@ InteractionText::InteractionText()
 	, IsShop_(false)
 	, IsCenter_(false)
 	, IsChoice_(false)
+	, ZIgnore_(false)
 {
 }
 
@@ -66,6 +70,7 @@ void InteractionText::ChoiceEnd()
 	{
 		PlayerRed::MainRed_->SetInteraction(false);
 		Fonts->EndFont();
+		NPC6::Text_ = nullptr;
 		Death();
 	}
 }
@@ -95,6 +100,15 @@ void InteractionText::Update()
 	{
 		IsCenter_ = true;
 	}
+	else if (Fonts->GetCurrentString() == "few seconds.")
+	{
+		IsCenterMove_ = true;
+	}
+	else if (Fonts->GetCurrentString() == "full health.")
+	{
+		IsCenterAnim_ = true;
+		ZIgnore_ = true;
+	}
 
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
@@ -105,19 +119,30 @@ void InteractionText::Update()
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
 			Fonts->NextString();
+			IsCenterMove_ = false;
+			//IsCenterAnim_ = false;
 		}
 	}
 	// 다음 문장이 없을 때 == 끝났을 때
 	if (Fonts->IsEnd())
 	{
 		MakeChoiceOption();
+		WaitingMoveAnim();
+
+		if (true == ZIgnore_)
+		{
+			return;
+		}
 
 		// 대화가 끝났을 때 z 키누르면 종료
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
 			PlayerRed::MainRed_->SetInteraction(false);
 			NPCBase::NPC_->SetNPCInteraction(false);
+			IsCenterMove_ = false;
+			IsCenterAnim_ = false;
 			Fonts->EndFont();
+			NPC6::Text_ = nullptr;
 			Death();
 		}
 	}
@@ -140,5 +165,22 @@ void InteractionText::MakeChoiceOption()
 		TmpOption->SetParent(this);
 		IsChoice_ = true;
 		return;
+	}
+}
+
+void InteractionText::WaitingMoveAnim()
+{
+	if (true == NPC6::InteractionMove_ || true == NPC6::InteractionAnim_)
+	{
+		return;
+	}
+
+	if (true == IsCenterMove_)
+	{
+		NPC6::InteractionMove_ = true;
+	}
+	if (true == IsCenterAnim_)
+	{
+		NPC6::InteractionAnim_ = true;
 	}
 }
