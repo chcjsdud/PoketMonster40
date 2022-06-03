@@ -66,6 +66,21 @@ public:
 		return Rot;
 	}
 
+	////////////////////////////////////////////////////////////////////////
+	//김예나 : 6월2일 회전값 조절용(꼬리흔들기 무빙용) 수정함수 (가로로 길게 세로로 짧게 타원형으로 돎)
+	static float4 KYN_VectorRotationToDegreeZ(const float4& _Value, float _Degree)
+	{
+		return KYN_VectorRotationToRadianZ(_Value, _Degree * GameEngineMath::DegreeToRadian);
+	}
+	static float4 KYN_VectorRotationToRadianZ(const float4& _Value, float _Radian)
+	{
+		float4 Rot;
+		Rot.x = (_Value.x * cosf(_Radian) - _Value.y * sinf(_Radian))/3 -200.0f;
+		Rot.y = (_Value.x * sinf(_Radian) + _Value.y * cosf(_Radian))/20 +63.0f;
+		return Rot;
+	}
+	///////////////////////////////////////////////////////////////////////
+
 	static float4 Lerp(float4 p1, float4 p2, float Time)
 	{
 		return p1 * (1.0f - Time) + p2 * Time;

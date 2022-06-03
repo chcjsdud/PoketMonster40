@@ -59,6 +59,10 @@ private:
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
 	float TimeCheck;
 
+	float MyMoveTime;//김예나: 내 푸키먼 공격시 타임체크해서 그 시간을 기반으로 움직이게끔
+	bool MyTurnEnd;//김예나: 내 푸키먼 공격무빙이 끝나면 MoveTime초기화용
+	float Angle;//회전용..?
+
 	class BattleLevel* Level_;
 	class BattleData* BattleDataR_;
 
@@ -73,6 +77,8 @@ public:
 	{
 		PlayerStop = Value;
 	}
-
+	//김예나 전투 무빙 추가중(6월 2일)
+	void Tackle();
+	void TailWhipMove();
 };
 

@@ -25,6 +25,9 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, MonsterBall(nullptr)
 	, BattleDataR_(nullptr)
 	, Level_(nullptr)
+	, MyMoveTime(0.0f)
+	, MyTurnEnd(false)
+	, Angle(0.0f)
 {
 }
 
@@ -126,6 +129,8 @@ void BattleUnitRenderer::Update()
 					BattleInter->GetInterfaceImage()->On();
 					BattleInter->GetSelect()->On();
 					DoomChit();
+					TailWhipMove();
+					//Tackle();
 					BattleInter->DoomChit();
 				}
 			}
@@ -205,18 +210,6 @@ void BattleUnitRenderer::ShowDebugValue()
 	}
 }
 
-void BattleUnitRenderer::DoomChit()
-{
-	if ((int)TimeCheck % 2 == 0)
-	{
-		PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
-	}
-
-	if ((int)TimeCheck % 2 == 1)
-	{
-		PlayerCurrentPokemon_->SetPivot({ -220, 61 });
-	}
-}
 
 void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
@@ -249,6 +242,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	PlayerRenderer_->On();
 	PlayerRenderer_->ChangeAnimation("Stop");
 	PlayerCurrentPokemon_->Off();
+	PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
 	PoeCurrentPokemon_->On();
 	MonsterBall->Off();
 	MonsterBall->SetPivot({ -220.0f,-30.0f });
@@ -267,5 +261,94 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		PoeCurrentPokemon_->Off();
 		PlayerRenderer_->Off();
 		MonsterBall->Off();
+		MyMoveTime = 0.0f;
+		MyTurnEnd = false;
+	}
+}
+
+void BattleUnitRenderer::DoomChit()
+{
+	if ((int)TimeCheck % 2 == 0)
+	{
+		PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
+	}
+
+	if ((int)TimeCheck % 2 == 1)
+	{
+		PlayerCurrentPokemon_->SetPivot({ -220, 61 });
+	}
+}
+
+void BattleUnitRenderer::Tackle()
+{
+	float X = PlayerCurrentPokemon_->GetPivot().x;
+
+	if (MyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+
+		if (MyMoveTime <= 0.3f)
+		{
+			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),43.0f });
+		}
+		if (MyMoveTime >= 0.1f)
+		{
+			PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
+			//적 피격시 적 HPUI이미지 들썩
+			BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-440.0f });
+		}
+
+		{	//적 푸키먼 피격 반짝반짝
+			if (MyMoveTime >= 0.2f)
+			{
+				PoeCurrentPokemon_->SetAlpha(55);
+				//적 HPUI이미지 제자리로
+				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-420.0f });
+			}
+			if (MyMoveTime >= 0.3f)
+			{
+				PoeCurrentPokemon_->SetAlpha(255);
+				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
+			}
+			if (MyMoveTime >= 0.4f)
+			{
+				PoeCurrentPokemon_->SetAlpha(55);
+			}
+			if (MyMoveTime >= 0.5f)
+			{
+				PoeCurrentPokemon_->SetAlpha(255);
+				MyTurnEnd = true;
+			}
+		}
+	}
+	if (MyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
+	}
+}
+
+void BattleUnitRenderer::TailWhipMove()
+{
+	//꼬리흔들기 : 렌더러 회전은 그대로 무빙이 원형으로 무빙x2(자전x, 공전o)
+
+	float4 GongJeon = PlayerCurrentPokemon_->GetPivot();
+	Angle += GameEngineTime::GetDeltaTime() * 360.0f;
+
+	if (MyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+		if (MyMoveTime <= 2.2f)
+		{
+			PlayerCurrentPokemon_->SetPivot(GongJeon.KYN_VectorRotationToDegreeZ(PlayerPokemonPos_, Angle));
+		}
+		if (MyMoveTime > 2.2f)
+		{
+			PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
+			MyTurnEnd = true;
+		}
+	}
+	if (MyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
 	}
 }
