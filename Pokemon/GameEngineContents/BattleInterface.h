@@ -130,10 +130,6 @@ public:
 
 
 	// string 없을때 호출해서 생략시키는 함수
-	inline void SetEmptyString()
-	{
-		EmptyString_ = true;
-	}
 
 	inline bool IsEndString()
 	{
@@ -142,7 +138,6 @@ public:
 
 
 private:
-	bool EmptyString_;
 	int SkillUIPos_;
 	PokemonSkillInfo* RandomPoeSkill(Pokemon* _Pokemon);
 

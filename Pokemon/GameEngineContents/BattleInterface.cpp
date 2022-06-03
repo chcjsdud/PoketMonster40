@@ -28,7 +28,6 @@ BattleInterface::BattleInterface()
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, PlayerEnd(false)
-	, EmptyString_(false)
 	, BattleFont_(nullptr)
 	, SkillUIPos_(0)
 {
@@ -341,21 +340,17 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 
 bool BattleInterface::BattleKey()
 {
-	if (EmptyString_ == false)
+	if (GameEngineInput::GetInst()->IsDown("SSelect"))
 	{
-		if (GameEngineInput::GetInst()->IsDown("SSelect"))
+		if (BattleFont_->IsEnd())
 		{
-			if (BattleFont_->IsEnd())
-			{
-				BattleFont_->EndFont();
-				Level_->EndFont_ = true;
-				return true;
-			}
+			BattleFont_->EndFont();
+			Level_->EndFont_ = true;
+			return true;
 		}
 	}
-	else
+	else if (!BattleFont_->IsRendererFont())
 	{
-		EmptyString_ = false;
 		return true;
 	}
 	return false;
@@ -420,25 +415,25 @@ std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 	switch (_Ability)
 	{
 	case PokemonAbility::Att:
-		return "ATTACK";
+		return "Attack";
 		break;
 	case PokemonAbility::Def:
-		return "DEFENSE";
+		return "Defense";
 		break;
 	case PokemonAbility::SpAtt:
-		return "SPECIAL ATTACK";
+		return "Special Attack";
 		break;
 	case PokemonAbility::SpDef:
-		return "SPECIAL DEFENSE";
+		return "Special Defense";
 		break;
 	case PokemonAbility::Speed:
-		return "SPEED";
+		return "Speed";
 		break;
 	case PokemonAbility::Accuracy:
-		return "ACCURACY";
+		return "Accuracy";
 		break;
 	case PokemonAbility::Evasion:
-		return "EVASION";
+		return "Evasion";
 		break;
 	default:
 		break;

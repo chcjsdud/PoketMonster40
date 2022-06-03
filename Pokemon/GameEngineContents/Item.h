@@ -19,8 +19,8 @@ public:
 	}
 
 
-protected:
 	virtual void Use() {}
+protected:
 
 private:
 	ItemInfo MyInfo_;

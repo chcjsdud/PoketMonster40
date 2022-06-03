@@ -610,16 +610,28 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		{
 			//이펙트
 			//포켓몬 흔들고 체력 다는 효과 추가
-
 			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
 			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
 			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
-			Interface_->SetEmptyString(); // 디버깅
 			CurrentFont_ = Battlefont::Wait;
 		}
 
 		break;
 		case SkillType::Status:
+		{
+			if (_Skill->GetNameConstRef() == "TAILWHIP")
+			{
+				//TailWhipMove();
+				CurrentFont_ = Battlefont::Wait;
+			}
+			else if (_Skill->GetNameConstRef() == "GROWL")
+			{
+				//TailWhipMove();
+				CurrentFont_ = Battlefont::Wait;
+			}
+
+		}
+
 			// 꼬리흔들기 등 이펙트 구현, 포켓몬에게 랭크 적용
 			break;
 		default:
@@ -635,9 +647,21 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			Interface_->ShowCriticalHitString();
 			FristTurn_->Critical_ = false;
 		}
-		else if (/*추가 랭크 적용*/false)
+		else if (AttSkillType == SkillType::Status)
 		{
-
+			if (_Skill->GetNameConstRef() == "TAILWHIP")
+			{
+				Interface_->ShowRankUpAndDown(_Def->Pokemon_->GetInfo()->GetNameConstRef(), PokemonAbility::Def, -1);
+				_Def->SetRank(PokemonAbility::Def, -1);
+			}
+			else if (_Skill->GetNameConstRef() == "GROWL")
+			{
+				Interface_->ShowRankUpAndDown(_Def->Pokemon_->GetInfo()->GetNameConstRef(), PokemonAbility::Att, -1);
+				_Def->SetRank(PokemonAbility::Att, -1);
+			}
+			PlayerFirst_ = !PlayerFirst_;
+			CurrentFont_ = Battlefont::None;
+			return true;
 		}
 		else
 		{
@@ -650,7 +674,6 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 					switch (_Turn->DamageType_)
 					{
 					case DamageType::Nomal:
-						Interface_->SetEmptyString();
 						break;
 					case DamageType::Great:
 						Interface_->ShowSupperEffectString();
