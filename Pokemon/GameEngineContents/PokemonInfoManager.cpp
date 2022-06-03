@@ -75,7 +75,34 @@ PokemonInfoManager::~PokemonInfoManager()
 		}
 	}
 
+	{
+		std::vector<PokemonSkill*>::iterator StartIter = AllPokemonSkillList_.begin();
+		std::vector<PokemonSkill*>::iterator EndIter = AllPokemonSkillList_.end();
 
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if (nullptr != (*StartIter))
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
+
+
+	{
+		std::vector<Item*>::iterator StartIter = AllItemList_.begin();
+		std::vector<Item*>::iterator EndIter = AllItemList_.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			if (nullptr != (*StartIter))
+			{
+				delete (*StartIter);
+				(*StartIter) = nullptr;
+			}
+		}
+	}
 }
 
 void PokemonInfoManager::Reset()
@@ -95,7 +122,7 @@ void PokemonInfoManager::Reset()
 		//Charmander: 파이리
 		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
 		//스킬 초기화
-		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
+		CharmanderInfo->AddMySkill(CreatePokemonSkill("Scratch"));
 		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Squirtle: 꼬부기
@@ -122,6 +149,10 @@ void PokemonInfoManager::Reset()
 		ItemInfo* MonsterBall = CreateItemInfo("Pokeball", 10, ItemType::BALL, "A Ball thrown to catch a Pokemon.\\It is designed in a capsule style.");
 		ItemInfo* Potion = CreateItemInfo("Potion", 10, ItemType::ITEM, "A Potion is an item that\\heals 20 HP of a Pokemon.");
 	}
+
+
+	//디버깅 포켓몬
+	Pokemon* pokemon = CreatePokemon("Rattata");
 }
 
 
@@ -155,12 +186,21 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 	NewPokemon->GetInfo()->SetSpeed(MyInfo->GetSpeed());
 	NewPokemon->GetInfo()->SetIsPlayer(MyInfo->GetIsPlayer());
 	NewPokemon->GetInfo()->SetGender(MyInfo->GetGender());
-	NewPokemon->GetInfo()->SetSkill(MyInfo->GetSkill());
 	NewPokemon->GetInfo()->SetPokemonImage(_Name); 
+
+	for (int i = 0; i < MyInfo->GetSkill().size(); ++i)
+	{
+		std::vector<PokemonSkill*> SkillList = MyInfo->GetSkill();
+
+		PokemonSkill* NewnSkill = CreatePokemonSkill(SkillList[i]->GetInfo()->GetNameCopy());
+		NewPokemon->GetInfo()->AddMySkill(NewnSkill);
+	}
 
 	CreateRandomNature(MyInfo);
 
 	++PokemonId_;
+
+	AllPokemonList_.insert(std::make_pair(NewPokemon->GetInfo()->GetMyId(), NewPokemon));
 
 	return NewPokemon;
 }
@@ -215,12 +255,13 @@ PokemonSkill* PokemonInfoManager::CreatePokemonSkill(const std::string& _Name)
 	NewPokemonSkill->GetInfo()->SetPP(MyInfo->GetPP());
 	NewPokemonSkill->GetInfo()->SetEffect(MyInfo->GetEffect());
 
+	AllPokemonSkillList_.push_back(NewPokemonSkill);
 	return NewPokemonSkill;
 }
 
 Item* PokemonInfoManager::CreateItem(const std::string& _Name)
 {
-	Item* NewItem = new Item();
+	Item* NewItem = new Item();	
 	ItemInfo* MyInfo = FindItemInfo(_Name);
 
 	NewItem->GetInfo()->SetName(MyInfo->GetNameCopy());
@@ -228,6 +269,7 @@ Item* PokemonInfoManager::CreateItem(const std::string& _Name)
 	NewItem->GetInfo()->SetValue(MyInfo->GetValue());
 	NewItem->GetInfo()->SetDesc(MyInfo->GetDesc());
 
+	AllItemList_.push_back(NewItem);
 	return NewItem;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <vector>
 #include <string>
 #include "ContentEnum.h"
 #include <GameEngineBase/GameEngineString.h>
@@ -60,6 +61,9 @@ private:
 	static int PokemonId_;
 
 	std::map<int, Pokemon*> AllPokemonList_;
+	std::vector<PokemonSkill*> AllPokemonSkillList_;
+	std::vector<Item*> AllItemList_;
+
 	std::map<std::string, PokemonInfo*> AllPokemonInfoList_;
 	std::map<std::string, PokemonSkillInfo*> AllSkillInfoList_;
 	std::map<std::string, ItemInfo*> AllItemInfoList_;

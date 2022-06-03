@@ -43,10 +43,10 @@ BattleLevel::~BattleLevel()
 	}
 	if (Opponent_ != nullptr)
 	{
-		delete Opponent_->GetPokemonList()[0];
-		//		delete PlayerRed_->GetPokemonList().front();
-		PlayerRed_ = nullptr;
-		Opponent_ = nullptr;
+		//
+		////		delete PlayerRed_->GetPokemonList().front();
+		//PlayerRed_ = nullptr;
+		//Opponent_ = nullptr;
 	}
 
 	if (BattleManager_ != nullptr)
@@ -193,7 +193,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 			//PlayerRed_->GetPokemonList().clear();
 		for (auto& Iter : Opponent_->GetPokemonList())
 		{
-			delete Iter;
+			PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
 		}
 		Opponent_->GetPokemonList().clear();
 
@@ -201,6 +201,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		delete BattleData_;
 		BattleData_ = nullptr;
 	}
+
 }
 
 void BattleLevel::ShowEndding()

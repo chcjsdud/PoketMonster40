@@ -254,17 +254,19 @@ public:
 	//스킬 관련 함수
 	void AddMySkill(PokemonSkill* _Skill);
 
-	inline void SetSkill(std::vector<PokemonSkill*>& _Skills)
-	{
-		for (int i = 0; i < _Skills.size(); i++)
-		{
-			if (nullptr != _Skills[i])
-			{
-				PokemonSkill* Skill = new PokemonSkill();
-				MySkills_.push_back(Skill);
-			}
-		}
-	}
+	void changeMySkill(int _Index, PokemonSkill* _Skill);
+
+	//inline void SetSkill(std::vector<PokemonSkill*>& _Skills)
+	//{
+	//	for (int i = 0; i < _Skills.size(); ++i)
+	//	{
+	//		if (nullptr != _Skills[i])
+	//		{
+	//			PokemonSkill* Skill = new PokemonSkill();
+	//			MySkills_.push_back(Skill);
+	//		}
+	//	}
+	//}
 
 	inline std::vector<PokemonSkill*>& GetSkill()
 	{
@@ -311,7 +313,6 @@ private:
 	std::string MyIcon_; //지닌 포켓몬 아이콘
 
 	std::vector<PokemonSkill*> MySkills_;
-	int MySkillCount_;
 
 	Item* MyItem_;
 };

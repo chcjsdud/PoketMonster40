@@ -24,25 +24,23 @@ PokemonInfo::PokemonInfo()
 	, MyProfile_()
 	, MyIcon_()
 	, MySkills_{}
-	, MySkillCount_(0)
 	, MyItem_(nullptr)
 {
 }
 
 PokemonInfo::~PokemonInfo() 
 {
-	//자신이 가지고 있는 스킬을 삭제(이 스킬은 인포매니저에서 삭제해주지 않는다)
-	std::vector<PokemonSkill*>::iterator StartIter = MySkills_.begin();
-	std::vector<PokemonSkill*>::iterator EndIter = MySkills_.end();
+	//std::vector<PokemonSkill*>::iterator StartIter = MySkills_.begin();
+	//std::vector<PokemonSkill*>::iterator EndIter = MySkills_.end();
 
-	for (; StartIter != EndIter; StartIter++)
-	{
-		if (nullptr != (*StartIter))
-		{
-			delete (*StartIter);
-			(*StartIter) = nullptr;
-		}
-	}
+	//for (; StartIter != EndIter; StartIter++)
+	//{
+	//	if (nullptr != (*StartIter))
+	//	{
+	//		delete (*StartIter);
+	//		(*StartIter) = nullptr;
+	//	}
+	//}
 }
 
 void PokemonInfo::SetPokemonImage(const std::string _Name)
@@ -63,36 +61,17 @@ void PokemonInfo::AddMySkill(PokemonSkill* _Skill)
 		return;
 	}
 
-	switch (MySkills_.size() - 1)
+	MySkills_.push_back(_Skill);
+}
+
+void PokemonInfo::changeMySkill(int _Index, PokemonSkill* _Skill)
+{
+	if (4 <= _Index)
 	{
-	case 0:
-		if (nullptr == MySkills_[0])
-		{
-			MySkills_[0] = _Skill;
-		}
-		break;
-
-	case 1:
-		if (nullptr == MySkills_[1])
-		{
-			MySkills_[1] = _Skill;
-		}
-		break;
-
-	case 2:
-		if (nullptr == MySkills_[2])
-		{
-			MySkills_[2] = _Skill;
-		}
-		break;
-
-	case 3:
-		if (nullptr == MySkills_[3])
-		{
-			MySkills_[3] = _Skill;
-		}
-		break;
+		return;
 	}
 
-	++MySkillCount_;
+	MySkills_[_Index] = _Skill;
 }
+
+

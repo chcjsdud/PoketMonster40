@@ -77,10 +77,7 @@ PlayerRed::PlayerRed()
 
 PlayerRed::~PlayerRed()
 {
-	for (Pokemon* i : MyPokemonList_)
-	{
-		delete i;
-	}
+
 }
 
 void PlayerRed::ChangeState(RedState _State)
