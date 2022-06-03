@@ -23,6 +23,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerStop(false)
 	, TimeCheck(0.0f)
 	, MonsterBall(nullptr)
+	, TackleEffect(nullptr)
 	, BattleDataR_(nullptr)
 	, Level_(nullptr)
 	, MyMoveTime(0.0f)
@@ -129,8 +130,8 @@ void BattleUnitRenderer::Update()
 					BattleInter->GetInterfaceImage()->On();
 					BattleInter->GetSelect()->On();
 					DoomChit();
-					TailWhipMove();
-					//Tackle();
+					//TailWhipMove();
+					Tackle();
 					BattleInter->DoomChit();
 				}
 			}
@@ -237,6 +238,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
+
+		TackleEffect = CreateRenderer("Tackle4.bmp",4);
 	}
 
 	PlayerRenderer_->On();
@@ -246,6 +249,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	PoeCurrentPokemon_->On();
 	MonsterBall->Off();
 	MonsterBall->SetPivot({ -220.0f,-30.0f });
+	TackleEffect->SetPivot({ 210.0f,-90.0f });
+	TackleEffect->Off();
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -261,6 +266,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		PoeCurrentPokemon_->Off();
 		PlayerRenderer_->Off();
 		MonsterBall->Off();
+		TackleEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = false;
 	}
@@ -290,6 +296,8 @@ void BattleUnitRenderer::Tackle()
 		if (MyMoveTime <= 0.3f)
 		{
 			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),43.0f });
+
+			TackleEffect->On();
 		}
 		if (MyMoveTime >= 0.1f)
 		{
@@ -302,13 +310,15 @@ void BattleUnitRenderer::Tackle()
 			if (MyMoveTime >= 0.2f)
 			{
 				PoeCurrentPokemon_->SetAlpha(55);
-				//적 HPUI이미지 제자리로
+				//적 HPUI이미지 아래로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-420.0f });
 			}
 			if (MyMoveTime >= 0.3f)
 			{
 				PoeCurrentPokemon_->SetAlpha(255);
+				//적 HPUI 제자리로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
+				TackleEffect->Off();
 			}
 			if (MyMoveTime >= 0.4f)
 			{

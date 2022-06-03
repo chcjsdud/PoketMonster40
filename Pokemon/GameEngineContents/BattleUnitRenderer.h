@@ -36,6 +36,7 @@ protected:
 private:
 	GameEngineRenderer* PlayerCurrentPokemon_;
 	GameEngineRenderer* PoeCurrentPokemon_;
+	GameEngineRenderer* TackleEffect;//김예나 : 6월 3일 몸통박치기 이팩트 렌더러 추가
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
