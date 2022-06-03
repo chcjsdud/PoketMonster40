@@ -34,7 +34,7 @@ void FadeActor::FadeOut()
 
 void FadeActor::Start()
 {
-	Background_ = CreateRenderer("FadeInOut.bmp", 100);
+	Background_ = CreateRenderer("FadeInOut.bmp", 9999999);
 	Background_->SetAlpha(0);
 }
 
