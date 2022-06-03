@@ -23,7 +23,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerStop(false)
 	, TimeCheck(0.0f)
 	, MonsterBall(nullptr)
-	, TackleEffect(nullptr)
+	, MyTackleEffect(nullptr)
 	, BattleDataR_(nullptr)
 	, Level_(nullptr)
 	, MyMoveTime(0.0f)
@@ -239,7 +239,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 
-		TackleEffect = CreateRenderer("Tackle4.bmp",4);
+		MyTackleEffect = CreateRenderer("Tackle4.bmp",4);
 	}
 
 	PlayerRenderer_->On();
@@ -249,8 +249,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	PoeCurrentPokemon_->On();
 	MonsterBall->Off();
 	MonsterBall->SetPivot({ -220.0f,-30.0f });
-	TackleEffect->SetPivot({ 210.0f,-90.0f });
-	TackleEffect->Off();
+	MyTackleEffect->SetPivot({ 210.0f,-90.0f });
+	MyTackleEffect->Off();
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -266,7 +266,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		PoeCurrentPokemon_->Off();
 		PlayerRenderer_->Off();
 		MonsterBall->Off();
-		TackleEffect->Off();
+		MyTackleEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = false;
 	}
@@ -297,7 +297,7 @@ void BattleUnitRenderer::Tackle()
 		{
 			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),43.0f });
 
-			TackleEffect->On();
+			MyTackleEffect->On();
 		}
 		if (MyMoveTime >= 0.1f)
 		{
@@ -318,7 +318,7 @@ void BattleUnitRenderer::Tackle()
 				PoeCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
-				TackleEffect->Off();
+				MyTackleEffect->Off();
 			}
 			if (MyMoveTime >= 0.4f)
 			{
@@ -362,3 +362,4 @@ void BattleUnitRenderer::TailWhipMove()
 		MyMoveTime = 0.0f;
 	}
 }
+

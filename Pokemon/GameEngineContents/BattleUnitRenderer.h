@@ -36,7 +36,8 @@ protected:
 private:
 	GameEngineRenderer* PlayerCurrentPokemon_;
 	GameEngineRenderer* PoeCurrentPokemon_;
-	GameEngineRenderer* TackleEffect;//김예나 : 6월 3일 몸통박치기 이팩트 렌더러 추가
+	GameEngineRenderer* MyTackleEffect;//김예나 : 6월 3일 몸통박치기 이팩트 렌더러 추가
+	GameEngineRenderer* EnemyTackleEffect;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -62,6 +63,7 @@ private:
 
 	float MyMoveTime;//김예나: 내 푸키먼 공격시 타임체크해서 그 시간을 기반으로 움직이게끔
 	bool MyTurnEnd;//김예나: 내 푸키먼 공격무빙이 끝나면 MoveTime초기화용
+
 	float Angle;//회전용..?
 
 	class BattleLevel* Level_;
