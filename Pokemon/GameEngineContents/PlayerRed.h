@@ -106,7 +106,7 @@ private:
 
 	//레드의 포켓몬과 아이템
 	std::vector<Pokemon*> MyPokemonList_;
-	std::vector<std::string> MyItemList_;
+	std::vector<class Item*> MyItemList_;
 
 	void Start() override;
 	void Update() override;

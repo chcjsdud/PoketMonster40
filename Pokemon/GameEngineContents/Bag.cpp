@@ -53,23 +53,27 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("RightArrow", VK_RIGHT);
 		GameEngineInput::GetInst()->CreateKey("DownArrow", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
-		GameEngineInput::GetInst()->CreateKey("DialogOn", VK_LCONTROL);
-		GameEngineInput::GetInst()->CreateKey("Select", VK_TAB);
+		GameEngineInput::GetInst()->CreateKey("DialogOn", 'z');
+		GameEngineInput::GetInst()->CreateKey("Select", 'z');
 		GameEngineInput::GetInst()->CreateKey("Close", 'x');
 	}
 }
 
 void Bag::Update()
 {
+	//자식 UI 체크
+	if (nullptr != ChildUI_ 
+		&& false == ChildUI_->IsUpdate())
+	{
+		ChildUI_->Death();
+		ChildUI_ = nullptr;
+
+		BagState_ = BagState::DialogMenu;
+	}
+
 	if (nullptr != ChildUI_)
 	{
 		return;
-	}
-
-	if (true == GameEngineInput::GetInst()->IsDown("Close"))
-	{
-		DestroyBag();
-		Off();
 	}
 
 	switch (BagState_)
@@ -92,6 +96,12 @@ void Bag::Update()
 				ChangeBag();
 			}
 		}
+
+		if (true == GameEngineInput::GetInst()->IsDown("Close"))
+		{
+			DestroyBag();
+			Off();
+		}
 		break;
 
 	case BagState::DialogMenu:
@@ -105,17 +115,6 @@ void Bag::Update()
 			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
-		}
-
-		else
-		{
-			if (false == ChildUI_->IsUpdate())
-			{
-				ChildUI_->Death();
-				ChildUI_ = nullptr;
-
-				BagState_ = BagState::ListMenu;
-			}
 		}
 		break;
 
@@ -297,6 +296,16 @@ void Bag::MoveItem()
 		}
 
 		MoveSelectArrow();
+	}
+
+	else if (true == GameEngineInput::GetInst()->IsDown("Select"))
+	{
+		if (0 == SelectIndex_ && ItemNameFonts_.size() == 1
+			|| SelectIndex_ == ItemNameFonts_.size() - 1)
+		{
+			DestroyBag();
+			Off();
+		}
 	}
 }
 
@@ -583,6 +592,12 @@ void Bag::MoveDialog()
 		CloseDialog();
 		BagState_ = BagState::ListMenu;
 	}
+
+	else if(true == GameEngineInput::GetInst()->IsDown("Close"))
+	{
+		CloseDialog();
+		BagState_ = BagState::ListMenu;
+	}
 }
 
 void Bag::SelectDialog()
@@ -592,7 +607,8 @@ void Bag::SelectDialog()
 	case 0:
 		if ("BattleLevel" == GetLevel()->GetNameConstRef())
 		{
-			//Use
+			//Use 구현부
+			Use(ItemList_);
 			break;
 		}
 
@@ -604,17 +620,9 @@ void Bag::SelectDialog()
 
 		if (ItemType::ITEM == BagType_)
 		{
-			if (0 == ItemList_.size())
-			{
-				ShowFonts(ItemList_);
-				break;
-			}
+			Give(ItemList_);
 
-			if (ChildUI_ == nullptr)
-			{
-				BagState_ = BagState::ItemGive;
-			}
-
+			//잠정 미구현
 			//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
 			//Item* NewItem = ItemList_.back();
 			//delete NewItem;
@@ -625,24 +633,14 @@ void Bag::SelectDialog()
 
 		if (ItemType::BALL == BagType_)
 		{
-			if (0 == BallList_.size())
-			{
-				ShowFonts(BallList_);
-				break;
-			}
+			Give(BallList_);
 
-			//포켓몬 스탯창 가기
-			if (ChildUI_ == nullptr)
-			{
-				BagState_ = BagState::ItemGive;
-			}
-
-			CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
-			Item* NewItem = BallList_.back();
-			delete NewItem;
-			NewItem = nullptr;
-			BallList_.pop_back();
-			ShowFonts(BallList_);
+			//CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
+			//Item* NewItem = BallList_.back();
+			//delete NewItem;
+			//NewItem = nullptr;
+			//BallList_.pop_back();
+			//ShowFonts(BallList_);
 		}
 		break;
 	case 1:
@@ -650,6 +648,7 @@ void Bag::SelectDialog()
 		{
 			CloseDialog();
 		}
+
 		//Toss
 		if (ItemType::KEYITEM == BagType_)
 		{
@@ -657,14 +656,11 @@ void Bag::SelectDialog()
 		}
 		if (ItemType::ITEM == BagType_)
 		{
-			ItemList_.pop_back();
-			ShowFonts(ItemList_);
-
+			Toss(ItemList_);
 		}
 		if (ItemType::BALL == BagType_)
 		{
-			BallList_.pop_back();
-			ShowFonts(BallList_);
+			Toss(ItemList_);
 		}
 		break;
 	case 2:
@@ -828,11 +824,6 @@ void Bag::BagInit()
 	ItemPreview_ = CreateRenderer("Bag_EnterArrow.bmp");
 	ItemPreview_->SetPivot({ -400, 225 });
 
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	ItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-	BallList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
-
 	BagDialog_ = CreateRenderer("DialogBox_Bag.bmp");
 	BagDialog_->SetPivot({ 335, 190 });
 	BagDialog_->Off();
@@ -915,6 +906,7 @@ void Bag::HideFonts()
 		}
 	}*/
 }
+
 
 void Bag::ShowFonts(std::vector<Item*>& _List)
 {
@@ -1037,6 +1029,51 @@ void Bag::DestroyDialogFonts()
 	DialogFonts_.clear();
 }
 
+
+//아이템 상호작용
+void Bag::Use(std::vector<Item*>& _List)
+{
+	if (0 == _List.size())
+	{
+		ShowFonts(_List);
+		return;
+	}
+
+	Item* UseItem = _List[_List.size() - 1];
+	UseItem->Use();
+	ShowFonts(_List);
+}
+
+void Bag::Give(std::vector<Item*>& _List)
+{
+	if (0 == _List.size())
+	{
+		ShowFonts(_List);
+		return;
+	}
+
+	//스탯창 가기
+	if (ChildUI_ == nullptr)
+	{
+		BagState_ = BagState::ItemGive;
+	}
+
+}
+
+void Bag::Toss(std::vector<Item*>& _List)
+{
+	if (0 == _List.size())
+	{
+		return;
+	}
+
+	_List.pop_back();
+	ShowFonts(_List);
+}
+
+
+
+
 void Bag::DestroyBag()
 {
 	BagRedrerer_->Death();
@@ -1067,39 +1104,9 @@ void Bag::DestroyBag()
 	//	}
 	//}
 
-	//ItemList_.clear();
-
-	/*{
-		std::vector<Item*>::iterator StartIter = KeyItemList_.begin();
-		std::vector<Item*>::iterator EndIter = KeyItemList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
+	ItemList_.clear();
 	KeyItemList_.clear();
-
-	{
-		std::vector<Item*>::iterator StartIter = BallList_.begin();
-		std::vector<Item*>::iterator EndIter = BallList_.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			if ((*StartIter) != nullptr)
-			{
-				delete (*StartIter);
-				(*StartIter) = nullptr;
-			}
-		}
-	}
-
-	BallList_.clear();*/
+	BallList_.clear();
 
 	ItemPreview_->Death(); //현재 선택한 아이템 이미지
 
