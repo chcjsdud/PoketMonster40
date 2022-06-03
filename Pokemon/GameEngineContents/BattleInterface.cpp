@@ -118,6 +118,14 @@ void BattleInterface::Render()
 void BattleInterface::Update()
 {
 
+	//if (!(Level_->BState_ == BattleState::SelecetPage) || !(Level_->CurrentSelect_ == BattleOrder::Fight))
+	//{
+	//	for (auto& Font : AllSkillFont_)
+	//	{
+	//		Font->ClearCurrentFonts();
+	//	}
+	//}
+
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (Level_->GetBattleState() != BattleState::BattlePage)
 	{
@@ -257,6 +265,12 @@ void BattleInterface::ShowAndCheckSkillPos()
 			}
 			Level_->StartBattlePage(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()
 				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()));
+
+			for (auto& Font : AllSkillFont_)
+			{
+				Font->ClearCurrentFonts();
+			}
+
 		}
 		break;
 		case BattleOrder::Pokemon:
