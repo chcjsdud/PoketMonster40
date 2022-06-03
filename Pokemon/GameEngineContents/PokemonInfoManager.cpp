@@ -171,7 +171,7 @@ Pokemon* PokemonInfoManager::CreatePokemon(const std::string& _Name)
 		NewPokemon->GetInfo()->AddMySkill(NewnSkill);
 	}
 
-	CreateRandomNature(MyInfo);
+	CreateRandomNature(NewPokemon->GetInfo());
 
 	++PokemonId_;
 

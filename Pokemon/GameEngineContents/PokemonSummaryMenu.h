@@ -52,21 +52,32 @@ private:
 	void PokemonInfoStart();
 	void PokemonInfoUpdate();
 
+	void PokemonAbilityStart();
+	void PokemonAbilityUpdate();
+
 	PokemonSummaryMenuType CurState_;
 
 
 	//렌더러
 	GameEngineRenderer* TopMenuRenderer_;
 	GameEngineRenderer* PokemonFrameRenderer_;
-	GameEngineRenderer* PokemonInfoRenderer_;
+
+	GameEngineRenderer* PokemonInfoRenderer_; //이거 탑메뉴 아래 큰창
 
 	std::vector<GameEngineRenderer*> PokemonFrontRenderer_;
+	std::vector< GameEngineRenderer*> PokemonTypeRenderer_;
+	std::vector<GameEngineRenderer*> GenderRenderer_;
 
 	//폰트
 	std::vector<GameEngineContentFont*> LevelFonts_;
+	std::vector< GameEngineContentFont*> FrameNameFonts_;
 	std::vector< GameEngineContentFont*> NameFonts_;
 	std::vector< GameEngineContentFont*> NumberFonts_;
+	std::vector<GameEngineContentFont*> NatureFonts_;
 	std::vector< GameEngineContentFont*> AllFonts_;
+	GameEngineContentFont* Owner_; //레드 이름
+	GameEngineContentFont* IDNumber_;//ID 폰트
+	GameEngineContentFont* Item_; //아이템 폰트
 
 
 	//캐릭터 통통튀는거 구현

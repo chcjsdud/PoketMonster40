@@ -10,6 +10,7 @@
 #include "PokemonSummaryMenu.h"
 #include <GameEngineBase/GameEngineWindow.h>
 #include "PlayerRed.h"
+#include "FadeActor.h"
 
 //렌더오더 설정 나중에 해주기
 
@@ -28,7 +29,8 @@ PokemonMenu::PokemonMenu() :
 	IsSwitchingTurn_(false),
 	ChildUIActor_(nullptr),
 	CurChildUIType_(ChildUIType::None),
-	IsOn_(false)
+	IsOn_(false),
+	FadeActor_(nullptr)
 {
 	PokemonRenderer_.resize(6);
 	PokemonNameFonts_.reserve(6);
@@ -45,6 +47,8 @@ void PokemonMenu::Start()
 	//NullImage_Ani 슬라이스
 	GameEngineImage* NullImage = GameEngineImageManager::GetInst()->Find("NullImage_Ani.bmp");
 	NullImage->Cut({ 32,32 });
+
+
 
 	
 }
@@ -781,6 +785,7 @@ void PokemonMenu::OpeningChildUIStart()
 	{
 
 	case PokemonMenu::ChildUIType::PokemonSummaryMenu:
+		FadeActor_->FadeOut();
 		ChildUIActor_ = GetLevel()->CreateActor<PokemonSummaryMenu>(GetOrder()+10, "PokemonSummaryMenu"); 
 		ChildUIActor_->SetPosition(GetPosition());
 		dynamic_cast<PokemonSummaryMenu*>(ChildUIActor_)->InitPokemonSummaryMenu(CurrentOrder_);
@@ -795,6 +800,7 @@ void PokemonMenu::OpeningChildUIUpdate()
 	if (ChildUIActor_->IsUpdate() == false)
 	{
 		//탈출함수
+		FadeActor_->FadeOut();
 		ChildUIActor_->Death();
 		ChildUIActor_ = nullptr;
 		CurChildUIType_ = ChildUIType::None;
@@ -1147,6 +1153,10 @@ void PokemonMenu::IconJumpOff(int _PokemonOrder)
 
 void PokemonMenu::InitPokemonMenu()
 {
+	//FadeActor 생성
+	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
+	FadeActor_->SetPosition(GetPosition()+GameEngineWindow::GetScale().Half());
+
 	GetPlayerPokemon();
 	InitRenderer();
 	InitFont();
@@ -1182,6 +1192,9 @@ void PokemonMenu::DestroyPokemonMenu()
 	{
 		QuestionFont_->ClearCurrentFonts();
 	}
+
+	//페이드아웃
+	FadeActor_->FadeOut();
 	Off();
 }
 

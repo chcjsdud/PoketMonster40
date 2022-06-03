@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 
+class FadeActor;
 class GameEngineContentFont;
 class PokemonInfo;
 class PokemonMenu : public GameEngineActor
@@ -111,6 +112,9 @@ private:
 
 	//On관련
 	bool IsOn_; // Init함수가 호출되야 업데이트를 시작하게 만든다
+
+	//FadeOut관련
+	FadeActor* FadeActor_;
 
 
 	//----------------------------------------- UI 키입력 관련----------------------------------------------------
