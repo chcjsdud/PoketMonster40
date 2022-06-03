@@ -15,6 +15,7 @@
 #include "RoomTileMap6.h"
 #include "RoomTileMap7.h"
 #include "RoomTileMap8.h"
+#include "WorldMapSoundManager.h"
 
 WorldMapLevel::WorldMapLevel()
 {
@@ -26,6 +27,7 @@ WorldMapLevel::~WorldMapLevel()
 
 void WorldMapLevel::Loading()
 {
+	CreateActor<WorldMapSoundManager>();
 	CreateActor<WorldMapBackground>();
 	CreateActor<WorldTileMap1>();
 	CreateActor<WorldTileMap2>();
@@ -42,9 +44,20 @@ void WorldMapLevel::Loading()
 	CreateActor<NPC4>();
 	CreateActor<NPC6>();
 	CreateActor<NPC7>();
+
 }
 
 void WorldMapLevel::Update()
 {
+}
+
+void WorldMapLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)
+{
+	WorldMapSoundManager::GetInst()->StopSound();
+}
+
+void WorldMapLevel::LevelChangeStart(GameEngineLevel* _NextLevel)
+{
+
 }
 

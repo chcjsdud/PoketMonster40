@@ -19,20 +19,20 @@ void WorldTileMap3::Start()
 	ColMap_ = GameEngineImageManager::GetInst()->Find("ColMap3.bmp");
 	//CreateRenderer("ColMap3.bmp", 100, RenderPivot::CENTER, {1650, 3810})->SetAlpha(100);
 
-	for (int y = 50; y < 119; y++)
-	{
-		for (int x = 0; x < 50; x++)
-		{
-			if (x % 2 == 0 && y % 2 != 0)
-			{
-				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
-			}
-			else if (x % 2 != 0 && y % 2 == 0)
-			{
-				TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
-			}
-		}
-	}
+	//for (int y = 50; y < 119; y++)
+	//{
+	//	for (int x = 0; x < 50; x++)
+	//	{
+	//		if (x % 2 == 0 && y % 2 != 0)
+	//		{
+	//			TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
+	//		}
+	//		else if (x % 2 != 0 && y % 2 == 0)
+	//		{
+	//			TileMap_.CreateTile<Tile>(x, y, "White.bmp", 1);
+	//		}
+	//	}
+	//}
 
 	MakeFlowers();
 }

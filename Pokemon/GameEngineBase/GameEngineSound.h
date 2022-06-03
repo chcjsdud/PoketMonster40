@@ -55,7 +55,9 @@ class GameEngineSoundPlayer
 	friend GameEngineSound;
 
 public:
+	bool IsNull();
 	void Stop();
+	void StopWithNullCheck();
 	void Volume(float _Value);
 
 	GameEngineSoundPlayer(const GameEngineSoundPlayer& _Other);

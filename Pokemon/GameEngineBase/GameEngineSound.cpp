@@ -164,7 +164,12 @@ void GameEngineSound::AllResourcesDestroy()
 
 ////////////////////////////////////////////////////////// 사운드 플레이어
 
-void GameEngineSoundPlayer::Stop() 
+bool GameEngineSoundPlayer::IsNull()
+{
+	return (nullptr == ControlHandle_);
+}
+
+void GameEngineSoundPlayer::Stop()
 {
 	if (nullptr == ControlHandle_)
 	{
@@ -173,6 +178,14 @@ void GameEngineSoundPlayer::Stop()
 	}
 
 	ControlHandle_->stop();
+}
+
+void GameEngineSoundPlayer::StopWithNullCheck()
+{
+	if (false == IsNull())
+	{
+		ControlHandle_->stop();
+	}
 }
 
 void GameEngineSoundPlayer::Volume(float _Value)

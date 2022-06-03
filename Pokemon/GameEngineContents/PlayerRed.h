@@ -122,6 +122,7 @@ private:
 	void IsWMenuKey();
 
 	void MoveAnim();
+	bool CanMove();
 
 	// 상호작용
 	void InteractionUpdate();

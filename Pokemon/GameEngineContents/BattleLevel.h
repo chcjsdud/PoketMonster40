@@ -73,7 +73,7 @@ private:
 	BattleInterface* Interface_;
 	BattleState BState_;
 
-	GameEngineSoundPlayer BgmPlayer;
+	GameEngineSoundPlayer BgmPlayer_;
 
 
 	// ¿ÀÇÁ´× °ü·Ã
