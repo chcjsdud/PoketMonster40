@@ -30,6 +30,7 @@ BattleLevel::BattleLevel()
 	, BattleData_(nullptr)
 	, BattleManager_(nullptr)
 	, CurrentSelect_(BattleOrder::None)
+	, EndFont_(false)
 {
 
 }
@@ -80,7 +81,6 @@ void BattleLevel::Loading()
 
 void BattleLevel::Update()
 {
-	int a = 0;
 	switch (BState_)
 	{
 	case BattleState::Openning:
@@ -97,7 +97,8 @@ void BattleLevel::Update()
 		}
 		break;
 	case BattleState::BattlePage:
-		if (Interface_->BattleKey())
+		// Update();
+		if (Interface_->BattleKey() || EndFont_ == true)
 		{
 			if (BattleManager_->Update() == true)
 			{
@@ -168,6 +169,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		RefreshPokemon();
 	}
 
+	EndFont_ = false;
 
 }
 

@@ -270,7 +270,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 			{
 				Font->ClearCurrentFonts();
 			}
-
+			Select->Off();
 		}
 		break;
 		case BattleOrder::Pokemon:
@@ -348,13 +348,9 @@ bool BattleInterface::BattleKey()
 			if (BattleFont_->IsEnd())
 			{
 				BattleFont_->EndFont();
+				Level_->EndFont_ = true;
 				return true;
 			}
-			//else
-			//{
-			//	Fonts->SkipCharAnimation();
-			//	return false;
-			//}
 		}
 	}
 	else
@@ -369,36 +365,42 @@ void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const 
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowSupperEffectString()
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString("It's Supe\\effective!");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowCriticalHitString()
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString("A critical hit!");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowNotEffective()
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString("It's not Very\\effective;");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowFailed()
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString("But it failed!");
+	Level_->EndFont_ = false;
 }
 
 void BattleInterface::ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank)
@@ -409,6 +411,8 @@ void BattleInterface::ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbil
 	Rankfont += AbilityString(_Ability);
 	Rankfont += RankString(_Rank);
 	BattleFont_->ShowString(Rankfont);
+
+	Level_->EndFont_ = false;
 }
 
 std::string BattleInterface::AbilityString(PokemonAbility _Ability)
