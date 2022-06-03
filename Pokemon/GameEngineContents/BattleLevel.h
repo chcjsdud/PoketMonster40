@@ -112,6 +112,7 @@ private:
 
 	void RefreshPokemon();
 
+	bool EndFont_;
 
 	void StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill);
 	void EndBattlePage();
