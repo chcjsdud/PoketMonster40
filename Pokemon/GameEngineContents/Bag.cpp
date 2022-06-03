@@ -61,6 +61,17 @@ void Bag::Start()
 
 void Bag::Update()
 {
+	if (nullptr != ChildUI_)
+	{
+		return;
+	}
+
+	if (true == GameEngineInput::GetInst()->IsDown("Close"))
+	{
+		DestroyBag();
+		Off();
+	}
+
 	switch (BagState_)
 	{
 	case BagState::ListMenu:
@@ -95,17 +106,21 @@ void Bag::Update()
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
 		}
+
+		else
+		{
+			if (false == ChildUI_->IsUpdate())
+			{
+				ChildUI_->Death();
+				ChildUI_ = nullptr;
+
+				BagState_ = BagState::ListMenu;
+			}
+		}
 		break;
 
 	case BagState::ItemToss:
 		break;
-	}
-
-
-	if (true == GameEngineInput::GetInst()->IsDown("Close"))
-	{
-		DestroyBag();
-		Off();
 	}
 }
 
