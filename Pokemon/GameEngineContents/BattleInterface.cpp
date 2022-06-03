@@ -460,26 +460,45 @@ bool BattleInterface::MoveKey()
 {
 	if (InterfaceImage->IsUpdate() == true)
 	{
-		switch (CurOrder)
-		{
-		case BattleOrder::Fight:
-			break;
-		case BattleOrder::Bag:
-			break;
-		case BattleOrder::Pokemon:
-			break;
-		case BattleOrder::Run:
-			break;
-		case BattleOrder::None:
-			break;
-		default:
-			break;
+		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+		{	//Fight에서 Pokemon으로
+			Select->SetPivot({ -190.0f,35.0f });
 		}
-		if (CurOrder == BattleOrder::None)
-		{
-			
+
+		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+		{	//Pokemon에서 Fight로
+			Select->SetPivot({ -190.0f,-25.0f });
 		}
-		
+
+		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+		{	//Fight에서 Bag으로
+			Select->SetPivot({ 30.0f,-25.0f });
+		}
+
+		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+		{	//Bag에서 Fight로
+			Select->SetPivot({ -190.0f,-25.0f });
+		}
+
+		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
+		{	//Bag에서 Run으로
+			Select->SetPivot({ 30.0f,35.0f });
+		}
+
+		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
+		{	//Run에서 Bag으로
+			Select->SetPivot({ 30.0f,-25.0f });
+		}
+
+		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
+		{	//Pokemon에서 Run으로
+			Select->SetPivot({ 30.0f,35.0f });
+		}
+
+		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
+		{	//Run에서 Pokemon으로
+			Select->SetPivot({ -190.0f,35.0f });
+		}
 
 	}
 
@@ -562,7 +581,7 @@ void BattleInterface::SelectOrder()
 		//	BattleCommend->Off();
 		//	Select->SetPivot({ -190.0f,-25.0f });
 		//	CurOrder = BattleOrder::None;
-		//}
+		//}Z
 	}
 }
 

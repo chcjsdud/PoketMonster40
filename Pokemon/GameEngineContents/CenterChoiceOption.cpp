@@ -56,6 +56,29 @@ void CenterChoiceOption::Update()
 	}
 
 	ArrowRenderer_->SetPivot(ArrowPos_[CurrentIndex_]);
+
+	bool isOn_ = false;
+	if (GetAccTime() <= 2.0f && false == isOn_)
+	{
+		isOn_ = true;
+		ParentText_->ClearText();
+		ParentText_->AddText("1");
+		ParentText_->Setting();
+	}
+	else if (GetAccTime() <= 4.0f && true == isOn_)
+	{
+		isOn_ = false;
+		ParentText_->ClearText();
+		ParentText_->AddText("2");
+		ParentText_->Setting();
+	}
+	//else if (GetAccTime() <= 6.0f && false == isOn_)
+	//{
+	//	isOn_ = true;
+	//	ParentText_->ClearText();
+	//	ParentText_->AddText("3");
+	//	ParentText_->Setting();
+	//}
 }
 
 void CenterChoiceOption::SelectIndex()
@@ -92,3 +115,5 @@ void CenterChoiceOption::SelectIndex()
 	ParentText_->ChoiceEnd();
 	Death();
 }
+
+

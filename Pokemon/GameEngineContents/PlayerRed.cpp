@@ -192,6 +192,7 @@ void PlayerRed::FadeIn()
 			IsFadeOut_ = true;
 			if (nullptr != NextTileMap_)
 			{
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = NextTileMap_;
 				SetPosition(CurrentTileMap_->GetWorldPostion(NextTilePos_.ix(), NextTilePos_.iy()));
 
@@ -369,6 +370,15 @@ void PlayerRed::Update()
 
 void PlayerRed::Render()
 {
+	{
+		char Text[30] = { 0 };
+		sprintf_s(Text, "pos : %d , %d", CurrentTilePos_.ix(), CurrentTilePos_.iy());
+		TextOut(GameEngine::BackBufferDC(),
+			100,
+			100,
+			Text,
+			static_cast<int>(strlen(Text)));
+	}
 }
 
 void PlayerRed::PlayerSetMove(float4 _Value)
@@ -403,6 +413,7 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		IsBush_ = BushTileCheck(NextIndex.X, NextIndex.Y);
 		IsBushEventReady_ = true;
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+		CurrentTilePos_ = { static_cast<float>(NextIndex.X), static_cast<float>(NextIndex.Y) };
 		break;
 	case TileState::MoreDown:
 		IsJump_ = true;
@@ -410,6 +421,7 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		IsBushEventReady_ = true;
 		ShadowRender_->On();
 		GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y + 1);
+		CurrentTilePos_ = { static_cast<float>(NextIndex.X), static_cast<float>(NextIndex.Y) };
 
 		if (true == IsDebugRun_)
 		{
@@ -484,8 +496,17 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 7 && _Y == 7)
 		{
-			NextTileMap_ = WorldTileMap1::GetInst();
-			NextTilePos_ = { 23, 31 };
+			if (BeforeTileMap_ == WorldTileMap1::GetInst())
+			{
+				NextTileMap_ = WorldTileMap1::GetInst();
+				NextTilePos_ = { 23, 31 };
+			}
+			else if (BeforeTileMap_ == WorldTileMap3::GetInst())
+			{
+				NextTileMap_ = WorldTileMap3::GetInst();
+				NextTilePos_ = { 18, 29 };
+			}
+			
 			return true;
 		}
 	}
@@ -493,8 +514,16 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 	{
 		if (_X == 4 && _Y == 6)
 		{
-			NextTileMap_ = WorldTileMap1::GetInst();
-			NextTilePos_ = { 33, 24 };
+			if (BeforeTileMap_ == WorldTileMap1::GetInst())
+			{
+				NextTileMap_ = WorldTileMap1::GetInst();
+				NextTilePos_ = { 33, 24 };
+			}
+			else if (BeforeTileMap_ == WorldTileMap3::GetInst())
+			{
+				NextTileMap_ = WorldTileMap3::GetInst();
+				NextTilePos_ = { 29, 22 };
+			}
 			return true;
 		}
 	}
@@ -567,6 +596,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			if (_X == -1 && _Y == y)
 			{
 				IsMove_ = true;
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap2::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
 				return false;
@@ -579,6 +609,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			if (_X == x && _Y == -1)
 			{
 				IsMove_ = true;
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap3::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
 				return false;
@@ -593,6 +624,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			if (_X == 66 && _Y == y)
 			{
 				IsMove_ = true;
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
 				return false;
@@ -607,6 +639,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			if (_X == x && _Y == 119)
 			{
 				IsMove_ = true;
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
@@ -641,19 +674,27 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			if (_X == x && _Y == 94)
 			{
 				IsMove_ = true;
+				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
 				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
+
+		if (_X == 18 && _Y == 28) // 치료소
+		{
+			NextTileMap_ = RoomTileMap5::GetInst();
+			NextTilePos_ = { 7, 6 };
+			return true;
+		}
+		if (_X == 29 && _Y == 21) // 상점
+		{
+			NextTileMap_ = RoomTileMap6::GetInst();
+			NextTilePos_ = { 4, 5 };
+			return true;
+		}
 	}
 	return false;
-}
-
-void PlayerRed::MoveTile(PokemonTileMap* _Tile, float4 _Pos)
-{
-	CurrentTileMap_ = _Tile;
-	SetPosition(CurrentTileMap_->GetWorldPostion(_Pos.ix(), _Pos.iy()));
 }
 
 void PlayerRed::Camera()
@@ -1032,8 +1073,8 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 			TmpText->SetPosition(GetPosition());
 			TmpText->AddText("Red Played with the NES.");
-			TmpText->AddText("");
-			TmpText->AddText(";Okay!");
+			TmpText->AddText(" ");
+			TmpText->AddText("Okay!");
 			TmpText->AddText("It's time to go!");
 			TmpText->Setting();
 			return true;
@@ -1084,9 +1125,9 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->AddText("There's a movie on TV.");
 			TmpText->AddText("Four boys are walking on railroad");
 			TmpText->AddText("tracks.");
-			TmpText->AddText("");
-			TmpText->AddText(";I better go, too.");
-			TmpText->AddText("");
+			TmpText->AddText(" ");
+			TmpText->AddText("I better go, too.");
+			TmpText->AddText(" ");
 			TmpText->Setting();
 			return true;
 		}
@@ -1166,7 +1207,7 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 			TmpText->SetPosition(GetPosition());
 			TmpText->AddText("TRAINER TIPS");
-			TmpText->AddText("");
+			TmpText->AddText(" ");
 			TmpText->AddText("Press P to open the MENU!");
 			TmpText->Setting();
 			return true;
@@ -1234,16 +1275,152 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->Setting();
 			return true;
 		}
+		if (_X == 17 && _Y == 20)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("VIRIDIAN CITY");
+			TmpText->AddText("The Eternally Green Paradise");
+			TmpText->Setting();
+			return true;
+		}
 		if (_X == 17 && _Y == 35)
 		{
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 			TmpText->SetPosition(GetPosition());
 			TmpText->AddText("TRAINER TIPS");
-			TmpText->AddText("");
+			TmpText->AddText(" ");
 			TmpText->AddText("The battle moves of POKEMON are");
 			TmpText->AddText("limited by their POWER POINTS, PP.");
 			TmpText->AddText("To replenish PP, rest your tired");
 			TmpText->AddText("POKEMON at a POKEMON CENTER.");
+			TmpText->Setting();
+			return true;
+		}
+
+		if (_X == 20 && _Y == 5)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("TRAINER TIPS");
+			TmpText->AddText(" ");
+			TmpText->AddText("Catch POKEMON and expand your");
+			TmpText->AddText("collection.");
+			TmpText->AddText("The more you have, the easier it");
+			TmpText->AddText("is to battle.");
+			TmpText->Setting();
+			return true;
+		}
+	}
+	else if (WorldTileMap2::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 22 && _Y == 23)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("POKEMON LEAGUE");
+			TmpText->AddText("Front Gate");
+			TmpText->Setting();
+			return true;
+		}
+	}
+	else if (WorldTileMap3::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 20 && _Y == 116)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("ROUTE 2");
+			TmpText->AddText("VIRIDIAN CITY - PEWTER CITY");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 21 && _Y == 33)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("TRAINER TIPS");
+			TmpText->AddText(" ");
+			TmpText->AddText("All POKEMON that appear in battle,");
+			TmpText->AddText("however briefly, earn EXP Points.");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 16 && _Y == 28)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Heal Your POKEMON!");
+			TmpText->AddText("POKEMON CENTER");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 17 && _Y == 28)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Heal Your POKEMON!");
+			TmpText->AddText("POKEMON CENTER");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 32 && _Y == 28)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("PEWTER CITY");
+			TmpText->AddText("A Stone Gray City");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 40 && _Y == 22)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("NOTICE!");
+			TmpText->AddText("");
+			TmpText->AddText("Thieves have been stealing POKEMON");
+			TmpText->AddText("fossils from MT. MOON.");
+			TmpText->AddText("Please call the PEWTER POLICE if");
+			TmpText->AddText("you have any information.");
+			TmpText->Setting();
+			return true;
+		}
+
+		if (_X == 27 && _Y == 21)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("All your item needs fulfilled!");
+			TmpText->AddText("POKEMON MART");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 28 && _Y == 21)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("All your item needs fulfilled!");
+			TmpText->AddText("POKEMON MART");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 20 && _Y == 10)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("PEWTER MUSEUM OF SCIENCE");
+			TmpText->Setting();
+			return true;
+		}
+
+		if (_X == 12 && _Y == 19)
+		{
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("PEWTER CITY POKEMON GYM");
+			TmpText->AddText("LEADER: BROCK");
+			TmpText->AddText("The Rock-Solid POKEMON TRAINER!");
 			TmpText->Setting();
 			return true;
 		}
@@ -1452,7 +1629,7 @@ void PlayerRed::InitMyPokemon()
 	Pokemon* Squirtle = PokemonInfoManager::GetInst().CreatePokemon("Squirtle");
 	Squirtle->GetInfo()->PlusHp(-50);
 	Squirtle->GetInfo()->SetMyLevel(4);
-	Squirtle->GetInfo() -> SetMaxHp(170);
+	Squirtle->GetInfo()->SetMaxHp(170);
 
 	Pokemon* Bulbasaur = PokemonInfoManager::GetInst().CreatePokemon("Bulbasaur");
 	Bulbasaur->GetInfo()->PlusHp(-90);
