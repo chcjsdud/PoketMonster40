@@ -10,6 +10,15 @@ enum class WorldMapSoundEnum
 	Max
 };
 
+enum class WorldSoundEffectEnum
+{
+	None,
+	Block,
+	Click,
+	Menu,
+	Max
+};
+
 // Ό³Έν :
 class WorldMapSoundManager : public GameEngineActor
 {
@@ -20,6 +29,8 @@ public:
 	{
 		return Inst_;
 	}
+
+	static void PlayEffectSound(WorldSoundEffectEnum _Enum);
 	static void ChangeSound(WorldMapSoundEnum _Enum);
 	static void StopSound();
 

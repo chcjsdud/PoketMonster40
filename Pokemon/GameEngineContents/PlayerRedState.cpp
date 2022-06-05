@@ -34,22 +34,18 @@ void PlayerRed::WalkUpdate()
 	
 	if (true == GameEngineInput::GetInst()->IsPress("Up"))
 	{
-		CurrentDir_ = RedDir::Up;
 		MoveDir_ = float4::UP;
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Down"))
 	{
-		CurrentDir_ = RedDir::Down;
 		MoveDir_ = float4::DOWN;
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Left"))
 	{
-		CurrentDir_ = RedDir::Left;
 		MoveDir_ = float4::LEFT;
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("Right"))
 	{
-		CurrentDir_ = RedDir::Right;
 		MoveDir_ = float4::RIGHT;
 	}
 

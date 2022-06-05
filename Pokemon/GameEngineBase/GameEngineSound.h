@@ -31,6 +31,7 @@ public:
 	static GameEngineSoundPlayer SoundPlayControl(const std::string& _Name);
 
 	static void SoundPlayOneShot(const std::string& _Name, int LoopCount = 0);
+	static void SoundPlayOneShotWithVolume(const std::string& _Name, float _Volume = 1.0f, int _LoopCount = 0);
 	static void Update();
 
 /// <summary>
