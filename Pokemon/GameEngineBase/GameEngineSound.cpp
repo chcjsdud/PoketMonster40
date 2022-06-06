@@ -108,7 +108,7 @@ void GameEngineSound::SoundPlayOneShotWithVolume(const std::string& _Name, float
 	FMOD::Channel* PlayControl = nullptr;
 	SoundSystem_->playSound(FindSound->Sound, nullptr, false, &PlayControl);
 	PlayControl->setLoopCount(_LoopCount);
-	GameEngineSoundPlayer(FindSound, PlayControl).Volume(_Volume);
+	GameEngineSoundPlayer(FindSound, PlayControl).SetVolume(_Volume);
 }
 
 void GameEngineSound::Update()
@@ -203,10 +203,16 @@ void GameEngineSoundPlayer::StopWithNullCheck()
 	}
 }
 
-void GameEngineSoundPlayer::Volume(float _Value)
+void GameEngineSoundPlayer::SetVolume(float _Value)
 {
 	ControlHandle_->setVolume(_Value);
 }
+
+void  GameEngineSoundPlayer::GetVolume(float* _Value)
+{
+	ControlHandle_->getVolume(_Value);
+}
+
 
 GameEngineSoundPlayer::GameEngineSoundPlayer() 
 	: Sound_(nullptr)

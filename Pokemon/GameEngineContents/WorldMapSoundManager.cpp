@@ -1,10 +1,13 @@
 #include "WorldMapSoundManager.h"
 
 WorldMapSoundManager* WorldMapSoundManager::Inst_;
-GameEngineSoundPlayer WorldMapSoundManager::BgmPlayer_;
 
 WorldMapSoundManager::WorldMapSoundManager() 
+	: CurrentSoundState_(WorldMapSoundEnum::None)
+	, NextSoundState_(WorldMapSoundEnum::None)
 {
+	Inst_ = this;
+
 }
 
 WorldMapSoundManager::~WorldMapSoundManager() 
@@ -13,6 +16,40 @@ WorldMapSoundManager::~WorldMapSoundManager()
 
 void WorldMapSoundManager::Start()
 {
+}
+
+void WorldMapSoundManager::Update()
+{
+	if (NextSoundState_ != WorldMapSoundEnum::None)
+	{
+		float TmpValue = 0.0f;
+		BgmPlayer_.GetVolume(&TmpValue);
+		if (TmpValue < 0.05f)
+		{
+			CurrentSoundState_ = NextSoundState_;
+			NextSoundState_ = WorldMapSoundEnum::None;
+
+			switch (CurrentSoundState_)
+			{
+			case WorldMapSoundEnum::PalletTown:
+				BgmPlayer_.StopWithNullCheck();
+				BgmPlayer_ = GameEngineSound::SoundPlayControl("World_PalletTown.mp3");
+				BgmPlayer_.SetVolume(0.5f);
+				break;
+			case WorldMapSoundEnum::Route1:
+				BgmPlayer_.StopWithNullCheck();
+				BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
+				BgmPlayer_.SetVolume(0.5f);
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			BgmPlayer_.SetVolume(TmpValue - GameEngineTime::GetDeltaTime());
+		}
+	}
 }
 
 void WorldMapSoundManager::PlayEffectSound(WorldSoundEffectEnum _Enum)
@@ -35,21 +72,11 @@ void WorldMapSoundManager::PlayEffectSound(WorldSoundEffectEnum _Enum)
 
 void WorldMapSoundManager::ChangeSound(WorldMapSoundEnum _Enum)
 {
-	switch (_Enum)
+	if (CurrentSoundState_ == _Enum || NextSoundState_ == _Enum)
 	{
-	case WorldMapSoundEnum::PalletTown:
-		BgmPlayer_.StopWithNullCheck();
-		BgmPlayer_ = GameEngineSound::SoundPlayControl("World_PalletTown.mp3");
-		BgmPlayer_.Volume(0.5f);
-		break;
-	case WorldMapSoundEnum::Route1:
-		BgmPlayer_.StopWithNullCheck();
-		BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
-		BgmPlayer_.Volume(0.5f);
-		break;
-	default:
-		break;
+		return;
 	}
+	NextSoundState_ = _Enum;
 }
 
 void WorldMapSoundManager::StopSound()

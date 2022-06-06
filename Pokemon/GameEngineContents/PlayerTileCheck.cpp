@@ -12,6 +12,7 @@
 #include "WorldTileMap2.h"
 #include "WorldTileMap3.h"
 #include "InteractionText.h"
+#include "WorldMapSoundManager.h"
 
 bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
@@ -919,4 +920,47 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 	}
 
 	return false;
+}
+
+void PlayerRed::SoundTileCheck()
+{
+	float4 CheckPos = GetPosition() - CurrentTileMap_->GetPosition();
+	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
+
+	int _X = NextIndex.X;
+	int _Y = NextIndex.Y;
+	if (WorldTileMap1::GetInst() == CurrentTileMap_)
+	{
+		{
+			float4 LeftTop = { 21, 84 };
+			float4 RightBot = { 22, 84 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+				}
+			}
+		}
+
+		{
+			float4 LeftTop = { 21, 83 };
+			float4 RightBot = { 22, 83 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::Route1);
+				}
+			}
+		}
+	}
+	if (RoomTileMap1::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+	}
+	if (RoomTileMap2::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+	}
 }

@@ -30,9 +30,9 @@ public:
 		return Inst_;
 	}
 
-	static void PlayEffectSound(WorldSoundEffectEnum _Enum);
-	static void ChangeSound(WorldMapSoundEnum _Enum);
-	static void StopSound();
+	void PlayEffectSound(WorldSoundEffectEnum _Enum);
+	void ChangeSound(WorldMapSoundEnum _Enum);
+	void StopSound();
 
 	// constrcuter destructer
 	WorldMapSoundManager();
@@ -46,8 +46,11 @@ public:
 
 protected:
 	void Start() override;
+	void Update() override;
 
 private:
-	static GameEngineSoundPlayer BgmPlayer_;
-};
+	GameEngineSoundPlayer BgmPlayer_;
+	WorldMapSoundEnum CurrentSoundState_;
+	WorldMapSoundEnum NextSoundState_;
 
+};

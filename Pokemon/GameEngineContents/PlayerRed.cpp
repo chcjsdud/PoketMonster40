@@ -362,6 +362,7 @@ void PlayerRed::Update()
 	UIUpdate();
 	//Camera();
 	InteractionUpdate();
+	SoundTileCheck();
 
 	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
 	{

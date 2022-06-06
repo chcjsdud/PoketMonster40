@@ -133,6 +133,9 @@ private:
 	Bush* BushActor_;
 	bool BushTileCheck(int _X, int _Y);
 
+	// »ç¿îµå
+	void SoundTileCheck();
+
 	// FSM
 	float AnimTimer_;
 	float NextMoveTime_;
