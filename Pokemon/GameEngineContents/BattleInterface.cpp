@@ -370,6 +370,14 @@ void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 	Level_->EndFont_ = false;
 }
 
+void BattleInterface::ShowPlayerFaintString(const std::string& _PlayerPokemon)
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString(_PlayerPokemon + " is\\fainted!");
+	Level_->EndFont_ = false;
+}
+
+
 void BattleInterface::ShowSupperEffectString()
 {
 	BattleFont_->EndFont();

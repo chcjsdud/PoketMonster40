@@ -13,6 +13,7 @@
 
 //설명 : 
 
+enum class InBattle;
 enum class PokemonAbility;
 enum class DamageType;
 enum class BattlePage;
@@ -115,6 +116,8 @@ private:
 	bool EndFont_;
 
 	void StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill);
+
+
 	void EndBattlePage();
 };
 
@@ -203,7 +206,6 @@ public:
 		return Pokemon_;
 	}
 	float GetRank(const PokemonAbility& _State);
-	// 몇 턴 동안 지속인지 확인하는 함수 필요
 	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkillInfo* _Skill);
 	void Update();
 
@@ -299,6 +301,7 @@ private:
 	BattleManager& operator=(BattleManager&& _Other) noexcept = delete;
 
 private:
+	BattleLevel* const Level_;
 	BattleInterface* const Interface_;
 
 	PokemonSkillInfo* const PlayerSkill_;
@@ -317,6 +320,11 @@ private:
 
 	BattleTurn* FristTurn_;
 	BattleTurn* SecondTurn_;
+
+	void PlayerPokemonDead();
+	void PoePokemonDead();
+
+	bool DeadSwitch_;
 
 private:
 	// 설명: 결과물 저장
@@ -342,7 +350,7 @@ private:
 		bool Critical_;
 	};
 public:
-	bool Update();
+	InBattle Update();
 };
 
 enum class DamageType
@@ -380,3 +388,11 @@ enum class Battlefont
 	Effect
 };
 
+
+enum class InBattle
+{
+	Wait,
+	BattleEnd,
+	BattleEndByPlayerDeath,
+	BattleEndByPoeDeath,
+};

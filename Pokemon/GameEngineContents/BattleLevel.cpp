@@ -100,9 +100,19 @@ void BattleLevel::Update()
 		// Update();
 		if (Interface_->BattleKey() || EndFont_ == true)
 		{
-			if (BattleManager_->Update() == true)
+			switch (BattleManager_->Update())
 			{
+			case InBattle::Wait:
+				break;
+			case InBattle::BattleEnd:
 				EndBattlePage();
+				break;
+			case InBattle::BattleEndByPlayerDeath:
+				break;
+			case InBattle::BattleEndByPoeDeath:
+				break;
+			default:
+				break;
 			}
 		}
 		return;
@@ -135,7 +145,6 @@ void BattleLevel::EndBattlePage()
 		BattleManager_ = nullptr;
 	}
 	BState_ = BattleState::SelecetPage;
-
 }
 
 void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -477,6 +486,7 @@ void PokemonBattleState::Update()
 BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill, BattleLevel* _Level)
 	: PlayerSkill_(_PlayerSkill)
 	, PoeSkill_(_PoeSkill)
+	, Level_(_Level)
 	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
 	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
 	, Select_(BattleOrder::Fight)
@@ -486,6 +496,7 @@ BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _
 	, CurrentFont_(Battlefont::None)
 	, FristTurn_(nullptr)
 	, SecondTurn_(nullptr)
+	, DeadSwitch_(false)
 {
 
 	switch (Select_)
@@ -506,13 +517,54 @@ BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _
 
 }
 
-bool BattleManager::Update()
+
+void BattleManager::PlayerPokemonDead()
+{
+	Interface_->ShowPlayerFaintString(PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef());
+	DeadSwitch_ = true;
+}
+
+void BattleManager::PoePokemonDead()
+{
+	Interface_->ShowPoeFaintString(PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef());
+	DeadSwitch_ = true;
+}
+
+
+InBattle BattleManager::Update()
 {
 	PokemonBattleState* CurrentTurn = PlayerFirst_ == true ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
 	PokemonSkillInfo* CurrentPokemonSkill = PlayerFirst_ == true ? PlayerSkill_ : PoeSkill_;
 
 	PokemonBattleState* AfterTrun = PlayerFirst_ == false ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
 	PokemonSkillInfo* AfterPokemonSkill = PlayerFirst_ == false ? PlayerSkill_ : PoeSkill_;
+
+	if (PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetHp() <= 0)
+	{
+		PlayerPokemonDead();
+		if (DeadSwitch_ == true)
+		{
+			return InBattle::BattleEndByPlayerDeath;
+		}
+		else
+		{
+			return InBattle::Wait;
+		}
+	
+	}
+	else if (PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetHp() <= 0)
+	{
+		PoePokemonDead();
+		if (DeadSwitch_ == true)
+		{
+			return InBattle::BattleEndByPoeDeath;
+		}
+		else
+		{
+			return InBattle::Wait;
+		}
+
+	}
 	if (PlayerFirst_ == true)
 	{
 		CurrentTurn = PlayCurrentPokemon_;
@@ -580,10 +632,10 @@ bool BattleManager::Update()
 		}
 		break;
 	case BattlePage::End:
-		return true;
+		return InBattle::BattleEnd;
 		break;
 	}
-	return false;
+	return InBattle::Wait;
 }
 
 bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _Def, PokemonSkillInfo* _Skill, BattleTurn* _Turn)

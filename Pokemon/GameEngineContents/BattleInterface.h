@@ -113,6 +113,7 @@ public:
 	bool BattleKey();
 	void ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill);
 	void ShowPoeFaintString(const std::string& _PoePokemon);
+	void ShowPlayerFaintString(const std::string& _PlayerPokemon);
 	void ShowSupperEffectString();
 	void ShowCriticalHitString();
 	void ShowNotEffective();
