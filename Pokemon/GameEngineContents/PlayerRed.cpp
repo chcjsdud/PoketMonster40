@@ -276,8 +276,6 @@ void PlayerRed::Start()
 		Image->CutCount(3, 1);
 		Image = GameEngineImageManager::GetInst()->Find("RunRight.bmp");
 		Image->CutCount(3, 1);
-
-		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
 	}
 
 	GameEngineInput::GetInst()->CreateKey("JBMTest", 'L');
@@ -374,6 +372,7 @@ void PlayerRed::Update()
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
 		IsDebugRun_ = true;
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 	}
 	if (true == GameEngineInput::GetInst()->IsUp("JBMDebugRun"))
 	{
@@ -412,6 +411,10 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 		{
 			Alpha_ = 0;
 			IsFadeIn_ = true;
+		}
+		else
+		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Block);
 		}
 		break;
 	case TileState::True:
@@ -618,6 +621,7 @@ void PlayerRed::IsWMenuKey()
 	{
 		if (true == WMenuUICheck_)
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
 			WMenuUIRender_->On();
 			WMenuArrowRender_->On();
 
