@@ -19,7 +19,8 @@ RegionUI::RegionUI()
 	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
 	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
 
-	Fonts_->ShowString(" ", true);
+	//Fonts_ = GetLevel()->CreateActor<GameEngineContentFont>();
+	//Fonts_->ShowString(" ", true);
 }
 
 RegionUI::~RegionUI()

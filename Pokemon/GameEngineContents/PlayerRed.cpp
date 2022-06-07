@@ -855,6 +855,8 @@ void PlayerRed::UIUpdate()
 
 		if (true == GameEngineInput::GetInst()->IsDown("C")) //메뉴UI 열기
 		{
+			WMenuUICheck_ = false;
+
 			ChildUI_ = GetLevel()->CreateActor<MenuUI>(60, "MenuUI");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<MenuUI*>(ChildUI_)->InitMenuUI();
@@ -866,6 +868,7 @@ void PlayerRed::UIUpdate()
 		{
 			//FadeActor_->SetPosition(GetPosition());
 			//FadeActor_->FadeOut();
+			WMenuUICheck_ = true;
 
 			ChildUI_->Death();
 			ChildUI_ = nullptr;
