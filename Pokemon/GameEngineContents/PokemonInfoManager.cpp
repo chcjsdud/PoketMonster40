@@ -113,12 +113,20 @@ void PokemonInfoManager::Reset()
 	{
 		//Tackle: 몸통박치기
 		PokemonSkillInfo* Tackle = CreateSkillInfo("Tackle", 10, 35, PokemonType::NORMAL, SkillType::Physical, "A physical attack in which the user charges,\\full body, into the foe.");
-		////Tail Whip: 꼬리 흔들기 
+		//Tail Whip: 꼬리 흔들기 
 		PokemonSkillInfo* TailWhip = CreateSkillInfo("TailWhip", 10, 30, PokemonType::NORMAL, SkillType::Status, "Lowers the opponent's Pokémon's Defense by 1 stage.");
-		////Scratch: 할퀴기
+		//Scratch: 할퀴기
 		PokemonSkillInfo* Scratch = CreateSkillInfo("Scratch", 10, 35, PokemonType::NORMAL, SkillType::Physical, "Hard, pointed, and sharp claws rake the foe.");
-		////Scratch: 울음소리 
+		//Scratch: 울음소리 
 		PokemonSkillInfo* Growl = CreateSkillInfo("Growl", 10, 40, PokemonType::NORMAL, SkillType::Status, "The user growls in a cute way, making the foe lower its Attack. stat.");
+
+		//Withdraw: 껍질에 숨기
+		PokemonSkillInfo* Withdraw = CreateSkillInfo("Withdraw", 10, 20, PokemonType::WATER, SkillType::Status, "The user withdraws its body in its hard shell, raising its Defense stat.");
+		//WaterGun: 물대포
+		PokemonSkillInfo* WaterGun = CreateSkillInfo("WaterGun", 10, 20, PokemonType::WATER, SkillType::Special, "The foe is struck with a lot of water expelled forcibly through the mouth.");
+
+		//RockTomb: 암석봉인
+		PokemonSkillInfo* RockTomb = CreateSkillInfo("RockTomb", 10, 20, PokemonType::ROCK, SkillType::Physical, "Boulders are hurled at the foe. It also lowers the foe's Speed if it hits.");
 	}
 
 	{
@@ -146,6 +154,16 @@ void PokemonInfoManager::Reset()
 		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
 		RattataInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		RattataInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
+
+		//Geodude: 꼬마돌
+		PokemonInfo* Geodude = CreatePokemonInfo("Geodude", PokemonType::ROCK, 12, 10, 10, 15, 15, 5);
+		Geodude->AddMySkill(CreatePokemonSkill("Tackle"));
+
+		//Onix: 롱스톤
+		PokemonInfo* Onix = CreatePokemonInfo("Onix", PokemonType::ROCK, 14, 10, 10, 15, 15, 5);
+		Onix->AddMySkill(CreatePokemonSkill("Tackle"));
+		Onix->AddMySkill(CreatePokemonSkill("Growl"));
+		Onix->AddMySkill(CreatePokemonSkill("RockTomb"));
 	}
 
 	{

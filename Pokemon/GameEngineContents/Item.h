@@ -18,8 +18,8 @@ public:
 		return &MyInfo_;
 	}
 
-
 	virtual void Use() {}
+
 protected:
 
 private:
