@@ -10,6 +10,7 @@
 #include "PokemonMenu.h"
 #include "PokemonInfoManager.h"
 #include "FadeActor.h"
+#include "PlayerRed.h"
 
 Bag::Bag()
 	: BagType_(ItemType::ITEM)
@@ -109,13 +110,21 @@ void Bag::Update()
 		break;
 
 	case BagState::ItemGive:
-		if (nullptr == ChildUI_)
-		{
-			FadeActor_->FadeOut();
-			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
-			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
-		}
+		//if (nullptr == ChildUI_)
+		//{
+		//	FadeActor_->FadeOut();
+		//	ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+		//	ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+		//	dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+		//}
+		// 
+		//잠정 미구현
+		//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
+		//Item* NewItem = ItemList_.back();
+		//delete NewItem;
+		//NewItem = nullptr;
+		//ItemList_.pop_back();
+		//ShowFonts(ItemList_);
 		break;
 
 	case BagState::ItemUse:
@@ -1032,21 +1041,26 @@ void Bag::Use(std::vector<Item*>& _List)
 	CurrentItem_ = _List.back();
 
 	BagState_ = BagState::ItemUse;
-	ShowFonts(_List);
 	_List.pop_back();
+	ShowFonts(_List);
+
+	PlayerRed::MainRed_->GetItemList();
+
+	std::vector<Item*>::iterator StartIter = PlayerRed::MainRed_->GetItemList().begin();
+	std::vector<Item*>::iterator EndIter = PlayerRed::MainRed_->GetItemList().end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if ("POTION" == (*StartIter)->GetInfo()->GetNameCopy())
+		{
+			PlayerRed::MainRed_->GetItemList().erase(StartIter);
+			return;
+		}
+	}
 }
 
 void Bag::Give(std::vector<Item*>& _List)
 {
-	//잠정 미구현
-//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
-//Item* NewItem = ItemList_.back();
-//delete NewItem;
-//NewItem = nullptr;
-//ItemList_.pop_back();
-//ShowFonts(ItemList_);
-
-
 	if (0 == _List.size())
 	{
 		ShowFonts(_List);
