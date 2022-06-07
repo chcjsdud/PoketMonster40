@@ -46,7 +46,7 @@ void BattleBackground::Update()
 		Fade_Down->Off();
 	}
 	Start_Effect->SetPivot({ 960.0f - (Fade_Time * 3),320.0f });
-	Start_Effect->SetAlpha(255 - static_cast<unsigned int>(Fade_Time) < 0 ? 0 : 255 - static_cast<unsigned int>(Fade_Time));
+	Start_Effect->SetAlpha((unsigned int)((float)255.0f - (Fade_Time) < (float)0.0f ? (float)0.0f : (float)255.0f - (Fade_Time)));
 	//삼항연산자 알파값이 0보다 크면 해당값, 아니라면 0고정
 	if (Start_Effect->GetPivot().x < -960.0f)
 	{
