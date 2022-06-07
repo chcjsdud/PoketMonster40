@@ -37,7 +37,8 @@ PokemonMenu::PokemonMenu() :
 	UsingPotionTime_(0.0f),
 	PotionValue_(0),
 	UsingPotionBoxRenderer_(nullptr),
-	UsingPotionFont_(nullptr)
+	UsingPotionFont_(nullptr),
+	MenuTime_(0.0f)
 {
 	PokemonRenderer_.resize(6);
 	PokemonNameFonts_.reserve(6);
@@ -67,6 +68,7 @@ void PokemonMenu::Update()
 		return;
 	}
 	UpdateState();
+	MenuTime_ += GameEngineTime::GetDeltaTime();
 }
 
 void PokemonMenu::Render()
@@ -412,7 +414,7 @@ void PokemonMenu::SelectPokemonUpdate()
 		}
 	}
 
-	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	if (GameEngineInput::GetInst()->IsDown("Z") == true && MenuTime_>0)
 	{
 		if (CurrentOrder_ < PokemonNumber_) //일반 포켓몬 버튼
 		{

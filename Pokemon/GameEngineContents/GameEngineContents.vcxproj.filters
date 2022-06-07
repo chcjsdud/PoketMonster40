@@ -169,6 +169,9 @@
     <ClCompile Include="WorldMapSoundManager.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="MenuUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="NPC5.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
@@ -342,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="WorldMapSoundManager.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="NPC5.h">
       <Filter>NPC</Filter>

@@ -46,10 +46,7 @@ void PokemonEngine::GameInit()
 
 void PokemonEngine::GameLoop()
 {
-	if (GameEngineInput::GetInst()->IsDown("8") == true)
-	{
-		ChangeLevel("UITestLevel");
-	}
+
 
 	//if (GameEngineInput::GetInst()->IsDown("Bag") == true)
 	//{
@@ -107,6 +104,7 @@ void PokemonEngine::InitKey()
 
 	GameEngineInput::GetInst()->CreateKey("Z", 'Z');
 	GameEngineInput::GetInst()->CreateKey("X", 'X');
+	GameEngineInput::GetInst()->CreateKey("C", 'C');
 
 	GameEngineInput::GetInst()->CreateKey("8", 0x38); //UI테스트레벨로 텔포용 키
 	GameEngineInput::GetInst()->CreateKey("Bag", VK_LSHIFT); //UI테스트레벨로 텔포용 키
