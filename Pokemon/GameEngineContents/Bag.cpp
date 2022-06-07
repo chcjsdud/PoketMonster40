@@ -110,6 +110,7 @@ void Bag::Update()
 		break;
 
 	case BagState::ItemGive:
+		BagState_ = BagState::DialogMenu;
 		//if (nullptr == ChildUI_)
 		//{
 		//	FadeActor_->FadeOut();
@@ -665,7 +666,7 @@ void Bag::SelectDialog()
 		}
 		if (ItemType::BALL == BagType_)
 		{
-			Toss(ItemList_);
+			Toss(BallList_);
 		}
 		break;
 	case 2:
@@ -1044,14 +1045,12 @@ void Bag::Use(std::vector<Item*>& _List)
 	_List.pop_back();
 	ShowFonts(_List);
 
-	PlayerRed::MainRed_->GetItemList();
-
 	std::vector<Item*>::iterator StartIter = PlayerRed::MainRed_->GetItemList().begin();
 	std::vector<Item*>::iterator EndIter = PlayerRed::MainRed_->GetItemList().end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
-		if ("POTION" == (*StartIter)->GetInfo()->GetNameCopy())
+		if (CurrentItem_->GetInfo()->GetNameCopy() == (*StartIter)->GetInfo()->GetNameCopy())
 		{
 			PlayerRed::MainRed_->GetItemList().erase(StartIter);
 			return;
@@ -1082,8 +1081,22 @@ void Bag::Toss(std::vector<Item*>& _List)
 		return;
 	}
 
+	std::string Temp = _List.back()->GetInfo()->GetNameCopy();
+
 	_List.pop_back();
 	ShowFonts(_List);
+
+	std::vector<Item*>::iterator StartIter = PlayerRed::MainRed_->GetItemList().begin();
+	std::vector<Item*>::iterator EndIter = PlayerRed::MainRed_->GetItemList().end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (Temp == (*StartIter)->GetInfo()->GetNameCopy())
+		{
+			PlayerRed::MainRed_->GetItemList().erase(StartIter);
+			return;
+		}
+	}
 }
 
 
