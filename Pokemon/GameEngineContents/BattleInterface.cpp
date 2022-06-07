@@ -430,6 +430,18 @@ void BattleInterface::ShowGetEXP(const std::string& _PlayerPokemon, int _EXP)
 	BattleFont_->ShowString(_PlayerPokemon + "gained\\" + std::to_string(_EXP) + " EXP. Points!");
 	Level_->EndFont_ = false;
 }
+void BattleInterface::ShowChangePokemon(const std::string& _Poe,const std::string& _PoePokemon)
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString(_Poe + " sent\\out " + _PoePokemon + "!");
+	Level_->EndFont_ = false;
+}
+void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv)
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString(_PlayerPokemon + "grew to\\LV. " + std::to_string(_Lv) + "!");
+	Level_->EndFont_ = false;
+}
 
 std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 {

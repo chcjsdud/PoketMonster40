@@ -137,7 +137,7 @@ void PokemonInfoManager::Reset()
 		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Squirtle: 꼬부기
-		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 5, 12, 11, 10, 10, 9, 19);
+		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 5, 12, 11, 10, 10, 13, 19);
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 

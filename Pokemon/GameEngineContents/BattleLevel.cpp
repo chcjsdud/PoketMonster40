@@ -31,6 +31,7 @@ BattleLevel::BattleLevel()
 	, BattleManager_(nullptr)
 	, CurrentSelect_(BattleOrder::None)
 	, EndFont_(false)
+	, EndAction_(BattlePageEnd::None)
 {
 
 }
@@ -100,6 +101,53 @@ void BattleLevel::Update()
 		// Update();
 		if (Interface_->BattleKey() || EndFont_ == true)
 		{
+			switch (EndAction_)
+			{
+			case BattlePageEnd::None:
+				break;
+			case BattlePageEnd::ChangePokemon:
+				Interface_->ShowChangePokemon(Opponent_->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
+				return;
+				break;
+			case BattlePageEnd::SetPokemon:
+				break;
+			case BattlePageEnd::LevelUp:
+				{
+					//
+					LevelUp(BattleData_->GetCurrentPlayerPokemon());
+					return;
+					break;
+					// 레벨업 어쩌구 삽입
+					if (BattleData_->IsWild())
+					{
+						BState_ = BattleState::Endding;
+						return;
+						break;
+					}
+					else
+					{
+						const std::vector<PokemonBattleState*>& PoePokemonList = BattleData_->GetCurrentPoePokemonList();
+						for (auto Pokemon : PoePokemonList)
+						{
+							if (!Pokemon->GetPokemon()->GetInfo()->GetFaint())
+							{
+								BattleData_->SetCurrentPoePokemon(Pokemon);
+								EndAction_ = BattlePageEnd::ChangePokemon;
+								return;
+								break;
+							}
+						}
+						BState_ = BattleState::Endding;
+						return;
+						break;
+					}
+				}
+				BState_ = BattleState::Endding;
+				return;
+				break;
+			default:
+				break;
+			}
 			switch (BattleManager_->Update())
 			{
 			case InBattle::Wait:
@@ -110,11 +158,35 @@ void BattleLevel::Update()
 			case InBattle::BattleEndByPlayerDeath:
 				break;
 			case InBattle::BattleEndByPoeDeath:
+				if (BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxExp() <= BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp())
+				{
+					EndAction_ = BattlePageEnd::LevelUp;
+					return;
+					break;
+				}
 				if (BattleData_->IsWild())
 				{
 					// 경험치 얻고 끝
 					BState_ = BattleState::Endding;
+					return;
+					break;
 					//EndBattle
+				}
+				else
+				{
+					const std::vector<PokemonBattleState*>& PoePokemonList = BattleData_->GetCurrentPoePokemonList();
+					for (auto Pokemon : PoePokemonList)
+					{
+						if (!Pokemon->GetPokemon()->GetInfo()->GetFaint())
+						{
+							BattleData_->SetCurrentPoePokemon(Pokemon);
+							EndAction_ = BattlePageEnd::ChangePokemon;
+							return;
+							break;
+						}
+					}
+					BState_ = BattleState::Endding;
+					return;
 				}
 				break;
 			default:
@@ -131,6 +203,20 @@ void BattleLevel::Update()
 		}
 		break;
 	}
+}
+
+void BattleLevel::LevelUp(PokemonBattleState* _PlayerPokemon)
+{
+	int CurrentEXP = _PlayerPokemon->GetPokemon()->GetInfo()->GetExp();
+	int MaxEXP = _PlayerPokemon->GetPokemon()->GetInfo()->GetMaxExp();
+	CurrentEXP = MaxEXP - CurrentEXP;
+	_PlayerPokemon->GetPokemon()->GetInfo()->SetExp(CurrentEXP);
+	int CurrntLevel = _PlayerPokemon->GetPokemon()->GetInfo()->GetMyLevel();
+	++CurrntLevel;
+	_PlayerPokemon->GetPokemon()->GetInfo()->SetMyLevel(CurrntLevel);
+
+	Interface_->ShowLevelUp(_PlayerPokemon->GetPokemon()->GetInfo()->GetNameConstRef(), CurrntLevel);
+
 }
 
 void BattleLevel::StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill)
@@ -536,6 +622,7 @@ void BattleManager::PlayerPokemonDead()
 void BattleManager::PoePokemonDead()
 {
 	Interface_->ShowPoeFaintString(PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef());
+	PoeCurrentPokemon_->GetPokemon()->GetInfo()->SetFaint(true);
 	DeadSwitch_ = true;
 }
 
@@ -567,6 +654,7 @@ InBattle BattleManager::Update()
 		{
 			int EXP = GameEngineRandom::GetInst_->RandomInt(80, 100);
 			Interface_->ShowGetEXP(PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef(), EXP);
+			PlayCurrentPokemon_->GetPokemon()->GetInfo()->PlusExp(EXP);
 			return InBattle::BattleEndByPoeDeath;
 		}
 		else

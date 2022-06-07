@@ -18,6 +18,7 @@ enum class PokemonAbility;
 enum class DamageType;
 enum class BattlePage;
 enum class Battlefont;
+enum class BattlePageEnd;
 class BattleEngine;
 class BattleData;
 class BattleManager;
@@ -110,6 +111,7 @@ private:
 	BattleManager* BattleManager_;
 
 	BattleOrder CurrentSelect_;
+	void LevelUp(PokemonBattleState* _PlayerPokemon);
 
 	void RefreshPokemon();
 
@@ -119,6 +121,9 @@ private:
 
 
 	void EndBattlePage();
+	BattlePageEnd EndAction_;
+
+	
 };
 
 class BattleData
@@ -137,6 +142,22 @@ public:
 	inline PokemonBattleState* GetCurrentPoePokemon() const
 	{
 		return PoeCurrentPokemonInBattle_;
+	}
+
+	inline void SetCurrentPoePokemon(PokemonBattleState* _Pokemon)
+	{
+		PlayerCurrentPokemonInBattle_ = _Pokemon;
+	}
+
+
+	inline std::vector<PokemonBattleState*> GetCurrentPlayerPokemonList() const
+	{
+		return PlayerPokemonsInBattle_;
+	}
+
+	inline std::vector<PokemonBattleState*> GetCurrentPoePokemonList() const
+	{
+		return PeoPokemonsInBattle_;
 	}
 
 	inline bool IsWild() const
@@ -399,4 +420,13 @@ enum class InBattle
 	BattleEnd,
 	BattleEndByPlayerDeath,
 	BattleEndByPoeDeath,
+};
+
+enum class BattlePageEnd
+{
+	None,
+	ChangePokemon,
+	EndPokemon,
+	LevelUp,
+	SetPokemon
 };
