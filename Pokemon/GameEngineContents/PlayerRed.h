@@ -80,6 +80,7 @@ private:
 	bool IsFadeOut_;
 	bool IsFadeRL_;
 	bool IsFadeRLCheck_;
+	bool NPC5Check_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;

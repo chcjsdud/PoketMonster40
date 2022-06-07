@@ -169,6 +169,9 @@
     <ClCompile Include="WorldMapSoundManager.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="NPC5.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -339,6 +342,9 @@
     </ClInclude>
     <ClInclude Include="WorldMapSoundManager.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC5.h">
+      <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

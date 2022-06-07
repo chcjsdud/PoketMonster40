@@ -650,6 +650,18 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->Setting();
 			return true;
 		}
+
+		if (_X == 18 && _Y == 15)
+		{
+			// bool 하나 놓기(true일 때만 실행)
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("I absolutely forbid you from");
+			TmpText->AddText("going through here!");
+			TmpText->AddText("This is private property!");
+			TmpText->Setting();
+			return true;
+		}
 	}
 	else if (WorldTileMap2::GetInst() == CurrentTileMap_)
 	{

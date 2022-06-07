@@ -57,6 +57,7 @@ PlayerRed::PlayerRed()
 	, IsFadeOut_(false)
 	, IsFadeRL_(false)
 	, IsFadeRLCheck_(false)
+	, NPC5Check_(false)
 	, LerpX_(0)
 	, LerpY_(0)
 	, MoveTimer_(0.0f)
@@ -743,21 +744,55 @@ void PlayerRed::InteractionUpdate()
 	}
 
 	// z키 누르면 잠깐 멈추듯 버벅거리는 현상, 눌리지 않았을 때만 return해서 그런 거 같음.
-	if (false == GameEngineInput::GetInst()->IsDown("Z"))
-	{
-		return;
-	}
+	//if (false == GameEngineInput::GetInst()->IsDown("Z"))
+	//{
+	//	return;
+	//}
 
 	StartPos_ = GetPosition();
 	float4 CheckPos = GetPosition() - CurrentTileMap_->GetPosition();
 	TileIndex CheckIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
-	if (true == InteractTileCheck(CheckIndex.X, CheckIndex.Y, CurrentDir_))
+	if (true == GameEngineInput::GetInst()->IsDown("Z"))
 	{
-		IsInteraction_ = true;
+		if (true == InteractTileCheck(CheckIndex.X, CheckIndex.Y, CurrentDir_))
+		{
+			IsInteraction_ = true;
+		}
+		if (true == InteractionNPC())
+		{
+			IsInteraction_ = true;
+		}
 	}
-	if (true == InteractionNPC())
+	else
 	{
-		IsInteraction_ = true;
+		{
+			float4 NPCCheckPos = GetPosition() - WorldTileMap1::GetInst()->GetPosition();
+			TileIndex NPCCheckIndex = WorldTileMap1::GetInst()->GetTileMap().GetTileIndex(NPCCheckPos);
+			if (true == NPC5Check_)
+			{
+				ChangeDirText_ = "Down";
+				RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+				PlayerSetMove(float4::DOWN * 50);
+
+				if (19 == NPCCheckIndex.X && 16 == NPCCheckIndex.Y)
+				{
+					NPC5Check_ = false;
+				}
+			}
+			else if (false == NPC5Check_ && 19 == NPCCheckIndex.X && 15 == NPCCheckIndex.Y)
+			{
+				IsInteraction_ = true;
+				NPC5Check_ = true;
+
+				InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+				TmpText->SetPosition(GetPosition());
+				TmpText->AddText("I absolutely forbid you from");
+				TmpText->AddText("going through here!");
+				TmpText->AddText("This is private property!");
+				TmpText->Setting();
+			}
+		}
+		return;
 	}
 }
 
