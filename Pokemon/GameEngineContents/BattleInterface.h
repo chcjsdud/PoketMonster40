@@ -41,14 +41,14 @@ protected:
 	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
 
 private:
-	GameEngineRenderer* InterfaceImage;
-	GameEngineRenderer* Select;
+	GameEngineRenderer* InterfaceImage; // 파이트
+	GameEngineRenderer* Select; // 선택
 	GameEngineRenderer* MyHPUI;
 	GameEngineRenderer* EnemyHPUI;
 	GameEngineRenderer* MyHP;
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
-	GameEngineRenderer* BattleCommend;
+	GameEngineRenderer* BattleCommend; // 스킬
 
 	BattleInterface* MainInterface;
 

@@ -131,27 +131,27 @@ void PokemonInfoManager::Reset()
 
 	{
 		//Charmander: 파이리
-		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 1, 10, 10, 15, 15, 5);
+		PokemonInfo* CharmanderInfo = CreatePokemonInfo("Charmander", PokemonType::FIRE, 5, 10, 10, 12, 10, 12, 19);
 		//스킬 초기화
 		CharmanderInfo->AddMySkill(CreatePokemonSkill("Scratch"));
 		CharmanderInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Squirtle: 꼬부기
-		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 1, 10, 10, 15, 15, 5);
+		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 5, 12, 11, 10, 10, 9, 19);
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 
 		//Bulbasaur: 이상해씨
-		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 1, 10, 10, 15, 15, 5);
+		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 5, 11, 11, 12, 12, 9, 19);
 		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Pidgey: 구구
-		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 10, 10, 15, 15, 5);
+		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 45, 40, 35, 35, 56, 40);
 		PidgeyInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 
 		//Rattata: 꼬렛
-		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 10, 10, 15, 15, 5);
+		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 56, 35, 25, 35, 72, 30);
 		RattataInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		RattataInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 
@@ -307,7 +307,7 @@ Item* PokemonInfoManager::CreateItem(const std::string& _Name)
 
 //정보 생성 함수
 //포인터 선언 이유: 값형으로 바꿔보았으나 전투 쪽 복사 생성자 오류 및 관리 난이도 상승
-PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed)
+PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed, int _HP)
 {
 	PokemonInfo* NewPokemonInfo = new PokemonInfo();
 
@@ -317,8 +317,8 @@ PokemonInfo* PokemonInfoManager::CreatePokemonInfo(const std::string& _Key, Poke
 	NewPokemonInfo->SetStatusEffect(StatusEffect::NONE);
 	NewPokemonInfo->SetMyLevel(_Lv);
 	NewPokemonInfo->SetMyMaxLevel(100);
-	NewPokemonInfo->SetHp(100);
-	NewPokemonInfo->SetMaxHp(100);
+	NewPokemonInfo->SetHp(_HP);
+	NewPokemonInfo->SetMaxHp(_HP);
 	NewPokemonInfo->SetExp(0);
 	NewPokemonInfo->SetMaxExp(100);
 	NewPokemonInfo->SetAtt(_Att);

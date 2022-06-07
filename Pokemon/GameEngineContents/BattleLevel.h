@@ -139,6 +139,10 @@ public:
 		return PoeCurrentPokemonInBattle_;
 	}
 
+	inline bool IsWild() const
+	{
+		return WildBattle_;
+	}
 
 
 private:
