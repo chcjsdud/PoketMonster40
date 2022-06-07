@@ -59,6 +59,8 @@ private:
 
 	bool PlayerStop;//김예나 : 일정 위치 도착하면 멈추도록 할 조건문
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
+	bool Fighting;//김예나 : 싸움 채팅중엔 꺼져야함
+
 	float TimeCheck;
 
 	float MyMoveTime;//김예나: 내 푸키먼 공격시 타임체크해서 그 시간을 기반으로 움직이게끔
@@ -71,6 +73,8 @@ private:
 
 	void ShowDebugValue();
 public:
+	void Opening();
+	void Opening2();
 	void DoomChit();
 	bool GetPlayerStop() const
 	{
@@ -83,5 +87,9 @@ public:
 	//김예나 전투 무빙 추가중(6월 2일)
 	void Tackle();
 	void TailWhipMove();
+	void SetFighting(bool Value)
+	{
+		Fighting = Value;
+	}
 };
 

@@ -29,6 +29,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, MyMoveTime(0.0f)
 	, MyTurnEnd(false)
 	, Angle(0.0f)
+	, Fighting(false)
 {
 }
 
@@ -62,82 +63,8 @@ void BattleUnitRenderer::Start()
 void BattleUnitRenderer::Update()
 {
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	if (FirstMove == true)
-	{
-		TimeCheck = 0.0f;
-		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
-		PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
-
-		PoeCurrentPokemon_->SetPivot({ -450 + PlayerTime_,-105 });
-
-		if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
-		{
-			MoveSpeed = 0.0f;
-			PlayerStop = true;
-			FirstMove = false;
-		}
-	}
-
-	//김예나 : 28일 추가 내용
-	{
-		float Move = PlayerRenderer_->GetPivot().x;
-		float BallMoveY = MonsterBall->GetPivot().y;
-		float BallMoveX = MonsterBall->GetPivot().x;
-
-		if (BattleInter->GetPlayerEnd() == true)
-		{
-			PlayerRenderer_->ChangeAnimation("Go");
-
-			if (PlayerRenderer_->GetPivot().x < -960.0f)
-			{
-				PlayerRenderer_->Off();
-			}
-
-			BallLerp += GameEngineTime::GetDeltaTime();
-			//플레이어 무빙
-			BattleUnitRenderer::PlayerRenderer_->SetPivot({ Move - (GameEngineTime::GetDeltaTime() * 900.0f),31.0f });
-			if (MonsterBall->IsUpdate() == false)
-			{
-				MonsterBall->On();
-				MonsterBall->ChangeAnimation("BallRoll");
-			}
-
-			{	//볼 던지기 무빙
-				if (BallLerp <= 1.0f)
-				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
-				}
-
-				if (BallLerp > 1.0f)
-				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
-					if (MonsterBall->GetPivot().y > 1000.0f)
-					{
-						MonsterBall->Off();
-					}
-				}
-
-				if (BallLerp > 2.0f)
-				{	//내 포켓몬 출현 + HPUI
-					PlayerCurrentPokemon_->On();
-					BattleInter->GetMyHPUI()->On();
-					BattleInter->GetMyHP()->On();
-					BattleInter->GetEXP()->On();
-				}
-
-				if (BallLerp > 3.0f)
-				{	//명령창 ON + 둠칫효과 시작
-					BattleInter->GetInterfaceImage()->On();
-					BattleInter->GetSelect()->On();
-					DoomChit();
-					//TailWhipMove();
-					Tackle();
-					BattleInter->DoomChit();
-				}
-			}
-		}
-	}
-
+	Opening();
+	Opening2();
 }
 
 void BattleUnitRenderer::Render()
@@ -215,6 +142,7 @@ void BattleUnitRenderer::ShowDebugValue()
 void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	FirstMove = true;
+	Fighting = false;
 	MoveSpeed = 900.0f;//원래는200
 
 	BattleDataR_ = Level_->GetBattleData();
@@ -363,3 +291,85 @@ void BattleUnitRenderer::TailWhipMove()
 	}
 }
 
+void BattleUnitRenderer::Opening()
+{
+	if (FirstMove == true)
+	{
+		TimeCheck = 0.0f;
+		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
+		PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
+
+		PoeCurrentPokemon_->SetPivot({ -450 + PlayerTime_,-105 });
+
+		if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
+		{
+			MoveSpeed = 0.0f;
+			PlayerStop = true;
+			FirstMove = false;
+		}
+	}
+}
+
+void BattleUnitRenderer::Opening2()
+{
+	//김예나 : 28일 추가 내용
+	{
+		float Move = PlayerRenderer_->GetPivot().x;
+		float BallMoveY = MonsterBall->GetPivot().y;
+		float BallMoveX = MonsterBall->GetPivot().x;
+
+		if (BattleInter->GetPlayerEnd() == true)
+		{
+			PlayerRenderer_->ChangeAnimation("Go");
+
+			if (PlayerRenderer_->GetPivot().x < -960.0f)
+			{
+				PlayerRenderer_->Off();
+			}
+
+			BallLerp += GameEngineTime::GetDeltaTime();
+			//플레이어 무빙
+			BattleUnitRenderer::PlayerRenderer_->SetPivot({ Move - (GameEngineTime::GetDeltaTime() * 900.0f),31.0f });
+			if (MonsterBall->IsUpdate() == false)
+			{
+				MonsterBall->On();
+				MonsterBall->ChangeAnimation("BallRoll");
+			}
+
+			{	//볼 던지기 무빙
+				if (BallLerp <= 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
+				}
+
+				if (BallLerp > 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
+					if (MonsterBall->GetPivot().y > 1000.0f)
+					{
+						MonsterBall->Off();
+					}
+				}
+
+				if (BallLerp > 2.0f)
+				{	//내 포켓몬 출현 + HPUI
+					PlayerCurrentPokemon_->On();
+					BattleInter->GetMyHPUI()->On();
+					BattleInter->GetMyHP()->On();
+					BattleInter->GetEXP()->On();
+				}
+
+				if (BallLerp > 3.0f && Fighting==false)
+				{	//명령창 ON + 둠칫효과 시작
+					
+					BattleInter->GetInterfaceImage()->On();
+					BattleInter->GetSelect()->On();
+					DoomChit();
+					//TailWhipMove();
+					Tackle();
+					BattleInter->DoomChit();
+				}
+			}
+		}
+	}
+}

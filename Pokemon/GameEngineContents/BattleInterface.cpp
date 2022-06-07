@@ -346,6 +346,10 @@ bool BattleInterface::BattleKey()
 		{
 			BattleFont_->EndFont();
 			Level_->EndFont_ = true;
+			//김예나 : 추가함수
+			BattleUnit->SetFighting(false);
+			Select->SetPivot({ -190.0f, -25.0f });
+			////////////////////
 			return true;
 		}
 	}
@@ -358,6 +362,13 @@ bool BattleInterface::BattleKey()
 
 void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
+	//김예나 : 이게 되야함
+	BattleUnit->SetFighting(true);
+	InterfaceImage->Off();
+	BattleCommend->Off();
+	Select->Off();
+	/////////////////////////
+
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
 	Level_->EndFont_ = false;
@@ -596,13 +607,6 @@ void BattleInterface::SelectOrder()
 		{
 			CurOrder = BattleOrder::Run;
 		}
-
-		//if (CurOrder == BattleOrder::Fight && true == GameEngineInput::GetInst()->IsDown("SCancel"))
-		//{
-		//	BattleCommend->Off();
-		//	Select->SetPivot({ -190.0f,-25.0f });
-		//	CurOrder = BattleOrder::None;
-		//}Z
 	}
 }
 
