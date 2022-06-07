@@ -150,6 +150,9 @@ void BattleLevel::EndBattlePage()
 		delete BattleManager_;
 		BattleManager_ = nullptr;
 	}
+	Interface_->BattleUnit->SetFighting(false);
+	Interface_->GetSelect()->SetPivot({-190.0f, -25.0f});
+
 	BState_ = BattleState::SelecetPage;
 }
 
@@ -562,6 +565,8 @@ InBattle BattleManager::Update()
 	{
 		if (DeadSwitch_ == true)
 		{
+			int EXP = GameEngineRandom::GetInst_->RandomInt(80, 100);
+			Interface_->ShowGetEXP(PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef(), EXP);
 			return InBattle::BattleEndByPoeDeath;
 		}
 		else

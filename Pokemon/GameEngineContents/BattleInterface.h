@@ -67,12 +67,12 @@ private:
 
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
-	class BattleUnitRenderer* BattleUnit;
 	GameEngineContentFont* BattleFont_;
 
 	bool OneTalk;
 
 public:
+	class BattleUnitRenderer* BattleUnit;
 	void DoomChit();
 	bool MoveKey();
 	bool GetPlayerEnd() const
@@ -119,6 +119,7 @@ public:
 	void ShowNotEffective();
 	void ShowFailed();
 	void ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank);
+	void ShowGetEXP(const std::string& _PlayerPokemon, int _EXP);
 
 	//
 	std::vector<GameEngineContentFont*> AllSkillFont_;

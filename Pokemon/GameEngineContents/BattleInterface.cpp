@@ -258,6 +258,11 @@ void BattleInterface::ShowAndCheckSkillPos()
 		{
 		case BattleOrder::Fight:
 		{
+			BattleUnit->SetFighting(true);
+			InterfaceImage->Off();
+			BattleCommend->Off();
+			Select->Off();
+
 			if (Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill().size() == 0)
 			{
 				MsgBoxAssert("스킬이 없습니다")
@@ -270,6 +275,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 				Font->ClearCurrentFonts();
 			}
 			Select->Off();
+			CurOrder = BattleOrder::None;
 		}
 		break;
 		case BattleOrder::Pokemon:
@@ -346,10 +352,6 @@ bool BattleInterface::BattleKey()
 		{
 			BattleFont_->EndFont();
 			Level_->EndFont_ = true;
-			//김예나 : 추가함수
-			BattleUnit->SetFighting(false);
-			Select->SetPivot({ -190.0f, -25.0f });
-			////////////////////
 			return true;
 		}
 	}
@@ -362,13 +364,6 @@ bool BattleInterface::BattleKey()
 
 void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const std::string& _AttSkill)
 {
-	//김예나 : 이게 되야함
-	BattleUnit->SetFighting(true);
-	InterfaceImage->Off();
-	BattleCommend->Off();
-	Select->Off();
-	/////////////////////////
-
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
 	Level_->EndFont_ = false;
@@ -426,6 +421,13 @@ void BattleInterface::ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbil
 	Rankfont += RankString(_Rank);
 	BattleFont_->ShowString(Rankfont);
 
+	Level_->EndFont_ = false;
+}
+
+void BattleInterface::ShowGetEXP(const std::string& _PlayerPokemon, int _EXP)
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString(_PlayerPokemon + "gained\\" + std::to_string(_EXP) + " EXP. Points!");
 	Level_->EndFont_ = false;
 }
 

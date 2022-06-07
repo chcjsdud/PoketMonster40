@@ -867,8 +867,9 @@ void PlayerRed::InitMyPokemon()
 	//
 
 	Pokemon* Squirtle = PokemonInfoManager::GetInst().CreatePokemon("Squirtle");
-	Squirtle->GetInfo()->PlusHp(-10);
-	Squirtle->GetInfo()->SetMyLevel(4);
+	//Squirtle->GetInfo()->PlusHp(-70);
+	//Squirtle->GetInfo()->SetMyLevel(4);
+	//Squirtle->GetInfo()->SetMaxHp(170);
 
 	MyPokemonList_.push_back(Squirtle);
 
