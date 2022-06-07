@@ -58,6 +58,12 @@ public:
 		return MyPokemonList_;
 	}
 
+	inline std::vector<class Item*>& GetItemList()
+	{
+		return MyItemList_;
+	}
+
+
 protected:
 
 private:

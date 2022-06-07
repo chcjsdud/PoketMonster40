@@ -63,7 +63,7 @@ public:
 		CurrentPokemon_ = _Pokemon;
 	}
 
-	inline void SetPlayerItemList(std::vector<Item*>&_List)
+	inline void SetPlayerItemList(std::vector<Item*>& _List)
 	{
 		for (int i = 0; i < _List.size(); ++i)
 		{
