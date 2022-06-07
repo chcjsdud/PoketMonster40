@@ -15,7 +15,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)//º´¹®¾¾ µµ¿ò
 	, FirstMove(true)
-	, PlayerPokemonPos_({ -220, 43 })
+	, PlayerPokemonPos_({ -220, 63 })
 	, OpponentPokemonPos_({ -450, -105 })//200,-105
 	, PlayerRendererPos_({ 480,31 })
 	, OpponentRenderer_Pos_()
@@ -209,7 +209,7 @@ void BattleUnitRenderer::DoomChit()
 
 	if ((int)TimeCheck % 2 == 1)
 	{
-		PlayerCurrentPokemon_->SetPivot({ -220, 61 });
+		PlayerCurrentPokemon_->SetPivot({ -220, 71 });
 	}
 }
 
@@ -223,7 +223,7 @@ void BattleUnitRenderer::Tackle()
 
 		if (MyMoveTime <= 0.3f)
 		{
-			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),43.0f });
+			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),63.0f });
 
 			MyTackleEffect->On();
 		}
@@ -365,8 +365,8 @@ void BattleUnitRenderer::Opening2()
 					BattleInter->GetInterfaceImage()->On();
 					BattleInter->GetSelect()->On();
 					DoomChit();
-					//TailWhipMove();
-					Tackle();
+					TailWhipMove();
+					//Tackle();
 					BattleInter->DoomChit();
 				}
 			}

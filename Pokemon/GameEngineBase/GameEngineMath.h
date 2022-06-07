@@ -76,7 +76,7 @@ public:
 	{
 		float4 Rot;
 		Rot.x = (_Value.x * cosf(_Radian) - _Value.y * sinf(_Radian))/3 -200.0f;
-		Rot.y = (_Value.x * sinf(_Radian) + _Value.y * cosf(_Radian))/20 +63.0f;
+		Rot.y = (_Value.x * sinf(_Radian) + _Value.y * cosf(_Radian))/20 +83.0f;
 		return Rot;
 	}
 	///////////////////////////////////////////////////////////////////////
