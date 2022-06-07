@@ -88,3 +88,25 @@ enum class RenderOrder
 	Player = 1,
 	UI = 15
 };
+
+// 월드맵 사운드 관련
+enum class WorldBackgroundSoundEnum
+{
+	None,
+	PalletTown,
+	Route1,
+	ViridianCity,
+	Route22,
+	Route2,
+	PewterCity,
+	Max
+};
+
+enum class WorldSoundEffectEnum
+{
+	None,
+	Block,
+	Click,
+	Menu,
+	Max
+};

@@ -1,27 +1,12 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngineBase/GameEngineSound.h>
-
-enum class WorldMapSoundEnum
-{
-	None,
-	PalletTown,
-	Route1,
-	Max
-};
-
-enum class WorldSoundEffectEnum
-{
-	None,
-	Block,
-	Click,
-	Menu,
-	Max
-};
+#include "ContentEnum.h"
 
 // Ό³Έν :
 class WorldMapSoundManager : public GameEngineActor
 {
+private:
 	static WorldMapSoundManager* Inst_;
 
 public:
@@ -31,7 +16,7 @@ public:
 	}
 
 	void PlayEffectSound(WorldSoundEffectEnum _Enum);
-	void ChangeSound(WorldMapSoundEnum _Enum);
+	void ChangeSound(WorldBackgroundSoundEnum _Enum);
 	void StopSound();
 
 	// constrcuter destructer
@@ -50,7 +35,6 @@ protected:
 
 private:
 	GameEngineSoundPlayer BgmPlayer_;
-	WorldMapSoundEnum CurrentSoundState_;
-	WorldMapSoundEnum NextSoundState_;
-
+	WorldBackgroundSoundEnum CurrentSoundState_;
+	WorldBackgroundSoundEnum NextSoundState_;
 };

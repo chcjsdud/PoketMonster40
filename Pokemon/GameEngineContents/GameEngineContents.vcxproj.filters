@@ -29,9 +29,6 @@
     <ClCompile Include="WorldMapBackground.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
-    <ClCompile Include="WorldMapLevel.cpp">
-      <Filter>WorldMap</Filter>
-    </ClCompile>
     <ClCompile Include="TitleBackground.cpp">
       <Filter>Level</Filter>
     </ClCompile>
@@ -106,9 +103,6 @@
     <ClCompile Include="NPCBase.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
-    <ClCompile Include="InteractionText.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Flower.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
@@ -169,11 +163,20 @@
     <ClCompile Include="WorldMapSoundManager.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="RegionUI.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="InteractionText.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
     <ClCompile Include="MenuUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="NPC5.cpp">
       <Filter>NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMapLevel.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,9 +209,6 @@
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="WorldMapBackground.h">
-      <Filter>WorldMap</Filter>
-    </ClInclude>
-    <ClInclude Include="WorldMapLevel.h">
       <Filter>WorldMap</Filter>
     </ClInclude>
     <ClInclude Include="TitleBackground.h">
@@ -280,9 +280,6 @@
     <ClInclude Include="NPCBase.h">
       <Filter>NPC</Filter>
     </ClInclude>
-    <ClInclude Include="InteractionText.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Flower.h">
       <Filter>WorldMap</Filter>
     </ClInclude>
@@ -346,11 +343,20 @@
     <ClInclude Include="WorldMapSoundManager.h">
       <Filter>WorldMap</Filter>
     </ClInclude>
+    <ClInclude Include="RegionUI.h">
+      <Filter>WorldMap\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InteractionText.h">
+      <Filter>WorldMap\UI</Filter>
+    </ClInclude>
     <ClInclude Include="MenuUI.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="NPC5.h">
       <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapLevel.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -17,6 +17,7 @@
 #include "RoomTileMap7.h"
 #include "RoomTileMap8.h"
 #include "WorldMapSoundManager.h"
+#include "RegionUI.h"
 
 WorldMapLevel::WorldMapLevel()
 {
@@ -46,7 +47,7 @@ void WorldMapLevel::Loading()
 	CreateActor<NPC5>();
 	CreateActor<NPC6>();
 	CreateActor<NPC7>();
-
+	CreateActor<RegionUI>();
 }
 
 void WorldMapLevel::Update()

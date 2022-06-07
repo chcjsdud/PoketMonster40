@@ -216,7 +216,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			}
 		}
 
-		// 월드맵4로 가야되는데 우선 위로 이동
+		// 월드맵4로 가야되는데 우선 위로 이동 - 숲지형 스킵
 		for (int x = 18; x <= 19; x++)
 		{
 			if (_X == x && _Y == 94)
@@ -227,7 +227,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			}
 		}
 
-		// 월드맵4로 가야되는데 우선 아래로 이동
+		// 월드맵4로 가야되는데 우선 아래로 이동 - 숲지형 스킵
 		for (int x = 18; x <= 19; x++)
 		{
 			if (_X == x && _Y == 57)
@@ -238,7 +238,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			}
 		}
 
-		// 다른방 가야하는데 우선 위로 이동
+		// 월드맵1로 타일 변경
 		for (int x = 17; x <= 26; x++)
 		{
 			if (_X == x && _Y == 94)
@@ -950,7 +950,7 @@ void PlayerRed::SoundTileCheck()
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
 				}
 			}
 		}
@@ -962,17 +962,113 @@ void PlayerRed::SoundTileCheck()
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::Route1);
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
+				}
+			}
+		}
+
+		{
+			float4 LeftTop = { 19, 43 };
+			float4 RightBot = { 22, 43 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+				}
+			}
+		}
+		{
+			float4 LeftTop = { 19, 44 };
+			float4 RightBot = { 22, 44 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
+				}
+			}
+		}
+	}
+	if (WorldTileMap2::GetInst() == CurrentTileMap_)
+	{
+		{
+			float4 LeftTop = { 62, 16 };
+			float4 RightBot = { 62, 19 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
+				}
+			}
+		}
+		{
+			float4 LeftTop = { 63, 16 };
+			float4 RightBot = { 63, 19 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+				}
+			}
+		}
+	}
+	if (WorldTileMap3::GetInst() == CurrentTileMap_)
+	{
+		{
+			float4 LeftTop = { 18, 56 };
+			float4 RightBot = { 19, 56 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
+				}
+			}
+		}
+		{
+			float4 LeftTop = { 18, 95 };
+			float4 RightBot = { 19, 95 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
+				}
+			}
+		}
+
+		{
+			float4 LeftTop = { 21, 42 };
+			float4 RightBot = { 24, 42 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PewterCity);
+				}
+			}
+		}
+		{
+			float4 LeftTop = { 21, 43 };
+			float4 RightBot = { 24, 43 };
+			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
+			{
+				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
+				{
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
 				}
 			}
 		}
 	}
 	if (RoomTileMap1::GetInst() == CurrentTileMap_)
 	{
-		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
 	}
 	if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
-		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::PalletTown);
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
 	}
 }

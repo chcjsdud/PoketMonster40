@@ -333,7 +333,7 @@ void PlayerRed::Start()
 	CurrentState_ = RedState::Idle;
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
-	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
+	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));	
 
 
 	//UI
@@ -371,7 +371,6 @@ void PlayerRed::Update()
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
-		WorldMapSoundManager::GetInst()->ChangeSound(WorldMapSoundEnum::Route1);
 	}
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
@@ -626,6 +625,7 @@ void PlayerRed::IsWMenuKey()
 		if (true == WMenuUICheck_)
 		{
 			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+			ChangeState(RedState::Idle);
 			WMenuUIRender_->On();
 			WMenuArrowRender_->On();
 
@@ -750,7 +750,6 @@ void PlayerRed::InteractionUpdate()
 	//	return;
 	//}
 
-	StartPos_ = GetPosition();
 	float4 CheckPos = GetPosition() - CurrentTileMap_->GetPosition();
 	TileIndex CheckIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 	if (true == GameEngineInput::GetInst()->IsDown("Z"))
