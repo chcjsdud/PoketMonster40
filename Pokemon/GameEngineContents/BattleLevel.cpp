@@ -110,6 +110,12 @@ void BattleLevel::Update()
 			case InBattle::BattleEndByPlayerDeath:
 				break;
 			case InBattle::BattleEndByPoeDeath:
+				if (BattleData_->IsWild())
+				{
+					// 경험치 얻고 끝
+					BState_ = BattleState::Endding;
+					//EndBattle
+				}
 				break;
 			default:
 				break;
@@ -541,26 +547,26 @@ InBattle BattleManager::Update()
 
 	if (PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetHp() <= 0)
 	{
-		PlayerPokemonDead();
 		if (DeadSwitch_ == true)
 		{
 			return InBattle::BattleEndByPlayerDeath;
 		}
 		else
 		{
+			PlayerPokemonDead();
 			return InBattle::Wait;
 		}
 	
 	}
 	else if (PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetHp() <= 0)
 	{
-		PoePokemonDead();
 		if (DeadSwitch_ == true)
 		{
 			return InBattle::BattleEndByPoeDeath;
 		}
 		else
 		{
+			PoePokemonDead();
 			return InBattle::Wait;
 		}
 
