@@ -8,6 +8,7 @@ enum class BagState
 {
 	ListMenu,
 	DialogMenu,
+	ItemUse,
 	ItemGive,
 	ItemToss
 };

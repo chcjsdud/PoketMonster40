@@ -118,6 +118,16 @@ void Bag::Update()
 		}
 		break;
 
+	case BagState::ItemUse:
+		if (nullptr == ChildUI_)
+		{
+			FadeActor_->FadeOut();
+			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu(CurrentItem_);
+		}
+		break;
+
 	case BagState::ItemToss:
 		break;
 	}
@@ -476,7 +486,7 @@ void Bag::OnDialog()
 	{
 		GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>(55);
 		Give->SetPosition(GetPosition() + float4{250, 100});
-		Give->ShowString("GIVE", true);
+		BagType_ == ItemType::ITEM ? Give->ShowString("USE", true) : Give->ShowString("GIVE", true);
 		DialogFonts_.push_back(Give);
 
 		GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>(55);
@@ -620,27 +630,13 @@ void Bag::SelectDialog()
 
 		if (ItemType::ITEM == BagType_)
 		{
-			Give(ItemList_);
-
-			//잠정 미구현
-			//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
-			//Item* NewItem = ItemList_.back();
-			//delete NewItem;
-			//NewItem = nullptr;
-			//ItemList_.pop_back();
-			//ShowFonts(ItemList_);
+			Use(ItemList_);
 		}
 
 		if (ItemType::BALL == BagType_)
 		{
 			Give(BallList_);
 
-			//CurrentPokemon_->GetInfo()->SetMyItem(BallList_[SelectIndex_]);
-			//Item* NewItem = BallList_.back();
-			//delete NewItem;
-			//NewItem = nullptr;
-			//BallList_.pop_back();
-			//ShowFonts(BallList_);
 		}
 		break;
 	case 1:
@@ -1033,19 +1029,24 @@ void Bag::DestroyDialogFonts()
 //아이템 상호작용
 void Bag::Use(std::vector<Item*>& _List)
 {
-	if (0 == _List.size())
-	{
-		ShowFonts(_List);
-		return;
-	}
+	CurrentItem_ = _List.back();
 
-	Item* UseItem = _List[_List.size() - 1];
-	UseItem->Use();
+	BagState_ = BagState::ItemUse;
 	ShowFonts(_List);
+	_List.pop_back();
 }
 
 void Bag::Give(std::vector<Item*>& _List)
 {
+	//잠정 미구현
+//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
+//Item* NewItem = ItemList_.back();
+//delete NewItem;
+//NewItem = nullptr;
+//ItemList_.pop_back();
+//ShowFonts(ItemList_);
+
+
 	if (0 == _List.size())
 	{
 		ShowFonts(_List);
