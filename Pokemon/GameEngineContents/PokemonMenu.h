@@ -4,6 +4,7 @@
 class FadeActor;
 class GameEngineContentFont;
 class PokemonInfo;
+class Item;
 class PokemonMenu : public GameEngineActor
 {
 	enum class PokemonMenuType
@@ -13,6 +14,7 @@ class PokemonMenu : public GameEngineActor
 		SelectSwitch,
 		Switching,
 		OpeningChildUI,
+		UsingPotion,
 		Max
 	};
 
@@ -32,7 +34,7 @@ public:
 	PokemonMenu& operator=(const PokemonMenu& _Ohter) = delete;
 	PokemonMenu& operator=(const PokemonMenu&& _Other) noexcept = delete;
 
-	void InitPokemonMenu();
+	void InitPokemonMenu(Item* _Item = nullptr);
 	void DestroyPokemonMenu();
 
 protected:
@@ -61,6 +63,9 @@ private:
 	void OpeningChildUIStart();
 	void OpeningChildUIUpdate();
 
+	void UsingPotionStart();
+	void UsingPotionUpdate();
+
 	PokemonMenuType CurState_;
 
 	void InitRenderer();
@@ -88,6 +93,7 @@ private:
 	GameEngineRenderer* QuestionDialogRenderer_;
 	GameEngineRenderer* SelectDialogRenderer_;
 	GameEngineRenderer* CancelRenderer_;
+	GameEngineRenderer* UsingPotionBoxRenderer_;
 	std::vector<GameEngineRenderer*> PokemonRenderer_;
 	GameEngineRenderer* HpRenderer_[6];
 	GameEngineRenderer* GenderRenderer_[6];
@@ -134,5 +140,11 @@ private:
 	// 포켓몬 리스트
 	std::vector<PokemonInfo*> PokemonList_;
 
+
+	//--------------------------------------- 상처약 이벤트 관련-------------------------------------------------------------
+
+	bool IsItemMode_; //true : 상처약 사용 모드, false : 일반 모드
+	float UsingPotionTime_;
+	int PotionValue_;
 };
 

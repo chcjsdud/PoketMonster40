@@ -11,6 +11,8 @@
 #include <GameEngineBase/GameEngineWindow.h>
 #include "PlayerRed.h"
 #include "FadeActor.h"
+#include "Item.h"
+#include "Potion.h"
 
 //렌더오더 설정 나중에 해주기
 
@@ -30,7 +32,11 @@ PokemonMenu::PokemonMenu() :
 	ChildUIActor_(nullptr),
 	CurChildUIType_(ChildUIType::None),
 	IsOn_(false),
-	FadeActor_(nullptr)
+	FadeActor_(nullptr),
+	IsItemMode_(false),
+	UsingPotionTime_(0.0f),
+	PotionValue_(0),
+	UsingPotionBoxRenderer_(nullptr)
 {
 	PokemonRenderer_.resize(6);
 	PokemonNameFonts_.reserve(6);
@@ -305,6 +311,9 @@ void PokemonMenu::ChangeState(PokemonMenuType _Type)
 	case PokemonMenu::PokemonMenuType::OpeningChildUI:
 		OpeningChildUIStart();
 		break;
+	case PokemonMenu::PokemonMenuType::UsingPotion:
+		UsingPotionStart();
+		break;
 	default:
 		break;
 	}
@@ -329,6 +338,9 @@ void PokemonMenu::UpdateState()
 		break;
 	case PokemonMenu::PokemonMenuType::OpeningChildUI:
 		OpeningChildUIUpdate();
+		break;
+	case PokemonMenu::PokemonMenuType::UsingPotion:
+		UsingPotionUpdate();
 		break;
 	default:
 		break;
@@ -401,12 +413,21 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
-		if (CurrentOrder_ < PokemonNumber_)
+		if (CurrentOrder_ < PokemonNumber_) //일반 포켓몬 버튼
 		{
-			ChangeState(PokemonMenuType::SelectAction);
-			return;
+			if (IsItemMode_ == false)
+			{
+				ChangeState(PokemonMenuType::SelectAction);
+				return;
+			}
+			else
+			{
+				ChangeState(PokemonMenuType::UsingPotion);
+				return;
+			}
+			
 		}
-		else
+		else //캔슬버튼
 		{
 			DestroyPokemonMenu();
 			return;
@@ -812,6 +833,26 @@ void PokemonMenu::OpeningChildUIUpdate()
 	}
 }
 
+void PokemonMenu::UsingPotionStart()
+{
+	DialogFont_->Off();
+	DialogRenderer_->Off();
+}
+
+void PokemonMenu::UsingPotionUpdate()
+{
+	UsingPotionTime_ += GameEngineTime::GetDeltaTime();
+	if (UsingPotionTime_ >= 0.03f)
+	{
+		UsingPotionTime_ = 0.0f;
+		if (PokemonList_[CurrentOrder_]->GetHp() < PokemonList_[CurrentOrder_]->GetMaxHp() && PotionValue_ <20)
+		{
+			ChangeHp(CurrentOrder_, 1);
+			PotionValue_++;
+		}
+	}
+}
+
 
 void PokemonMenu::InitRenderer()
 {
@@ -853,6 +894,10 @@ void PokemonMenu::InitRenderer()
 	QuestionDialogRenderer_->SetImage("DialogBox_PokemonMenu_Question.bmp");
 	QuestionDialogRenderer_->SetTransColor(RGB(255, 0, 255));
 	QuestionDialogRenderer_->Off();
+
+	//포션 먹이고나서 나오는 박스
+	UsingPotionBoxRenderer_ = CreateRenderer("PokemonMenu_UsingPotion.bmp", GetOrder(), RenderPivot::LeftTop, { 4,450 });
+	UsingPotionBoxRenderer_->SetTransColor(RGB(255, 0, 255));
 
 	//선택형 대화형 박스
 	SelectDialogRenderer_ = CreateRenderer(static_cast<int>(GetOrder()), RenderPivot::LeftTop, { 580,326 });
@@ -1151,11 +1196,17 @@ void PokemonMenu::IconJumpOff(int _PokemonOrder)
 }
 
 
-void PokemonMenu::InitPokemonMenu()
+void PokemonMenu::InitPokemonMenu(Item* _Item)
 {
 	//FadeActor 생성
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition()+GameEngineWindow::GetScale().Half());
+
+	//상처약 이벤트
+	if (_Item != nullptr)
+	{
+		IsItemMode_ = true;
+	}
 
 	GetPlayerPokemon();
 	InitRenderer();

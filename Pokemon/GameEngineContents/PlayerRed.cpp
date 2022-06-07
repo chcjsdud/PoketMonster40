@@ -830,24 +830,13 @@ void PlayerRed::UIUpdate()
 void PlayerRed::InitMyPokemon()
 {
 	//
-	Pokemon* Charmander = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
-	Charmander->GetInfo()->PlusHp(-10);
-	Charmander->GetInfo()->SetMyLevel(2);
-	Charmander->GetInfo()->SetGender(true);
 
 	Pokemon* Squirtle = PokemonInfoManager::GetInst().CreatePokemon("Squirtle");
-	Squirtle->GetInfo()->PlusHp(-50);
+	Squirtle->GetInfo()->PlusHp(-70);
 	Squirtle->GetInfo()->SetMyLevel(4);
 	Squirtle->GetInfo()->SetMaxHp(170);
 
-	Pokemon* Bulbasaur = PokemonInfoManager::GetInst().CreatePokemon("Bulbasaur");
-	Bulbasaur->GetInfo()->PlusHp(-90);
-	Bulbasaur->GetInfo()->SetMyLevel(10);
-	Bulbasaur->GetInfo()->SetGender(true);
-	Bulbasaur->GetInfo()->SetMaxHp(150);
-
-	MyPokemonList_.push_back(Charmander);
 	MyPokemonList_.push_back(Squirtle);
-	MyPokemonList_.push_back(Bulbasaur);
+
 
 }
