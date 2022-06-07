@@ -326,6 +326,7 @@ void PlayerRed::Start()
 	BushActor_ = GetLevel()->CreateActor<Bush>();
 
 	AnimationName_ = "Idle";
+	ChangeDirText_ = "Up";
 	CurrentDir_ = RedDir::Up;
 	CurrentState_ = RedState::Idle;
 
