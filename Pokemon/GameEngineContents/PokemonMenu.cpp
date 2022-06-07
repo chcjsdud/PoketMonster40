@@ -36,7 +36,8 @@ PokemonMenu::PokemonMenu() :
 	IsItemMode_(false),
 	UsingPotionTime_(0.0f),
 	PotionValue_(0),
-	UsingPotionBoxRenderer_(nullptr)
+	UsingPotionBoxRenderer_(nullptr),
+	UsingPotionFont_(nullptr)
 {
 	PokemonRenderer_.resize(6);
 	PokemonNameFonts_.reserve(6);
@@ -850,6 +851,24 @@ void PokemonMenu::UsingPotionUpdate()
 			ChangeHp(CurrentOrder_, 1);
 			PotionValue_++;
 		}
+		else //HP가 전부 회복된 경우
+		{
+			UsingPotionBoxRenderer_->On();
+			if (UsingPotionFont_ == nullptr)
+			{
+				
+				UsingPotionFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder()+11);
+				UsingPotionFont_->SetPosition(GetPosition()+float4( 24,490 ));
+				UsingPotionFont_->ShowString(PokemonList_[CurrentOrder_]->GetNameCopy()+"'s HP was restored\\by "+std::to_string(PotionValue_)+" points.", true);
+				
+			}
+			//탈출
+			if (GameEngineInput::GetInst()->IsDown("Z") == true || GameEngineInput::GetInst()->IsDown("X") == true)
+			{
+				DestroyPokemonMenu();
+				return;
+			}
+		}
 	}
 }
 
@@ -896,8 +915,9 @@ void PokemonMenu::InitRenderer()
 	QuestionDialogRenderer_->Off();
 
 	//포션 먹이고나서 나오는 박스
-	UsingPotionBoxRenderer_ = CreateRenderer("PokemonMenu_UsingPotion.bmp", GetOrder(), RenderPivot::LeftTop, { 4,450 });
+	UsingPotionBoxRenderer_ = CreateRenderer("PokemonMenu_UsingPotion.bmp", GetOrder()+10, RenderPivot::LeftTop, { 4,450 });
 	UsingPotionBoxRenderer_->SetTransColor(RGB(255, 0, 255));
+	UsingPotionBoxRenderer_->Off();
 
 	//선택형 대화형 박스
 	SelectDialogRenderer_ = CreateRenderer(static_cast<int>(GetOrder()), RenderPivot::LeftTop, { 580,326 });
@@ -1239,6 +1259,10 @@ void PokemonMenu::DestroyPokemonMenu()
 
 	DialogFont_->ClearCurrentFonts();
 	SwitchFont_->ClearCurrentFonts();
+	if (UsingPotionFont_ != nullptr)
+	{
+		UsingPotionFont_->ClearCurrentFonts();
+	}
 	if (QuestionFont_ != nullptr)
 	{
 		QuestionFont_->ClearCurrentFonts();

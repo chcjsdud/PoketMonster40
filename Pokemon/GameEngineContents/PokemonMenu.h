@@ -83,6 +83,7 @@ private:
 	GameEngineContentFont* DialogFont_;
 	GameEngineContentFont* SwitchFont_;
 	GameEngineContentFont* QuestionFont_;
+	GameEngineContentFont* UsingPotionFont_;
 	void InitFont();
 
 	//·»´õ·¯
