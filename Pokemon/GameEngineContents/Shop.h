@@ -1,5 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
+#include "ContentEnum.h"
+#include "Item.h"
 
 enum class ShopState
 {
@@ -29,7 +31,30 @@ public:
 	void OpenCountDialog();
 	void OpenBuyDialog();
 
-	void AllClose();
+	void DestroyAllFonts();
+
+	void ArrowUpdate();
+
+	inline void SetPlayerItemList(std::vector<Item*>& _List)
+	{
+		for (int i = 0; i < _List.size(); ++i)
+		{
+			if (ItemType::ITEM == _List[i]->GetInfo()->GetType())
+			{
+				ItemList_.push_back(_List[i]);
+			}
+
+			else if (ItemType::KEYITEM == _List[i]->GetInfo()->GetType())
+			{
+				KeyItemList_.push_back(_List[i]);
+			}
+
+			else if (ItemType::BALL == _List[i]->GetInfo()->GetType())
+			{
+				BallList_.push_back(_List[i]);
+			}
+		}
+	}
 
 protected:
 	void Start();
@@ -45,5 +70,12 @@ private:
 	GameEngineRenderer* BuyDialog_;
 
 	GameEngineRenderer* Arrow_;
+	int ArrowIndex_;
+
+	std::vector<Item*> ItemList_;
+	std::vector<Item*> KeyItemList_;
+	std::vector<Item*> BallList_;
+
+	std::vector<class GameEngineContentFont*> AllFontList_;
 };
 

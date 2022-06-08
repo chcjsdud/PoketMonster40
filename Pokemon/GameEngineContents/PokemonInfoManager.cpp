@@ -140,6 +140,8 @@ void PokemonInfoManager::Reset()
 		PokemonInfo* SquirtleInfo = CreatePokemonInfo("Squirtle", PokemonType::WATER, 5, 12, 11, 10, 10, 13, 19);
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		SquirtleInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
+		SquirtleInfo->AddMySkill(CreatePokemonSkill("Withdraw"));
+		SquirtleInfo->AddMySkill(CreatePokemonSkill("WaterGun"));
 
 		//Bulbasaur: 이상해씨
 		PokemonInfo* BulbasaurInfo = CreatePokemonInfo("Bulbasaur", PokemonType::GRASS, 5, 11, 11, 12, 12, 9, 19);

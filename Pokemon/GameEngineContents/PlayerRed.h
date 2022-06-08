@@ -63,6 +63,11 @@ public:
 		return MyItemList_;
 	}
 
+	inline int GetMoney()
+	{
+		return Money_;
+	}
+
 
 protected:
 
@@ -159,6 +164,8 @@ private:
 private:
 	GameEngineActor* ChildUI_;
 	class FadeActor* FadeActor_;
+
+	int Money_; //플레이어 돈. 상점에 필요
 
 	void UIUpdate(); 
 	void InitMyPokemon();

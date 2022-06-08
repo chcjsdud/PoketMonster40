@@ -1,11 +1,15 @@
 #include "Shop.h"
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineBase/GameEngineInput.h>
+#include "PlayerRed.h"
+#include <string>
+#include <GameEngineContentsCore/GameEngineContentFont.h>
 
 Shop::Shop()
 	: ShopState_(ShopState::SelectDialog)
 	, SalesList_(nullptr)
 	, ShopDialog_(nullptr)
+	, ArrowIndex_(0)
 {
 }
 
@@ -25,6 +29,13 @@ void Shop::ShopInit()
 	Arrow_ = CreateRenderer("Bag_CurrentArrow.bmp", -1, RenderPivot::LeftTop);
 
 	ShopDialog_->SetPivot(float4{ 25, 0 });
+	InBag_->SetPivot(float4{ 10, 330 });
+	CountDialog_->SetPivot(float4{ 520, 260 });
+	BuyDialog_->SetPivot(float4{ 530, 265 });	
+
+	ArrowIndex_ = 0;
+
+	Arrow_->SetOrder(GetOrder() + 10);
 }
 
 void Shop::ShopDestroy()
@@ -35,7 +46,10 @@ void Shop::ShopDestroy()
 	CountDialog_->Death();
 	BuyDialog_->Death();
 	Arrow_->Death();
+
+	DestroyAllFonts();
 }
+
 
 void Shop::OpenDialog()
 {
@@ -58,13 +72,87 @@ void Shop::OpenBuyDialog()
 	BuyDialog_->SetOrder(GetOrder() + 3);
 }
 
-void Shop::AllClose()
+void Shop::DestroyAllFonts()
 {
-	ShopDialog_->SetOrder(-1);
-	SalesList_->SetOrder(-1);
-	InBag_->SetOrder(-1);
-	CountDialog_->SetOrder(-1);
-	BuyDialog_->SetOrder(-1);
+	for (GameEngineContentFont* Font : AllFontList_)
+	{
+		if (nullptr != Font)
+		{
+			Font->Death();
+		}
+	}
+
+	AllFontList_.clear();
+}
+
+void Shop::ArrowUpdate()
+{
+	if (true == GameEngineInput::GetInst()->IsDown("UpArrowShop"))
+	{
+		if (0 == ArrowIndex_)
+		{
+			return;
+		}
+
+		--ArrowIndex_;
+	}
+
+	else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
+	{
+		++ArrowIndex_;
+	}
+
+	switch (ShopState_)
+	{
+	case ShopState::SelectDialog:
+		switch (ArrowIndex_)
+		{
+		case 0:
+			Arrow_->SetPivot(float4{ 50, 45 });
+			break;
+
+		case 1:
+			Arrow_->SetPivot(float4{ 50, 110 });
+			break;
+
+		case 2:
+			Arrow_->SetPivot(float4{ 50, 175 });
+			break;
+
+		default:
+			ArrowIndex_ = 2;
+			Arrow_->SetPivot(float4{ 50, 175 });
+			break;
+		}
+		break;
+	case ShopState::SelectSalesList:
+		switch (ArrowIndex_)
+		{
+		case 0:
+			Arrow_->SetPivot(float4{ 355, 45 });
+			break;
+
+		case 1:
+			Arrow_->SetPivot(float4{ 355, 110 });
+			break;
+
+		case 2:
+			Arrow_->SetPivot(float4{ 355, 175 });
+			break;
+
+		default:
+			ArrowIndex_ = 2;
+			Arrow_->SetPivot(float4{ 355, 175 });
+			break;
+		}
+		break;
+	case ShopState::SelectCount:
+
+		break;
+	case ShopState::SelectBuy:
+
+		break;
+	}
 }
 
 void Shop::Start()
@@ -73,6 +161,9 @@ void Shop::Start()
 	{
 		GameEngineInput::GetInst()->CreateKey("SelectShop", 'z');
 		GameEngineInput::GetInst()->CreateKey("Exitshop", 'x');
+
+		GameEngineInput::GetInst()->CreateKey("DownArrowShop", VK_DOWN);
+		GameEngineInput::GetInst()->CreateKey("UpArrowShop", VK_UP);
 	}
 }
 
@@ -87,24 +178,69 @@ void Shop::Update()
 		{
 			ShopState_ = ShopState::SelectSalesList;
 			ShopDialog_->SetOrder(-1);
+			ArrowIndex_ = 0;
+
+			GameEngineContentFont* Money = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			Money->SetPosition(GetPosition() + float4{ 195, 85 });
+			Money->ShowString(std::to_string(PlayerRed::MainRed_->GetMoney()), true);
+			AllFontList_.push_back(Money);
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
 		{
+			ShopDestroy();
 			Off();
 		}
 		break;
+
 	case ShopState::SelectSalesList:
 		OpenSalesList();
 
 		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectCount;
+
+			int Index = 0;
+
+			for (Item* CurItem : ItemList_)
+			{
+				if (nullptr == CurItem)
+				{
+					continue;
+				}
+
+				switch (ArrowIndex_)
+				{
+				case 0:
+					if ("POKEBALL" == CurItem->GetInfo()->GetNameConstPtr())
+					{
+						++Index;
+					}
+					break;
+				case 1:
+					if ("POTION" == CurItem->GetInfo()->GetNameConstPtr())
+					{
+						++Index;
+					}
+					break;
+				case 2: 
+					ShopState_ = ShopState::SelectDialog;
+					DestroyAllFonts();
+					SalesList_->SetOrder(-1);
+					break;
+				}
+			}
+
+			GameEngineContentFont* Count  = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			Count->SetPosition(GetPosition() + float4{ 195, 85 });
+			Count->ShowString(std::to_string(PlayerRed::MainRed_->GetMoney()), true);
+			AllFontList_.push_back(Count);
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
 		{
 			ShopState_ = ShopState::SelectDialog;
+			DestroyAllFonts();
 			SalesList_->SetOrder(-1);
 		}
 		break;
@@ -116,6 +252,8 @@ void Shop::Update()
 		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectBuy;
+			InBag_->SetOrder(-1);
+			CountDialog_->SetOrder(-1);
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
@@ -132,6 +270,7 @@ void Shop::Update()
 		{
 			ShopState_ = ShopState::SelectSalesList;
 			BuyDialog_->SetOrder(-1);
+			ArrowIndex_ = 0;
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
@@ -140,9 +279,12 @@ void Shop::Update()
 			BuyDialog_->SetOrder(-1);
 			InBag_->SetOrder(-1);
 			CountDialog_->SetOrder(-1);
+			ArrowIndex_ = 0;
 		}
 		break;
 	}
+
+	ArrowUpdate();
 }
 
 

@@ -77,6 +77,7 @@ PlayerRed::PlayerRed()
 	, FadeActor_(nullptr)
 	, RedCollision_(nullptr)
 	, RedFrontCollision_(nullptr)
+	, Money_(3000)
 {
 	MainRed_ = this;
 }
@@ -876,6 +877,4 @@ void PlayerRed::InitMyPokemon()
 	//Squirtle->GetInfo()->SetMaxHp(170);
 
 	MyPokemonList_.push_back(Squirtle);
-
-
 }
