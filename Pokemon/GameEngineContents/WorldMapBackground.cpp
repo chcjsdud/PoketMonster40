@@ -31,7 +31,7 @@ void WorldMapBackground::Start()
 	Rooms2Renderer_ = CreateRenderer("Rooms2.bmp");
 	Rooms2Renderer_->SetPivot({ -5800, 0 });
 	GymRenderer_ = CreateRenderer("Gym.bmp");
-	GymRenderer_->SetPivot({-2500, -5000});
+	GymRenderer_->SetPivot({-2500, -6500});
 }
 
 void WorldMapBackground::Update()

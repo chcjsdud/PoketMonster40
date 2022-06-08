@@ -99,6 +99,8 @@ enum class WorldBackgroundSoundEnum
 	Route22,
 	Route2,
 	PewterCity,
+	OakLap,
+	Gym,
 	Max
 };
 

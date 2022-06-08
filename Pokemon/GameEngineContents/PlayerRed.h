@@ -145,6 +145,7 @@ private:
 
 	// »ç¿îµå
 	void SoundTileCheck();
+	void TileChangeSound();
 
 	// FSM
 	float AnimTimer_;

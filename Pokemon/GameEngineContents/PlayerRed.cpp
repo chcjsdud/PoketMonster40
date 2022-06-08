@@ -203,6 +203,8 @@ void PlayerRed::FadeIn()
 				CurrentTileMap_ = NextTileMap_;
 				SetPosition(CurrentTileMap_->GetWorldPostion(NextTilePos_.ix(), NextTilePos_.iy()));
 
+				TileChangeSound();
+
 				NextTileMap_ = nullptr;
 				NextTilePos_ = float4::ZERO;
 			}
@@ -355,7 +357,6 @@ void PlayerRed::Start()
 void PlayerRed::Update()
 {
 	DirAnimationCheck();
-	//Camera();
 	StateUpdate();
 	//WMenuUISelect();
 	MoveAnim();
@@ -364,7 +365,6 @@ void PlayerRed::Update()
 	FadeRL();
 	Camera();
 	UIUpdate();
-	//Camera();
 	InteractionUpdate();
 	SoundTileCheck();
 

@@ -11,6 +11,7 @@
 #include "WorldTileMap1.h"
 #include "WorldTileMap2.h"
 #include "WorldTileMap3.h"
+#include "GymTileMap.h"
 #include "InteractionText.h"
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
@@ -264,7 +265,23 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 			NextTilePos_ = { 4, 5 };
 			return true;
 		}
+		if (_X == 16 && _Y == 19) // Ã¼À°°ü
+		{
+			NextTileMap_ = GymTileMap::GetInst();
+			NextTilePos_ = { 11, 19 };
+			return true;
+		}
 	}
+	else if (GymTileMap::GetInst() == CurrentTileMap_)
+	{
+		if (_X == 11 && _Y == 20)
+		{
+			NextTileMap_ = WorldTileMap3::GetInst();
+			NextTilePos_ = { 16, 20 };
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -1081,5 +1098,13 @@ void PlayerRed::SoundTileCheck()
 	if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
 		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
+	}
+}
+
+void PlayerRed::TileChangeSound()
+{
+	if (CurrentTileMap_ == GymTileMap::GetInst())
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Gym);
 	}
 }

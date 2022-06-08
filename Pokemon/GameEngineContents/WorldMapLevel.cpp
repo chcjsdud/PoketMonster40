@@ -16,6 +16,7 @@
 #include "RoomTileMap6.h"
 #include "RoomTileMap7.h"
 #include "RoomTileMap8.h"
+#include "GymTileMap.h"
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
 
@@ -42,6 +43,7 @@ void WorldMapLevel::Loading()
 	CreateActor<RoomTileMap6>();
 	CreateActor<RoomTileMap7>();
 	CreateActor<RoomTileMap8>();
+	CreateActor<GymTileMap>();
 	CreateActor<PlayerRed>();
 	CreateActor<NPC4>();
 	CreateActor<NPC5>();

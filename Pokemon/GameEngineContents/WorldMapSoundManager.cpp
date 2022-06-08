@@ -44,7 +44,7 @@ void WorldMapSoundManager::Update()
 			break;
 		case WorldBackgroundSoundEnum::ViridianCity:
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
-			BgmPlayer_.SetVolume(0.5f);
+			BgmPlayer_.SetVolume(0.2f);
 			break;
 		case WorldBackgroundSoundEnum::Route22:
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
@@ -56,7 +56,15 @@ void WorldMapSoundManager::Update()
 			break;
 		case WorldBackgroundSoundEnum::PewterCity:
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
-			BgmPlayer_.SetVolume(0.5f);
+			BgmPlayer_.SetVolume(0.2f);
+			break;
+		case WorldBackgroundSoundEnum::OakLap:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_OakLap.mp3");
+			BgmPlayer_.SetVolume(0.2f);
+			break;
+		case WorldBackgroundSoundEnum::Gym:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Gym.mp3");
+			BgmPlayer_.SetVolume(0.2f);
 			break;
 		default:
 			break;
