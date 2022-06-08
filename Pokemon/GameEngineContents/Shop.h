@@ -71,6 +71,7 @@ private:
 	GameEngineRenderer* BuyDialog_;
 
 	GameEngineRenderer* Arrow_;
+	GameEngineRenderer* BuyArrow_;
 	int ArrowIndex_;
 
 	std::vector<Item*> ItemList_;
@@ -80,7 +81,8 @@ private:
 	std::vector<class GameEngineContentFont*> AllFontList_;
 	std::vector<class GameEngineContentFont*> CountList_; //아이템 구매 개수 폰트
 
-
 	GameEngineContentFont* InBagCount_;
+
+	GameEngineRenderer* ItemPreView_;
 };
 

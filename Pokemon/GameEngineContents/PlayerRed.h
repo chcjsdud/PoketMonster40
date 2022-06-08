@@ -167,6 +167,10 @@ private:
 
 	int Money_; //플레이어 돈. 상점에 필요
 
+	GameEngineRenderer* PokemonPreview_; //스타팅 포켓몬 전용 UI
+
 	void UIUpdate(); 
 	void InitMyPokemon();
+
+	void PopUpPokemonPreview(int _Index);
 };

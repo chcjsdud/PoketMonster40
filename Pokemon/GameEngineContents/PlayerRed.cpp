@@ -347,6 +347,9 @@ void PlayerRed::Start()
 	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
 	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
 	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("PokeBall"));
+
+	PokemonPreview_ = CreateRenderer("Select_Bulbasaur.bmp");
+	PokemonPreview_->SetOrder(-1);
 }
 
 void PlayerRed::Update()
@@ -876,4 +879,30 @@ void PlayerRed::InitMyPokemon()
 	//Squirtle->GetInfo()->SetMaxHp(170);
 
 	MyPokemonList_.push_back(Squirtle);
+}
+
+void PlayerRed::PopUpPokemonPreview(int _Index)
+{
+	if (3 <= _Index)
+	{
+		return;
+	}
+
+	switch (_Index)
+	{	
+	case 0:
+		PokemonPreview_ = CreateRenderer("Select_Bulbasaur.bmp");
+		PokemonPreview_->SetOrder(GetOrder() + 10);
+		break;
+
+	case 1:
+		PokemonPreview_ = CreateRenderer("Select_Charmander.bmp");
+		PokemonPreview_->SetOrder(GetOrder() + 10);
+		break;
+
+	case 2:
+		PokemonPreview_ = CreateRenderer("Select_Squirtle.bmp");
+		PokemonPreview_->SetOrder(GetOrder() + 10);
+		break;
+	}
 }
