@@ -79,5 +79,8 @@ private:
 
 	std::vector<class GameEngineContentFont*> AllFontList_;
 	std::vector<class GameEngineContentFont*> CountList_; //아이템 구매 개수 폰트
+
+
+	GameEngineContentFont* InBagCount_;
 };
 

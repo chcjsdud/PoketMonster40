@@ -172,7 +172,7 @@ void Shop::ArrowUpdate()
 
 			++Index_;
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			Count->SetPosition(GetPosition() + float4{ 400, 225 });
+			Count->SetPosition(GetPosition() + float4{ 580, 325 });
 			Count->ShowString(std::to_string(Index_), true);
 			CountList_.push_back(Count);
 		}
@@ -188,7 +188,7 @@ void Shop::ArrowUpdate()
 			--Index_;
 
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			Count->SetPosition(GetPosition() + float4{ 620, 250 });
+			Count->SetPosition(GetPosition() + float4{ 580, 325 });
 			Count->ShowString(std::to_string(Index_), true);
 			CountList_.push_back(Count);
 		}
@@ -205,7 +205,7 @@ void Shop::Start()
 	if (false == GameEngineInput::GetInst()->IsKey("SelectShop"))
 	{
 		GameEngineInput::GetInst()->CreateKey("SelectShop", 'z');
-		GameEngineInput::GetInst()->CreateKey("Exitshop", 'x');
+		GameEngineInput::GetInst()->CreateKey("ExitShop", 'x');
 
 		GameEngineInput::GetInst()->CreateKey("DownArrowShop", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrowShop", VK_UP);
@@ -231,7 +231,7 @@ void Shop::Update()
 			AllFontList_.push_back(Money);
 		}
 
-		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
+		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
 		{
 			ShopDestroy();
 			Off();
@@ -284,27 +284,29 @@ void Shop::Update()
 				ShopState_ = ShopState::SelectDialog;
 				DestroyAllFonts();
 				SalesList_->SetOrder(-1);
+
+				ArrowIndex_ = 0;
 				break;
 			}
 
-			GameEngineContentFont* InBagCount  = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			InBagCount->SetPosition(GetPosition() + float4{ 195, 85 });
-			InBagCount->ShowString(std::to_string(Index), true);
-			CountList_.push_back(InBagCount);
+			InBagCount_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			InBagCount_->SetPosition(GetPosition() + float4{ 270, 360 });
+			InBagCount_->ShowString(std::to_string(Index), true);
+			AllFontList_.push_back(InBagCount_);
 
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			Count->SetPosition(GetPosition() + float4{ 400, 225 });
+			Count->SetPosition(GetPosition() + float4{ 580, 325 });
 			Count->ShowString("1", true);
 			CountList_.push_back(Count);
-
-			ArrowIndex_ = 1;
 		}
 
-		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
+		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
 		{
 			ShopState_ = ShopState::SelectDialog;
 			DestroyAllFonts();
 			SalesList_->SetOrder(-1);
+
+			ArrowIndex_ = 0;
 		}
 		break;
 
@@ -319,11 +321,14 @@ void Shop::Update()
 			CountDialog_->SetOrder(-1);
 		}
 
-		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
+		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
 		{
 			ShopState_ = ShopState::SelectSalesList;
 			InBag_->SetOrder(-1);
 			CountDialog_->SetOrder(-1);
+
+			InBagCount_->Death();
+			DestroyCountFont();
 		}
 		break;
 	case ShopState::SelectBuy:
@@ -333,7 +338,6 @@ void Shop::Update()
 		{
 			ShopState_ = ShopState::SelectSalesList;
 			BuyDialog_->SetOrder(-1);
-			ArrowIndex_ = 0;
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
@@ -342,7 +346,6 @@ void Shop::Update()
 			BuyDialog_->SetOrder(-1);
 			InBag_->SetOrder(-1);
 			CountDialog_->SetOrder(-1);
-			ArrowIndex_ = 0;
 		}
 		break;
 	}

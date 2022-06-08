@@ -857,6 +857,7 @@ void PlayerRed::UIUpdate()
 		{
 			ChildUI_ = GetLevel()->CreateActor<Shop>(60, "Shop");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<Shop*>(ChildUI_)->SetPlayerItemList(MyItemList_);
 			dynamic_cast<Shop*>(ChildUI_)->ShopInit();
 
 			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
