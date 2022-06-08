@@ -353,7 +353,6 @@ void PlayerRed::Update()
 	DirAnimationCheck();
 	//Camera();
 	StateUpdate();
-	IsWMenuKey();
 	WMenuUISelect();
 	MoveAnim();
 	FadeIn();
@@ -611,26 +610,6 @@ bool PlayerRed::IsMoveKey()
 	return true;
 }
 
-void PlayerRed::IsWMenuKey()
-{
-	if (true == GameEngineInput::GetInst()->IsDown("WMenuUI"))
-	{
-		if (true == WMenuUICheck_)
-		{
-			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
-			ChangeState(RedState::Idle);
-			WMenuArrowRender_->On();
-
-			WMenuUICheck_ = false;
-		}
-		else if (false == WMenuUICheck_)
-		{
-			WMenuArrowRender_->Off();
-
-			WMenuUICheck_ = true;
-		}
-	}
-}
 
 void PlayerRed::MoveAnim()
 {
@@ -841,6 +820,8 @@ void PlayerRed::UIUpdate()
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("BagOn")) // 가방열기
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+
 			FadeActor_->SetPosition(GetPosition());
 			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
@@ -851,6 +832,8 @@ void PlayerRed::UIUpdate()
 
 		if (true == GameEngineInput::GetInst()->IsDown("BagClose")) //포켓몬 메뉴 열기
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+
 			FadeActor_->SetPosition(GetPosition());
 			FadeActor_->FadeOut();
 			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
@@ -862,6 +845,8 @@ void PlayerRed::UIUpdate()
 		{
 			WMenuUICheck_ = false;
 
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+
 			ChildUI_ = GetLevel()->CreateActor<MenuUI>(60, "MenuUI");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<MenuUI*>(ChildUI_)->InitMenuUI();
@@ -872,6 +857,11 @@ void PlayerRed::UIUpdate()
 			ChildUI_ = GetLevel()->CreateActor<Shop>(60, "Shop");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<Shop*>(ChildUI_)->ShopInit();
+
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+			ChangeState(RedState::Idle);
+
+			WMenuUICheck_ = !WMenuUICheck_;
 		}
 	}
 }

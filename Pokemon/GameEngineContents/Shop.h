@@ -29,6 +29,8 @@ public:
 	void OpenCountDialog();
 	void OpenBuyDialog();
 
+	void AllClose();
+
 protected:
 	void Start();
 	void Update();
