@@ -3,6 +3,8 @@
 #include <GameEngineBase/GameEngineInput.h>
 #include <GameEngineBase/GameEngineWindow.h>
 
+#include "PlayerRed.h"
+
 WorldMapBackground::WorldMapBackground() 
 	: WorldMap1_(nullptr)
 	, WorldMap2_(nullptr)
@@ -28,6 +30,8 @@ void WorldMapBackground::Start()
 	RoomsRenderer_->SetPivot({-2500, 0});
 	Rooms2Renderer_ = CreateRenderer("Rooms2.bmp");
 	Rooms2Renderer_->SetPivot({ -5800, 0 });
+	GymRenderer_ = CreateRenderer("Gym.bmp");
+	GymRenderer_->SetPivot({-2500, -5000});
 }
 
 void WorldMapBackground::Update()

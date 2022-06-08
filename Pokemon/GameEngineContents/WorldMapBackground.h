@@ -24,6 +24,7 @@ private:
 	GameEngineRenderer* WorldMap3_;
 	GameEngineRenderer* RoomsRenderer_;
 	GameEngineRenderer* Rooms2Renderer_;
+	GameEngineRenderer* GymRenderer_;
 
 	void Start() override;
 	void Update() override;

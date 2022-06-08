@@ -181,6 +181,9 @@
     <ClCompile Include="Shop.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="GymTileMap.cpp">
+      <Filter>WorldMap\TileMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -363,6 +366,9 @@
     </ClInclude>
     <ClInclude Include="Shop.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GymTileMap.h">
+      <Filter>WorldMap\TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
