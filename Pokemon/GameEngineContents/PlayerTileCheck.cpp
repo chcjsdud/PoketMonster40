@@ -169,7 +169,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap2::GetInst();
-				AppearPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
 				return false;
 			}
 		}
@@ -182,7 +182,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap3::GetInst();
-				AppearPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
 				return false;
 			}
 		}
@@ -197,7 +197,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				AppearPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
 				return false;
 			}
 		}
@@ -212,7 +212,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				AppearPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
@@ -247,7 +247,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				AppearPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
+				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
