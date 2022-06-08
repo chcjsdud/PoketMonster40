@@ -13,7 +13,8 @@
 MenuUI::MenuUI():
 	CurrentOrder_(0),
 	IsOn_(false),
-	FadeActor_(nullptr)
+	FadeActor_(nullptr),
+	MenuUITimer_(0.0f)
 {
 	MenuUIRenderer_.reserve(6);
 }
@@ -55,6 +56,7 @@ void MenuUI::Update()
 	{
 		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
 		{
+			MenuUITimer_ = 0.0f;
 			FadeActor_->SetPosition(GetPosition() + GameEngineWindow::GetScale().Half());
 			FadeActor_->FadeOut();
 
@@ -63,9 +65,10 @@ void MenuUI::Update()
 		}
 		else
 		{
-			return;
+			return;//api 
 		}
 	}
+
 
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
@@ -91,12 +94,12 @@ void MenuUI::Update()
 		}
 	}
 
-	if (GameEngineInput::GetInst()->IsDown("X") == true)
+	if (GameEngineInput::GetInst()->IsDown("X") == true && MenuUITimer_ > 0)
 	{
 		Off();
 	}
 
-	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	if (GameEngineInput::GetInst()->IsDown("Z") == true && MenuUITimer_ > 0)
 	{
 		switch (CurrentOrder_)
 		{
@@ -125,6 +128,8 @@ void MenuUI::Update()
 		}
 	}
 
+
+	MenuUITimer_ += GameEngineTime::GetDeltaTime();
 }
 
 void MenuUI::Render()

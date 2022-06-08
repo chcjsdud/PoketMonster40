@@ -828,10 +828,24 @@ bool PlayerRed::InteractionNPC()
 
 void PlayerRed::UIUpdate()
 {
+	if (ChildUI_ != nullptr) // UI창이 뜰 경우
+	{
+		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
+		{
+			//FadeActor_->SetPosition(GetPosition());
+			//FadeActor_->FadeOut();
+			WMenuUICheck_ = true;
+
+			ChildUI_->Death();
+			ChildUI_ = nullptr;
+		}
+	}
+
 	if (IsMove_ == true)
 	{
 		return;
 	}
+
 	if (ChildUI_ == nullptr)
 	{
 		if (true == GameEngineInput::GetInst()->IsDown("BagOn")) // 가방열기
@@ -860,18 +874,6 @@ void PlayerRed::UIUpdate()
 			ChildUI_ = GetLevel()->CreateActor<MenuUI>(60, "MenuUI");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<MenuUI*>(ChildUI_)->InitMenuUI();
-		}
-	}
-	else //UI창이 뜬 경우
-	{
-		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
-		{
-			//FadeActor_->SetPosition(GetPosition());
-			//FadeActor_->FadeOut();
-			WMenuUICheck_ = true;
-
-			ChildUI_->Death();
-			ChildUI_ = nullptr;
 		}
 	}
 }

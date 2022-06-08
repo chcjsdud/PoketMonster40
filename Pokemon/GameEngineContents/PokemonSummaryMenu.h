@@ -75,6 +75,17 @@ private:
 	std::vector< GameEngineContentFont*> NumberFonts_;
 	std::vector<GameEngineContentFont*> NatureFonts_;
 	std::vector< GameEngineContentFont*> AllFonts_;
+	std::vector<GameEngineContentFont*> CurHpFonts_;
+	std::vector<GameEngineContentFont*> MaxHpFonts_;
+	std::vector<GameEngineContentFont*> AttFonts_;
+	std::vector<GameEngineContentFont*> DefFonts_;
+	std::vector<GameEngineContentFont*> SpAttFonts_;
+	std::vector<GameEngineContentFont*> SpDefFonts_;
+	std::vector<GameEngineContentFont*> SpeedFonts_;
+	std::vector<GameEngineContentFont*> CurExpFonts_;
+	std::vector<GameEngineContentFont*> NextExpFonts_;
+	std::vector<GameEngineContentFont*> AbilityFonts_;
+	std::vector<GameEngineContentFont*> AbilityExplanationFonts_;
 	GameEngineContentFont* Owner_; //레드 이름
 	GameEngineContentFont* IDNumber_;//ID 폰트
 	GameEngineContentFont* Item_; //아이템 폰트

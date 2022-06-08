@@ -24,7 +24,7 @@ protected:
 	void Render() override;
 private:
 	bool IsOn_; // 이게 true가 되야 액터가 업데이트
-
+	float MenuUITimer_;
 	int CurrentOrder_;
 	std::vector<GameEngineRenderer*> MenuUIRenderer_;
 	FadeActor* FadeActor_;

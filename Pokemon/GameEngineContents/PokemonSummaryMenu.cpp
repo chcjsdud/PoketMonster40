@@ -27,6 +27,18 @@ PokemonSummaryMenu::PokemonSummaryMenu():
 	NumberFonts_.reserve(6);
 	FrameNameFonts_.reserve(6);
 	GenderRenderer_.reserve(6);
+
+	CurHpFonts_.reserve(6);
+	MaxHpFonts_.reserve(6);
+	AttFonts_.reserve(6);
+	DefFonts_.reserve(6);
+	SpAttFonts_.reserve(6);
+	SpDefFonts_.reserve(6);
+	SpeedFonts_.reserve(6);
+	CurExpFonts_.reserve(6);
+	NextExpFonts_.reserve(6);
+	AbilityFonts_.reserve(6);
+	AbilityExplanationFonts_.reserve(6);
 }
 
 PokemonSummaryMenu::~PokemonSummaryMenu()
@@ -102,6 +114,11 @@ void PokemonSummaryMenu::Render()
 				FrameNameFonts_[i]->On();
 				GenderRenderer_[i]->On();
 			}
+
+			//다른 State에서 쓰이는 폰트 전부 Off
+			{
+				CurHpFonts_[i]->Off();
+			}
 		}
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonAbility:
@@ -113,6 +130,7 @@ void PokemonSummaryMenu::Render()
 				LevelFonts_[i]->Off();
 				FrameNameFonts_[i]->Off();
 				GenderRenderer_[i]->Off();
+				CurHpFonts_[i]->Off();
 			}
 			else
 			{
@@ -120,7 +138,20 @@ void PokemonSummaryMenu::Render()
 				LevelFonts_[i]->On();
 				FrameNameFonts_[i]->On();
 				GenderRenderer_[i]->On();
+				CurHpFonts_[i]->On();
 			}
+		}
+
+		//다른 State에서 쓰이는 폰트 끄기
+		Owner_->Off();
+		Item_->Off();
+		IDNumber_->Off();
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			NumberFonts_[i]->Off();
+			NatureFonts_[i]->Off();
+			PokemonTypeRenderer_[i]->Off();
+			NameFonts_[i]->Off();
 		}
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
@@ -238,6 +269,8 @@ void PokemonSummaryMenu::InitRenderer_()
 
 void PokemonSummaryMenu::InitFonts_()
 {
+
+	//--------------------------------------------------  포 켓 몬 인 포 ----------------------------------------------------------------------------
 	//넘버 폰트
 	{
 		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
@@ -320,6 +353,20 @@ void PokemonSummaryMenu::InitFonts_()
 			NewFonts->ShowString(PokemonInfoList_[i]->GetNature()+" nature.", true);
 			NewFonts->Off();
 			NatureFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	// =====================================================  포  켓  몬  어  빌  리  티 ========================================================================================
+	//현재 Hp 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(30, 460));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetHp()), true);
+			NewFonts->Off();
+			CurHpFonts_.push_back(NewFonts);
 			AllFonts_.push_back(NewFonts);
 		}
 	}
@@ -407,17 +454,6 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Right") == true)
 	{
-		//켜져있는 폰트 끄기
-		Owner_->Off();
-		Item_->Off();
-		IDNumber_->Off();
-		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
-		{
-			NumberFonts_[i]->Off();
-			NatureFonts_[i]->Off();
-			PokemonTypeRenderer_[i]->Off();
-			NameFonts_[i]->Off();
-		}
 		ChangeState(PokemonSummaryMenuType::PokemonAbility);
 		return;
 	}
