@@ -31,19 +31,32 @@ void WorldMapSoundManager::Update()
 		CurrentSoundState_ = NextSoundState_;
 		NextSoundState_ = WorldBackgroundSoundEnum::None;
 
+		BgmPlayer_.StopWithNullCheck();
 		switch (CurrentSoundState_)
 		{
 		case WorldBackgroundSoundEnum::PalletTown:
-			BgmPlayer_.StopWithNullCheck();
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_PalletTown.mp3");
 			BgmPlayer_.SetVolume(0.5f);
 			break;
 		case WorldBackgroundSoundEnum::Route1:
-			BgmPlayer_.StopWithNullCheck();
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
 			BgmPlayer_.SetVolume(0.5f);
 			break;
 		case WorldBackgroundSoundEnum::ViridianCity:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
+			BgmPlayer_.SetVolume(0.5f);
+			break;
+		case WorldBackgroundSoundEnum::Route22:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
+			BgmPlayer_.SetVolume(0.5f);
+			break;
+		case WorldBackgroundSoundEnum::Route2:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
+			BgmPlayer_.SetVolume(0.5f);
+			break;
+		case WorldBackgroundSoundEnum::PewterCity:
+			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
+			BgmPlayer_.SetVolume(0.5f);
 			break;
 		default:
 			break;

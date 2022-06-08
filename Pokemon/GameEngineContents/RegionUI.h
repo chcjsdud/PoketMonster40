@@ -2,6 +2,16 @@
 #include <GameEngine/GameEngineActor.h>
 #include "ContentEnum.h"
 
+enum class RegionState
+{
+	None,
+	Show,
+	Hide,
+	Appear,
+	Disappear,
+	Max,
+};
+
 class RegionUI : public GameEngineActor
 {
 private:
@@ -34,14 +44,25 @@ private:
 	class GameEngineContentFont* Fonts_;
 	WorldBackgroundSoundEnum CurrentRegion_;
 	WorldBackgroundSoundEnum NextRegion_;
-	float4 StartPos_;
-	float4 GoalPos_;
+	GameEngineRenderer* Renderer_;
+	float4 DisappearPos_;
+	float4 AppearPos_;
 	float LerpTimer_;
-	bool IsShow_;
-	bool IsHide_;
-	bool IsShowing_;
 
-	void Show();
-	void Hide();
+	// FSM
+	RegionState CurrentState_;
+
+	void ChangeState(RegionState _State);
+	void StateUpdate();
+
+	void ShowStart();
+	void HideStart();
+	void AppearStart();
+	void DisappearStart();
+
+	void ShowUpdate();
+	void HideUpdate();
+	void AppearUpdate();
+	void DisappearUpdate();
 };
 

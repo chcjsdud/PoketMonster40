@@ -13,6 +13,7 @@
 #include "WorldTileMap3.h"
 #include "InteractionText.h"
 #include "WorldMapSoundManager.h"
+#include "RegionUI.h"
 
 bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
@@ -168,7 +169,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap2::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
+				AppearPos_ = CurrentTileMap_->GetWorldPostion(65, -4 + y);
 				return false;
 			}
 		}
@@ -181,7 +182,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap3::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
+				AppearPos_ = CurrentTileMap_->GetWorldPostion(4 + x, 118);
 				return false;
 			}
 		}
@@ -196,7 +197,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
+				AppearPos_ = CurrentTileMap_->GetWorldPostion(0, 4 + y);
 				return false;
 			}
 		}
@@ -211,7 +212,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
+				AppearPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
@@ -246,7 +247,7 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				IsMove_ = true;
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = WorldTileMap1::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
+				AppearPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
 				return false;
 			}
 		}
@@ -951,6 +952,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::PalletTown);
 				}
 			}
 		}
@@ -963,6 +965,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route1);
 				}
 			}
 		}
@@ -975,6 +978,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::ViridianCity);
 				}
 			}
 		}
@@ -986,6 +990,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route1);
 				}
 			}
 		}
@@ -1000,6 +1005,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route22);
 				}
 			}
 		}
@@ -1011,6 +1017,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::ViridianCity);
 				}
 			}
 		}
@@ -1025,6 +1032,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route2);
 				}
 			}
 		}
@@ -1036,6 +1044,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route22);
 				}
 			}
 		}
@@ -1048,6 +1057,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PewterCity);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::PewterCity);
 				}
 			}
 		}
@@ -1059,6 +1069,7 @@ void PlayerRed::SoundTileCheck()
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route2);
 				}
 			}
 		}

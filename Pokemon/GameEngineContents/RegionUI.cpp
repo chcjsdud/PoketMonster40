@@ -1,26 +1,20 @@
 #include "RegionUI.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <GameEngineBase/GameEngineInput.h>
+#include "PlayerRed.h"
 
 RegionUI* RegionUI::Inst_;
 
 RegionUI::RegionUI()
 	: Fonts_(nullptr)
-	, CurrentRegion_()
-	, NextRegion_()
-	, StartPos_()
-	, GoalPos_()
+	, CurrentRegion_(WorldBackgroundSoundEnum::PalletTown)
+	, NextRegion_(WorldBackgroundSoundEnum::None)
+	, Renderer_(nullptr)
+	, DisappearPos_()
+	, AppearPos_()
 	, LerpTimer_()
-	, IsShow_()
-	, IsHide_()
-	, IsShowing_()
 {
 	Inst_ = this;
-	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
-	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
-
-	//Fonts_ = GetLevel()->CreateActor<GameEngineContentFont>();
-	//Fonts_->ShowString(" ", true);
 }
 
 RegionUI::~RegionUI()
@@ -29,123 +23,180 @@ RegionUI::~RegionUI()
 
 void RegionUI::ChangeRegion(WorldBackgroundSoundEnum _Enum)
 {
-	if (CurrentRegion_ == _Enum || NextRegion_ == _Enum)
+	if (NextRegion_ == _Enum || CurrentRegion_ == _Enum)
 	{
 		return;
 	}
 
-	Hide();
-
 	NextRegion_ = _Enum;
-	Fonts_->ClearCurrentFonts();
-	std::string TmpString = "";
-	switch (_Enum)
-	{
-	case WorldBackgroundSoundEnum::PalletTown:
-		TmpString = "PalletTown";
-		break;
-	case WorldBackgroundSoundEnum::Route1:
-		TmpString = "Route1";
-		break;
-	case WorldBackgroundSoundEnum::ViridianCity:
-		TmpString = "ViridianCity";
-		break;
-	case WorldBackgroundSoundEnum::Route22:
-		TmpString = "Route22";
-		break;
-	case WorldBackgroundSoundEnum::Route2:
-		TmpString = "Route2";
-		break;
-	case WorldBackgroundSoundEnum::PewterCity:
-		TmpString = "PewterCity";
-		break;
-	default:
-		break;
-	}
-
-	Fonts_->ShowString(TmpString, true);
-	Show();
 }
 
 void RegionUI::Start()
 {
+	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
+	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
+
+	Fonts_ = GetLevel()->CreateActor<GameEngineContentFont>();
+	Renderer_ = CreateRenderer("AreaUI.bmp");
+	DisappearPos_ = { -220, -365 };
+	AppearPos_ = {-220, -285};
+	
+	SetPosition(PlayerRed::MainRed_->GetPosition() + DisappearPos_);
+	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
+	Fonts_->ShowString(" ", false);
+	ChangeState(RegionState::Disappear);
 }
 
 void RegionUI::Update()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
 	{
-		ChangeRegion(WorldBackgroundSoundEnum::Route1);
-	}
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
-	{
 		ChangeRegion(WorldBackgroundSoundEnum::PalletTown);
 	}
+	else if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
+	{
+		ChangeRegion(WorldBackgroundSoundEnum::Route1);
+	}
 
-	if (NextRegion_ == WorldBackgroundSoundEnum::None)
+	StateUpdate();
+	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
+}
+
+////////////////// FSM
+void RegionUI::ChangeState(RegionState _State)
+{
+	if (CurrentState_ == _State)
 	{
 		return;
 	}
 
-	if (true == IsShow_)
+	CurrentState_ = _State;
+	switch (_State)
 	{
-		LerpTimer_ += GameEngineTime::GetDeltaTime();
-		SetPosition(float4::LerpLimit(StartPos_, GoalPos_, LerpTimer_));
-
-		if (LerpTimer_ >= 1.0f)
-		{
-			IsShow_ = false;
-		}
+	case RegionState::Show:
+		ShowStart();
+		break;
+	case RegionState::Hide:
+		HideStart();
+		break;
+	case RegionState::Appear:
+		AppearStart();
+		break;
+	case RegionState::Disappear:
+		DisappearStart();
+		break;
+	default:
+		break;
 	}
-	else if (true == IsHide_)
+}
+
+void RegionUI::StateUpdate()
+{
+	switch (CurrentState_)
 	{
-		LerpTimer_ += GameEngineTime::GetDeltaTime();
-		SetPosition(float4::LerpLimit(GoalPos_, StartPos_, LerpTimer_));
-		if (LerpTimer_ >= 1.0f)
-		{
-			IsHide_ = true;
-		}
+	case RegionState::Show:
+		ShowUpdate();
+		break;
+	case RegionState::Hide:
+		HideUpdate();
+		break;
+	case RegionState::Appear:
+		AppearUpdate();
+		break;
+	case RegionState::Disappear:
+		DisappearUpdate();
+		break;
+	default:
+		break;
 	}
+}
 
-	/*float TmpValue = 0.0f;
-	BgmPlayer_.GetVolume(&TmpValue);
-	if (TmpValue < 0.05f)
+void RegionUI::ShowStart()
+{
+	LerpTimer_ = 0.0f;
+}
+void RegionUI::HideStart()
+{
+	LerpTimer_ = 0.0f;
+}
+void RegionUI::AppearStart()
+{
+	LerpTimer_ = 0.0f;
+}
+void RegionUI::DisappearStart()
+{
+	LerpTimer_ = 0.0f;
+}
+
+void RegionUI::ShowUpdate()
+{
+	LerpTimer_ += GameEngineTime::GetDeltaTime();
+	SetPosition(PlayerRed::MainRed_->GetPosition() + float4::LerpLimit(DisappearPos_, AppearPos_, LerpTimer_ * 5.0f));
+	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
+
+	if (LerpTimer_ >= 1.0f)
 	{
-		CurrentSoundState_ = NextSoundState_;
-		NextSoundState_ = WorldBackgroundSoundEnum::None;
+		ChangeState(RegionState::Appear);
+	}
+}
+void RegionUI::HideUpdate()
+{
+	LerpTimer_ += GameEngineTime::GetDeltaTime();
+	SetPosition(PlayerRed::MainRed_->GetPosition() + float4::LerpLimit(AppearPos_, DisappearPos_, LerpTimer_ * 5.0f));
+	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
 
-		switch (CurrentSoundState_)
+	if (LerpTimer_ >= 1.0f)
+	{
+		ChangeState(RegionState::Disappear);
+	}
+}
+void RegionUI::AppearUpdate()
+{
+	LerpTimer_ += GameEngineTime::GetDeltaTime();
+	SetPosition(PlayerRed::MainRed_->GetPosition() + AppearPos_);
+	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
+
+	if (LerpTimer_ >= 1.2f || WorldBackgroundSoundEnum::None != NextRegion_)
+	{
+		ChangeState(RegionState::Hide);
+	}
+}
+void RegionUI::DisappearUpdate()
+{
+	SetPosition(PlayerRed::MainRed_->GetPosition() + DisappearPos_);
+
+	if (WorldBackgroundSoundEnum::None != NextRegion_)
+	{
+		Fonts_->ClearCurrentFonts();
+		std::string TmpString = "";
+		switch (NextRegion_)
 		{
 		case WorldBackgroundSoundEnum::PalletTown:
-			BgmPlayer_.StopWithNullCheck();
-			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_PalletTown.mp3");
-			BgmPlayer_.SetVolume(0.5f);
+			TmpString = "PalletTown";
 			break;
 		case WorldBackgroundSoundEnum::Route1:
-			BgmPlayer_.StopWithNullCheck();
-			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
-			BgmPlayer_.SetVolume(0.5f);
+			TmpString = "Route1";
 			break;
 		case WorldBackgroundSoundEnum::ViridianCity:
+			TmpString = "ViridianCity";
+			break;
+		case WorldBackgroundSoundEnum::Route22:
+			TmpString = "Route22";
+			break;
+		case WorldBackgroundSoundEnum::Route2:
+			TmpString = "Route2";
+			break;
+		case WorldBackgroundSoundEnum::PewterCity:
+			TmpString = "PewterCity";
 			break;
 		default:
 			break;
 		}
+
+		CurrentRegion_ = NextRegion_;
+		NextRegion_ = WorldBackgroundSoundEnum::None;
+		Fonts_->SetPosition(GetPosition() + float4(-100, -30));
+		Fonts_->ShowString(TmpString, true);
+		ChangeState(RegionState::Show);
 	}
-	else
-	{
-		BgmPlayer_.SetVolume(TmpValue - GameEngineTime::GetDeltaTime());
-	}*/
-}
-
-void RegionUI::Show()
-{
-	LerpTimer_ = 0.0f;
-	IsShow_ = true;
-}
-
-void RegionUI::Hide()
-{
-	LerpTimer_ = 0.0f;
-	IsHide_ = true;
 }
