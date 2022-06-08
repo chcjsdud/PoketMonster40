@@ -1,8 +1,11 @@
 #include "PokemonSummaryMenu.h"
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineBase/GameEngineInput.h>
-#include "PlayerRed.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
+
+#include "PokemonSkillInfo.h"
+#include "PokemonSkill.h"
+#include "PlayerRed.h"
 #include "Pokemon.h"
 #include "PokemonInfo.h"
 
@@ -18,7 +21,8 @@ PokemonSummaryMenu::PokemonSummaryMenu():
 	CurYPos_(0),
 	JumpTime_(0.0f),
 	Owner_(nullptr),
-	IDNumber_(nullptr)
+	IDNumber_(nullptr),
+	PokemonSkillGreenBoxRenderer_(nullptr)
 {
 	PokemonInfoList_.reserve(6);
 	PokemonFrontRenderer_.reserve(6);
@@ -39,6 +43,11 @@ PokemonSummaryMenu::PokemonSummaryMenu():
 	NextExpFonts_.reserve(6);
 	AbilityFonts_.reserve(6);
 	AbilityExplanationFonts_.reserve(6);
+
+	SkillNameFonts_.reserve(4);
+	CurSkillPPFonts_.reserve(4);
+	MaxSkillPPFonts_.reserve(4);
+	PokemonSkillTypeRenderer_.reserve(4);
 }
 
 PokemonSummaryMenu::~PokemonSummaryMenu()
@@ -87,6 +96,9 @@ void PokemonSummaryMenu::Render()
 	switch (CurState_)
 	{
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonInfo:
+		TopMenuRenderer_->SetImage("PokemonInfo.bmp");
+		PokemonInfoRenderer_->SetImage("PokemonInfo_Window.bmp");
+		PokemonSkillGreenBoxRenderer_->Off();
 		IDNumber_->On();
 		Owner_->On();
 		Item_->On();
@@ -129,10 +141,38 @@ void PokemonSummaryMenu::Render()
 				NextExpFonts_[i]->Off();
 				AbilityFonts_[i]->Off();
 				AbilityExplanationFonts_[i]->Off();
+
+			}
+		}
+
+		//======== Pokemon Skill ====================================
+		{
+			//스킬 타입 렌더러
+			for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+			{
+				PokemonSkillTypeRenderer_[i]->Off();
+			}
+
+			for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+			{
+				SkillNameFonts_[i]->Off();
+			}
+
+			for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+			{
+				CurSkillPPFonts_[i]->Off();
+			}
+			for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+			{
+				MaxSkillPPFonts_[i]->Off();
 			}
 		}
 		break;
+
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonAbility:
+		TopMenuRenderer_->SetImage("PokemonAbility.bmp");
+		PokemonInfoRenderer_->SetImage("PokemonAbility_Window.bmp");
+		PokemonSkillGreenBoxRenderer_->Off();
 		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
 			if (i != CurrentOrder_)
@@ -187,8 +227,80 @@ void PokemonSummaryMenu::Render()
 			PokemonTypeRenderer_[i]->Off();
 			NameFonts_[i]->Off();
 		}
+
+		//======== Pokemon Skill ====================================
+		{
+			//스킬 타입 렌더러
+			for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+			{
+				PokemonSkillTypeRenderer_[i]->Off();
+			}
+
+			for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+			{
+				SkillNameFonts_[i]->Off();
+			}
+
+			for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+			{
+				CurSkillPPFonts_[i]->Off();
+			}
+			for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+			{
+				MaxSkillPPFonts_[i]->Off();
+			}
+		}
 		break;
+
+
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
+		TopMenuRenderer_->SetImage("PokemonSkill.bmp");
+		PokemonInfoRenderer_->SetImage("PokemonSkill_Back.bmp");
+		PokemonSkillGreenBoxRenderer_->On();
+
+		//스킬 타입 렌더러
+		for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+		{
+			PokemonSkillTypeRenderer_[i]->On();
+		}
+		//스킬 이름 렌더러
+		for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+		{
+			SkillNameFonts_[i]->On();
+		}
+		// 현재 pp
+		for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+		{
+			CurSkillPPFonts_[i]->On();
+		}
+		//Max PP
+		for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+		{
+			MaxSkillPPFonts_[i]->On();
+		}
+
+
+		//다른 State에서 사용하는 폰트, 렌더러 제거
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			{
+				//======= Pokemon Ability =========
+				{
+					CurHpFonts_[i]->Off();
+					MaxHpFonts_[i]->Off();
+					AttFonts_[i]->Off();
+					DefFonts_[i]->Off();
+					SpAttFonts_[i]->Off();
+					SpDefFonts_[i]->Off();
+					SpeedFonts_[i]->Off();
+					CurExpFonts_[i]->Off();
+					NextExpFonts_[i]->Off();
+					AbilityFonts_[i]->Off();
+					AbilityExplanationFonts_[i]->Off();
+				}
+			}
+			
+		}
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::Max:
 		break;
@@ -207,8 +319,12 @@ void PokemonSummaryMenu::InitRenderer_()
 	PokemonFrameRenderer_ = CreateRenderer("Pokemon_Frame.bmp", GetOrder(), RenderPivot::LeftTop,{0,64});
 	PokemonFrameRenderer_->SetTransColor(RGB(255, 0, 255));
 
-	PokemonInfoRenderer_ = CreateRenderer("PokemonInfo_Window.bmp", GetOrder(), RenderPivot::LeftTop, { 0,64 });
+	PokemonInfoRenderer_ = CreateRenderer("PokemonInfo_Window.bmp", GetOrder()-1, RenderPivot::LeftTop, { 0,64 });
 	PokemonInfoRenderer_->SetTransColor(RGB(255, 0, 255));
+
+	PokemonSkillGreenBoxRenderer_ = CreateRenderer("PokemonSkill_Window.bmp", GetOrder(), RenderPivot::LeftTop, { 476,64 });
+	PokemonSkillGreenBoxRenderer_->SetTransColor(RGB(255, 0, 255));
+	PokemonSkillGreenBoxRenderer_->Off();
 
 	//포켓몬 성별
 	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
@@ -289,6 +405,12 @@ void PokemonSummaryMenu::InitRenderer_()
 		case PokemonType::DRAGON:
 			TypeString = "Dragon";
 			break;
+		case PokemonType::STEEL:
+			TypeString = "Steel";
+			break;
+		case PokemonType::DARK:
+			TypeString = "Dark";
+			break;
 		default:
 			break;
 		}
@@ -298,6 +420,80 @@ void PokemonSummaryMenu::InitRenderer_()
 		PokemonTypeRenderer_.push_back(NewRenderer);
 	}
 
+	//========================================================= 포켓몬 스킬========================================================================
+
+	//스킬 타입 렌더러
+	for (PokemonInfo* i : PokemonInfoList_)
+	{
+		std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+		for (size_t j = 0; j<CurSkillList_.size();j++)
+		{
+			PokemonSkillInfo* CurSkillInfo = CurSkillList_[j]->GetInfo();
+
+			std::string TypeString;
+			PokemonType Type = CurSkillInfo->GetType();
+			switch (Type)
+			{
+			case PokemonType::NORMAL:
+				TypeString = "Normal";
+				break;
+			case PokemonType::FIRE:
+				TypeString = "Fire";
+				break;
+			case PokemonType::WATER:
+				TypeString = "Water";
+				break;
+			case PokemonType::GRASS:
+				TypeString = "Grass";
+				break;
+			case PokemonType::ELECTRIC:
+				TypeString = "Electric";
+				break;
+			case PokemonType::ICE:
+				TypeString = "Ice";
+				break;
+			case PokemonType::FIGHTING:
+				TypeString = "Fighting";
+				break;
+			case PokemonType::POISON:
+				TypeString = "Poison";
+				break;
+			case PokemonType::GROUND:
+				TypeString = "Ground";
+				break;
+			case PokemonType::FLYING:
+				TypeString = "Flying";
+				break;
+			case PokemonType::PSYCHIC:
+				TypeString = "Psychic";
+				break;
+			case PokemonType::BUG:
+				TypeString = "Bug";
+				break;
+			case PokemonType::ROCK:
+				TypeString = "Rock";
+				break;
+			case PokemonType::GHOST:
+				TypeString = "Ghost";
+				break;
+			case PokemonType::DRAGON:
+				TypeString = "Dragon";
+				break;
+			case PokemonType::STEEL:
+				TypeString = "Steel";
+				break;
+			case PokemonType::DARK:
+				TypeString = "Dark";
+				break;
+			default:
+				break;
+			}
+
+			GameEngineRenderer* NewRenderer = CreateRenderer(TypeString + ".bmp", GetOrder(), RenderPivot::LeftTop, { 490,78+static_cast<float>(j*112  )});
+			NewRenderer->SetTransColor(RGB(255, 0, 255));
+			PokemonSkillTypeRenderer_.push_back(NewRenderer);
+		}
+	}
 
 }
 
@@ -533,6 +729,58 @@ void PokemonSummaryMenu::InitFonts_()
 			AllFonts_.push_back(NewFonts);
 		}
 	}
+
+	//=================================================================== Pokemon Skill ==========================================================
+	//스킬 이름
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(640, 76 + static_cast<float>(j * 112)));
+				NewFonts->ShowString(CurSkillList_[j]->GetInfo()->GetNameCopy(), true);
+				NewFonts->Off();
+				SkillNameFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
+
+	//스킬 현재 PP
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(700, 128 + static_cast<float>(j * 112)));
+				NewFonts->ShowString("PP" + std::to_string(CurSkillList_[j]->GetInfo()->GetPP())+" /", true);
+				NewFonts->Off();
+				CurSkillPPFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
+
+	//스킬 맥스 PP
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(868, 128 + static_cast<float>(j * 112)));
+				NewFonts->ShowString(std::to_string(CurSkillList_[j]->GetInfo()->GetMaxPP()), true);
+				NewFonts->Off();
+				MaxSkillPPFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
 }
 
 void PokemonSummaryMenu::DestroyPokemonSummaryMenu()
@@ -557,6 +805,9 @@ void PokemonSummaryMenu::ChangeState(PokemonSummaryMenuType _State)
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonAbility:
 		PokemonAbilityStart();
 		break;
+	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
+		PokemonSkillStart();
+		break;
 	default:
 		break;
 	}
@@ -574,7 +825,9 @@ void PokemonSummaryMenu::UpdateState()
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonAbility:
 		PokemonAbilityUpdate();
 		break;
-
+	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
+		PokemonSkillUpdate();
+		break;
 	default:
 		break;
 	}
@@ -582,8 +835,7 @@ void PokemonSummaryMenu::UpdateState()
 
 void PokemonSummaryMenu::PokemonInfoStart()
 {
-	TopMenuRenderer_->SetImage("PokemonInfo.bmp");
-	PokemonInfoRenderer_->SetImage("PokemonInfo_Window.bmp");
+
 }
 
 void PokemonSummaryMenu::PokemonInfoUpdate()
@@ -624,8 +876,7 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 
 void PokemonSummaryMenu::PokemonAbilityStart()
 {
-	TopMenuRenderer_->SetImage("PokemonAbility.bmp");
-	PokemonInfoRenderer_->SetImage("PokemonAbility_Window.bmp");
+
 
 }
 
@@ -658,10 +909,29 @@ void PokemonSummaryMenu::PokemonAbilityUpdate()
 		return;
 	}
 
+	if (GameEngineInput::GetInst()->IsDown("Right") == true)
+	{
+		ChangeState(PokemonSummaryMenuType::PokemonSkill);
+		return;
+	}
+
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		DestroyPokemonSummaryMenu();
 		Off();
+	}
+}
+
+void PokemonSummaryMenu::PokemonSkillStart()
+{
+}
+
+void PokemonSummaryMenu::PokemonSkillUpdate()
+{
+	if (GameEngineInput::GetInst()->IsDown("Left") == true)
+	{
+		ChangeState(PokemonSummaryMenuType::PokemonAbility);
+		return;
 	}
 }
 

@@ -72,26 +72,22 @@ void MenuUI::Update()
 
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
-		if (CurrentOrder_ >= 5)
+		CurrentOrder_++;
+		if (CurrentOrder_ > 5)
 		{
 			CurrentOrder_ = 0;
 		}
-		else
-		{
-			CurrentOrder_++;
-		}
+
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
-		if (CurrentOrder_ <= 0)
+		CurrentOrder_--;
+		if (CurrentOrder_ < 0)
 		{
 			CurrentOrder_ = 5;
 		}
-		else
-		{
-			CurrentOrder_--;
-		}
+
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true && MenuUITimer_ > 0)
@@ -122,6 +118,10 @@ void MenuUI::Update()
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 				dynamic_cast<Bag*>(ChildUI_)->BagInit();
 			}
+			break;
+		case 5:
+			Off();
+			return;
 			break;
 		default:
 			break;

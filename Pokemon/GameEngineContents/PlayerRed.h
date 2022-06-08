@@ -127,7 +127,7 @@ private:
 	bool PlayerMoveTileCheck(int _X, int _Y);
 	
 	void Camera();
-	void WMenuUISelect();
+	//void WMenuUISelect();
 
 	bool IsMoveKey();
 

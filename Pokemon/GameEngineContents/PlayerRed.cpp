@@ -354,7 +354,7 @@ void PlayerRed::Update()
 	DirAnimationCheck();
 	//Camera();
 	StateUpdate();
-	WMenuUISelect();
+	//WMenuUISelect();
 	MoveAnim();
 	FadeIn();
 	FadeOut();
@@ -492,112 +492,112 @@ void PlayerRed::Camera()
 	}
 }
 
-void PlayerRed::WMenuUISelect()
-{
-	if (false == WMenuUICheck_)
-	{
-		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,100 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-200 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Z"))
-		{
-			FadeActor_->SetPosition(GetPosition());
-			FadeActor_->FadeOut();
-			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
-			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-260 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-140 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Z"))
-		{
-			FadeActor_->SetPosition(GetPosition());
-			FadeActor_->FadeOut();
-			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
-			ChildUI_->SetPosition(GetPosition());
-			dynamic_cast<Bag*>(ChildUI_)->BagInit();
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-200 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-80 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == -80 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-140 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -80 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-20 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == -20 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-80 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == -20 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,40 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == 40 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-20 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == 40 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,100 });
-			return;
-		}
-
-		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Z"))
-		{
-			WMenuArrowRender_->Off();
-			WMenuUICheck_ = true;
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Up"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,40 });
-			return;
-		}
-		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Down"))
-		{
-			WMenuArrowRender_->SetPivot({ 240,-260 });
-			return;
-		}
-	}
-}
+//void PlayerRed::WMenuUISelect()
+//{
+//	if (false == WMenuUICheck_)
+//	{
+//		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,100 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-200 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Z"))
+//		{
+//			FadeActor_->SetPosition(GetPosition());
+//			FadeActor_->FadeOut();
+//			ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+//			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+//			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-260 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -200 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-140 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Z"))
+//		{
+//			FadeActor_->SetPosition(GetPosition());
+//			FadeActor_->FadeOut();
+//			ChildUI_ = GetLevel()->CreateActor<Bag>(50);
+//			ChildUI_->SetPosition(GetPosition());
+//			dynamic_cast<Bag*>(ChildUI_)->BagInit();
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-200 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -140 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-80 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == -80 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-140 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -80 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-20 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == -20 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-80 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == -20 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,40 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == 40 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-20 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == 40 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,100 });
+//			return;
+//		}
+//
+//		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Z"))
+//		{
+//			WMenuArrowRender_->Off();
+//			WMenuUICheck_ = true;
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Up"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,40 });
+//			return;
+//		}
+//		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Down"))
+//		{
+//			WMenuArrowRender_->SetPivot({ 240,-260 });
+//			return;
+//		}
+//	}
+//}
 
 bool PlayerRed::IsMoveKey()
 {
@@ -803,8 +803,6 @@ void PlayerRed::UIUpdate()
 	{
 		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
 		{
-			//FadeActor_->SetPosition(GetPosition());
-			//FadeActor_->FadeOut();
 			WMenuUICheck_ = true;
 
 			ChildUI_->Death();

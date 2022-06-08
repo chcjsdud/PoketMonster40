@@ -55,18 +55,22 @@ private:
 	void PokemonAbilityStart();
 	void PokemonAbilityUpdate();
 
+	void PokemonSkillStart();
+	void PokemonSkillUpdate();
+
 	PokemonSummaryMenuType CurState_;
 
 
 	//렌더러
 	GameEngineRenderer* TopMenuRenderer_;
 	GameEngineRenderer* PokemonFrameRenderer_;
-
 	GameEngineRenderer* PokemonInfoRenderer_; //이거 탑메뉴 아래 큰창
+	GameEngineRenderer* PokemonSkillGreenBoxRenderer_;
 
 	std::vector<GameEngineRenderer*> PokemonFrontRenderer_;
 	std::vector< GameEngineRenderer*> PokemonTypeRenderer_;
 	std::vector<GameEngineRenderer*> GenderRenderer_;
+	std::vector<GameEngineRenderer*> PokemonSkillTypeRenderer_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
 
 	//폰트
 	std::vector<GameEngineContentFont*> LevelFonts_;
@@ -86,6 +90,9 @@ private:
 	std::vector<GameEngineContentFont*> NextExpFonts_;
 	std::vector<GameEngineContentFont*> AbilityFonts_;
 	std::vector<GameEngineContentFont*> AbilityExplanationFonts_;
+	std::vector<GameEngineContentFont*> SkillNameFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> CurSkillPPFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> MaxSkillPPFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
 	GameEngineContentFont* Owner_; //레드 이름
 	GameEngineContentFont* IDNumber_;//ID 폰트
 	GameEngineContentFont* Item_; //아이템 폰트
