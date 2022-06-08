@@ -91,6 +91,7 @@ public:
 	void Tackle();
 	void WaterGun();
 	void TailWhipMove();
+	void ShellHide();
 	void SetFighting(bool Value)
 	{
 		Fighting = Value;

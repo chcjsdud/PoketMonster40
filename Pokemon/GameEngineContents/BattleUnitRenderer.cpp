@@ -69,6 +69,14 @@ void BattleUnitRenderer::Start()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("WaterGun4.bmp");
 		Image->CutCount(3, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("ShellHide.bmp");
+		Image->CutCount(8, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("SquirtleB.bmp");
+		Image->CutCount(1, 1);
+	}
 }
 
 void BattleUnitRenderer::Update()
@@ -182,6 +190,9 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "WaterGun", 0, 2, 0.1f, false);
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "Water", 0, 0, 0.1f, false);
 		MyTackleEffect = CreateRenderer("Tackle4.bmp",4);
+
+		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
+		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
 	}
 
 	PlayerRenderer_->On();
@@ -386,7 +397,8 @@ void BattleUnitRenderer::Opening2()
 					DoomChit();
 					//TailWhipMove();
 					//Tackle();
-					WaterGun();
+					//WaterGun();
+					ShellHide();
 					BattleInter->DoomChit();
 				}
 			}
@@ -455,6 +467,23 @@ void BattleUnitRenderer::WaterGun()
 	}
 	if (MyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
+	}
+}
+
+void BattleUnitRenderer::ShellHide()
+{
+	if (MyTurnEnd == false)
+	{
+		PlayerCurrentPokemon_->ChangeAnimation("ShellHide");
+		MyTurnEnd = true;
+	}
+	if (MyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		if (PlayerCurrentPokemon_->IsEndAnimation() == true)
+		{
+			PlayerCurrentPokemon_->ChangeAnimation("Idle");
+		}
 		MyMoveTime = 0.0f;
 	}
 }
