@@ -38,6 +38,7 @@ Bag::Bag()
 	, CurrentItem_(nullptr)
 	, CurrentPokemon_(nullptr)
 	, ChildUI_(nullptr)
+	, InputTime_(0.f)
 {
 
 }
@@ -143,6 +144,15 @@ void Bag::Update()
 	}
 }
 
+void Bag::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+	InputTime_ = 0.f;
+}
+
+void Bag::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+}
+
 
 void Bag::MoveBag()
 {
@@ -226,8 +236,8 @@ void Bag::ChangeBag()
 		BagRedrerer_->SetPivot({ -317, -48 });
 		BagName_->SetImage("Bag_KeyItems.bmp");
 
-		LeftArrow_->SetOrder(55);
-		RightArrow_->SetOrder(55);
+		LeftArrow_->SetOrder(GetOrder());
+		RightArrow_->SetOrder(GetOrder());
 		ShowKeyItemList();
 		ShowItemInfo(KeyItemList_);
 		break;
@@ -408,6 +418,12 @@ void Bag::ShowItemInfo(std::vector<class Item*>& _List)
 
 void Bag::ActiveDialog()
 {
+	if (0.5f > InputTime_)
+	{
+		InputTime_ += GameEngineTime::GetDeltaTime();
+		return;
+	}
+		 
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn"))
 	{
 		if (ItemType::ITEM == BagType_)
@@ -694,8 +710,8 @@ void Bag::CloseDialog()
 		break;
 
 	case ItemType::KEYITEM:
-		LeftArrow_->SetOrder(55);
-		RightArrow_->SetOrder(55);
+		LeftArrow_->SetOrder(GetOrder());
+		RightArrow_->SetOrder(GetOrder());
 		ShowKeyItemList();
 		ShowItemInfo(KeyItemList_);
 		break;
@@ -921,7 +937,7 @@ void Bag::ShowFonts(std::vector<Item*>& _List)
 
 	if (0 == _List.size())
 	{
-		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>(55);
+		GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 		EndFont->SetPosition(GetPosition() + float4{-90, -285 });
 		EndFont->ShowString("CLOSE", true);
 		ItemNameFonts_.push_back(EndFont);
@@ -929,7 +945,7 @@ void Bag::ShowFonts(std::vector<Item*>& _List)
 		return;
 	}
 
-	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>(55);
+	GameEngineContentFont* BeginFont = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 	BeginFont->SetPosition(GetPosition() + float4{ -90, -285 });
 	BeginFont->ShowString(_List[0]->GetInfo()->GetNameCopy(), true);
 	ItemNameFonts_.push_back(BeginFont);
@@ -950,14 +966,14 @@ void Bag::ShowFonts(std::vector<Item*>& _List)
 				continue;
 			}
 
-			GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>(55);
+			GameEngineContentFont* Fonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 			Fonts->SetPosition(ItemNameFonts_.back()->GetPosition() + float4{ 0, 65.f });
 			Fonts->ShowString(_List[i]->GetInfo()->GetNameCopy(), true);
 			ItemNameFonts_.push_back(Fonts);
 		}
 	}
 
-	GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>(55);
+	GameEngineContentFont* EndFont = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 	EndFont->SetPosition(ItemNameFonts_.back()->GetPosition() + float4{ 0, 65.f });
 	EndFont->ShowString("CLOSE", true);
 	ItemNameFonts_.push_back(EndFont);

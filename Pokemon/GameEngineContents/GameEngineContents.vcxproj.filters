@@ -178,6 +178,9 @@
     <ClCompile Include="WorldMapLevel.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -357,6 +360,9 @@
     </ClInclude>
     <ClInclude Include="WorldMapLevel.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

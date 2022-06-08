@@ -107,7 +107,6 @@ private:
 	bool IsDebugRun_;
 	bool IsPokemonMenuOn_;
 
-	GameEngineRenderer* WMenuUIRender_;
 	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
 

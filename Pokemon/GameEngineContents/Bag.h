@@ -88,6 +88,9 @@ protected:
 	void Start() override;
 	void Update() override;
 
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
 private:
 	ItemType BagType_;
 	BagState BagState_;
@@ -136,5 +139,8 @@ private:
 	Pokemon* CurrentPokemon_;
 
 	GameEngineActor* ChildUI_;
+
+	//입력 대기 시간 
+	float InputTime_;
 };
 

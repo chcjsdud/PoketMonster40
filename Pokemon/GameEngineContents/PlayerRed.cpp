@@ -26,6 +26,7 @@
 #include "NPCBase.h"
 
 #include "Bag.h"
+#include "Shop.h"
 #include "PokemonMenu.h"
 #include "MenuUI.h"
 #include "FadeActor.h"
@@ -47,7 +48,6 @@ PlayerRed::PlayerRed()
 	, FadeLeftRender_(nullptr)
 	, AnimTimer_(0.0f)
 	, WMenuArrowRender_()
-	, WMenuUIRender_()
 	//, WMenuUICheck_(true)
 	, LerpTime_(0)
 	, FadeTime_(0)
@@ -286,8 +286,6 @@ void PlayerRed::Start()
 	GameEngineInput::GetInst()->CreateKey("BagOn", VK_LSHIFT);
 	GameEngineInput::GetInst()->CreateKey("BagClose", VK_ESCAPE);
 
-	WMenuUIRender_ = CreateRenderer("MenuUI2.bmp", 20);
-	WMenuUIRender_->Off();
 	WMenuArrowRender_ = CreateRenderer("MenuArrow2.bmp", 20);
 	WMenuArrowRender_->SetPivot({ 240,-260 });
 	WMenuArrowRender_->Off();
@@ -494,16 +492,12 @@ void PlayerRed::Camera()
 	}
 }
 
-GameEngineRenderer* Renderer_;
 void PlayerRed::WMenuUISelect()
 {
 	if (false == WMenuUICheck_)
 	{
-		Renderer_ = CreateRenderer("WMenuUI_Dex.bmp");
-
 		if (WMenuArrowRender_->GetPivot().y == -260 && true == GameEngineInput::GetInst()->IsDown("Up"))
 		{
-			Renderer_->SetOrder(100);
 			WMenuArrowRender_->SetPivot({ 240,100 });
 			return;
 		}
@@ -588,7 +582,6 @@ void PlayerRed::WMenuUISelect()
 
 		if (WMenuArrowRender_->GetPivot().y == 100 && true == GameEngineInput::GetInst()->IsDown("Z"))
 		{
-			WMenuUIRender_->Off();
 			WMenuArrowRender_->Off();
 			WMenuUICheck_ = true;
 			return;
@@ -626,14 +619,12 @@ void PlayerRed::IsWMenuKey()
 		{
 			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
 			ChangeState(RedState::Idle);
-			WMenuUIRender_->On();
 			WMenuArrowRender_->On();
 
 			WMenuUICheck_ = false;
 		}
 		else if (false == WMenuUICheck_)
 		{
-			WMenuUIRender_->Off();
 			WMenuArrowRender_->Off();
 
 			WMenuUICheck_ = true;
@@ -874,6 +865,13 @@ void PlayerRed::UIUpdate()
 			ChildUI_ = GetLevel()->CreateActor<MenuUI>(60, "MenuUI");
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<MenuUI*>(ChildUI_)->InitMenuUI();
+		}
+
+		if (true == GameEngineInput::GetInst()->IsDown("WMenuUI")) //메뉴UI 열기
+		{
+			ChildUI_ = GetLevel()->CreateActor<Shop>(60, "Shop");
+			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+			dynamic_cast<Shop*>(ChildUI_)->ShopInit();
 		}
 	}
 }
