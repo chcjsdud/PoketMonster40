@@ -499,6 +499,10 @@ void PokemonMenu::SelectActionUpdate()
 			return;
 			break;
 		case 3:
+		{
+			QuestionFont_->ClearCurrentFonts();
+			QuestionFont_ = nullptr;
+		}
 			ChangeState(PokemonMenuType::SelectPokemon);
 			return;
 			break;
@@ -629,6 +633,7 @@ void PokemonMenu::SelectSwitchUpdate()
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonMenuType::SelectPokemon);
+		return;
 	}
 }
 
