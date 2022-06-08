@@ -10,7 +10,7 @@
 
 GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
 
-BattleUnitRenderer::BattleUnitRenderer() 
+BattleUnitRenderer::BattleUnitRenderer()
 	: PlayerCurrentPokemon_(nullptr)
 	, PoeCurrentPokemon_(nullptr)
 	, OpponentRenderer_(nullptr)//병문씨 도움
@@ -30,6 +30,13 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, MyTurnEnd(false)
 	, Angle(0.0f)
 	, Fighting(false)
+	, MyWaterGunEffect(nullptr)
+	, BallLerp(0.0f)
+	, BattleInter(nullptr)
+	, EnemyTackleEffect(nullptr)
+	, PlayerTime_(0.0f)
+	, EffectX(-105.0f)
+	, EffectY(20.0f)
 {
 }
 
@@ -57,6 +64,10 @@ void BattleUnitRenderer::Start()
 	{
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("BallRoll.bmp");
 		Image->CutCount(6, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("WaterGun4.bmp");
+		Image->CutCount(3, 1);
 	}
 }
 
@@ -167,6 +178,9 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 
+		MyWaterGunEffect = CreateRenderer("WaterGun4.bmp", 4);
+		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "WaterGun", 0, 2, 0.1f, false);
+		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "Water", 0, 0, 0.1f, false);
 		MyTackleEffect = CreateRenderer("Tackle4.bmp",4);
 	}
 
@@ -179,6 +193,10 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MonsterBall->SetPivot({ -220.0f,-30.0f });
 	MyTackleEffect->SetPivot({ 210.0f,-90.0f });
 	MyTackleEffect->Off();
+	MyWaterGunEffect->Off();
+	MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
+	EffectX = -105.0f;
+	EffectY = 20.0f;
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -195,6 +213,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		PlayerRenderer_->Off();
 		MonsterBall->Off();
 		MyTackleEffect->Off();
+		MyWaterGunEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = false;
 	}
@@ -365,11 +384,77 @@ void BattleUnitRenderer::Opening2()
 					BattleInter->GetInterfaceImage()->On();
 					BattleInter->GetSelect()->On();
 					DoomChit();
-					TailWhipMove();
+					//TailWhipMove();
 					//Tackle();
+					WaterGun();
 					BattleInter->DoomChit();
 				}
 			}
 		}
+	}
+}
+
+void BattleUnitRenderer::WaterGun()
+{
+
+	float X = PlayerCurrentPokemon_->GetPivot().x;
+	EffectX += GameEngineTime::GetDeltaTime() * 200.0f;
+	EffectY -= GameEngineTime::GetDeltaTime() * 100.0f;
+
+	if (MyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+
+		if (MyMoveTime <= 1.5f)
+		{
+			MyWaterGunEffect->On();
+			MyWaterGunEffect->ChangeAnimation("Water");
+			MyWaterGunEffect->SetPivot({ EffectX  ,EffectY});
+		}
+		if (MyMoveTime >= 1.6f)
+		{
+			MyWaterGunEffect->ChangeAnimation("WaterGun");
+			PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
+			//적 피격시 적 HPUI이미지 들썩
+			BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-440.0f });
+		}
+
+		{	//적 푸키먼 피격 반짝반짝
+			if (MyMoveTime >= 1.6f)
+			{
+				PoeCurrentPokemon_->SetAlpha(55);
+				PoeCurrentPokemon_->SetPivot({ 220.0f,-105.0f });
+				//적 HPUI이미지 아래로
+				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-420.0f });
+			}
+			if (MyMoveTime >= 1.7f)
+			{
+				PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
+			}
+			if (MyMoveTime >= 1.8f)
+			{
+				MyWaterGunEffect->Off();
+				PoeCurrentPokemon_->SetPivot({ 240.0f,-105.0f });
+				PoeCurrentPokemon_->SetAlpha(255);
+				//적 HPUI 제자리로
+				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
+			}
+			if (MyMoveTime >= 2.0f)
+			{
+				PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
+				PoeCurrentPokemon_->SetAlpha(55);
+			
+			}
+			if (MyMoveTime >= 2.2f)
+			{
+				PoeCurrentPokemon_->SetPivot({ 230.6f,-105.0f });
+				PoeCurrentPokemon_->SetAlpha(255);
+				MyTurnEnd = true;
+			}
+		}
+	}
+	if (MyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
 	}
 }
