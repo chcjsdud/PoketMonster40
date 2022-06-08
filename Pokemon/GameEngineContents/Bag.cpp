@@ -56,8 +56,8 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("DownArrow", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
 		GameEngineInput::GetInst()->CreateKey("DialogOn", 'z');
-		GameEngineInput::GetInst()->CreateKey("Select", 'z');
-		GameEngineInput::GetInst()->CreateKey("Close", 'x');
+		GameEngineInput::GetInst()->CreateKey("SelectBag", 'z');
+		GameEngineInput::GetInst()->CreateKey("CloseBag", 'x');
 	}
 }
 
@@ -99,7 +99,7 @@ void Bag::Update()
 			}
 		}
 
-		if (true == GameEngineInput::GetInst()->IsDown("Close"))
+		if (true == GameEngineInput::GetInst()->IsDown("CloseBag"))
 		{
 			DestroyBag();
 			Off();
@@ -328,7 +328,7 @@ void Bag::MoveItem()
 		MoveSelectArrow();
 	}
 
-	else if (true == GameEngineInput::GetInst()->IsDown("Select"))
+	else if (true == GameEngineInput::GetInst()->IsDown("SelectBag"))
 	{
 		if (0 == SelectIndex_ && ItemNameFonts_.size() == 1
 			|| SelectIndex_ == ItemNameFonts_.size() - 1)
@@ -618,7 +618,7 @@ void Bag::MoveDialog()
 		}
 	}
 
-	else if (true == GameEngineInput::GetInst()->IsDown("Select"))
+	else if (true == GameEngineInput::GetInst()->IsDown("SelectBag"))
 	{
 		SelectDialog();
 	}
@@ -629,7 +629,7 @@ void Bag::MoveDialog()
 		BagState_ = BagState::ListMenu;
 	}
 
-	else if(true == GameEngineInput::GetInst()->IsDown("Close"))
+	else if(true == GameEngineInput::GetInst()->IsDown("CloseBag"))
 	{
 		CloseDialog();
 		BagState_ = BagState::ListMenu;

@@ -17,20 +17,14 @@ void Shop::ShopInit()
 {
 	ShopState_ = ShopState::SelectDialog;
 
-	SalesList_ = CreateRenderer("Shop_ItemList.bmp", 0, RenderPivot::LeftTop);
-	ShopDialog_ = CreateRenderer("Shop_Dialog.bmp", 0, RenderPivot::LeftTop);
-	CountDialog_ = CreateRenderer("Shop_Price.bmp", 0, RenderPivot::LeftTop);
-	InBag_ = CreateRenderer("Shop_InBag.bmp", 0, RenderPivot::LeftTop);
-	BuyDialog_ = CreateRenderer("Select_YesOrNO.bmp", 0, RenderPivot::LeftTop);
-	Arrow_ = CreateRenderer("Bag_CurrentArrow.bmp", 0, RenderPivot::LeftTop);
+	SalesList_ = CreateRenderer("Shop_ItemList.bmp", -1, RenderPivot::LeftTop);
+	ShopDialog_ = CreateRenderer("Shop_Dialog.bmp", -1, RenderPivot::LeftTop);
+	CountDialog_ = CreateRenderer("Shop_Price.bmp", -1, RenderPivot::LeftTop);
+	InBag_ = CreateRenderer("Shop_InBag.bmp", -1, RenderPivot::LeftTop);
+	BuyDialog_ = CreateRenderer("Select_YesOrNO.bmp", -1, RenderPivot::LeftTop);
+	Arrow_ = CreateRenderer("Bag_CurrentArrow.bmp", -1, RenderPivot::LeftTop);
 
 	ShopDialog_->SetPivot(float4{ 25, 0 });
-
-	if (false == GameEngineInput::GetInst()->IsKey("Select"))
-	{
-		GameEngineInput::GetInst()->CreateKey("Select", 'z');
-		GameEngineInput::GetInst()->CreateKey("Exit", 'x');
-	}
 }
 
 void Shop::ShopDestroy()
@@ -50,7 +44,6 @@ void Shop::OpenDialog()
 
 void Shop::OpenSalesList()
 {
-	ShopDialog_->SetOrder(0);
 	SalesList_->SetOrder(GetOrder() + 1);
 }
 
@@ -65,8 +58,22 @@ void Shop::OpenBuyDialog()
 	BuyDialog_->SetOrder(GetOrder() + 3);
 }
 
+void Shop::AllClose()
+{
+	ShopDialog_->SetOrder(-1);
+	SalesList_->SetOrder(-1);
+	InBag_->SetOrder(-1);
+	CountDialog_->SetOrder(-1);
+	BuyDialog_->SetOrder(-1);
+}
+
 void Shop::Start()
 {
+	if (false == GameEngineInput::GetInst()->IsKey("SelectShop"))
+	{
+		GameEngineInput::GetInst()->CreateKey("SelectShop", 'z');
+		GameEngineInput::GetInst()->CreateKey("Exitshop", 'x');
+	}
 }
 
 void Shop::Update()
@@ -76,12 +83,13 @@ void Shop::Update()
 	case ShopState::SelectDialog:
 		OpenDialog();
 
-		if (true == GameEngineInput::GetInst()->IsDown("Select"))
+		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectSalesList;
+			ShopDialog_->SetOrder(-1);
 		}
 
-		if (true == GameEngineInput::GetInst()->IsDown("Exit"))
+		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
 		{
 			Off();
 		}
@@ -89,25 +97,49 @@ void Shop::Update()
 	case ShopState::SelectSalesList:
 		OpenSalesList();
 
-		if (true == GameEngineInput::GetInst()->IsDown("Select"))
+		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectCount;
 		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
+		{
+			ShopState_ = ShopState::SelectDialog;
+			SalesList_->SetOrder(-1);
+		}
 		break;
+
+
 	case ShopState::SelectCount:
 		OpenCountDialog();
 
-		if (true == GameEngineInput::GetInst()->IsDown("Select"))
+		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectBuy;
+		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))
+		{
+			ShopState_ = ShopState::SelectSalesList;
+			InBag_->SetOrder(-1);
+			CountDialog_->SetOrder(-1);
 		}
 		break;
 	case ShopState::SelectBuy:
 		OpenBuyDialog();
 
-		if (true == GameEngineInput::GetInst()->IsDown("Select"))
+		if (true == GameEngineInput::GetInst()->IsDown("SelectShop"))
 		{
 			ShopState_ = ShopState::SelectSalesList;
+			BuyDialog_->SetOrder(-1);
+		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
+		{
+			ShopState_ = ShopState::SelectCount;
+			BuyDialog_->SetOrder(-1);
+			InBag_->SetOrder(-1);
+			CountDialog_->SetOrder(-1);
 		}
 		break;
 	}

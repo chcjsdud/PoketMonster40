@@ -125,7 +125,6 @@ private:
 	void WMenuUISelect();
 
 	bool IsMoveKey();
-	void IsWMenuKey();
 
 	void MoveAnim();
 	bool CanMove();
