@@ -117,7 +117,18 @@ void PokemonSummaryMenu::Render()
 
 			//다른 State에서 쓰이는 폰트 전부 Off
 			{
+				//======= Pokemon Ability =========
 				CurHpFonts_[i]->Off();
+				MaxHpFonts_[i]->Off();
+				AttFonts_[i]->Off();
+				DefFonts_[i]->Off();
+				SpAttFonts_[i]->Off();
+				SpDefFonts_[i]->Off();
+				SpeedFonts_[i]->Off();
+				CurExpFonts_[i]->Off();
+				NextExpFonts_[i]->Off();
+				AbilityFonts_[i]->Off();
+				AbilityExplanationFonts_[i]->Off();
 			}
 		}
 		break;
@@ -131,6 +142,17 @@ void PokemonSummaryMenu::Render()
 				FrameNameFonts_[i]->Off();
 				GenderRenderer_[i]->Off();
 				CurHpFonts_[i]->Off();
+				MaxHpFonts_[i]->Off();
+				AttFonts_[i]->Off();
+				DefFonts_[i]->Off();
+				SpAttFonts_[i]->Off();
+				SpDefFonts_[i]->Off();
+				SpeedFonts_[i]->Off();
+				CurExpFonts_[i]->Off();
+				NextExpFonts_[i]->Off();
+				AbilityExplanationFonts_[i]->Off();
+				AbilityFonts_[i]->Off();
+
 			}
 			else
 			{
@@ -139,10 +161,22 @@ void PokemonSummaryMenu::Render()
 				FrameNameFonts_[i]->On();
 				GenderRenderer_[i]->On();
 				CurHpFonts_[i]->On();
+				MaxHpFonts_[i]->On();
+				AttFonts_[i]->On();
+				DefFonts_[i]->On();
+				SpAttFonts_[i]->On();
+				SpDefFonts_[i]->On();
+				SpeedFonts_[i]->On();
+				CurExpFonts_[i]->On();
+				AbilityFonts_[i]->On();
+				AbilityExplanationFonts_[i]->On();
+				NextExpFonts_[i]->On();
 			}
 		}
 
 		//다른 State에서 쓰이는 폰트 끄기
+
+		//===== Pokemon Info ==========
 		Owner_->Off();
 		Item_->Off();
 		IDNumber_->Off();
@@ -363,10 +397,139 @@ void PokemonSummaryMenu::InitFonts_()
 		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
-			NewFonts->SetPosition(GetPosition() + float4(30, 460));
-			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetHp()), true);
+			NewFonts->SetPosition(GetPosition() + float4(700, 80));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetHp())+"  /", true);
 			NewFonts->Off();
 			CurHpFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//최대 Hp 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(870, 80));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetMaxHp()), true);
+			NewFonts->Off();
+			MaxHpFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//공격력 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 152));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetAtt()), true);
+			NewFonts->Off();
+			AttFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//방어력 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 204));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetDef()), true);
+			NewFonts->Off();
+			DefFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//특공 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 256));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetSpAtt()), true);
+			NewFonts->Off();
+			SpAttFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//특방 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 308));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetSpDef()), true);
+			NewFonts->Off();
+			SpDefFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//스피드 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 360));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetSpeed()), true);
+			NewFonts->Off();
+			SpeedFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//현재 Exp 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(860, 416));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetExp()), true);
+			NewFonts->Off();
+			CurExpFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//최대 Exp 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(850, 464));
+			NewFonts->ShowString(std::to_string(PokemonInfoList_[i]->GetMaxExp()- PokemonInfoList_[i]->GetExp()), true);
+			NewFonts->Off();
+			NextExpFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+
+	//어빌리티 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(300, 516));
+			NewFonts->ShowString("Torrent", true);
+			NewFonts->Off();
+			AbilityFonts_.push_back(NewFonts);
+			AllFonts_.push_back(NewFonts);
+		}
+	}
+	//어빌리티 설명 폰트
+	{
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+			NewFonts->SetPosition(GetPosition() + float4(30, 564));
+			NewFonts->ShowString("Ups Power moves in a pinch.", true);
+			NewFonts->Off();
+			AbilityExplanationFonts_.push_back(NewFonts);
 			AllFonts_.push_back(NewFonts);
 		}
 	}
@@ -493,6 +656,12 @@ void PokemonSummaryMenu::PokemonAbilityUpdate()
 	{
 		ChangeState(PokemonSummaryMenuType::PokemonInfo);
 		return;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
+	{
+		DestroyPokemonSummaryMenu();
+		Off();
 	}
 }
 
