@@ -55,6 +55,16 @@ public:
 		PP_ = _PP;
 	}
 
+	inline int GetMaxPP()
+	{
+		return MaxPP_;
+	}
+
+	inline void SetMaxPP(int _PP)
+	{
+		MaxPP_ = _PP;
+	}
+
 	inline void SetEffect(const std::string& _Effect)
 	{
 		Effect_ = _Effect;
@@ -94,6 +104,7 @@ protected:
 
 private:
 	int Value_; //공격 스킬 혹은 방어나 버프 계산에 쓰일 값
+	int MaxPP_; //최대 공격 횟수
 	int PP_; //남은 공격 횟수
 
 	SkillType SkillType_; // 스킬 종류 (공격, 방어 등

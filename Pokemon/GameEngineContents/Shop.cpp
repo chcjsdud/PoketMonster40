@@ -83,6 +83,22 @@ void Shop::DestroyAllFonts()
 	}
 
 	AllFontList_.clear();
+
+	DestroyCountFont();
+}
+
+void Shop::DestroyCountFont()
+{
+	for (GameEngineContentFont* Font : CountList_)
+	{
+		if (nullptr != Font)
+		{
+			Font->Death();
+		}
+	}
+
+	CountList_.clear();
+
 }
 
 void Shop::ArrowUpdate()
@@ -147,7 +163,25 @@ void Shop::ArrowUpdate()
 		}
 		break;
 	case ShopState::SelectCount:
+		if (true == GameEngineInput::GetInst()->IsDown("UpArrowShop"))
+		{
+			DestroyCountFont();
 
+			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			Count->SetPosition(GetPosition() + float4{ 400, 225 });
+			Count->ShowString(std::to_string(ArrowIndex_ + 1), true);
+			CountList_.push_back(Count);
+		}
+
+		else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
+		{
+			DestroyCountFont();
+
+			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			Count->SetPosition(GetPosition() + float4{ 400, 225 });
+			Count->ShowString(std::to_string(ArrowIndex_ - 1), true);
+			CountList_.push_back(Count);
+		}
 		break;
 	case ShopState::SelectBuy:
 
@@ -202,39 +236,57 @@ void Shop::Update()
 
 			int Index = 0;
 
-			for (Item* CurItem : ItemList_)
+			if (0 == ArrowIndex_)
 			{
-				if (nullptr == CurItem)
+				for (Item* CurItem : ItemList_)
 				{
-					continue;
-				}
-
-				switch (ArrowIndex_)
-				{
-				case 0:
-					if ("POKEBALL" == CurItem->GetInfo()->GetNameConstPtr())
+					if (nullptr == CurItem)
 					{
-						++Index;
+						continue;
 					}
-					break;
-				case 1:
+
 					if ("POTION" == CurItem->GetInfo()->GetNameConstPtr())
 					{
 						++Index;
 					}
-					break;
-				case 2: 
-					ShopState_ = ShopState::SelectDialog;
-					DestroyAllFonts();
-					SalesList_->SetOrder(-1);
-					break;
 				}
 			}
 
-			GameEngineContentFont* Count  = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			Count->SetPosition(GetPosition() + float4{ 195, 85 });
-			Count->ShowString(std::to_string(PlayerRed::MainRed_->GetMoney()), true);
-			AllFontList_.push_back(Count);
+			else if (1 == ArrowIndex_)
+			{
+				for (Item* CurItem : ItemList_)
+				{
+					if (nullptr == CurItem)
+					{
+						continue;
+					}
+
+					if ("POKEBALL" == CurItem->GetInfo()->GetNameConstPtr())
+					{
+						++Index;
+					}
+				}
+			}
+
+			else if (2 == ArrowIndex_)
+			{
+				ShopState_ = ShopState::SelectDialog;
+				DestroyAllFonts();
+				SalesList_->SetOrder(-1);
+				break;
+			}
+
+			GameEngineContentFont* InBagCount  = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			InBagCount->SetPosition(GetPosition() + float4{ 195, 85 });
+			InBagCount->ShowString(std::to_string(Index), true);
+			CountList_.push_back(InBagCount);
+
+			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+			Count->SetPosition(GetPosition() + float4{ 400, 225 });
+			Count->ShowString("1", true);
+			CountList_.push_back(Count);
+
+			ArrowIndex_ = 1;
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("Exitshop"))

@@ -32,6 +32,7 @@ public:
 	void OpenBuyDialog();
 
 	void DestroyAllFonts();
+	void DestroyCountFont();
 
 	void ArrowUpdate();
 
@@ -77,5 +78,6 @@ private:
 	std::vector<Item*> BallList_;
 
 	std::vector<class GameEngineContentFont*> AllFontList_;
+	std::vector<class GameEngineContentFont*> CountList_; //아이템 구매 개수 폰트
 };
 

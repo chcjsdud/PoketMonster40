@@ -69,7 +69,7 @@ private:
 	std::map<std::string, ItemInfo*> AllItemInfoList_;
 
 	PokemonInfo* CreatePokemonInfo(const std::string& _Key, PokemonType _Type, int _Lv, int _Att, int _Def, int _SpAtt, int _SpDef, int _Speed, int _HP = 100);
-	PokemonSkillInfo* CreateSkillInfo(const std::string& _Key, int _Value, int _PP, PokemonType _Type, SkillType _SkillType, const std::string& _Desc);
+	PokemonSkillInfo* CreateSkillInfo(const std::string& _Key, int _Value, int _PP, int _MaxPP, PokemonType _Type, SkillType _SkillType, const std::string& _Desc);
 	ItemInfo* CreateItemInfo(const std::string& _Key, int _Value, ItemType _Type, const std::string& _Desc);
 
 	void CreateRandomNature(PokemonInfo* _Pokemon);
