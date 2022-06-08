@@ -276,6 +276,7 @@ PokemonSkill* PokemonInfoManager::CreatePokemonSkill(const std::string& _Name)
 	NewPokemonSkill->GetInfo()->SetValue(MyInfo->GetValue());
 	NewPokemonSkill->GetInfo()->SetDesc(MyInfo->GetDesc());
 	NewPokemonSkill->GetInfo()->SetPP(MyInfo->GetPP());
+	NewPokemonSkill->GetInfo()->SetMaxPP(MyInfo->GetMaxPP());
 	NewPokemonSkill->GetInfo()->SetEffect(MyInfo->GetEffect());
 
 	AllPokemonSkillList_.push_back(NewPokemonSkill);

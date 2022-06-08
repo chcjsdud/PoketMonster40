@@ -103,7 +103,9 @@ void Shop::DestroyCountFont()
 
 void Shop::ArrowUpdate()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("UpArrowShop"))
+	static int Index_ = 1;
+
+	if (ShopState_ != ShopState::SelectCount && true == GameEngineInput::GetInst()->IsDown("UpArrowShop"))
 	{
 		if (0 == ArrowIndex_)
 		{
@@ -113,7 +115,7 @@ void Shop::ArrowUpdate()
 		--ArrowIndex_;
 	}
 
-	else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
+	else if (ShopState_ != ShopState::SelectCount && true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
 	{
 		++ArrowIndex_;
 	}
@@ -162,27 +164,36 @@ void Shop::ArrowUpdate()
 			break;
 		}
 		break;
+
 	case ShopState::SelectCount:
 		if (true == GameEngineInput::GetInst()->IsDown("UpArrowShop"))
 		{
 			DestroyCountFont();
 
+			++Index_;
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
 			Count->SetPosition(GetPosition() + float4{ 400, 225 });
-			Count->ShowString(std::to_string(ArrowIndex_ + 1), true);
+			Count->ShowString(std::to_string(Index_), true);
 			CountList_.push_back(Count);
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
 		{
+			if (1 == Index_)
+			{
+				return;
+			}
+
 			DestroyCountFont();
+			--Index_;
 
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
-			Count->SetPosition(GetPosition() + float4{ 400, 225 });
-			Count->ShowString(std::to_string(ArrowIndex_ - 1), true);
+			Count->SetPosition(GetPosition() + float4{ 620, 250 });
+			Count->ShowString(std::to_string(Index_), true);
 			CountList_.push_back(Count);
 		}
 		break;
+
 	case ShopState::SelectBuy:
 
 		break;
