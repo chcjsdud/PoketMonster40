@@ -38,6 +38,7 @@ private:
 	bool IsShop_;
 	bool IsCenter_;
 	bool IsChoice_;
+	bool IsBrock_;
 
 	void Start() override;
 	void Update() override;

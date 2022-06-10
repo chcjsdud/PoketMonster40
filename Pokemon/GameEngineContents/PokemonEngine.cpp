@@ -114,6 +114,9 @@ void PokemonEngine::InitKey()
 	GameEngineInput::GetInst()->CreateKey("Battle", VK_RETURN);
 	
 	GameEngineInput::GetInst()->CreateKey("test", 'M'); // 충돌체 체크용 키
+
+	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
+	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
 }
 
 

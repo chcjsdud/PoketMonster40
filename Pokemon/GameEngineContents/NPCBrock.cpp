@@ -2,12 +2,12 @@
 #include "GymTileMap.h"
 #include "PokemonInfoManager.h"
 #include <GameEngineBase/GameEngineInput.h>
-#include "BattleLevel.h"
-#include <GameEngine/GameEngine.h>
-#include "ContentEnum.h"
 
-NPCBrock::NPCBrock() 
+NPCBrock* NPCBrock::Inst_ = nullptr;
+
+NPCBrock::NPCBrock()
 {
+	Inst_ = this;
 }
 
 NPCBrock::~NPCBrock() 
@@ -16,9 +16,6 @@ NPCBrock::~NPCBrock()
 
 void NPCBrock::Start()
 {
-	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
-	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
-
 	SetBattleNPC(true);
 	PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Geodude"));
 	PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Onix"));
@@ -51,24 +48,6 @@ void NPCBrock::Start()
 void NPCBrock::Update()
 {
 	NPCInteractDir();
-
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
-	{
-		BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
-		if (nullptr != TmpBattleLevel)
-		{
-			TmpBattleLevel->StartBattleLevelByWild();
-		}
-	}
-
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
-	{
-		BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
-		if (nullptr != TmpBattleLevel)
-		{
-			TmpBattleLevel->StartBattleLevelByNPC(this);
-		}
-	}
 }
 
 GameEngineActor* NPCBrock::GetActor()

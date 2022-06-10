@@ -22,6 +22,12 @@
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
 #include "ContentEnum.h"
+#include "BattleLevel.h"
+#include "ContentEnum.h"
+#include "NPCBrock.h"
+
+#include <GameEngine/GameEngine.h>
+#include <GameEngineBase/GameEngineInput.h>
 
 WorldMapLevel::WorldMapLevel()
 {
@@ -31,10 +37,37 @@ WorldMapLevel::~WorldMapLevel()
 {
 }
 
+void WorldMapLevel::StartBattleLevelByNPC(BattleNpcType _Type)
+{
+	switch (_Type)
+	{
+	case BattleNpcType::Brock:
+	{
+		BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
+		if (nullptr != TmpBattleLevel)
+		{
+			TmpBattleLevel->StartBattleLevelByNPC(NPCBrock::GetInst());
+		}
+	}
+		break;
+	default:
+		break;
+	}
+}
+
+void WorldMapLevel::StartBattleLevelByWilde()
+{
+	BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
+	if (nullptr != TmpBattleLevel)
+	{
+		TmpBattleLevel->StartBattleLevelByWild();
+	}
+}
+
 void WorldMapLevel::Loading()
 {
 	YSortOn(static_cast<int>(RenderOrder::Player));
-
+	
 	CreateActor<WorldMapSoundManager>();
 	CreateActor<WorldMapBackground>();
 	CreateActor<WorldTileMap1>();
@@ -61,6 +94,15 @@ void WorldMapLevel::Loading()
 
 void WorldMapLevel::Update()
 {
+	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
+	{
+		StartBattleLevelByWilde();
+	}
+
+	if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
+	{
+		StartBattleLevelByNPC(BattleNpcType::Brock);
+	}
 }
 
 void WorldMapLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)

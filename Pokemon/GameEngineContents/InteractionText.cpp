@@ -7,6 +7,7 @@
 #include "Oak.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
+#include "WorldMapLevel.h"
 
 bool InteractionText::IsCenterMove_ = false;
 bool InteractionText::IsCenterAnim_ = false;
@@ -18,6 +19,7 @@ InteractionText::InteractionText()
 	, IsShop_(false)
 	, IsCenter_(false)
 	, IsChoice_(false)
+	, IsBrock_(false)
 	, ZIgnore_(false)
 {
 }
@@ -110,6 +112,10 @@ void InteractionText::Update()
 		IsCenterAnim_ = true;
 		ZIgnore_ = true;
 	}
+	else if (Fonts->GetCurrentString() == "Show me your best!")
+	{
+		IsBrock_ = true;
+	}
 
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
@@ -159,6 +165,15 @@ void InteractionText::Update()
 			Fonts->EndFont();
 			NPC6::Text_ = nullptr;
 			Death();
+
+			if (true == IsBrock_)
+			{
+				WorldMapLevel* CurrentLevel = dynamic_cast<WorldMapLevel*>(GetLevel());
+				if (nullptr != CurrentLevel)
+				{
+					CurrentLevel->StartBattleLevelByNPC(BattleNpcType::Brock);
+				}
+			}
 		}
 	}
 }

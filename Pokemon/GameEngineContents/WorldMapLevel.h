@@ -1,6 +1,13 @@
 #pragma once
 #include <GameEngine/GameEngineLevel.h>
 
+enum class BattleNpcType 
+{
+	None,
+	Brock,
+	Max,
+};
+
 // Ό³Έν :
 class WorldMapLevel : public GameEngineLevel
 {
@@ -14,6 +21,9 @@ public:
 	WorldMapLevel(WorldMapLevel&& _Other) noexcept = delete;
 	WorldMapLevel& operator=(const WorldMapLevel& _Other) = delete;
 	WorldMapLevel& operator=(WorldMapLevel&& _Other) noexcept = delete;
+
+	void StartBattleLevelByNPC(BattleNpcType _Type);
+	void StartBattleLevelByWilde();
 
 protected:
 	void Loading() override;

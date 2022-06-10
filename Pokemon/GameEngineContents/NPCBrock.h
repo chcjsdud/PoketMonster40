@@ -5,6 +5,15 @@
 // Ό³Έν :
 class NPCBrock : public NPCBase, public BattleNPCInterface
 {
+private:
+	static NPCBrock* Inst_;
+
+public:
+	static NPCBrock* GetInst()
+	{
+		return Inst_;
+	}
+
 public:
 	// constrcuter destructer
 	NPCBrock();
