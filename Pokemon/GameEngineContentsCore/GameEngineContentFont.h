@@ -144,6 +144,11 @@ public:
 
 	}
 
+	inline void SetSize(float _Size)
+	{
+		FontSize_ = _Size;
+	}
+
 
 	const std::string& GetCurrentString() 
 	{
@@ -177,5 +182,7 @@ private:
 
 	std::string CurrentString_;
 	std::vector<GameEngineRenderer*> AllFontRenderer_;
+
+	float FontSize_;
 	// static std::list<GameEngineContentFont*> AllFonts_;
 };

@@ -73,15 +73,20 @@ void BattleInterface::Start()
 	// UI 폰트 
 	{
 		PlayerName_ = Level_->CreateActor<GameEngineContentFont>(10);
-		//PlayerName_->SetPosition({,});
+		PlayerName_->SetPosition({ 570 , 312 });
+		PlayerName_->SetSize(0.85f);
 		PlayerLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PlayerLevel_->SetPosition({});
+		PlayerLevel_->SetPosition({ 865 , 312 });
+		PlayerLevel_->SetSize(0.85f);
 		PlayerHP_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PlayerHP_->SetPosition({785 , 310 });
+		PlayerHP_->SetPosition({ 770 , 384 });
+		PlayerHP_->SetSize(0.75f);
 		PoeName_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PoeName_->SetPosition({});
+		PoeName_->SetPosition({ 85 , 56});
+		PoeName_->SetSize(0.85f);
 		PoeLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PoeLevel_->SetPosition({});
+		PoeLevel_->SetPosition({ 380 , 56 });
+		PoeLevel_->SetSize(0.85f);
 
 	}
 	// 키 생성
@@ -151,9 +156,18 @@ void BattleInterface::Update()
 
 	if (Level_->BState_ != BattleState::Openning)
 	{
-		if (!PlayerHP_->IsRendererFont())
+		if (!PlayerName_->IsRendererFont())
 		{
-			PlayerHP_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
+			PlayerName_->ShowString(Level_->PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef() + (Level_->PlayerCurrentPokemon_->GetPokemon()->GetInfo()->GetGender() ? "[" : "]"), true);
+			PlayerLevel_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
+			PlayerHP_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetHp())
+				+ "/ " + std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp()), true);
+		}
+
+		if (!PoeName_->IsRendererFont())
+		{
+			PoeName_->ShowString(Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef() + (Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetGender() ? "[" : "]"), true);
+			PoeLevel_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
 		}
 		//MyHPUI->Is
 	}
@@ -296,7 +310,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 				MsgBoxAssert("스킬이 없습니다")
 			}
 			Level_->StartBattlePage(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()
-				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()));
+				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()));
 
 			for (auto& Font : AllSkillFont_)
 			{
@@ -610,6 +624,10 @@ void BattleInterface::DoomChit()
 		MyHPUI->SetPivot({ 0.0f,-174.0f });
 		MyHP->SetPivot({ 80.0f, -174.0f });
 		EXP->SetPivot({ 48.0f,-174.0f });
+		PlayerName_->SetPosition({ 570 ,  312 - 4 });
+		PlayerLevel_->SetPosition({ 865 , 312 - 4 });
+		PlayerHP_->SetPosition({ 770 , 384 - 4});
+
 	}
 
 	if ((int)TimeCheck % 2 == 1)
@@ -617,6 +635,9 @@ void BattleInterface::DoomChit()
 		MyHPUI->SetPivot({ 0.0f,-170.0f });
 		MyHP->SetPivot({ 80.0f, -170.0f });
 		EXP->SetPivot({ 48.0f,-170.0f });
+		PlayerName_->SetPosition({570 , 312 });
+		PlayerLevel_->SetPosition({ 865 , 312 });
+		PlayerHP_->SetPosition({ 770 , 384 });
 	}
 }
 
@@ -679,8 +700,9 @@ void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 void BattleInterface::StartTalk()
 {
-	const std::string& Name = Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef();
-	Fonts->ShowString("Wild " + Name + "\\is appear!!\\Go!!\\" + Name + "!!", false);
+	Fonts->ClearCurrentFonts();
+	Fonts->ShowString("Wild " + Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "\\is appear!!\\Go!!\\"
+		+ Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "!!", false);
 }
 
 

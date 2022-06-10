@@ -76,7 +76,6 @@ private:
 	GameEngineContentFont* PlayerName_;
 	GameEngineContentFont* PlayerLevel_;
 	GameEngineContentFont* PlayerHP_;
-
 	GameEngineContentFont* PoeName_;
 	GameEngineContentFont* PoeLevel_;
 	//

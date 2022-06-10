@@ -73,6 +73,10 @@ public:
 		EnddingEnd_ = true;
 	}
 
+	void StartBattleLevelByWild();
+	void StartBattleLevelByNPC(BattleNPCInterface* Opponent_);
+
+
 protected:
 	void Loading() override;
 	void Update() override;
@@ -131,7 +135,10 @@ private:
 	void EndBattlePage();
 	BattlePageEnd EndAction_;
 
-	
+	//Debug
+	void LevelStartDebug();
+	void LevelEndDebug();
+	bool DebugMode_;
 };
 
 class BattleData

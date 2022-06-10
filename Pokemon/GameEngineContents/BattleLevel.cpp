@@ -11,6 +11,7 @@
 #include "BattleNPCInterface.h"
 #include "WildPokemonNPC.h"
 #include "PokemonInfoManager.h"
+#include <GameEngine/GameEngine.h>
 
 
 
@@ -32,6 +33,7 @@ BattleLevel::BattleLevel()
 	, CurrentSelect_(BattleOrder::None)
 	, EndFont_(false)
 	, EndAction_(BattlePageEnd::None)
+	, DebugMode_(false)
 {
 
 }
@@ -77,6 +79,7 @@ void BattleLevel::Loading()
 
 	Interface_ = CreateActor<BattleInterface>(3);
 	Interface_->SetPosition({ 720.0f, 548.0f });
+	DebugMode_ = true;
 
 }
 
@@ -264,17 +267,14 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		ShowOpenning();
 	}
 
-
-	// 장중혁 : 배틀 디버깅
+	if (DebugMode_)
 	{
-		Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
-		Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
-		//PlayerRed_->GetPokemonList().push_back(PokemonInfoManager::GetInst().CreatePokemon("Squirtle"));
+		LevelStartDebug();
 
-		BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
-		RefreshPokemon();
 	}
 
+	BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+	RefreshPokemon();
 	EndFont_ = false;
 
 }
@@ -294,22 +294,45 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	// 장중혁 : Debug
 	{
-		//for (auto& Iter : PlayerRed_->GetPokemonList())
-		//{
-		//	delete Iter;
-		//}
-			//PlayerRed_->GetPokemonList().clear();
-		for (auto& Iter : Opponent_->GetPokemonList())
-		{
-			PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
-		}
-		Opponent_->GetPokemonList().clear();
 
-		Opponent_->Death();
+		if (DebugMode_)
+		{
+			LevelEndDebug();
+		}
 		delete BattleData_;
 		BattleData_ = nullptr;
 	}
 
+}
+
+void BattleLevel::LevelStartDebug()
+{
+	Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
+	Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
+}
+void BattleLevel::LevelEndDebug()
+{
+	for (auto& Iter : Opponent_->GetPokemonList())
+	{
+		PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
+	}
+	Opponent_->GetPokemonList().clear();
+	Opponent_->Death();
+}
+
+void BattleLevel::StartBattleLevelByWild()
+{
+	GameEngine::GetInst().ChangeLevel("BattleLevel");
+}
+
+void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
+{
+	if (!_Opponent->IsBattleNPC() || _Opponent->GetPokemonList().empty())
+	{
+		MsgBoxAssert("배틀 NPC가 아니거나 포켓몬을 가지고 있지 않습니다")
+	}
+	Opponent_ = _Opponent;
+	GameEngine::GetInst().ChangeLevel("BattleLevel");
 }
 
 void BattleLevel::ShowEndding()
