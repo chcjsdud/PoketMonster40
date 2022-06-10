@@ -9,7 +9,7 @@
 #include "Pokemon.h"
 #include "PokemonInfo.h"
 
-PokemonSummaryMenu::PokemonSummaryMenu():
+PokemonSummaryMenu::PokemonSummaryMenu() :
 	TopMenuRenderer_(nullptr),
 	CurState_(PokemonSummaryMenuType::PokemonInfo),
 	PokemonFrameRenderer_(nullptr),
@@ -22,7 +22,11 @@ PokemonSummaryMenu::PokemonSummaryMenu():
 	JumpTime_(0.0f),
 	Owner_(nullptr),
 	IDNumber_(nullptr),
-	PokemonSkillGreenBoxRenderer_(nullptr)
+	PokemonSkillGreenBoxRenderer_(nullptr),
+	PokemonSkillSelect_PokemonFrameRenderer_(nullptr),
+	PokemonSkillSelect_LeftGreenBox(nullptr),
+	SkillSelect_CurrentOrder_(0)
+
 {
 	PokemonInfoList_.reserve(6);
 	PokemonFrontRenderer_.reserve(6);
@@ -43,6 +47,11 @@ PokemonSummaryMenu::PokemonSummaryMenu():
 	NextExpFonts_.reserve(6);
 	AbilityFonts_.reserve(6);
 	AbilityExplanationFonts_.reserve(6);
+	PokemonSkillSelect_MiniPokemonRenderer_.reserve(6);
+	TypeString_.reserve(6);
+	PokemonSkillSelect_TypeRenderer_.reserve(6);
+	PokemonSkillSelect_SelectLineRenderer_.reserve(6);
+
 
 	SkillNameFonts_.reserve(4);
 	CurSkillPPFonts_.reserve(4);
@@ -257,6 +266,7 @@ void PokemonSummaryMenu::Render()
 		TopMenuRenderer_->SetImage("PokemonSkill.bmp");
 		PokemonInfoRenderer_->SetImage("PokemonSkill_Back.bmp");
 		PokemonSkillGreenBoxRenderer_->On();
+		PokemonFrameRenderer_->On();
 
 		//스킬 타입 렌더러
 		for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
@@ -279,8 +289,28 @@ void PokemonSummaryMenu::Render()
 			MaxSkillPPFonts_[i]->On();
 		}
 
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			if (i != CurrentOrder_)
+			{
+				PokemonFrontRenderer_[i]->Off();
+				LevelFonts_[i]->Off();
+				FrameNameFonts_[i]->Off();
+			}
+			else
+			{
+				PokemonFrontRenderer_[i]->On();
+				LevelFonts_[i]->On();
+				FrameNameFonts_[i]->On();
+			}
+		}
+
+
+
 
 		//다른 State에서 사용하는 폰트, 렌더러 제거
+		PokemonSkillSelect_PokemonFrameRenderer_->Off();
+		PokemonSkillSelect_LeftGreenBox->Off();
 		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
 			{
@@ -298,9 +328,48 @@ void PokemonSummaryMenu::Render()
 					AbilityFonts_[i]->Off();
 					AbilityExplanationFonts_[i]->Off();
 				}
+
+				//=============== PokemonSkillSelect ================================
+				{
+					PokemonSkillSelect_TypeRenderer_[i]->Off();
+					PokemonSkillSelect_MiniPokemonRenderer_[i]->Off();
+				}
 			}
 			
 		}
+
+		for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_)
+		{
+			i->Off();
+		}
+		break;
+	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkillSelect:
+
+		//렌더러 끄기
+	{
+		PokemonFrameRenderer_->Off();
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+		{
+			LevelFonts_[i]->Off();
+			PokemonFrontRenderer_[i]->Off();
+			PokemonSkillSelect_MiniPokemonRenderer_[i]->Off();
+			PokemonSkillSelect_TypeRenderer_[i]->Off();
+
+		}
+		for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_) //옌 스킬갯수가 다른 인덱스랑 다르니 별도로
+		{
+			i->Off();
+		}
+	}
+
+	// 렌더러 켜기
+	{
+		PokemonSkillSelect_PokemonFrameRenderer_->On();
+		PokemonSkillSelect_MiniPokemonRenderer_[CurrentOrder_]->On();
+		PokemonSkillSelect_TypeRenderer_[CurrentOrder_]->On();
+		PokemonSkillSelect_LeftGreenBox->On();
+		PokemonSkillSelect_SelectLineRenderer_[SkillSelect_CurrentOrder_]->On();
+	}
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::Max:
 		break;
@@ -326,6 +395,16 @@ void PokemonSummaryMenu::InitRenderer_()
 	PokemonSkillGreenBoxRenderer_->SetTransColor(RGB(255, 0, 255));
 	PokemonSkillGreenBoxRenderer_->Off();
 
+	PokemonSkillSelect_PokemonFrameRenderer_ = CreateRenderer("PokemonSkill_PokemonFrame.bmp", GetOrder()-1, RenderPivot::LeftTop, { 0,64 });
+	PokemonSkillSelect_PokemonFrameRenderer_->SetTransColor(RGB(255, 0, 255));
+	PokemonSkillSelect_PokemonFrameRenderer_->Off();
+
+	PokemonSkillSelect_LeftGreenBox = CreateRenderer("PokemonSkill_Detail_Window.bmp", GetOrder() - 1, RenderPivot::LeftTop, { 0,196});
+	PokemonSkillSelect_LeftGreenBox->SetTransColor(RGB(255, 0, 255));
+	PokemonSkillSelect_LeftGreenBox->Off();
+
+	
+
 	//포켓몬 성별
 	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 	{
@@ -343,7 +422,7 @@ void PokemonSummaryMenu::InitRenderer_()
 		GenderRenderer_.push_back(NewRenderer);
 	}
 
-	//포켓몬 앞판
+	//포켓몬 앞면
 	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 	{
 		GameEngineRenderer* NewRenderer = CreateRenderer(PokemonInfoList_[i]->GetMyBattleFront(), GetOrder(), RenderPivot::LeftTop,{120,120});
@@ -351,6 +430,17 @@ void PokemonSummaryMenu::InitRenderer_()
 		NewRenderer->Off();
 		PokemonFrontRenderer_.push_back(NewRenderer);
 	}
+
+	//포켓몬 아이콘
+	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+	{
+		GameEngineRenderer* NewRenderer = CreateRenderer(PokemonInfoList_[i]->GetMyIcon(), GetOrder(), RenderPivot::LeftTop, { 40,100 });
+		NewRenderer->SetIndex(0);
+		NewRenderer->SetTransColor(RGB(255, 0, 255));
+		NewRenderer->Off();
+		PokemonSkillSelect_MiniPokemonRenderer_.push_back(NewRenderer);
+	}
+
 
 	//타입
 	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
@@ -414,6 +504,7 @@ void PokemonSummaryMenu::InitRenderer_()
 		default:
 			break;
 		}
+		TypeString_.push_back(TypeString);
 		GameEngineRenderer* NewRenderer = CreateRenderer(TypeString + ".bmp", GetOrder(), RenderPivot::LeftTop, { 660, 204 });
 		NewRenderer->SetTransColor(RGB(255, 0, 255));
 		NewRenderer->Off();
@@ -494,6 +585,29 @@ void PokemonSummaryMenu::InitRenderer_()
 			PokemonSkillTypeRenderer_.push_back(NewRenderer);
 		}
 	}
+
+
+	//========================================================== 포켓몬스킬 셀렉트 ================================================================
+	//타입
+	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+	{
+		std::string& TypeString = TypeString_[i];
+		GameEngineRenderer* NewRenderer = CreateRenderer(TypeString + ".bmp", GetOrder(), RenderPivot::LeftTop, { 180, 145 });
+		NewRenderer->SetTransColor(RGB(255, 0, 255));
+		NewRenderer->Off();
+		PokemonSkillSelect_TypeRenderer_.push_back(NewRenderer);
+	}
+
+	//PokemonSkillSelect_SelectLineRenderer_
+	//스킬 선택 빨간 외곽선
+	for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+	{
+		GameEngineRenderer* NewRenderer = CreateRenderer("PokemonSkill_SelectFrame.bmp", GetOrder(), RenderPivot::LeftTop, { 480,72 +static_cast<float>(i*112)});
+		NewRenderer->SetTransColor(RGB(255, 0, 255));
+		NewRenderer->Off();
+		PokemonSkillSelect_SelectLineRenderer_.push_back(NewRenderer);
+	}
+
 
 }
 
@@ -808,6 +922,9 @@ void PokemonSummaryMenu::ChangeState(PokemonSummaryMenuType _State)
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
 		PokemonSkillStart();
 		break;
+	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkillSelect:
+		PokemonSkillSelectStart();
+		break;
 	default:
 		break;
 	}
@@ -827,6 +944,9 @@ void PokemonSummaryMenu::UpdateState()
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkill:
 		PokemonSkillUpdate();
+		break;
+	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkillSelect:
+		PokemonSkillSelectUpdate();
 		break;
 	default:
 		break;
@@ -932,6 +1052,52 @@ void PokemonSummaryMenu::PokemonSkillUpdate()
 	{
 		ChangeState(PokemonSummaryMenuType::PokemonAbility);
 		return;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Z") == true)
+	{
+		ChangeState(PokemonSummaryMenuType::PokemonSkillSelect);
+		return;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
+	{
+		DestroyPokemonSummaryMenu();
+		Off();
+	}
+}
+
+void PokemonSummaryMenu::PokemonSkillSelectStart()
+{
+
+}
+
+void PokemonSummaryMenu::PokemonSkillSelectUpdate()
+{
+	if (GameEngineInput::GetInst()->IsDown("X") == true)
+	{
+		ChangeState(PokemonSummaryMenuType::PokemonSkill);
+		return;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (SkillSelect_CurrentOrder_ <= 0)
+		{
+			SkillSelect_CurrentOrder_ = static_cast<int>(PokemonSkillTypeRenderer_.size()) - 1;
+			return;
+		}
+		SkillSelect_CurrentOrder_--;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
+	{
+		if (SkillSelect_CurrentOrder_ >= PokemonSkillTypeRenderer_.size() - 1)
+		{
+			SkillSelect_CurrentOrder_ = 0;
+			return;
+		}
+		SkillSelect_CurrentOrder_++;
 	}
 }
 

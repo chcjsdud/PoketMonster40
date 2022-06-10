@@ -11,6 +11,7 @@ class PokemonSummaryMenu : public GameEngineActor
 		PokemonInfo,
 		PokemonAbility,
 		PokemonSkill,
+		PokemonSkillSelect,
 		Max
 	};
 public:
@@ -31,6 +32,7 @@ private:
 
 	bool IsOn_; // Init함수가 실행되야 Update하게
 	int CurrentOrder_;
+	int SkillSelect_CurrentOrder_;
 
 protected:
 	void Start() override;
@@ -58,6 +60,10 @@ private:
 	void PokemonSkillStart();
 	void PokemonSkillUpdate();
 
+	void PokemonSkillSelectStart();
+	void PokemonSkillSelectUpdate();
+
+
 	PokemonSummaryMenuType CurState_;
 
 
@@ -66,11 +72,19 @@ private:
 	GameEngineRenderer* PokemonFrameRenderer_;
 	GameEngineRenderer* PokemonInfoRenderer_; //이거 탑메뉴 아래 큰창
 	GameEngineRenderer* PokemonSkillGreenBoxRenderer_;
+	GameEngineRenderer* PokemonSkillSelect_PokemonFrameRenderer_; //스킬 셀렉트에서 포켓몬 프레임
+	GameEngineRenderer* PokemonSkillSelect_LeftGreenBox; //아이콘 아래에 뜨는 창
+
 
 	std::vector<GameEngineRenderer*> PokemonFrontRenderer_;
 	std::vector< GameEngineRenderer*> PokemonTypeRenderer_;
 	std::vector<GameEngineRenderer*> GenderRenderer_;
 	std::vector<GameEngineRenderer*> PokemonSkillTypeRenderer_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineRenderer*> PokemonSkillSelect_MiniPokemonRenderer_; // 포켓몬 아이콘 이미지 렌더러
+	std::vector<GameEngineRenderer*> PokemonSkillSelect_TypeRenderer_; // 포켓몬 타입 이미지
+	std::vector<GameEngineRenderer*> PokemonSkillSelect_SelectLineRenderer_; // 스킬 선택했을때 빨간 외곽선
+
+
 
 	//폰트
 	std::vector<GameEngineContentFont*> LevelFonts_;
@@ -97,6 +111,8 @@ private:
 	GameEngineContentFont* IDNumber_;//ID 폰트
 	GameEngineContentFont* Item_; //아이템 폰트
 
+	//타입 스트링
+	std::vector<std::string> TypeString_; //.bmp는 미포함
 
 	//캐릭터 통통튀는거 구현
 	float AccGravity_;
