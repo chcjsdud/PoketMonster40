@@ -393,7 +393,7 @@ void PlayerRed::Start()
 	RedCollision_ = CreateCollision("RedColBox", { 60,60 });
 	RedFrontCollision_ = CreateCollision("RedFrontColBox", { 20,5 }, { 0,-32 });
 
-	RedRender_ = CreateRenderer();
+	RedRender_ = CreateRenderer(static_cast<int>(RenderOrder::Player));
 	RedRender_->CreateAnimation("IdleUp.bmp", "IdleUp", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleDown.bmp", "IdleDown", 0, 0, 0.0f, false);
 	RedRender_->CreateAnimation("IdleLeft.bmp", "IdleLeft", 0, 0, 0.0f, false);

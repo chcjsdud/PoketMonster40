@@ -58,6 +58,8 @@ public:
 		return PrevLevel_;
 	}
 
+	GameEngineLevel* FindLevel(const std::string& _Name);
+
 protected:
 	template<typename LevelType>
 	void CreateLevel(const std::string& _Name)

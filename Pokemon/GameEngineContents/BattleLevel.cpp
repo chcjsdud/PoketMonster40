@@ -110,7 +110,7 @@ void BattleLevel::Update()
 			case BattlePageEnd::None:
 				break;
 			case BattlePageEnd::ChangePokemon:
-				Interface_->ShowChangePokemon(Opponent_->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
+				Interface_->ShowChangePokemon(Opponent_->GetActor()->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
 				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
 				BattleData_->GetCurrentPoePokemon()->ResetRank();
 				return;
@@ -321,7 +321,7 @@ void BattleLevel::LevelEndDebug()
 			PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
 		}
 		Opponent_->GetPokemonList().clear();
-		Opponent_->Death();
+		Opponent_->GetActor()->Death();
 	}
 }
 
@@ -332,6 +332,11 @@ void BattleLevel::StartBattleLevelByWild()
 		delete Opponent_;
 		Opponent_ = nullptr;
 	}
+	if (PlayerRed_ == nullptr)
+	{
+		PlayerRed_ = PlayerRed::MainRed_;
+	}
+
 	Pokemon* WildPokemon = nullptr;
 	WildPokemon = GameEngineRandom::GetInst_->RandomInt(0, 1) == 0 ? PokemonInfoManager::GetInst().CreatePokemon("Rattata") : PokemonInfoManager::GetInst().CreatePokemon("Pidgey");
 	BattleData_ = new BattleData(PlayerRed_, WildPokemon, this);
@@ -346,6 +351,11 @@ void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
 	{
 		MsgBoxAssert("배틀 NPC가 아니거나 포켓몬을 가지고 있지 않습니다")
 	}
+	if (PlayerRed_ == nullptr)
+	{
+		PlayerRed_ = PlayerRed::MainRed_;
+	}
+
 	Opponent_ = _Opponent;
 	DebugMode_ = false;
 	WildBattle_ = false;
@@ -364,7 +374,6 @@ void BattleLevel::RefreshPokemon()
 		PlayerCurrentPokemon_ = BattleData_->GetCurrentPlayerPokemon();
 		PoeCurrentPokemon_ = BattleData_->GetCurrentPoePokemon();
 	}
-
 }
 
 
@@ -434,7 +443,7 @@ BattleData::~BattleData()
 {
 	if (PoeNPC_ != nullptr && WildBattle_ == true)
 	{
-		PoeNPC_->Death();
+		PoeNPC_->GetActor()->Death();
 	}
 
 	for (auto* State : AllPokemonInBattle_)

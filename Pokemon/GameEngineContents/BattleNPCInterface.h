@@ -5,7 +5,7 @@
 // 설명 : NPC들이 상속받는 Battle용 Interface
 class PlayerRed;
 class Pokemon;
-class BattleNPCInterface : public GameEngineActor
+class BattleNPCInterface
 {
 	friend PlayerRed;
 public:
@@ -37,11 +37,12 @@ public:
 	//
 	//
 
+	virtual GameEngineActor* GetActor()
+	{
+		return nullptr;
+	}
+
 protected:
-	virtual void Start() override {}
-	virtual void Update() override {}
-
-
 
 	inline void SetBattleNPC(bool _Idx)
 	{

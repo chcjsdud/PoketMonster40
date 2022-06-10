@@ -4,6 +4,7 @@
 
 #include "NPCBase.h"
 #include "RoomTileMap6.h"
+#include "ContentEnum.h"
 
 NPC7::NPC7() 
 {
@@ -37,7 +38,7 @@ void NPC7::Start()
 		//Image->CutCount(3, 1);
 	}
 
-	NPCRender_ = CreateRenderer();
+	NPCRender_ = CreateRenderer(static_cast<int>(RenderOrder::Player));
 	NPCRender_->CreateAnimation("NPC7_.bmp", "Idle", 0, 0, 0.0f, false);
 	//NPCRender_->CreateAnimation("NPC4_.bmp", "IdleLeft", 1, 1, 0.0f, false);
 	//NPCRender_->CreateAnimation("NPC4_.bmp", "IdleRight", 2, 2, 0.0f, false);

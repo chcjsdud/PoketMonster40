@@ -159,3 +159,15 @@ void GameEngine::ChangeLevel(const std::string& _Name)
     }
     NextLevel_ = FindIter->second;
 }
+
+GameEngineLevel* GameEngine::FindLevel(const std::string& _Name)
+{
+    std::map<std::string, GameEngineLevel*>::iterator FindIter = AllLevel_.find(_Name);
+
+    if (AllLevel_.end() != FindIter)
+    {
+        return (*FindIter).second;
+    }
+
+    return nullptr; 
+}

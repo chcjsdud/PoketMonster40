@@ -12,3 +12,7 @@ WildPokemonNPC::~WildPokemonNPC()
 	
 }
 
+void WildPokemonNPC::Start()
+{
+}
+

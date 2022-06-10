@@ -188,10 +188,6 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="BattleTestNPC1.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="BattleUnitRenderer.h">
       <SubType>
       </SubType>
@@ -420,10 +416,6 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="BattleNPCInterface.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="BattleTestNPC1.cpp">
       <SubType>
       </SubType>
     </ClCompile>

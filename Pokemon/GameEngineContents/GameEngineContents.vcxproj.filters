@@ -94,9 +94,6 @@
     <ClCompile Include="BattleNPCInterface.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
-    <ClCompile Include="BattleTestNPC1.cpp">
-      <Filter>NPC</Filter>
-    </ClCompile>
     <ClCompile Include="Tackle.cpp">
       <Filter>Battle\Skill</Filter>
     </ClCompile>
@@ -281,9 +278,6 @@
       <Filter>NPC</Filter>
     </ClInclude>
     <ClInclude Include="BattleNPCInterface.h">
-      <Filter>NPC</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleTestNPC1.h">
       <Filter>NPC</Filter>
     </ClInclude>
     <ClInclude Include="Tackle.h">
