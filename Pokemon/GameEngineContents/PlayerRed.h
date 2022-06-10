@@ -68,6 +68,15 @@ public:
 		return Money_;
 	}
 
+	inline GameEngineActor* GetChildUI()
+	{
+		return ChildUI_;
+	}
+
+	inline void SetChildUI(GameEngineActor* _Child)
+	{
+		ChildUI_ = _Child;
+	}
 
 protected:
 

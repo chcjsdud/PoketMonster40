@@ -119,6 +119,7 @@ public:
 				Iter = nullptr;
 			}
 		}
+		AllFontRenderer_.clear();
 		StringQueue_ = std::queue<std::string>();
 		CurrentString_.clear();
 		ShowAllText_ = false;
@@ -141,6 +142,11 @@ public:
 			return true;
 		}
 
+	}
+
+	inline void SetSize(float _Size)
+	{
+		FontSize_ = _Size;
 	}
 
 
@@ -176,5 +182,7 @@ private:
 
 	std::string CurrentString_;
 	std::vector<GameEngineRenderer*> AllFontRenderer_;
+
+	float FontSize_;
 	// static std::list<GameEngineContentFont*> AllFonts_;
 };

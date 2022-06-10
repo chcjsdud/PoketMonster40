@@ -14,7 +14,16 @@
 //설명 : 
 
 enum class InBattle;
-enum class PokemonAbility;
+enum class PokemonAbility
+{
+	Att,
+	Def,
+	SpAtt,
+	SpDef,
+	Speed,
+	Accuracy,
+	Evasion
+};
 enum class DamageType;
 enum class BattlePage;
 enum class Battlefont;
@@ -64,6 +73,10 @@ public:
 		EnddingEnd_ = true;
 	}
 
+	void StartBattleLevelByWild();
+	void StartBattleLevelByNPC(BattleNPCInterface* Opponent_);
+
+
 protected:
 	void Loading() override;
 	void Update() override;
@@ -97,7 +110,6 @@ private:
 
 	bool OneTalk;
 
-
 private:
 	// 플레이어 및 NPC
 	PlayerRed* PlayerRed_;
@@ -123,7 +135,10 @@ private:
 	void EndBattlePage();
 	BattlePageEnd EndAction_;
 
-	
+	//Debug
+	void LevelStartDebug();
+	void LevelEndDebug();
+	bool DebugMode_;
 };
 
 class BattleData
@@ -203,6 +218,7 @@ class PokemonBattleState
 {
 	friend BattleEngine;
 	friend BattleManager;
+	friend BattleUnitRenderer;
 	// 중첩 클래스 전방선언
 	class ApplySkill;
 	// PokemonBattleState();
@@ -229,6 +245,19 @@ public:
 	inline Pokemon* GetPokemon()
 	{
 		return Pokemon_;
+	}
+
+	inline void ResetRank()
+	{
+		{
+			CurrentRank_[PokemonAbility::Att] = 0;
+			CurrentRank_[PokemonAbility::Def] = 0;
+			CurrentRank_[PokemonAbility::SpAtt] = 0;
+			CurrentRank_[PokemonAbility::SpDef] = 0;
+			CurrentRank_[PokemonAbility::Speed] = 0;
+			CurrentRank_[PokemonAbility::Accuracy] = 0;
+			CurrentRank_[PokemonAbility::Evasion] = 0;
+		}
 	}
 	float GetRank(const PokemonAbility& _State);
 	bool SetSkill(PokemonBattleState* _AlppyPokemon, PokemonSkillInfo* _Skill);
@@ -386,16 +415,7 @@ enum class DamageType
 	Nothing
 };
 
-enum class PokemonAbility
-{
-	Att,
-	Def,
-	SpAtt,
-	SpDef,
-	Speed,
-	Accuracy,
-	Evasion
-};
+
 
 enum class BattlePage
 {

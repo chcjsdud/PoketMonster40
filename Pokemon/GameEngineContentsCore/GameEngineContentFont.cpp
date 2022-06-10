@@ -1,5 +1,6 @@
 #include "GameEngineContentFont.h"
 #include <GameEngineBase/GameEngineDebug.h>
+#include <GameEngine/GameEngineImageManager.h>
 
 GameEngineContentFont::GameEngineContentFont() 
 	: CurrentPivot_(float4::ZERO)
@@ -9,6 +10,7 @@ GameEngineContentFont::GameEngineContentFont()
 	, WatingKeyPush_(false)
 	, LineHeight_(60.0f)
 	, ShowAllText_(false)
+	, FontSize_(1.f)
 {
 }
 
@@ -20,6 +22,7 @@ GameEngineContentFont::~GameEngineContentFont()
 void GameEngineContentFont::Start()
 {
 	//std::list<GameEngineContentFont*> GameEngineContentFont::AllFonts_.push_back(this);
+
 	Off();
 }
 
@@ -87,14 +90,20 @@ void GameEngineContentFont::Update()
 						case ':':
 							StringForRendererName = "Colon.bmp";
 							break;
+						case '[':
+							StringForRendererName = "Male.bmp";
+							break;
+						case ']':
+							StringForRendererName = "Female.bmp";
+							break;
 						default:
 							MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
 								break;
 						}
 					}
 
-					GameEngineRenderer* CurrentRenderer = CreateRenderer(StringForRendererName, GetOrder(), RenderPivot::LeftTop, CurrentPivot_);
-					CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetImageScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_) };
+					GameEngineRenderer* CurrentRenderer = CreateRendererToScale(StringForRendererName, GameEngineImageManager::GetInst()->Find(StringForRendererName)->GetScale() * FontSize_, GetOrder(), RenderPivot::LeftTop, CurrentPivot_);
+					CurrentPivot_ = { CurrentPivot_.x + CurrentRenderer->GetScale().x , static_cast<float>(LineHeight_ * CurrentStringRow_) };
 					AllFontRenderer_.push_back(CurrentRenderer);
 
 					if (CurrentString_[i+1] == 0)
@@ -185,6 +194,12 @@ void GameEngineContentFont::Update()
 						break;
 					case ':':
 						StringForRendererName = "Colon.bmp";
+						break;
+					case '[':
+						StringForRendererName = "Male.bmp";
+						break;
+					case ']':
+						StringForRendererName = "Female.bmp";
 						break;
 					default:
 						MsgBoxAssert("허용할수 없는 문자가 포함되어있습니다 " + CurrentWord)
