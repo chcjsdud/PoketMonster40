@@ -321,7 +321,7 @@ void BattleUnitRenderer::Tackle()
 		if (MyMoveTime <= 0.3f)
 		{
 			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),63.0f });
-
+			MyTackleEffect->SetPivot({ 210.0f,-90.0f });
 			MyTackleEffect->On();
 		}
 		if (MyMoveTime >= 0.1f)
@@ -468,7 +468,8 @@ void BattleUnitRenderer::Opening2()
 					//Tackle();
 					//WaterGun();
 					//ShellHide();
-					EnemyRock();
+					//EnemyRock();
+					EnemyTackle();
 					BattleInter->DoomChit();
 				}
 			}
@@ -679,5 +680,58 @@ void BattleUnitRenderer::EnemyRock()
 
 		}
 	}
-	
 }
+
+void BattleUnitRenderer::EnemyTackle()
+{
+	float X = PoeCurrentPokemon_->GetPivot().x;
+
+	if (EnemyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+
+		if (MyMoveTime <= 0.3f)
+		{
+			PoeCurrentPokemon_->SetPivot({ X - (MyMoveTime * 50.0f),-105.0f });
+
+			MyTackleEffect->SetPivot({ -200.0f,100.0f });
+			MyTackleEffect->On();
+		}
+		if (MyMoveTime >= 0.1f)
+		{
+			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
+			//나 피격시 적 HPUI이미지 들썩
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
+		}
+
+		{	//내 푸키먼 피격 반짝반짝
+			if (MyMoveTime >= 0.2f)
+			{
+				PlayerCurrentPokemon_ ->SetAlpha(55);
+				//내 HPUI이미지 아래로
+				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
+			}
+			if (MyMoveTime >= 0.3f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(255);
+				//적 HPUI 제자리로
+				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+				MyTackleEffect->Off();
+			}
+			if (MyMoveTime >= 0.4f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(55);
+			}
+			if (MyMoveTime >= 0.5f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(255);
+				EnemyTurnEnd = true;
+			}
+		}
+	}
+	if (EnemyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
+	}
+}
+
