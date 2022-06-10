@@ -57,6 +57,10 @@ PokemonSummaryMenu::PokemonSummaryMenu() :
 	CurSkillPPFonts_.reserve(4);
 	MaxSkillPPFonts_.reserve(4);
 	PokemonSkillTypeRenderer_.reserve(4);
+	SkillValueFonts_.reserve(4);
+	SkillAccFonts_.reserve(4);
+	SkillExplanationFonts_.reserve(4);
+
 }
 
 PokemonSummaryMenu::~PokemonSummaryMenu()
@@ -342,7 +346,21 @@ void PokemonSummaryMenu::Render()
 		{
 			i->Off();
 		}
+		for (GameEngineContentFont* i : SkillValueFonts_)
+		{
+			i->Off();
+		}
+		for (GameEngineContentFont* i : SkillAccFonts_)
+		{
+			i->Off();
+		}
+		for (GameEngineContentFont* i : SkillExplanationFonts_)
+		{
+			i->Off();
+		}
 		break;
+
+
 	case PokemonSummaryMenu::PokemonSummaryMenuType::PokemonSkillSelect:
 
 		//렌더러 끄기
@@ -360,6 +378,18 @@ void PokemonSummaryMenu::Render()
 		{
 			i->Off();
 		}
+		for (GameEngineContentFont* i : SkillValueFonts_)
+		{
+			i->Off();
+		}
+		for (GameEngineContentFont* i : SkillAccFonts_)
+		{
+			i->Off();
+		}
+		for (GameEngineContentFont* i : SkillExplanationFonts_)
+		{
+			i->Off();
+		}
 	}
 
 	// 렌더러 켜기
@@ -369,6 +399,10 @@ void PokemonSummaryMenu::Render()
 		PokemonSkillSelect_TypeRenderer_[CurrentOrder_]->On();
 		PokemonSkillSelect_LeftGreenBox->On();
 		PokemonSkillSelect_SelectLineRenderer_[SkillSelect_CurrentOrder_]->On();
+		SkillValueFonts_[SkillSelect_CurrentOrder_]->On();
+		SkillAccFonts_[SkillSelect_CurrentOrder_]->On();
+		SkillExplanationFonts_[SkillSelect_CurrentOrder_]->On();
+
 	}
 		break;
 	case PokemonSummaryMenu::PokemonSummaryMenuType::Max:
@@ -891,6 +925,58 @@ void PokemonSummaryMenu::InitFonts_()
 				NewFonts->ShowString(std::to_string(CurSkillList_[j]->GetInfo()->GetMaxPP()), true);
 				NewFonts->Off();
 				MaxSkillPPFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
+
+	//===================================== 포켓몬 스킬 셀렉트 ======================================================================================
+	//스킬의 벨류값(파워)
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(230, 228));
+				NewFonts->ShowString(std::to_string(CurSkillList_[j]->GetInfo()->GetValue()), true);
+				NewFonts->Off();
+				SkillValueFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
+
+	//스킬의 정확도
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(230, 284));
+				NewFonts->ShowString("100", true);
+				NewFonts->Off();
+				SkillAccFonts_.push_back(NewFonts);
+				AllFonts_.push_back(NewFonts);
+			}
+		}
+	}
+
+	//스킬의 설명
+	{
+		for (PokemonInfo* i : PokemonInfoList_)
+		{
+			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			for (size_t j = 0; j < CurSkillList_.size(); j++)
+			{
+				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+				NewFonts->SetPosition(GetPosition() + float4(20, 390));
+				NewFonts->ShowString(CurSkillList_[j]->GetInfo()->GetDesc(), true);
+				NewFonts->Off();
+				SkillExplanationFonts_.push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
