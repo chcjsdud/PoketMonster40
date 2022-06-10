@@ -119,6 +119,7 @@ public:
 				Iter = nullptr;
 			}
 		}
+		AllFontRenderer_.clear();
 		StringQueue_ = std::queue<std::string>();
 		CurrentString_.clear();
 		ShowAllText_ = false;

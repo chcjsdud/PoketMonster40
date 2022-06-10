@@ -61,6 +61,8 @@ private:
 	void SelectOrder();
 
 	bool PlayerEnd;
+	//이동원 타이머
+	float BattleTimer_;
 
 	// 생성한 Level
 	class BattleLevel* Level_;
@@ -69,6 +71,15 @@ private:
 	class GameEngineContentFont* Fonts;
 	GameEngineContentFont* BattleFont_;
 
+
+	// UI 폰트
+	GameEngineContentFont* PlayerName_;
+	GameEngineContentFont* PlayerLevel_;
+	GameEngineContentFont* PlayerHP_;
+
+	GameEngineContentFont* PoeName_;
+	GameEngineContentFont* PoeLevel_;
+	//
 	bool OneTalk;
 
 public:

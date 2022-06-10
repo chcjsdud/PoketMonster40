@@ -30,6 +30,14 @@ BattleInterface::BattleInterface()
 	, PlayerEnd(false)
 	, BattleFont_(nullptr)
 	, SkillUIPos_(0)
+	, BattleTimer_(0.0f)
+	, PlayerName_(nullptr)
+	, PlayerLevel_(nullptr)
+	, PlayerHP_(nullptr)
+	, PoeName_(nullptr)
+	, PoeLevel_(nullptr)
+
+
 {
 
 }
@@ -61,6 +69,20 @@ void BattleInterface::Start()
 		index = Level_->CreateActor<GameEngineContentFont>(10);
 		index->SetPosition({ 350, 550 });
 		AllSkillFont_.push_back(index);
+	}
+	// UI 폰트 
+	{
+		PlayerName_ = Level_->CreateActor<GameEngineContentFont>(10);
+		//PlayerName_->SetPosition({,});
+		PlayerLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PlayerLevel_->SetPosition({});
+		PlayerHP_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PlayerHP_->SetPosition({785 , 310 });
+		PoeName_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PoeName_->SetPosition({});
+		PoeLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PoeLevel_->SetPosition({});
+
 	}
 	// 키 생성
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
@@ -126,11 +148,17 @@ void BattleInterface::Update()
 	//}
 
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	if (Level_->GetBattleState() != BattleState::BattlePage)
+
+	if (Level_->BState_ != BattleState::Openning)
 	{
-		SelectOrder();
-		OrderCheck();
+		if (!PlayerHP_->IsRendererFont())
+		{
+			PlayerHP_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
+		}
+		//MyHPUI->Is
 	}
+
+
 
 	if (BattleUnit->GetPlayerStop() == true && OneTalk == false)
 	{
@@ -167,7 +195,7 @@ void BattleInterface::Update()
 	}
 
 
-
+	BattleTimer_ += GameEngineTime::GetDeltaTime();
 
 }
 
@@ -346,8 +374,9 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 
 bool BattleInterface::BattleKey()
 {
-	if (GameEngineInput::GetInst()->IsDown("SSelect"))
+	if (GameEngineInput::GetInst()->IsDown("SSelect") && BattleTimer_ > 0)
 	{
+		BattleTimer_ = 0;
 		if (BattleFont_->IsEnd())
 		{
 			BattleFont_->EndFont();
@@ -504,6 +533,16 @@ std::string BattleInterface::RankString(int _Rank)
 
 bool BattleInterface::MoveKey()
 {
+	if (BattleTimer_ <= 0.1f)
+	{
+		return false;
+	}
+	if (CurOrder == BattleOrder::Fight)
+	{
+		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
+		ShowAndCheckSkillPos();
+	}
+
 	if (InterfaceImage->IsUpdate() == true)
 	{
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
@@ -546,12 +585,13 @@ bool BattleInterface::MoveKey()
 			Select->SetPivot({ -190.0f,35.0f });
 		}
 
-	}
 
-	if (CurOrder == BattleOrder::Fight)
-	{
-		ShowPokemonSkill(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon());
-		ShowAndCheckSkillPos();
+		{
+			SelectOrder();
+			OrderCheck();
+		}
+
+
 	}
 
 	// 장중혁 : Debug
@@ -604,6 +644,7 @@ void BattleInterface::SelectOrder()
 	{
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//싸우다 선택
+
 			CurOrder = BattleOrder::Fight;
 		}
 
@@ -656,6 +697,16 @@ void BattleInterface::Reset()
 	MyHP->Off();
 	EnemyHP->Off();
 	EXP->Off();
+	BattleFont_->ClearCurrentFonts();
+	Fonts->ClearCurrentFonts();
+	for (auto Iter : AllSkillFont_)
+	{
+		Iter->ClearCurrentFonts();
+	}
+
+	Level_->CurrentSelect_ = BattleOrder::None;
+	CurOrder = Level_->CurrentSelect_;
+	Select->SetPivot({ -190.0f,-25.0f });
 
 	// 스킬 마우스포인터
 	SkillUIPos_ = 0;

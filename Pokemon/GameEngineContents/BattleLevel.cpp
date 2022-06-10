@@ -107,6 +107,8 @@ void BattleLevel::Update()
 				break;
 			case BattlePageEnd::ChangePokemon:
 				Interface_->ShowChangePokemon(Opponent_->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
+				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
+				BattleData_->GetCurrentPoePokemon()->ResetRank();
 				return;
 				break;
 			case BattlePageEnd::SetPokemon:
@@ -240,6 +242,7 @@ void BattleLevel::EndBattlePage()
 	Interface_->GetSelect()->SetPivot({-190.0f, -25.0f});
 
 	BState_ = BattleState::SelecetPage;
+	GameEngineInput::GetInst()->Reset();
 }
 
 void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -260,7 +263,6 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		EnddingEnd_ = false;
 		ShowOpenning();
 	}
-
 
 
 	// ÀåÁßÇõ : ¹èÆ² µð¹ö±ë
@@ -417,15 +419,7 @@ PokemonBattleState::PokemonBattleState(Pokemon* _Pokemon)
 	: Pokemon_(_Pokemon)
 	, CanAction_(true)
 {
-	{
-		CurrentRank_[PokemonAbility::Att] = 0;
-		CurrentRank_[PokemonAbility::Def] = 0;
-		CurrentRank_[PokemonAbility::SpAtt] = 0;
-		CurrentRank_[PokemonAbility::SpDef] = 0;
-		CurrentRank_[PokemonAbility::Speed] = 0;
-		CurrentRank_[PokemonAbility::Accuracy] = 0;
-		CurrentRank_[PokemonAbility::Evasion] = 0;
-	}
+	ResetRank();
 }
 
 PokemonBattleState::~PokemonBattleState()

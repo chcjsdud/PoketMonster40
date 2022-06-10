@@ -84,6 +84,8 @@ void BattleUnitRenderer::Update()
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	Opening();
 	Opening2();
+
+
 }
 
 void BattleUnitRenderer::Render()
@@ -126,6 +128,20 @@ void BattleUnitRenderer::ShowDebugValue()
 			, PlayerCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
 	}
 
+	for (int i = 0; i < 6; i++)
+	{
+		int Rank = BattleDataR_->GetCurrentPlayerPokemon()->CurrentRank_[(static_cast<PokemonAbility>(i))];
+		std::string RankStr = BattleInter->AbilityString(static_cast<PokemonAbility>(i));
+		if (Rank != 0)
+		{
+			char Text[15] = { 0 };
+			sprintf_s(Text, "%c%c%c : %d", RankStr[0], RankStr[1], RankStr[2], Rank);
+			TextOut(GameEngine::BackBufferDC(), PlayerCurrentPokemon_->GetSortingPivot().ix()
+				, PlayerCurrentPokemon_->GetSortingPivot().iy() + 60 + (15 * i), Text, static_cast<int>(strlen(Text)));
+		}
+	}
+
+
 
 	// Poe Hp
 	{
@@ -154,6 +170,19 @@ void BattleUnitRenderer::ShowDebugValue()
 		sprintf_s(Text, "Speed : %d", PoePokemon->GetInfo()->GetSpeed());
 		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
 			, PoeCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		int Rank = BattleDataR_->GetCurrentPoePokemon()->CurrentRank_[(static_cast<PokemonAbility>(i))];
+		std::string RankStr = BattleInter->AbilityString(static_cast<PokemonAbility>(i));
+		if (Rank != 0)
+		{
+			char Text[15] = { 0 };
+			sprintf_s(Text, "%c%c%c : %d", RankStr[0], RankStr[1], RankStr[2], Rank);
+			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+				, PoeCurrentPokemon_->GetSortingPivot().iy() + 60 + (15 * i), Text, static_cast<int>(strlen(Text)));
+		}
 	}
 }
 
@@ -487,3 +516,5 @@ void BattleUnitRenderer::ShellHide()
 		MyMoveTime = 0.0f;
 	}
 }
+
+
