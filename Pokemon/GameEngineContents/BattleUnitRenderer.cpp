@@ -293,6 +293,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		MyWaterGunEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = false;
+		EnemyTurnEnd = false;
 	}
 }
 
@@ -560,6 +561,7 @@ void BattleUnitRenderer::ShellHide()
 
 void BattleUnitRenderer::EnemyRock()
 {
+
 	if (EnemyTurnEnd == false)
 	{	//첫번째 돌
 		RockSpeed = 600.0f;
@@ -655,6 +657,7 @@ void BattleUnitRenderer::EnemyRock()
 		if (EnemyTurnEnd == true)
 		{
 			AnimationEndTime = 0.0f;
+			//김예나 : 애니메이션 시간 초기화해주면 렌더러가 시간 관련이다보니 다시 켜지네용..다시 끄기용..
 			Rock1->Off();
 			Rock2->Off();
 			Rock3->Off();
@@ -665,6 +668,15 @@ void BattleUnitRenderer::EnemyRock()
 			Rock2End = false;
 			Rock3End = false;
 			Rock4End = false;
+			Rock1Pivot = { -220.f,-100.0f };
+			Rock2Pivot = { -160.f,-100.0f };
+			Rock3Pivot = { -280.f,-100.0f };
+			Rock4Pivot = { -240.f,-100.0f };
+			Rock1->SetPivot(Rock1Pivot);
+			Rock2->SetPivot(Rock2Pivot);
+			Rock3->SetPivot(Rock3Pivot);
+			Rock4->SetPivot(Rock4Pivot);
+
 		}
 	}
 	
