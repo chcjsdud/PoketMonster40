@@ -316,9 +316,6 @@
     <ClInclude Include="CenterChoiceOption.h">
       <Filter>WorldMap\UI</Filter>
     </ClInclude>
-    <ClInclude Include="BattleUnitRenderer.h">
-      <Filter>Battle</Filter>
-    </ClInclude>
     <ClInclude Include="Item.h">
       <Filter>Global</Filter>
     </ClInclude>
@@ -369,6 +366,9 @@
     </ClInclude>
     <ClInclude Include="GymTileMap.h">
       <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleUnitRenderer.h">
+      <Filter>Battle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

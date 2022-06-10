@@ -37,9 +37,24 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, PlayerTime_(0.0f)
 	, EffectX(-105.0f)
 	, EffectY(20.0f)
+	, Rock1(nullptr)
+	, Rock2(nullptr)
+	, Rock3(nullptr)
+	, Rock4(nullptr)
+	, X(nullptr)
+	, EnemyTurnEnd(false)
+	, Rock1Pivot({ -220.f, -100.0f })
+	, Rock2Pivot({ -160.f,-100.0f })
+	, Rock3Pivot({ -280.f, -100.0f })
+	, Rock4Pivot({ -240.f,-100.0f })
+	, RockSpeed(600.0f)
+	, Rock1End(false)
+	, Rock2End(false)
+	, Rock3End(false)
+	, Rock4End(false)
+	, AnimationEndTime(0.0f)
 {
-}
-
+}	
 BattleUnitRenderer::~BattleUnitRenderer() 
 {
 }
@@ -192,6 +207,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	FirstMove = true;
 	Fighting = false;
 	MoveSpeed = 900.0f;//¿ø·¡´Â200
+	RockSpeed = 300.0f;
 
 	BattleDataR_ = Level_->GetBattleData();
 	
@@ -222,6 +238,22 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
 		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
+
+		Rock2 = CreateRenderer("Rock4.bmp", 4);
+		Rock3 = CreateRenderer("Rock4.bmp", 4);
+		Rock4 = CreateRenderer("Rock4.bmp", 2);//ÇªÅ°¸Õ µÚ·Î ³Ñ¾î°¡´Â µ¹
+		Rock1 = CreateRenderer("Rock4.bmp", 4);
+		X = CreateRenderer("X4.bmp", 4);
+
+		Rock1Pivot = { -220.f,-100.0f };
+		Rock2Pivot = { -160.f,-100.0f };
+		Rock3Pivot = { -280.f,-100.0f };
+		Rock4Pivot = { -240.f,-100.0f };
+		Rock1->SetPivot(Rock1Pivot);
+		Rock2->SetPivot(Rock2Pivot);
+		Rock3->SetPivot(Rock3Pivot);
+		Rock4->SetPivot(Rock4Pivot);
+		X->SetPivot({ -200.0f,100.0f });
 	}
 
 	PlayerRenderer_->On();
@@ -237,6 +269,11 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
 	EffectX = -105.0f;
 	EffectY = 20.0f;
+	Rock1->Off();
+	Rock2->Off();
+	Rock3->Off();
+	Rock4->Off();
+	X->Off();
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -256,6 +293,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		MyWaterGunEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = false;
+		EnemyTurnEnd = false;
 	}
 }
 
@@ -362,6 +400,8 @@ void BattleUnitRenderer::Opening()
 
 		if (PlayerRenderer_->GetPivot().x <= -200.0f)//floatÀº Á¤È®ÇÏ°Ô µü¸Â¾Æ ¶³¾îÁöÁö ¾Ê´Â´Ù
 		{
+			PlayerRenderer_->SetPivot({ -200.0f, 31.0f });//ÇÃ·¹ÀÌ¾î °ø½ÄÀ§Ä¡ °íÁ¤
+			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });//Àû ÇªÅ°¸Õ °ø½ÄÀ§Ä¡ °íÁ¤
 			MoveSpeed = 0.0f;
 			PlayerStop = true;
 			FirstMove = false;
@@ -427,7 +467,8 @@ void BattleUnitRenderer::Opening2()
 					//TailWhipMove();
 					//Tackle();
 					//WaterGun();
-					ShellHide();
+					//ShellHide();
+					EnemyRock();
 					BattleInter->DoomChit();
 				}
 			}
@@ -518,3 +559,125 @@ void BattleUnitRenderer::ShellHide()
 }
 
 
+void BattleUnitRenderer::EnemyRock()
+{
+
+	if (EnemyTurnEnd == false)
+	{	//Ã¹¹øÂ° µ¹
+		RockSpeed = 600.0f;
+		Rock1Pivot.y += (GameEngineTime::GetDeltaTime() * RockSpeed);
+		Rock1->On();
+		Rock1->SetPivot({ Rock1Pivot.x, Rock1Pivot.y });
+
+	}
+	if (Rock1->GetPivot().y >= 100.0f)
+	{	//Ã¹¹øÂ° µ¹ ¸Ø­œ
+		RockSpeed = 0.0f;
+		Rock1->SetPivot({ -220.0f,100.0f });
+		Rock1End = true;
+	}
+	if (Rock1End ==true)
+	{	//µÎ¹øÂ°µ¹
+		RockSpeed = 600.0f;
+		Rock2Pivot.y += (GameEngineTime::GetDeltaTime() * RockSpeed);
+		Rock2->On();
+		Rock2->SetPivot({ Rock2Pivot.x, Rock2Pivot.y });
+	}
+	if (Rock2->GetPivot().y >= 100.0f)
+	{	//µÎ¹øÂ°µ¹ ¸ØÃã
+		RockSpeed = 0.0f;
+		Rock2->SetPivot({ -160.0f,100.0f });
+		Rock2End = true;
+	}
+	if (Rock2End == true)
+	{	//¼¼¹øÂ°µ¹
+		RockSpeed = 600.0f;
+		Rock3Pivot.y += (GameEngineTime::GetDeltaTime() * RockSpeed);
+		Rock3->On();
+		Rock3->SetPivot({ Rock3Pivot.x,Rock3Pivot.y });
+	}
+	if (Rock3->GetPivot().y >= 100.0f)
+	{	//¼¼¹øÂ°µ¹ ¸ØÃã
+		RockSpeed = 0.0f;
+		Rock3->SetPivot({ -280.0f, 100.0f });
+		Rock3End = true;
+	}
+	if (Rock3End == true)
+	{	//³×¹øÂ°µ¹
+		RockSpeed = 600.0f;;
+		Rock4Pivot.y += (GameEngineTime::GetDeltaTime() * RockSpeed);
+		Rock4->On();
+		Rock4->SetPivot({ Rock4Pivot.x,Rock4Pivot.y });
+	}
+	if (Rock4->GetPivot().y >= 90.0f)
+	{	//³×¹øÂ°µ¹ ¸ØÃã
+		RockSpeed = 0.0f;
+		Rock4->SetPivot({ -240.0f, 90.0f });
+		Rock4End = true;
+	}
+	if (Rock4End == true)
+	{
+		AnimationEndTime += GameEngineTime::GetDeltaTime();
+		X->On();
+
+		if (AnimationEndTime >= 1.5f)
+		{
+			Rock1->Off();
+			Rock2->Off();
+			Rock3->Off();
+			Rock4->Off();
+			X->Off();
+			RockSpeed = 600.0f;
+			Rock1End = false;
+			Rock2End = false;
+			Rock3End = false;
+			Rock4End = false;
+		}
+		//ÇÇ°Ý ¹ÝÂ¦¹ÝÂ¦
+		if (AnimationEndTime >= 1.6f)
+		{
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-200.0f });
+
+			PlayerCurrentPokemon_->SetAlpha(55);
+		}
+		if (AnimationEndTime >= 1.7f)
+		{
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+			PlayerCurrentPokemon_->SetAlpha(255);
+		}
+		if (AnimationEndTime >= 1.8f)
+		{
+			PlayerCurrentPokemon_->SetAlpha(55);
+		}
+		if (AnimationEndTime >= 1.9f)
+		{
+			PlayerCurrentPokemon_->SetAlpha(255);
+			EnemyTurnEnd = true;
+		}
+		if (EnemyTurnEnd == true)
+		{
+			AnimationEndTime = 0.0f;
+			//±è¿¹³ª : ¾Ö´Ï¸ÞÀÌ¼Ç ½Ã°£ ÃÊ±âÈ­ÇØÁÖ¸é ·»´õ·¯°¡ ½Ã°£ °ü·ÃÀÌ´Ùº¸´Ï ´Ù½Ã ÄÑÁö³×¿ë..´Ù½Ã ²ô±â¿ë..
+			Rock1->Off();
+			Rock2->Off();
+			Rock3->Off();
+			Rock4->Off();
+			X->Off();
+			RockSpeed = 600.0f;
+			Rock1End = false;
+			Rock2End = false;
+			Rock3End = false;
+			Rock4End = false;
+			Rock1Pivot = { -220.f,-100.0f };
+			Rock2Pivot = { -160.f,-100.0f };
+			Rock3Pivot = { -280.f,-100.0f };
+			Rock4Pivot = { -240.f,-100.0f };
+			Rock1->SetPivot(Rock1Pivot);
+			Rock2->SetPivot(Rock2Pivot);
+			Rock3->SetPivot(Rock3Pivot);
+			Rock4->SetPivot(Rock4Pivot);
+
+		}
+	}
+	
+}
