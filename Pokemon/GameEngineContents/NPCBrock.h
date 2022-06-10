@@ -1,8 +1,9 @@
 #pragma once
 #include "NPCBase.h"
+#include "BattleNPCInterface.h"
 
 // Ό³Έν :
-class NPCBrock : public NPCBase
+class NPCBrock : public NPCBase, public BattleNPCInterface
 {
 public:
 	// constrcuter destructer
@@ -20,6 +21,7 @@ protected:
 private:
 	void Start() override;
 	void Update() override;
+	GameEngineActor* GetActor() override;
 
 };
 

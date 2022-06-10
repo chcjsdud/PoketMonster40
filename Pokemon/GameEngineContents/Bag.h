@@ -98,6 +98,7 @@ private:
 	class FadeActor* FadeActor_;
 
 	class GameEngineRenderer* BagRedrerer_;
+	GameEngineRenderer* Title_;
 	GameEngineRenderer* BagName_;
 	GameEngineRenderer* BagDialog_;
 	GameEngineRenderer* DialogBox_;

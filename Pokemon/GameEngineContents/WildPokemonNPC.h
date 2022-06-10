@@ -1,9 +1,10 @@
 #pragma once
 #include "BattleNPCInterface.h"
+#include <GameEngine/GameEngineActor.h>
 
 // Ό³Έν :
 class Pokemon;
-class WildPokemonNPC : public BattleNPCInterface
+class WildPokemonNPC : public BattleNPCInterface , public GameEngineActor
 {
 public:
 	// constrcuter destructer
@@ -17,6 +18,7 @@ public:
 	WildPokemonNPC& operator=(WildPokemonNPC&& _Other) noexcept = delete;
 
 protected:
+	void Start() override;
 
 private:
 };

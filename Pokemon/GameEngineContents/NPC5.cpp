@@ -4,6 +4,7 @@
 
 #include "NPCBase.h"
 #include "WorldTileMap1.h"
+#include "ContentEnum.h"
 
 NPC5::NPC5() 
 {
@@ -37,7 +38,7 @@ void NPC5::Start()
 		//Image->CutCount(3, 1);
 	}
 
-	NPCRender_ = CreateRenderer();
+	NPCRender_ = CreateRenderer(static_cast<int>(RenderOrder::Player));
 	NPCRender_->CreateAnimation("NPC5-anim4.bmp", "Idle", 1, 1, 0.0f, false);
 	//NPCRender_->CreateAnimation("NPC4_.bmp", "IdleLeft", 1, 1, 0.0f, false);
 	//NPCRender_->CreateAnimation("NPC4_.bmp", "IdleRight", 2, 2, 0.0f, false);

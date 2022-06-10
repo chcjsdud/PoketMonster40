@@ -1062,7 +1062,7 @@ void PokemonMenu::InitFont()
 		//ÀÌ¸§
 		{
 			GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
-			NewFonts->SetPosition(GetPosition());
+			NewFonts->SetPosition(GetPosition()+float4(1,0));
 			NewFonts->ShowString(PokemonList_[0]->GetNameCopy(), true);
 			PokemonNameFonts_.push_back(NewFonts);
 		}

@@ -6,6 +6,7 @@
 #include "NPCBase.h"
 #include "RoomTileMap5.h"
 #include "InteractionText.h"
+#include "ContentEnum.h"
 
 bool NPC6::InteractionMove_ = false;
 bool NPC6::InteractionAnim_ = false;
@@ -105,7 +106,7 @@ void NPC6::Start()
 		//Image->CutCount(3, 1);
 	}
 
-	NPCRender_ = CreateRenderer();
+	NPCRender_ = CreateRenderer(static_cast<int>(RenderOrder::Player));
 	NPCRender_->CreateAnimation("NPC6_.bmp", "IdleDown", 0, 0, 0.0f, false);
 	NPCRender_->CreateAnimation("NPC6_.bmp", "IdleLeft", 1, 1, 0.0f, false);
 	//NPCRender_->CreateAnimation("NPC4_.bmp", "IdleRight", 2, 2, 0.0f, false);

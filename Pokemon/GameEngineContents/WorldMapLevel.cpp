@@ -21,6 +21,7 @@
 #include "GymTileMap.h"
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
+#include "ContentEnum.h"
 
 WorldMapLevel::WorldMapLevel()
 {
@@ -32,6 +33,8 @@ WorldMapLevel::~WorldMapLevel()
 
 void WorldMapLevel::Loading()
 {
+	YSortOn(static_cast<int>(RenderOrder::Player));
+
 	CreateActor<WorldMapSoundManager>();
 	CreateActor<WorldMapBackground>();
 	CreateActor<WorldTileMap1>();

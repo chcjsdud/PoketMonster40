@@ -39,9 +39,6 @@ void RegionUI::NoneNamedRegion()
 
 void RegionUI::Start()
 {
-	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
-	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
-
 	Fonts_ = GetLevel()->CreateActor<GameEngineContentFont>();
 	Renderer_ = CreateRenderer("AreaUI.bmp");
 	DisappearPos_ = { -220, -365 };
@@ -55,15 +52,6 @@ void RegionUI::Start()
 
 void RegionUI::Update()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
-	{
-		ChangeRegion(WorldBackgroundSoundEnum::PalletTown);
-	}
-	else if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
-	{
-		ChangeRegion(WorldBackgroundSoundEnum::Route1);
-	}
-
 	StateUpdate();
 	Fonts_->SetPosition(GetPosition() + float4(-100, -30));
 }

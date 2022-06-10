@@ -41,7 +41,11 @@ BattleInterface::BattleInterface()
 	, PlayerHP_(nullptr)
 	, PoeName_(nullptr)
 	, PoeLevel_(nullptr)
-
+	, HpRenderTimer_(0.0f)
+	, PrevFoeHp_(0)
+	, PrevPlayerHp_(0)
+	, LerpFoeHp_(0)
+	, LerpPlayerHp_(0)
 
 {
 
@@ -111,11 +115,11 @@ void BattleInterface::Start()
 
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp", 2);
 	EnemyHPUI->Off();
-	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3);
+	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3,RenderPivot::LeftTop);
 	EnemyHP->Off();
 	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp", 2);
 	MyHPUI->Off();
-	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3);
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3,RenderPivot::LeftTop);
 	MyHP->Off();
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
 	EXP->Off();
@@ -127,8 +131,8 @@ void BattleInterface::Start()
 
 	MyHPUI->SetPivot({ 0.0f,-170.0f });
 	EnemyHPUI->SetPivot({ -450.0f,-430.0f });
-	EnemyHP->SetPivot({ -406.0f,-430.0f });
-	MyHP->SetPivot({ 80.0f, -170.0f });
+	EnemyHP->SetPivot({ -502.0f,-436.0f });
+	MyHP->SetPivot({ -16.0f, -180.0f });
 	EXP->SetPivot({ 48.0f,-170.0f });
 	BattleCommend->SetPivot({ -240.0f,0.0f });
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
@@ -140,10 +144,17 @@ void BattleInterface::Start()
 	Fonts = Level_->CreateActor<GameEngineContentFont>(8);
 	Fonts->SetPosition({ 50, 485 });
 
+	//HP정보 업데이트
+	PrevPlayerHp_ = 19;
+	PrevFoeHp_ = 19;
+	LerpFoeHp_ = 19.0f;
+	LerpPlayerHp_ = 19.0f;
 }
 
 void BattleInterface::Render()
 {
+	HPChangeAnimation();
+	HPRenderUpdate();
 }
 
 void BattleInterface::Update()
@@ -156,6 +167,9 @@ void BattleInterface::Update()
 	//		Font->ClearCurrentFonts();
 	//	}
 	//}
+
+	//HP (Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetHp())
+	//Poe (Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetHp())
 
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 
@@ -554,6 +568,10 @@ std::string BattleInterface::RankString(int _Rank)
 
 bool BattleInterface::MoveKey()
 {
+	if (ChildUI_ != nullptr)
+	{
+		return false;
+	}
 	if (BattleTimer_ <= 0.1f)
 	{
 		return false;
@@ -629,7 +647,7 @@ void BattleInterface::DoomChit()
 	if ((int)TimeCheck % 2 == 0)
 	{
 		MyHPUI->SetPivot({ 0.0f,-174.0f });
-		MyHP->SetPivot({ 80.0f, -174.0f });
+		MyHP->SetPivot({ -16.0f, -184.0f });
 		EXP->SetPivot({ 48.0f,-174.0f });
 		PlayerName_->SetPosition({ 570 ,  312 - 4 });
 		PlayerLevel_->SetPosition({ 865 , 312 - 4 });
@@ -640,7 +658,7 @@ void BattleInterface::DoomChit()
 	if ((int)TimeCheck % 2 == 1)
 	{
 		MyHPUI->SetPivot({ 0.0f,-170.0f });
-		MyHP->SetPivot({ 80.0f, -170.0f });
+		MyHP->SetPivot({ -16.0f, -180.0f });
 		EXP->SetPivot({ 48.0f,-170.0f });
 		PlayerName_->SetPosition({570 , 312 });
 		PlayerLevel_->SetPosition({ 865 , 312 });
@@ -668,6 +686,10 @@ void BattleInterface::OrderCheck()
 
 void BattleInterface::SelectOrder()
 {
+	if (ChildUI_ != nullptr)
+	{
+		return;
+	}
 	if (InterfaceImage->IsUpdate() == true)
 	{
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -683,7 +705,7 @@ void BattleInterface::SelectOrder()
 			if (nullptr == ChildUI_)
 			{
 				ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-				ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+				ChildUI_->SetPosition(float4(0,0));
 				dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
 			}
 		}
@@ -696,7 +718,7 @@ void BattleInterface::SelectOrder()
 			if (nullptr == ChildUI_)
 			{
 				ChildUI_ = GetLevel()->CreateActor<Bag>(50);
-				ChildUI_->SetPosition(GetPosition());
+				ChildUI_->SetPosition(float4(0,0)+GameEngineWindow::GetScale().Half());
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 				dynamic_cast<Bag*>(ChildUI_)->BagInit();
 			}
@@ -776,4 +798,82 @@ void BattleInterface::UIUpdate()
 			ChildUI_ = nullptr;
 		}
 	}
+}
+
+void BattleInterface::HPChangeAnimation()
+{
+	//적 Hp변화를 감지하고 HP 보간 진행
+	int FoeHp = Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetHp();
+	if (PrevFoeHp_ != FoeHp)
+	{
+		HpRenderTimer_ += GameEngineTime::GetDeltaTime();
+		LerpFoeHp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevFoeHp_), static_cast<float>(FoeHp), HpRenderTimer_);
+
+		//보간값이 변화된 적 HP와 같아지면 보간 종료
+		if (static_cast<int>(LerpFoeHp_) == FoeHp)
+		{
+			PrevFoeHp_ = FoeHp;
+			HpRenderTimer_ = 0.0f;
+		}
+	}
+
+	//플레이어 Hp변화를 감지하고 HP 보간 진행
+	int PlayerHP = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetHp();
+	if (PrevPlayerHp_ != PlayerHP)
+	{
+		HpRenderTimer_ += GameEngineTime::GetDeltaTime();
+		LerpPlayerHp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevPlayerHp_), static_cast<float>(PlayerHP), HpRenderTimer_);
+
+		//보간값이 변화된 적 HP와 같아지면 보간 종료
+		if (static_cast<int>(LerpPlayerHp_) == PlayerHP)
+		{
+			PrevPlayerHp_ = PlayerHP;
+			HpRenderTimer_ = 0.0f;
+		}
+	}
+}
+
+void BattleInterface::HPRenderUpdate()
+{
+
+	//적 Hp 렌더링
+	{
+		float HpRatio = LerpFoeHp_ / static_cast<float>(Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMaxHp());
+		float HpXScale = GameEngineImageManager::GetInst()->Find("PoketmonMenu_Hp1.bmp")->GetScale().x * HpRatio;
+		if (HpRatio > 0.5f)
+		{
+			EnemyHP->SetImage("PoketmonMenu_Hp1.bmp");
+		}
+		else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
+		{
+			EnemyHP->SetImage("PoketmonMenu_Hp2.bmp");
+		}
+		else
+		{
+			EnemyHP->SetImage("PoketmonMenu_Hp3.bmp");
+		}
+		EnemyHP->SetScale({ HpXScale ,EnemyHP->GetScale().y });
+	}
+	
+
+	//플레이어 HP 렌더링
+	{
+		float HpRatio = LerpPlayerHp_ / static_cast<float>(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp());
+		float HpXScale = GameEngineImageManager::GetInst()->Find("PoketmonMenu_Hp1.bmp")->GetScale().x * HpRatio;
+		if (HpRatio > 0.5f)
+		{
+			MyHP->SetImage("PoketmonMenu_Hp1.bmp");
+		}
+		else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
+		{
+			MyHP->SetImage("PoketmonMenu_Hp2.bmp");
+		}
+		else
+		{
+			MyHP->SetImage("PoketmonMenu_Hp3.bmp");
+		}
+		MyHP->SetScale({ HpXScale ,MyHP->GetScale().y });
+	}
+	
+
 }

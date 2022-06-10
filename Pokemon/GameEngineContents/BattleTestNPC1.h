@@ -1,8 +1,9 @@
 #pragma once
 #include "BattleNPCInterface.h"
+#include <GameEngine/GameEngineActor.h>
 
 // Ό³Έν :
-class BattleTestNPC1 : public BattleNPCInterface
+class BattleTestNPC1 : public BattleNPCInterface, public GameEngineActor
 {
 public:
 	// constrcuter destructer
