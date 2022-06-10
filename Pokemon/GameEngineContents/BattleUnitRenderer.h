@@ -39,6 +39,11 @@ private:
 	GameEngineRenderer* MyTackleEffect;//김예나 : 6월 3일 몸통박치기 이팩트 렌더러 추가
 	GameEngineRenderer* MyWaterGunEffect;
 	GameEngineRenderer* EnemyTackleEffect;
+	GameEngineRenderer* Rock1;
+	GameEngineRenderer* Rock2;
+	GameEngineRenderer* Rock3;
+	GameEngineRenderer* Rock4;
+	GameEngineRenderer* X;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -57,6 +62,7 @@ private:
 
 	float PlayerTime_;
 	float MoveSpeed;
+	float RockSpeed;
 
 	bool PlayerStop;//김예나 : 일정 위치 도착하면 멈추도록 할 조건문
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
@@ -66,10 +72,22 @@ private:
 
 	float MyMoveTime;//김예나: 내 푸키먼 공격시 타임체크해서 그 시간을 기반으로 움직이게끔
 	bool MyTurnEnd;//김예나: 내 푸키먼 공격무빙이 끝나면 MoveTime초기화용
+	bool EnemyTurnEnd;
 
 	float Angle;//회전용..?
 	float EffectX;//이펙트 실시간x위치
 	float EffectY;//이펙트 실시간y위치
+	
+	float4 Rock1Pivot;
+	bool Rock1End;
+	float4 Rock2Pivot;
+	bool Rock2End;
+	float4 Rock3Pivot;
+	bool Rock3End;
+	float4 Rock4Pivot;
+	bool Rock4End;
+	
+	float AnimationEndTime;
 
 	class BattleLevel* Level_;
 	class BattleData* BattleDataR_;
@@ -96,5 +114,7 @@ public:
 	{
 		Fighting = Value;
 	}
+	
+	void EnemyRock();
 };
 

@@ -24,7 +24,7 @@ void BattleBackground::Start()
 {
 	//CreateRenderer("Battle_Back_NO_Ground.bmp");
 	BackgroundRender = CreateRenderer("Battle_Back.bmp", 0, RenderPivot::CENTER, { 480.0f, 225.0f});
-	TextRender = CreateRenderer("Combat_TextFrame2.bmp", 4 ,RenderPivot::CENTER, {480.0f, 548.0f});
+	TextRender = CreateRenderer("Combat_TextFrame2.bmp", 5 ,RenderPivot::CENTER, {480.0f, 548.0f});
 	Fade_Up = CreateRenderer("FadeUp.bmp", 99, RenderPivot::CENTER, { 480.0f,320.0f });
 	Fade_Down = CreateRenderer("FadeDown.bmp", 99, RenderPivot::CENTER, { 480.0f,320.0f });
 	Start_Effect = CreateRenderer("StartEffect.bmp", 98, RenderPivot::CENTER, {});
