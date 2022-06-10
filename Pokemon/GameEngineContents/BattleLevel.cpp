@@ -121,8 +121,7 @@ void BattleLevel::Update()
 				{
 					//
 					LevelUp(BattleData_->GetCurrentPlayerPokemon());
-					return;
-					break;
+
 					// ·¹º§¾÷ ¾îÂ¼±¸ »ðÀÔ
 					if (BattleData_->IsWild())
 					{
@@ -204,8 +203,11 @@ void BattleLevel::Update()
 	case BattleState::Endding:
 		//if (EnddingEnd_ == true)
 		//{
+		if (Interface_->BattleKey() || EndFont_ == true)
+		{
 			GameEngine::GetInst().ChangeLevel("WorldMap");
 			return;
+		}
 		//}
 		break;
 	}
