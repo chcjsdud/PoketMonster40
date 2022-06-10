@@ -68,6 +68,11 @@ public:
 		return Money_;
 	}
 
+	inline void SetMoney(int _Money)
+	{
+		Money_ = _Money;
+	}
+
 	inline GameEngineActor* GetChildUI()
 	{
 		return ChildUI_;
