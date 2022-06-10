@@ -98,6 +98,12 @@ public:
 		}
 	}
 
+	//김예나 추가 함수
+	inline int GetAlpha()
+	{
+		return Alpha_;
+	}
+
 	void CameraEffectOff()
 	{
 		IsCameraEffect_ = false;

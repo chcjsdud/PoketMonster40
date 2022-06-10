@@ -44,6 +44,7 @@ private:
 	GameEngineRenderer* Rock3;
 	GameEngineRenderer* Rock4;
 	GameEngineRenderer* X;
+	GameEngineRenderer* CatchBallOpen;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -54,6 +55,12 @@ private:
 	GameEngineRenderer* MonsterBall;
 	float BallLerp;
 	//////////////////////////////////////////////////////
+
+	float BallX;
+	float BallY;
+	float CatchBallTime;
+	float4 CatchBallPivot;
+	float Alpha_Time;
 
 	float4 PlayerPokemonPos_;
 	float4 OpponentPokemonPos_;
@@ -117,5 +124,6 @@ public:
 	
 	void EnemyRock();
 	void EnemyTackle();
+	void Catch();
 };
 

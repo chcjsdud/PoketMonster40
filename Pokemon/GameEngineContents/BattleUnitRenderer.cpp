@@ -53,6 +53,9 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, Rock3End(false)
 	, Rock4End(false)
 	, AnimationEndTime(0.0f)
+	, CatchBallTime(0.0f)
+	, CatchBallOpen(nullptr)
+	, Alpha_Time(0.0f)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -92,6 +95,11 @@ void BattleUnitRenderer::Start()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("SquirtleB.bmp");
 		Image->CutCount(1, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("MonsterBall_Open4.bmp");
+		Image->CutCount(2, 1);
+	}
+
 }
 
 void BattleUnitRenderer::Update()
@@ -212,6 +220,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	Fighting = false;
 	MoveSpeed = 900.0f;//원래는200
 	RockSpeed = 300.0f;
+	CatchBallTime = 0.0f;
 
 	BattleDataR_ = Level_->GetBattleData();
 	
@@ -231,9 +240,13 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
 
 		//볼
-		MonsterBall = CreateRenderer("MonsterBall4.bmp", 0);
+		MonsterBall = CreateRenderer("MonsterBall4.bmp", 4);
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
+		MonsterBall->CreateAnimation("BallRoll.bmp", "Ball", 0, 0, 0.05f, false);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
+
+		CatchBallOpen = CreateRenderer("MonsterBall_Open4.bmp",4);
+		CatchBallOpen->CreateAnimation("MonsterBall_Open4.bmp", "Open", 0, 1, 0.3f, false);
 
 		MyWaterGunEffect = CreateRenderer("WaterGun4.bmp", 4);
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "WaterGun", 0, 2, 0.1f, false);
@@ -267,6 +280,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	PoeCurrentPokemon_->On();
 	MonsterBall->Off();
 	MonsterBall->SetPivot({ -220.0f,-30.0f });
+	CatchBallOpen->Off();
+	CatchBallOpen->SetPivot({ 210.0f,-170.0f });
 	MyTackleEffect->SetPivot({ 210.0f,-90.0f });
 	MyTackleEffect->Off();
 	MyWaterGunEffect->Off();
@@ -278,6 +293,9 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	Rock3->Off();
 	Rock4->Off();
 	X->Off();
+	BallX = -480.0f;
+	BallY = 0.0f;
+	PoeCurrentPokemon_->SetAlpha(255);
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -473,7 +491,8 @@ void BattleUnitRenderer::Opening2()
 					//WaterGun();
 					//ShellHide();
 					//EnemyRock();
-					EnemyTackle();
+					//EnemyTackle();
+					Catch();
 					BattleInter->DoomChit();
 				}
 			}
@@ -736,6 +755,36 @@ void BattleUnitRenderer::EnemyTackle()
 	if (EnemyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
 		MyMoveTime = 0.0f;
+	}
+}
+
+void BattleUnitRenderer::Catch()
+{
+	CatchBallTime += GameEngineTime::GetDeltaTime();
+	BallX += GameEngineTime::GetDeltaTime() * 600.0f;
+	BallY -= GameEngineTime::GetDeltaTime() * 150.0f;
+	CatchBallPivot = { BallX,BallY };
+	if (MyTurnEnd == false)
+	{
+		MonsterBall->SetPivot({ -480.0f,0.0f });
+		MonsterBall->On();
+		MonsterBall->SetPivot({ CatchBallPivot });
+		if (CatchBallTime >= 1.1f)
+		{	
+			Alpha_Time += GameEngineTime::GetDeltaTime() * 200.0f;
+			MonsterBall->Off();
+			CatchBallOpen->On();
+			CatchBallOpen->ChangeAnimation("Open");
+			PoeCurrentPokemon_->SetAlpha((unsigned int)((float)255.0f - (Alpha_Time) < (float)0.0f ? (float)0.0f : (float)255.0f - (Alpha_Time)));
+			//삼항연산자 알파값이 0보다 크면 해당값, 아니라면 0고정
+			if (PoeCurrentPokemon_->GetAlpha() == 0)
+			{
+				CatchBallOpen->Off();
+				MonsterBall->SetPivot({ 210.0f, -170.0f });
+				MonsterBall->ChangeAnimation("Ball");
+				MonsterBall->On();
+			}
+		}
 	}
 }
 
