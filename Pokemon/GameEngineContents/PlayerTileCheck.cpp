@@ -15,6 +15,7 @@
 #include "InteractionText.h"
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
+#include "WorldMapLevel.h"
 
 bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
@@ -237,19 +238,6 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 				NextTileMap_ = WorldTileMap3::GetInst();
 				NextTilePos_ = { static_cast<float>(x), 95 };
 				return true;
-			}
-		}
-
-		// 월드맵1로 타일 변경
-		for (int x = 17; x <= 26; x++)
-		{
-			if (_X == x && _Y == 94)
-			{
-				IsMove_ = true;
-				BeforeTileMap_ = CurrentTileMap_;
-				CurrentTileMap_ = WorldTileMap1::GetInst();
-				GoalPos_ = CurrentTileMap_->GetWorldPostion(x - 4, 0);
-				return false;
 			}
 		}
 
@@ -954,6 +942,11 @@ bool PlayerRed::BushTileCheck(int _X, int _Y)
 
 void PlayerRed::SoundTileCheck()
 {
+	if (nullptr == dynamic_cast<WorldMapLevel*>(GetLevel()))
+	{
+		return;
+	}
+
 	float4 CheckPos = GetPosition() - CurrentTileMap_->GetPosition();
 	TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos);
 
@@ -962,8 +955,8 @@ void PlayerRed::SoundTileCheck()
 	if (WorldTileMap1::GetInst() == CurrentTileMap_)
 	{
 		{
-			float4 LeftTop = { 21, 84 };
-			float4 RightBot = { 22, 84 };
+			float4 LeftTop = { 11, 84 };
+			float4 RightBot = { 30, 102 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
@@ -975,8 +968,8 @@ void PlayerRed::SoundTileCheck()
 		}
 
 		{
-			float4 LeftTop = { 21, 83 };
-			float4 RightBot = { 22, 83 };
+			float4 LeftTop = { 11, 44 };
+			float4 RightBot = { 30, 83 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
@@ -986,10 +979,9 @@ void PlayerRed::SoundTileCheck()
 				}
 			}
 		}
-
 		{
-			float4 LeftTop = { 19, 43 };
-			float4 RightBot = { 22, 43 };
+			float4 LeftTop = { 0, 4 };
+			float4 RightBot = { 38, 43 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
@@ -1000,14 +992,14 @@ void PlayerRed::SoundTileCheck()
 			}
 		}
 		{
-			float4 LeftTop = { 19, 44 };
-			float4 RightBot = { 22, 44 };
+			float4 LeftTop = { 0, 0 };
+			float4 RightBot = { 38, 3 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
 					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
-					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route1);
+					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route2);
 				}
 			}
 		}
@@ -1015,20 +1007,20 @@ void PlayerRed::SoundTileCheck()
 	if (WorldTileMap2::GetInst() == CurrentTileMap_)
 	{
 		{
-			float4 LeftTop = { 62, 16 };
-			float4 RightBot = { 62, 19 };
+			float4 LeftTop = { 0, 0 };
+			float4 RightBot = { 62, 30 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
 					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route22);
 				}
 			}
 		}
 		{
-			float4 LeftTop = { 63, 16 };
-			float4 RightBot = { 63, 19 };
+			float4 LeftTop = { 63, 0 };
+			float4 RightBot = { 66, 30 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
@@ -1042,50 +1034,25 @@ void PlayerRed::SoundTileCheck()
 	if (WorldTileMap3::GetInst() == CurrentTileMap_)
 	{
 		{
-			float4 LeftTop = { 18, 56 };
-			float4 RightBot = { 19, 56 };
+			float4 LeftTop = { 0, 0 };
+			float4 RightBot = { 50, 42 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
-					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route2);
-				}
-			}
-		}
-		{
-			float4 LeftTop = { 18, 95 };
-			float4 RightBot = { 19, 95 };
-			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
-			{
-				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
-				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route22);
-					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route22);
-				}
-			}
-		}
-
-		{
-			float4 LeftTop = { 21, 42 };
-			float4 RightBot = { 24, 42 };
-			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
-			{
-				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
-				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PewterCity);
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
 					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::PewterCity);
 				}
 			}
 		}
 		{
-			float4 LeftTop = { 21, 43 };
-			float4 RightBot = { 24, 43 };
+			float4 LeftTop = { 0, 43 };
+			float4 RightBot = { 50, 120 };
 			if (LeftTop.ix() <= _X && _X <= RightBot.ix())
 			{
 				if (LeftTop.iy() <= _Y && _Y <= RightBot.iy())
 				{
-					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route2);
+					WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Route1);
 					RegionUI::GetInst()->ChangeRegion(WorldBackgroundSoundEnum::Route2);
 				}
 			}
@@ -1094,17 +1061,46 @@ void PlayerRed::SoundTileCheck()
 	if (RoomTileMap1::GetInst() == CurrentTileMap_)
 	{
 		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
+		RegionUI::GetInst()->NoneNamedRegion();
 	}
 	if (RoomTileMap2::GetInst() == CurrentTileMap_)
 	{
 		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
+		RegionUI::GetInst()->NoneNamedRegion();
 	}
-}
-
-void PlayerRed::TileChangeSound()
-{
-	if (CurrentTileMap_ == GymTileMap::GetInst())
+	if (RoomTileMap3::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::PalletTown);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (RoomTileMap4::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::OakLap);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (RoomTileMap5::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (RoomTileMap6::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (RoomTileMap7::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (RoomTileMap8::GetInst() == CurrentTileMap_)
+	{
+		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::ViridianCity);
+		RegionUI::GetInst()->NoneNamedRegion();
+	}
+	if (GymTileMap::GetInst() == CurrentTileMap_)
 	{
 		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Gym);
+		RegionUI::GetInst()->NoneNamedRegion();
 	}
 }

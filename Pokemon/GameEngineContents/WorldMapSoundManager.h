@@ -33,6 +33,9 @@ protected:
 	void Start() override;
 	void Update() override;
 
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
 private:
 	GameEngineSoundPlayer BgmPlayer_;
 	WorldBackgroundSoundEnum CurrentSoundState_;
