@@ -1,5 +1,6 @@
 #include "WorldTileMap3.h"
 #include "Flower.h"
+#include "CutableTree.h"
 
 WorldTileMap3* WorldTileMap3::Inst_ = nullptr;
 
@@ -35,6 +36,7 @@ void WorldTileMap3::Start()
 	//}
 
 	MakeFlowers();
+	MakeCutableTree();
 }
 
 void WorldTileMap3::MakeFlowers()
@@ -212,5 +214,25 @@ void WorldTileMap3::MakeFlowers()
 	{
 		Flower* TmpFlower = GetLevel()->CreateActor<Flower>();
 		TmpFlower->SetPosition(GetWorldPostion(12, 7));
+	}
+}
+
+void WorldTileMap3::MakeCutableTree()
+{
+	{
+		CutableTree* TmpFlower = GetLevel()->CreateActor<CutableTree>();
+		TmpFlower->SetPosition(GetWorldPostion(28, 112));
+	}
+	{
+		CutableTree* TmpFlower = GetLevel()->CreateActor<CutableTree>();
+		TmpFlower->SetPosition(GetWorldPostion(29, 105));
+	}
+	{
+		CutableTree* TmpFlower = GetLevel()->CreateActor<CutableTree>();
+		TmpFlower->SetPosition(GetWorldPostion(24, 56));
+	}
+	{
+		CutableTree* TmpFlower = GetLevel()->CreateActor<CutableTree>();
+		TmpFlower->SetPosition(GetWorldPostion(31, 8));
 	}
 }

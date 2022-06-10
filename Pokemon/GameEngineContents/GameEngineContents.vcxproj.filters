@@ -187,6 +187,9 @@
     <ClCompile Include="Oak.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
+    <ClCompile Include="CutableTree.cpp">
+      <Filter>WorldMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -375,6 +378,9 @@
     </ClInclude>
     <ClInclude Include="Oak.h">
       <Filter>NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="CutableTree.h">
+      <Filter>WorldMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
