@@ -5,7 +5,6 @@
 
 enum class ShopState
 {
-	SelectDialog,
 	SelectSalesList,
 	SelectCount,
 	SelectBuy,
@@ -26,13 +25,14 @@ public:
 	void ShopInit();
 	void ShopDestroy();
 
-	void OpenDialog();
 	void OpenSalesList();
 	void OpenCountDialog();
 	void OpenBuyDialog();
 
 	void DestroyAllFonts();
 	void DestroyCountFont();
+	void DestroyMoneyFont();
+	void DestroyInBagFont();
 
 	void ArrowUpdate();
 
@@ -65,7 +65,6 @@ private:
 	ShopState ShopState_;
 
 	GameEngineRenderer* SalesList_;
-	GameEngineRenderer* ShopDialog_;
 	GameEngineRenderer* CountDialog_;
 	GameEngineRenderer* InBag_;
 	GameEngineRenderer* BuyDialog_;
@@ -73,16 +72,26 @@ private:
 	GameEngineRenderer* Arrow_;
 	GameEngineRenderer* BuyArrow_;
 	int ArrowIndex_;
+	int BuyArrowIndex_;
 
 	std::vector<Item*> ItemList_;
 	std::vector<Item*> KeyItemList_;
 	std::vector<Item*> BallList_;
 
 	std::vector<class GameEngineContentFont*> AllFontList_;
-	std::vector<class GameEngineContentFont*> CountList_; //아이템 구매 개수 폰트
+	std::vector<class GameEngineContentFont*> CountFontList_; //아이템 구매 개수 폰트
+	std::vector<class GameEngineContentFont*> MoneyFontList_;
+	std::vector<class GameEngineContentFont*> InBagFontList_;
 
 	GameEngineContentFont* InBagCount_;
+	GameEngineContentFont* Money_;
+	GameEngineContentFont* PriceFont_;
+
+	int Price_;
+	int ItemCount_;
 
 	GameEngineRenderer* ItemPreView_;
+
+	float InputTime_;
 };
 

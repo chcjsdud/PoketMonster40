@@ -39,21 +39,12 @@ void WorldMapSoundManager::Update()
 			BgmPlayer_.SetVolume(0.5f);
 			break;
 		case WorldBackgroundSoundEnum::Route1:
-			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
-			BgmPlayer_.SetVolume(0.5f);
-			break;
-		case WorldBackgroundSoundEnum::ViridianCity:
-			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
-			BgmPlayer_.SetVolume(0.2f);
-			break;
 		case WorldBackgroundSoundEnum::Route22:
-			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
-			BgmPlayer_.SetVolume(0.5f);
-			break;
 		case WorldBackgroundSoundEnum::Route2:
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_Route1.mp3");
 			BgmPlayer_.SetVolume(0.5f);
 			break;
+		case WorldBackgroundSoundEnum::ViridianCity:
 		case WorldBackgroundSoundEnum::PewterCity:
 			BgmPlayer_ = GameEngineSound::SoundPlayControl("World_ViridianCity.mp3");
 			BgmPlayer_.SetVolume(0.2f);
@@ -74,6 +65,15 @@ void WorldMapSoundManager::Update()
 	{
 		BgmPlayer_.SetVolume(TmpValue - GameEngineTime::GetDeltaTime());
 	}
+}
+
+void WorldMapSoundManager::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+}
+
+void WorldMapSoundManager::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
+	WorldMapSoundManager::GetInst()->StopSound();
 }
 
 void WorldMapSoundManager::PlayEffectSound(WorldSoundEffectEnum _Enum)
@@ -105,5 +105,7 @@ void WorldMapSoundManager::ChangeSound(WorldBackgroundSoundEnum _Enum)
 
 void WorldMapSoundManager::StopSound()
 {
+	CurrentSoundState_ = WorldBackgroundSoundEnum::None;
+	NextSoundState_ = WorldBackgroundSoundEnum::None;
 	BgmPlayer_.StopWithNullCheck();
 }

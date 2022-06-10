@@ -64,17 +64,23 @@ void ShopChoiceOption::Update()
 
 void ShopChoiceOption::SelectIndex()
 {
+	if (nullptr != dynamic_cast<Shop*>(PlayerRed::MainRed_->GetChildUI()))
+	{
+		return;
+	}
+
 	switch (CurrentIndex_)
 	{
 	case 0:
 	{
+		ParentText_->ClearText();
+		ParentText_->AddText("Is there anything else I can do?");
+		ParentText_->Setting();
+
 		PlayerRed::MainRed_->SetChildUI(GetLevel()->CreateActor<Shop>(60, "Shop"));
 		PlayerRed::MainRed_->GetChildUI()->SetPosition(PlayerRed::MainRed_->GetPosition() - GameEngineWindow::GetScale().Half());
 		dynamic_cast<Shop*>(PlayerRed::MainRed_->GetChildUI())->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 		dynamic_cast<Shop*>(PlayerRed::MainRed_->GetChildUI())->ShopInit();
-
-		PlayerRed::MainRed_->WMenuUICheck_ = true;
-
 	}
 	break;
 	case 1:
@@ -86,10 +92,9 @@ void ShopChoiceOption::SelectIndex()
 		ParentText_->ClearText();
 		ParentText_->AddText("Please come again!");
 		ParentText_->Setting();
+		ParentText_->ChoiceEnd();
+		Death();
 	}
 	break;
 	}
-
-	ParentText_->ChoiceEnd();
-	Death();
 }

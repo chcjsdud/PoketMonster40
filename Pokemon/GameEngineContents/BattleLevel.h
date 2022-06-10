@@ -139,6 +139,7 @@ private:
 	void LevelStartDebug();
 	void LevelEndDebug();
 	bool DebugMode_;
+	bool WildBattle_;
 };
 
 class BattleData

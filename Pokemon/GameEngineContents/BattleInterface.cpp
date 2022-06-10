@@ -10,6 +10,11 @@
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngineBase/GameEngineRandom.h>
 #include "BattleLevel.h"
+#include "PlayerRed.h"
+#include <GameEngineBase/GameEngineWindow.h>
+#include "Bag.h"
+#include "PokemonMenu.h"
+
 
 BattleInterface::BattleInterface()
 	:TimeCheck(0.0f)
@@ -210,6 +215,8 @@ void BattleInterface::Update()
 
 
 	BattleTimer_ += GameEngineTime::GetDeltaTime();
+
+	UIUpdate();
 
 }
 
@@ -672,11 +679,27 @@ void BattleInterface::SelectOrder()
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//포켓몬 선택
 			CurOrder = BattleOrder::Pokemon;
+
+			if (nullptr == ChildUI_)
+			{
+				ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
+				ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
+				dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
+			}
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-		{	//가방 선택
+		{	
+			//가방 선택
 			CurOrder = BattleOrder::Bag;
+
+			if (nullptr == ChildUI_)
+			{
+				ChildUI_ = GetLevel()->CreateActor<Bag>(50);
+				ChildUI_->SetPosition(GetPosition());
+				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
+				dynamic_cast<Bag*>(ChildUI_)->BagInit();
+			}
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
@@ -732,4 +755,25 @@ void BattleInterface::Reset()
 
 	// 스킬 마우스포인터
 	SkillUIPos_ = 0;
+
+
+	PlayerName_->EndFont();
+	 PlayerLevel_->EndFont();
+	 PlayerHP_->EndFont();
+	 PoeName_->EndFont();
+	 PoeLevel_->EndFont();
+	 BattleFont_->EndFont();
+		 Fonts->EndFont();
+}
+
+void BattleInterface::UIUpdate()
+{
+	if (ChildUI_ != nullptr) // UI창이 뜰 경우
+	{
+		if (ChildUI_->IsUpdate() == false) //UI의 IsUpdate가 false면 해당 UI를 삭제시킵니다.
+		{
+			ChildUI_->Death();
+			ChildUI_ = nullptr;
+		}
+	}
 }

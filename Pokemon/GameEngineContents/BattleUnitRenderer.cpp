@@ -161,9 +161,13 @@ void BattleUnitRenderer::ShowDebugValue()
 	// Poe Hp
 	{
 		char Text[10] = { 0 };
-		sprintf_s(Text, "HP : %d", PoePokemon->GetInfo()->GetHp());
-		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-			, PoeCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+		if (PoePokemon->GetInfo()->GetHp() >= 0)
+		{
+			sprintf_s(Text, "HP : %d", PoePokemon->GetInfo()->GetHp());
+			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+				, PoeCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+		}
+
 	}
 	// Poe Att
 	{

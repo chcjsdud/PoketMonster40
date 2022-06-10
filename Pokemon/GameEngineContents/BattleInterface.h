@@ -156,6 +156,13 @@ private:
 	PokemonSkillInfo* RandomPoeSkill(Pokemon* _Pokemon);
 
 	void Reset();
+
+
+////////////////////UI////////////////
+private:
+	GameEngineActor* ChildUI_;
+
+	void UIUpdate();
 };
 
 // ¿Â¡ﬂ«ı : Test

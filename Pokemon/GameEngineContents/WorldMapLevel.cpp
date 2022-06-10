@@ -5,6 +5,7 @@
 #include "NPC5.h"
 #include "NPC6.h"
 #include "NPC7.h"
+#include "NPCBrock.h"
 #include "WorldTileMap1.h"
 #include "WorldTileMap2.h"
 #include "WorldTileMap3.h"
@@ -49,6 +50,7 @@ void WorldMapLevel::Loading()
 	CreateActor<NPC5>();
 	CreateActor<NPC6>();
 	CreateActor<NPC7>();
+	CreateActor<NPCBrock>();
 	CreateActor<RegionUI>();
 }
 
@@ -58,7 +60,6 @@ void WorldMapLevel::Update()
 
 void WorldMapLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)
 {
-	WorldMapSoundManager::GetInst()->StopSound();
 }
 
 void WorldMapLevel::LevelChangeStart(GameEngineLevel* _NextLevel)

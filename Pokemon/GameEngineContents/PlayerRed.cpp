@@ -8,6 +8,7 @@
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngine/GameEngineCollision.h>
 
+#include "WorldMapLevel.h"
 #include "WorldMapSoundManager.h"
 #include "RoomTileMap1.h"
 #include "RoomTileMap2.h"
@@ -203,8 +204,6 @@ void PlayerRed::FadeIn()
 				CurrentTileMap_ = NextTileMap_;
 				SetPosition(CurrentTileMap_->GetWorldPostion(NextTilePos_.ix(), NextTilePos_.iy()));
 
-				TileChangeSound();
-
 				NextTileMap_ = nullptr;
 				NextTilePos_ = float4::ZERO;
 			}
@@ -336,7 +335,6 @@ void PlayerRed::Start()
 	CurrentTileMap_ = RoomTileMap1::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));	
 
-
 	//UI
 	InitMyPokemon();
 
@@ -395,6 +393,14 @@ void PlayerRed::Render()
 			Text,
 			static_cast<int>(strlen(Text)));
 	}
+}
+
+void PlayerRed::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+}
+
+void PlayerRed::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
 }
 
 void PlayerRed::PlayerSetMove(float4 _Value)
@@ -458,6 +464,11 @@ void PlayerRed::PlayerSetMove(float4 _Value)
 
 void PlayerRed::Camera()
 {
+	if (nullptr == dynamic_cast<WorldMapLevel*>(GetLevel()))
+	{
+		return;
+	}
+
 	CameraPos_.x = GetPosition().x - GameEngineWindow::GetInst().GetScale().Half().x;
 	CameraPos_.y = GetPosition().y - GameEngineWindow::GetInst().GetScale().Half().y;
 	GetLevel()->SetCameraPos(CameraPos_);
@@ -793,6 +804,42 @@ bool PlayerRed::InteractionNPC()
 		TmpText->AddText("");
 		TmpText->AddText("You can now store and recall items");
 		TmpText->AddText("and POKEMON as data via PC.");
+		TmpText->Setting();
+
+		return true;
+	}
+
+	// Ã¼À°°ü
+	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPCBrockDirZColBox", TmpVector))
+	{
+		//WMenuUICheck_ = false;
+		for (size_t i = 0; i < TmpVector.size(); i++)
+		{
+			NPCBase* Newnpc = dynamic_cast<NPCBase*>(TmpVector[i]->GetActor());
+			if (nullptr == Newnpc)
+			{
+				continue;
+			}
+
+			Newnpc->IsTalk_ = true;
+		}
+
+		InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+		TmpText->SetPosition(GetPosition());
+		TmpText->AddText("So, you're here. I'm BROCK.");
+		TmpText->AddText("I'm PEWTER's GYM LEADER.");
+		TmpText->AddText("My rock-hard willpower is evident");
+		TmpText->AddText("even in my POKEMON.");
+		TmpText->AddText("My POKEMON are all rock hard, and");
+		TmpText->AddText("have true-grit determination.");
+		TmpText->AddText("That's right - my POKEMON are all");
+		TmpText->AddText("the ROCK type!");
+		TmpText->AddText("Fuhaha! You're going to challenge");
+		TmpText->AddText("me knowing that you'll lose?");
+		TmpText->AddText("That's the TRAINER's honor that");
+		TmpText->AddText("compels you to challenge me.");
+		TmpText->AddText("Fine, then!");
+		TmpText->AddText("Show me your best!");
 		TmpText->Setting();
 
 		return true;
