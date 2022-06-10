@@ -187,6 +187,9 @@
     <ClCompile Include="NPCBrock.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
+    <ClCompile Include="Oak.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -375,6 +378,9 @@
     </ClInclude>
     <ClInclude Include="BattleUnitRenderer.h">
       <Filter>Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Oak.h">
+      <Filter>NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include "NPC5.h"
 #include "NPC6.h"
 #include "NPC7.h"
+#include "Oak.h"
 #include "NPCBrock.h"
 #include "WorldTileMap1.h"
 #include "WorldTileMap2.h"
@@ -50,6 +51,7 @@ void WorldMapLevel::Loading()
 	CreateActor<NPC5>();
 	CreateActor<NPC6>();
 	CreateActor<NPC7>();
+	CreateActor<Oak>();
 	CreateActor<NPCBrock>();
 	CreateActor<RegionUI>();
 }

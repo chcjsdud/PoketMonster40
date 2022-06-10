@@ -44,8 +44,34 @@ public:
 		IsTalk_ = _Value;
 	}
 
+	inline void SetOakFollow(bool _Value)
+	{
+		OakFollowCheck_ = _Value;
+	}
+
+	inline void SetRoon4Enter(bool _Value)
+	{
+		Room4EnterCheck_ = _Value;
+	}
+
+	inline bool GetRedCathEnd()
+	{
+		return RedCatchEndCheck_;
+	}
+
+	inline bool GetOakFollow()
+	{
+		return OakFollowCheck_;
+	}
+
+	inline bool GetRoom4Enter()
+	{
+		return Room4EnterCheck_;
+	}
+
 protected:
 	void NPCMove();
+	void NPCMoveDir(NPCDir _Dir, int _Count);
 	void NPCMoveAnim();
 	void NPCInteractDir();
 	bool IsInside(float4 _LeftTop, float4 _RightBot);
@@ -65,7 +91,12 @@ protected:
 	float NPCLerpY_;
 	float NPCLerpTime_;
 	float NPCNextMoveTime_;
+	float NextDirMoveTimer_;
 	bool  IsMove_;
+	bool RedCatchEndCheck_;
+	bool OakFollowCheck_;
+	bool Room4EnterCheck_;
+	int Count_;
 
 private:
 	float4	StartPos_;

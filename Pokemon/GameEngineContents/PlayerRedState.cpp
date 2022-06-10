@@ -10,6 +10,12 @@
 
 void PlayerRed::IdleUpdate()
 {
+	if (true == IsRedMoveCheck_ && GetAccTime() >= NextDirMoveTimer_)
+	{
+		RedMoveControll(RedDir::Up, 8);
+		return;
+	}
+	
 	if (false == WMenuUICheck_)
 	{
 		float4 MoveDir_ = float4::ZERO;
@@ -107,6 +113,11 @@ void PlayerRed::RunUpdate()
 
 void PlayerRed::IdleStart()
 {
+	if (true == IsControllOnCheck_)
+	{
+		return;
+	}
+	
 	AnimationName_ = "Idle";
 	RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
 }

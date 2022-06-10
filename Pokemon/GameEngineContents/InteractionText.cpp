@@ -4,6 +4,7 @@
 #include "PlayerRed.h"
 #include "NPCBase.h"
 #include "NPC6.h"
+#include "Oak.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
 
@@ -137,6 +138,20 @@ void InteractionText::Update()
 		// 대화가 끝났을 때 z 키누르면 종료
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
+			if (true == PlayerRed::MainRed_->GetStartEvent())
+			{
+				PlayerRed::MainRed_->SetOakCall(true);
+			}
+
+			if (true == NPCBase::NPC_->GetRedCathEnd())
+			{
+				NPCBase::NPC_->SetOakFollow(true);
+			}
+
+			if (true == NPCBase::NPC_->GetRoom4Enter())
+			{
+				//NPCBase::NPC_->SetOakFollow(false);
+			}
 			PlayerRed::MainRed_->SetInteraction(false);
 			NPCBase::NPC_->SetNPCInteraction(false);
 			IsCenterMove_ = false;

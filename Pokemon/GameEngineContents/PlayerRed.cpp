@@ -25,6 +25,7 @@
 #include "InteractionText.h"
 #include "Bush.h"
 #include "NPCBase.h"
+#include "Oak.h"
 
 #include "Bag.h"
 #include "Shop.h"
@@ -39,7 +40,9 @@
 PlayerRed* PlayerRed::MainRed_ = nullptr;
 bool PlayerRed::WMenuUICheck_ = true;
 PlayerRed::PlayerRed()
-	: CurrentDir_()
+	: NextDirMoveTimer_(0)
+	, Count_(0)
+	, CurrentDir_()
 	, CurrentState_()
 	, CurrentTileMap_()
 	, RedRender_(nullptr)
@@ -59,6 +62,10 @@ PlayerRed::PlayerRed()
 	, IsFadeOut_(false)
 	, IsFadeRL_(false)
 	, IsFadeRLCheck_(false)
+	, IsStartEvent_(false)
+	, IsRedMoveCheck_(false)
+	, IsRedMoveEndCheck_(false)
+	, IsControllOnCheck_(false)
 	, NPC5Check_(false)
 	, LerpX_(0)
 	, LerpY_(0)
@@ -71,6 +78,8 @@ PlayerRed::PlayerRed()
 	, IsBushEventReady_(false)
 	, IsDebugRun_(false)
 	, IsPokemonMenuOn_(false)
+	, IsOakCall_(false)
+	, IsOakCallCheck_(false)
 	, BushActor_(nullptr)
 	, BeforeTileMap_(nullptr)
 	, NextTileMap_(nullptr)
@@ -175,6 +184,83 @@ void PlayerRed::DirAnimationCheck()
 	{
 		RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
 		CurrentDir_ = CheckDir_;
+	}
+}
+
+void PlayerRed::RedMoveControll(RedDir _Dir, int _Count)
+{
+	IsControllOnCheck_ = true;
+	Count_ = _Count;
+	NextDirMoveTimer_ = GetAccTime() + (0.35f * _Count);
+
+	if (RedDir::Up == _Dir)
+	{
+		AnimationName_ = "Walk";
+		ChangeDirText_ = "Up";
+		CurrentState_ = RedState::Walk;
+		CurrentDir_ = RedDir::Up;
+		RedMoveDir_ = float4::UP;
+	}
+	else if (RedDir::Down == _Dir)
+	{
+		AnimationName_ = "Walk";
+		ChangeDirText_ = "Down";
+		CurrentState_ = RedState::Walk;
+		CurrentDir_ = RedDir::Down;
+		RedMoveDir_ = float4::DOWN;
+	}
+	else if (RedDir::Left == _Dir)
+	{
+		AnimationName_ = "Walk";
+		ChangeDirText_ = "Left";
+		CurrentState_ = RedState::Walk;
+		CurrentDir_ = RedDir::Left;
+		RedMoveDir_ = float4::LEFT;
+	}
+	else if (RedDir::Right == _Dir)
+	{
+		AnimationName_ = "Walk";
+		ChangeDirText_ = "Right";
+		CurrentState_ = RedState::Walk;
+		CurrentDir_ = RedDir::Right;
+		RedMoveDir_ = float4::RIGHT;
+	}
+
+
+	if (GetAccTime() >= NextMoveTime_)
+	{
+		NextDirMoveTimer_ = GetAccTime() + 0.3f;
+		StartPos_ = GetPosition();
+		float4 CheckPos_ = GetPosition() + (RedMoveDir_ * 50) - CurrentTileMap_->GetPosition();
+		TileIndex NextIndex = CurrentTileMap_->GetTileMap().GetTileIndex(CheckPos_);
+
+		switch (CurrentTileMap_->CanMove(NextIndex.X, NextIndex.Y, (RedMoveDir_ * 50)))
+		{
+		case TileState::False:
+		{
+			CurrentState_ = RedState::Idle;
+			AnimationName_ = "Idle";
+			if ("" == ChangeDirText_)
+			{
+				ChangeDirText_ = "Down";
+			}
+			RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+			RedMoveDir_ = float4::ZERO;
+			break;
+		}
+		case TileState::True:
+		{
+			IsMove_ = true;
+			RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+			GoalPos_ = CurrentTileMap_->GetWorldPostion(NextIndex.X, NextIndex.Y);
+			CurrentTilePos_ = { static_cast<float>(NextIndex.X), static_cast<float>(NextIndex.Y) };
+			break;
+		}
+		case TileState::MoreDown:
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -283,6 +369,7 @@ void PlayerRed::Start()
 	}
 
 	GameEngineInput::GetInst()->CreateKey("JBMTest", 'L');
+	GameEngineInput::GetInst()->CreateKey("RTest", 'R');
 	GameEngineInput::GetInst()->CreateKey("JBMDebugRun", VK_SPACE);
 	GameEngineInput::GetInst()->CreateKey("WMenuUI", 'P');
 	GameEngineInput::GetInst()->CreateKey("BagOn", VK_LSHIFT);
@@ -364,12 +451,18 @@ void PlayerRed::Update()
 	Camera();
 	UIUpdate();
 	InteractionUpdate();
+	OakCall();
 	SoundTileCheck();
 
 	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("RTest"))
+	{
+		CurrentTileMap_ = WorldTileMap1::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(22, 90));
 	}
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
@@ -630,6 +723,32 @@ void PlayerRed::MoveAnim()
 {
 	if (true == IsMove_)
 	{
+		if (true == NPCBase::NPC_->GetOakFollow())
+		{
+			LerpTime_ += GameEngineTime::GetDeltaTime() * 3.0f;
+			LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
+			LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+			SetPosition({ LerpX_,LerpY_ });
+
+			if (LerpTime_ > 1.0f)
+			{
+				LerpTime_ = 0.0f;
+				IsMove_ = false;
+				CurrentState_ = RedState::Idle;
+				AnimationName_ = "Idle";
+				RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+				if (Count_ > 0)
+				{
+					Count_ -= 1;
+					if (Count_ > 0)
+					{
+						RedMoveControll(CurrentDir_, Count_);
+					}
+				}
+			}
+			return;
+		}
+
 		if (true == IsDebugRun_)
 		{
 			LerpTime_ += GameEngineTime::GetDeltaTime() * 4.0f;
@@ -722,6 +841,21 @@ bool PlayerRed::CanMove()
 	return true;
 }
 
+void PlayerRed::OakCall()
+{
+	if (true == IsOakCall_ && false == IsOakCallCheck_)
+	{
+		IsOakCallCheck_ = true;
+
+		ChangeDirText_ = "Down";
+		RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+
+		// 오박사 출동
+		Oak* OakTest = GetLevel()->CreateActor<Oak>();
+		OakTest->SetRedOut(true);
+	}
+}
+
 void PlayerRed::InteractionUpdate()
 {
 	if (true == IsFadeIn_ || true == IsInteraction_)
@@ -775,6 +909,29 @@ void PlayerRed::InteractionUpdate()
 				TmpText->AddText("going through here!");
 				TmpText->AddText("This is private property!");
 				TmpText->Setting();
+			}
+		}
+
+		{
+			float4 NPCCheckPos = GetPosition() - WorldTileMap1::GetInst()->GetPosition();
+			TileIndex NPCCheckIndex = WorldTileMap1::GetInst()->GetTileMap().GetTileIndex(NPCCheckPos);
+			if ((21 == NPCCheckIndex.X && 85 == NPCCheckIndex.Y) || (22 == NPCCheckIndex.X && 85 == NPCCheckIndex.Y))
+			{
+				if (false == IsStartEvent_)
+				{
+					// 레드 움직임 막기
+					IsInteraction_ = true;
+
+					IsStartEvent_ = true;
+					RedCurrentIndex_.x = NPCCheckIndex.X;
+					RedCurrentIndex_.y = NPCCheckIndex.Y;
+
+					InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+					TmpText->SetPosition(GetPosition() + float4(0, -30));
+					TmpText->AddText("OAK: Hey! Wait!");
+					TmpText->AddText("Don't go out!");
+					TmpText->Setting();
+				}
 			}
 		}
 		return;

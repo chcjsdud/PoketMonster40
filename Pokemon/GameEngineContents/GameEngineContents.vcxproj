@@ -260,6 +260,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Oak.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PlayerRed.h">
       <SubType>
       </SubType>
@@ -484,6 +488,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="NPCBrock.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Oak.cpp">
       <SubType>
       </SubType>
     </ClCompile>

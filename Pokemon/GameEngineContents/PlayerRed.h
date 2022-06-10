@@ -43,14 +43,48 @@ public:
 	void ChangeState(RedState _State);
 	void StateUpdate();
 	void DirAnimationCheck();
+	void RedMoveControll(RedDir _Dir, int _Count);
 
 	void FadeIn();
 	void FadeOut();
 	void FadeRL();
 
+	float NextDirMoveTimer_;
+	int Count_;
+	
 	inline void SetInteraction(const bool _Value)
 	{
 		IsInteraction_ = _Value;
+	}
+
+	inline void SetFadeIn(const bool _Value)
+	{
+		IsFadeIn_ = _Value;
+	}
+
+	inline void SetOakCall(const bool _Value)
+	{
+		IsOakCall_ = _Value;
+	}
+
+	inline void SetRedMoveCheck(const bool _Value)
+	{
+		IsRedMoveCheck_ = _Value;
+	}
+
+	inline void SetRedMoveEnd(const bool _Value)
+	{
+		IsRedMoveEndCheck_ = _Value;
+	}
+
+	inline void SetControllOn(const bool _Value)
+	{
+		IsControllOnCheck_ = _Value;
+	}
+
+	inline void SetCurrentTileMap(PokemonTileMap* _Value)
+	{
+		CurrentTileMap_ = _Value;
 	}
 
 	inline std::vector<Pokemon*>& GetPokemonList()
@@ -61,6 +95,31 @@ public:
 	inline std::vector<class Item*>& GetItemList()
 	{
 		return MyItemList_;
+	}
+
+	inline float4 GetRedCurrentIndex()
+	{
+		return RedCurrentIndex_;
+	}
+
+	inline float4 GetCurrentTilePos()
+	{
+		return CurrentTilePos_;
+	}
+
+	inline bool GetStartEvent()
+	{
+		return IsStartEvent_;
+	}
+
+	inline bool GetOakCall()
+	{
+		return IsOakCall_;
+	}
+
+	inline bool GetRedMoveEnd()
+	{
+		return IsRedMoveEndCheck_;
 	}
 
 	inline int GetMoney()
@@ -89,6 +148,8 @@ private:
 	float4			CameraPos_;
 	float4			StartPos_;
 	float4			GoalPos_;
+	float4			RedCurrentIndex_;
+	float4			RedMoveDir_;
 	RedDir			CurrentDir_;
 	//bool			WMenuUICheck_;
 	std::string		AnimationName_;
@@ -105,6 +166,10 @@ private:
 	bool IsFadeOut_;
 	bool IsFadeRL_;
 	bool IsFadeRLCheck_;
+	bool IsStartEvent_;
+	bool IsRedMoveCheck_;
+	bool IsRedMoveEndCheck_;
+	bool IsControllOnCheck_;
 	bool NPC5Check_;
 	float LerpX_;
 	float LerpY_;
@@ -125,6 +190,8 @@ private:
 	bool IsBushEventReady_;
 	bool IsDebugRun_;
 	bool IsPokemonMenuOn_;
+	bool IsOakCall_;
+	bool IsOakCallCheck_;
 
 	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
@@ -151,6 +218,8 @@ private:
 	void MoveAnim();
 	bool CanMove();
 
+	void OakCall();
+	
 	// 상호작용
 	void InteractionUpdate();
 	bool InteractionNPC();
