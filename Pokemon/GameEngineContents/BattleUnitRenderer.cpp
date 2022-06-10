@@ -558,8 +558,6 @@ void BattleUnitRenderer::ShellHide()
 }
 
 
-}
-
 void BattleUnitRenderer::EnemyRock()
 {
 	if (EnemyTurnEnd == false)
