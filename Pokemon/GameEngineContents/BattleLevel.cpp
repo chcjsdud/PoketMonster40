@@ -34,6 +34,7 @@ BattleLevel::BattleLevel()
 	, EndFont_(false)
 	, EndAction_(BattlePageEnd::None)
 	, DebugMode_(false)
+	, WildBattle_(false)
 {
 
 }
@@ -201,11 +202,11 @@ void BattleLevel::Update()
 		return;
 		break;
 	case BattleState::Endding:
-		if (EnddingEnd_ == true)
-		{
-			// 레벨 이동
+		//if (EnddingEnd_ == true)
+		//{
+			GameEngine::GetInst().ChangeLevel("WorldMap");
 			return;
-		}
+		//}
 		break;
 	}
 }
@@ -270,10 +271,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	if (DebugMode_)
 	{
 		LevelStartDebug();
-
 	}
-
-	BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
 	RefreshPokemon();
 	EndFont_ = false;
 
@@ -302,27 +300,42 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		delete BattleData_;
 		BattleData_ = nullptr;
 	}
-
+	WildBattle_ = false;
 }
 
 void BattleLevel::LevelStartDebug()
 {
-	Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
-	Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
+	//Opponent_ = CreateActor<BattleNPCInterface>(0, "Debug");
+	//Opponent_->PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Charmander"));
+	Opponent_ = nullptr;
+	BattleData_ = new BattleData(PlayerRed_ ,PokemonInfoManager::GetInst().CreatePokemon("Charmander"), this);
 }
 void BattleLevel::LevelEndDebug()
 {
-	for (auto& Iter : Opponent_->GetPokemonList())
+	if (Opponent_ != nullptr)
 	{
-		PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
+		for (auto& Iter : Opponent_->GetPokemonList())
+		{
+			PokemonInfoManager::GetInst().DestroyPokemon(Iter->GetInfo()->GetMyId());
+		}
+		Opponent_->GetPokemonList().clear();
+		Opponent_->Death();
 	}
-	Opponent_->GetPokemonList().clear();
-	Opponent_->Death();
 }
 
 void BattleLevel::StartBattleLevelByWild()
 {
-	GameEngine::GetInst().ChangeLevel("BattleLevel");
+	if (Opponent_ != nullptr)
+	{
+		delete Opponent_;
+		Opponent_ = nullptr;
+	}
+	Pokemon* WildPokemon = nullptr;
+	WildPokemon = GameEngineRandom::GetInst_->RandomInt(0, 1) == 0 ? PokemonInfoManager::GetInst().CreatePokemon("Rattata") : PokemonInfoManager::GetInst().CreatePokemon("Pidgey");
+	BattleData_ = new BattleData(PlayerRed_, WildPokemon, this);
+	DebugMode_ = false;
+	WildBattle_ = true;
+	GameEngine::GetInst().ChangeLevel("Battle"); 
 }
 
 void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
@@ -332,7 +345,10 @@ void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
 		MsgBoxAssert("배틀 NPC가 아니거나 포켓몬을 가지고 있지 않습니다")
 	}
 	Opponent_ = _Opponent;
-	GameEngine::GetInst().ChangeLevel("BattleLevel");
+	DebugMode_ = false;
+	WildBattle_ = false;
+	BattleData_ = new BattleData(PlayerRed_, Opponent_, this);
+	GameEngine::GetInst().ChangeLevel("Battle");
 }
 
 void BattleLevel::ShowEndding()
@@ -403,11 +419,9 @@ BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _
 
 	{
 		// Poe
-		size_t PokemonInt = PoePokemonList_.size();
-		for (size_t i = 0; i < PokemonInt; i++)
-		{
-			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
-		}
+		PoePokemonList_.push_back(_WildPokemon);
+		PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[0]));
+
 	}
 
 	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
@@ -416,7 +430,7 @@ BattleData::BattleData(PlayerRed* _Player, Pokemon* _WildPokemon, BattleLevel* _
 
 BattleData::~BattleData()
 {
-	if (WildBattle_ == true)
+	if (PoeNPC_ != nullptr && WildBattle_ == true)
 	{
 		PoeNPC_->Death();
 	}

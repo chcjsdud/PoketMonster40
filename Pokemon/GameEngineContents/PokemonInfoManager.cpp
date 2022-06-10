@@ -123,7 +123,7 @@ void PokemonInfoManager::Reset()
 		//Withdraw: 껍질에 숨기
 		PokemonSkillInfo* Withdraw = CreateSkillInfo("Withdraw", 10, 20, 20, PokemonType::WATER, SkillType::Status, "The user withdraws\\raising its Defense");
 		//WaterGun: 물대포
-		PokemonSkillInfo* WaterGun = CreateSkillInfo("WaterGun", 10, 20, 20, PokemonType::WATER, SkillType::Special, "Struck with water\\through the mouth.");
+		PokemonSkillInfo* WaterGun = CreateSkillInfo("WaterGun", 5000, 20, 20, PokemonType::WATER, SkillType::Special, "The foe is struck with a lot of water expelled forcibly through the mouth.");
 
 		//RockTomb: 암석봉인
 		PokemonSkillInfo* RockTomb = CreateSkillInfo("RockTomb", 10, 20, 20, PokemonType::ROCK, SkillType::Physical, "Boulders are hurled at the foe. It also lowers the foe's Speed if it hits.");
@@ -149,11 +149,11 @@ void PokemonInfoManager::Reset()
 		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Pidgey: 구구
-		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 1, 45, 40, 35, 35, 56, 40);
+		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 3, 45, 40, 35, 35, 56, 40);
 		PidgeyInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 
 		//Rattata: 꼬렛
-		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 1, 56, 35, 25, 35, 72, 30);
+		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 3, 56, 35, 25, 35, 72, 30);
 		RattataInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		RattataInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 

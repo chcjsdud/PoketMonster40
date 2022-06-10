@@ -755,6 +755,15 @@ void BattleInterface::Reset()
 
 	// 스킬 마우스포인터
 	SkillUIPos_ = 0;
+
+
+	PlayerName_->EndFont();
+	 PlayerLevel_->EndFont();
+	 PlayerHP_->EndFont();
+	 PoeName_->EndFont();
+	 PoeLevel_->EndFont();
+	 BattleFont_->EndFont();
+		 Fonts->EndFont();
 }
 
 void BattleInterface::UIUpdate()
