@@ -1,6 +1,9 @@
 #include "ShopChoiceOption.h"
 #include <GameEngineBase/GameEngineInput.h>
 #include "InteractionText.h"
+#include "Shop.h"
+#include "PlayerRed.h"
+#include <GameEngineBase/GameEngineWindow.h>
 
 ShopChoiceOption::ShopChoiceOption() 
 	: UIRenderer_(nullptr)
@@ -65,6 +68,13 @@ void ShopChoiceOption::SelectIndex()
 	{
 	case 0:
 	{
+		PlayerRed::MainRed_->SetChildUI(GetLevel()->CreateActor<Shop>(60, "Shop"));
+		PlayerRed::MainRed_->GetChildUI()->SetPosition(PlayerRed::MainRed_->GetPosition() - GameEngineWindow::GetScale().Half());
+		dynamic_cast<Shop*>(PlayerRed::MainRed_->GetChildUI())->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
+		dynamic_cast<Shop*>(PlayerRed::MainRed_->GetChildUI())->ShopInit();
+
+		PlayerRed::MainRed_->WMenuUICheck_ = true;
+
 	}
 	break;
 	case 1:
@@ -78,8 +88,6 @@ void ShopChoiceOption::SelectIndex()
 		ParentText_->Setting();
 	}
 	break;
-	default:
-		break;
 	}
 
 	ParentText_->ChoiceEnd();

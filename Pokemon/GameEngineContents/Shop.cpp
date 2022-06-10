@@ -5,6 +5,8 @@
 #include <string>
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 
+
+//상점 초반이 이미 만들어져있음
 Shop::Shop()
 	: ShopState_(ShopState::SelectDialog)
 	, SalesList_(nullptr)
@@ -371,8 +373,6 @@ void Shop::Update()
 
 			InBagCount_->Off();
 			DestroyCountFont();
-
-			ArrowIndex_ = 0;
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
