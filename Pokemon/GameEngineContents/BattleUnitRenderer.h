@@ -116,5 +116,6 @@ public:
 	}
 	
 	void EnemyRock();
+	void EnemyTackle();
 };
 

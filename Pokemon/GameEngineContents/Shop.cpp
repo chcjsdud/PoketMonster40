@@ -115,6 +115,7 @@ void Shop::DestroyAllFonts()
 	DestroyCountFont();
 	DestroyInBagFont();
 	DestroyMoneyFont();
+	DestroyPriceFont();
 }
 
 void Shop::DestroyCountFont()
@@ -154,6 +155,19 @@ void Shop::DestroyInBagFont()
 	}
 
 	InBagFontList_.clear();
+}
+
+void Shop::DestroyPriceFont()
+{
+	for (GameEngineContentFont* Font : PriceFontList_)
+	{
+		if (nullptr != Font)
+		{
+			Font->Death();
+		}
+	}
+
+	PriceFontList_.clear();
 }
 
 void Shop::ArrowUpdate()
@@ -227,11 +241,25 @@ void Shop::ArrowUpdate()
 			if (0 == ArrowIndex_)
 			{
 				Price_ += 200;
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(Price_), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			else if (1 == ArrowIndex_)
 			{
 				Price_ += 300;
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(Price_), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
@@ -242,8 +270,9 @@ void Shop::ArrowUpdate()
 
 		else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
 		{
-			if (1 == ItemCount_)
+			if (1 >= ItemCount_)
 			{
+				ItemCount_ = 1;
 				return;
 			}
 
@@ -254,11 +283,25 @@ void Shop::ArrowUpdate()
 			if (0 == ArrowIndex_)
 			{
 				Price_ -= 200;
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(Price_), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			else if (1 == ArrowIndex_)
 			{
 				Price_ -= 300;
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(Price_), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			GameEngineContentFont* Count = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
@@ -340,6 +383,13 @@ void Shop::Update()
 						++Index;
 					}
 				}
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(200), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			else if (1 == ArrowIndex_)
@@ -351,6 +401,13 @@ void Shop::Update()
 						++Index;
 					}
 				}
+
+				DestroyPriceFont();
+
+				PriceFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 10);
+				PriceFont_->SetPosition(GetPosition() + float4{ 720, 330 });
+				PriceFont_->ShowString(std::to_string(300), true);
+				PriceFontList_.push_back(PriceFont_);
 			}
 
 			else if (2 == ArrowIndex_)
@@ -391,6 +448,7 @@ void Shop::Update()
 			InBagCount_->Off();
 			DestroyInBagFont();
 			DestroyCountFont();
+			DestroyPriceFont();
 		}
 
 		else if (true == GameEngineInput::GetInst()->IsDown("ExitShop"))
@@ -402,8 +460,10 @@ void Shop::Update()
 			InBagCount_->Off();
 			DestroyInBagFont();
 			DestroyCountFont();
+			DestroyPriceFont();
 
 			ItemCount_ = 0;
+			Price_ = 0;
 		}
 		break;
 	case ShopState::SelectBuy:

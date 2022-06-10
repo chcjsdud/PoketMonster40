@@ -35,8 +35,8 @@ void InteractionText::Setting()
 	UIRenderer_ = CreateRenderer("Npc_TextFrame.bmp");
 	UIRenderer_->SetPivot({ 0, 225 });
 
-	ArrowRenderer_ = CreateRenderer("BottomArrow.bmp");
-	ArrowRenderer_->SetPivot({ 0, 225 });
+	//ArrowRenderer_ = CreateRenderer("BottomArrow.bmp");
+	//ArrowRenderer_->SetPivot({ 0, 225 });
 
 	std::string TmpString = "";
 	for (int i = 0; i < TextVector_.size(); i++)

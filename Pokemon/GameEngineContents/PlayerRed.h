@@ -137,6 +137,9 @@ private:
 	void Update() override;
 	void Render() override;
 
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
 	void PlayerSetMove(float4 _Value);
 	bool PlayerMoveTileCheck(int _X, int _Y);
 	
@@ -159,7 +162,6 @@ private:
 
 	// »ç¿îµå
 	void SoundTileCheck();
-	void TileChangeSound();
 
 	// FSM
 	float AnimTimer_;

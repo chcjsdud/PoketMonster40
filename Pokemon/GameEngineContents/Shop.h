@@ -33,6 +33,7 @@ public:
 	void DestroyCountFont();
 	void DestroyMoneyFont();
 	void DestroyInBagFont();
+	void DestroyPriceFont();
 
 	void ArrowUpdate();
 
@@ -82,6 +83,7 @@ private:
 	std::vector<class GameEngineContentFont*> CountFontList_; //아이템 구매 개수 폰트
 	std::vector<class GameEngineContentFont*> MoneyFontList_;
 	std::vector<class GameEngineContentFont*> InBagFontList_;
+	std::vector<class GameEngineContentFont*> PriceFontList_;
 
 	GameEngineContentFont* InBagCount_;
 	GameEngineContentFont* Money_;

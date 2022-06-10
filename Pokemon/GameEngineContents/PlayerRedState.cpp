@@ -114,7 +114,10 @@ void PlayerRed::IdleStart()
 void PlayerRed::WalkStart()
 {
 	AnimationName_ = "Walk";
-	RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+	if (true == CanMove())
+	{
+		RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+	}
 }
 
 void PlayerRed::RunStart()

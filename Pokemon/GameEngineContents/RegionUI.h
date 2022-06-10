@@ -35,7 +35,8 @@ public:
 	RegionUI& operator=(RegionUI&& _Other) noexcept = delete;
 
 	void ChangeRegion(WorldBackgroundSoundEnum _Enum);
-	
+	void NoneNamedRegion();
+
 protected:
 	void Start() override;
 	void Update() override;

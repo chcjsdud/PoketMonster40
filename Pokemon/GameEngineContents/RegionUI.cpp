@@ -31,6 +31,12 @@ void RegionUI::ChangeRegion(WorldBackgroundSoundEnum _Enum)
 	NextRegion_ = _Enum;
 }
 
+void RegionUI::NoneNamedRegion()
+{
+	CurrentRegion_ = WorldBackgroundSoundEnum::None;
+	NextRegion_ = WorldBackgroundSoundEnum::None;
+}
+
 void RegionUI::Start()
 {
 	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');

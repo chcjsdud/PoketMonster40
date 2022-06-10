@@ -868,6 +868,8 @@ void Bag::BagInit()
 	//CurrentPokemon_ = PokemonInfoManager::GetInst().CreatePokemon("Charmander");
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition());
+
+	FadeActor_->FadeOut();
 }
 
 void Bag::UpFonts()

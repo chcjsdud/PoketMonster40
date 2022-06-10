@@ -184,6 +184,9 @@
     <ClCompile Include="GymTileMap.cpp">
       <Filter>WorldMap\TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="NPCBrock.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -366,6 +369,9 @@
     </ClInclude>
     <ClInclude Include="GymTileMap.h">
       <Filter>WorldMap\TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCBrock.h">
+      <Filter>NPC</Filter>
     </ClInclude>
     <ClInclude Include="BattleUnitRenderer.h">
       <Filter>Battle</Filter>
