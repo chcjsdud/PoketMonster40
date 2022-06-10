@@ -805,7 +805,10 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			//포켓몬 흔들고 체력 다는 효과 추가
 			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
 			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
+			// Interface_
+			
 			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
+
 			CurrentFont_ = Battlefont::Wait;
 		}
 

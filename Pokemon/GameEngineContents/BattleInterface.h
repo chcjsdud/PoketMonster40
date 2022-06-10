@@ -163,6 +163,19 @@ private:
 	GameEngineActor* ChildUI_;
 
 	void UIUpdate();
+
+	void HPChangeAnimation();
+	void HPRenderUpdate(); //HP바의 렌더정보를 업데이트 하는 함수
+	float HpRenderTimer_;//HP쭉 다는거 타이머
+	int PrevFoeHp_; //적이 받은 데미지
+	int PrevPlayerHp_; //  플레이어가 받은 데미지
+
+	float LerpFoeHp_;//적의 HP보간값을 저장할 변수
+	float LerpPlayerHp_; //플레이어의 HP보간값을 저장할 변수
+
+public:
+
+
 };
 
 // 장중혁 : Test
