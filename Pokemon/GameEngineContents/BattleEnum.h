@@ -23,3 +23,15 @@ enum class BattleTrun
 	Player,
 	Opponent
 };
+
+enum class SkillName
+{
+	None,
+	Tackle,
+	TailWhipMove,
+	WaterGun,
+	ShellHide,
+	EnemyRock,
+	EnemyTackle,
+
+};

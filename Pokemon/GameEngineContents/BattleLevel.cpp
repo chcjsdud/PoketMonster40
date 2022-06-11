@@ -25,7 +25,7 @@ BattleLevel::BattleLevel()
 	, PoeCurrentPokemon_(nullptr)
 	, PlayerRed_(nullptr)
 	, Opponent_(nullptr)
-	, PlayerStopCheck(nullptr)
+	, UnitRenderer(nullptr)
 	, OneTalk(false)
 	, Fonts(nullptr)
 	, BattleData_(nullptr)
@@ -35,6 +35,7 @@ BattleLevel::BattleLevel()
 	, EndAction_(BattlePageEnd::None)
 	, DebugMode_(false)
 	, WildBattle_(false)
+	, DoingSkillAnimation_(false)
 {
 
 }
@@ -77,7 +78,8 @@ void BattleLevel::Loading()
 
 
 	CreateActor<BattleBackground>();
-
+	UnitRenderer = CreateActor<BattleUnitRenderer>(3);
+	RegistActor("BattleUnitRenderer", UnitRenderer);
 	Interface_ = CreateActor<BattleInterface>(3);
 	Interface_->SetPosition({ 720.0f, 548.0f });
 	DebugMode_ = true;
@@ -103,7 +105,7 @@ void BattleLevel::Update()
 		break;
 	case BattleState::BattlePage:
 		// Update();
-		if (Interface_->BattleKey() || EndFont_ == true)
+		if (Interface_->BattleKey() && DoingSkillAnimation_ == false /*EndFont_ == true*/)
 		{
 			switch (EndAction_)
 			{
@@ -302,7 +304,15 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		delete BattleData_;
 		BattleData_ = nullptr;
 	}
+
+	if (BattleManager_ != nullptr)
+	{
+		delete BattleManager_;
+		BattleManager_ = nullptr;
+	}
+
 	WildBattle_ = false;
+	DoingSkillAnimation_ = false;
 }
 
 void BattleLevel::LevelStartDebug()
@@ -706,20 +716,7 @@ InBattle BattleManager::Update()
 		}
 
 	}
-	if (PlayerFirst_ == true)
-	{
-		CurrentTurn = PlayCurrentPokemon_;
-		CurrentPokemonSkill = PlayerSkill_;
-		AfterTrun = PoeCurrentPokemon_;
-		AfterPokemonSkill = PoeSkill_;
-	}
-	else
-	{
-		CurrentTurn = PoeCurrentPokemon_;
-		CurrentPokemonSkill = PoeSkill_;
-		AfterTrun = PlayCurrentPokemon_;
-		AfterPokemonSkill = PlayerSkill_;
-	}
+
 	switch (CurrentBattlePage_)
 	{
 	case BattlePage::FirstBattle:
@@ -796,6 +793,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 
 	case Battlefont::Att:
 	{
+		const std::string& SkillName = _Skill->GetNameConstRef();
 		switch (AttSkillType)
 		{
 		case SkillType::Physical:
@@ -803,12 +801,34 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		{
 			//이펙트
 			//포켓몬 흔들고 체력 다는 효과 추가
-			_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
-			_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
-			// Interface_
-			
-			_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
+			if (PlayerFirst_ ==  true)
+			{
+				if (SkillName == "TACKLE")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::Tackle;
+					Level_->UnitRenderer->MyTurnEnd = false;
+				}
+				else if (SkillName == "WATERGUN")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::WaterGun;
+					Level_->UnitRenderer->MyTurnEnd = false;
+				}
+			}
+			else if (PlayerFirst_ == false)
+			{
+				if (SkillName == "TACKLE")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::EnemyTackle;
+					Level_->UnitRenderer->EnemyTurnEnd = false;
+				}
+				else if (SkillName == "ROCKTOMB")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::EnemyRock;
+					Level_->UnitRenderer->EnemyTurnEnd = false;
+				}
+			}
 
+			Level_->DoingSkillAnimation_ = true;
 			CurrentFont_ = Battlefont::Wait;
 		}
 
@@ -866,6 +886,10 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				{
 				case SkillType::Physical:
 				case SkillType::Special:
+					_Turn->DamageType_ = BattleEngine::ComparePokemonType(_Skill, _Def);
+					_Turn->FinalDamage_ = BattleEngine::AttackCalculation(_Att, _Def, _Skill, _Turn->DamageType_);
+					// Interface_
+					_Def->GetPokemon()->GetInfo()->GetHp() -= _Turn->FinalDamage_;
 				{
 					switch (_Turn->DamageType_)
 					{

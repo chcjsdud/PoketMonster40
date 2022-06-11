@@ -1,13 +1,16 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include "BattleEnum.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "Pokemon.h"
 
 // 설명 : BattleLevel에서 생성되는 인터페이스를 제외한 모든 렌더러를 가지고 있는 Actor
+class BattleLevel;
 class BattleUnitRenderer : public GameEngineActor
 {
+	friend class BattleManager;
 public:
 	// constrcuter destructer
 	BattleUnitRenderer();
@@ -20,7 +23,20 @@ public:
 	BattleUnitRenderer& operator=(BattleUnitRenderer&& _Other) noexcept = delete;
 
 
+	inline bool GetMyAniTurn() const
+	{
+		return MyTurnEnd;
+	}
+	inline bool GetPoeAniTurn() const
+	{
+		return EnemyTurnEnd;
+	}
+
+	
+
 	static GameEngineRenderer* PlayerRenderer_;
+
+	SkillName SkillName_;
 
 
 protected:
@@ -79,6 +95,7 @@ private:
 
 	float MyMoveTime;//김예나: 내 푸키먼 공격시 타임체크해서 그 시간을 기반으로 움직이게끔
 	bool MyTurnEnd;//김예나: 내 푸키먼 공격무빙이 끝나면 MoveTime초기화용
+	bool MyCatchEnd;
 	bool EnemyTurnEnd;
 
 	float Angle;//회전용..?
@@ -96,7 +113,7 @@ private:
 	
 	float AnimationEndTime;
 
-	class BattleLevel* Level_;
+	BattleLevel* Level_;
 	class BattleData* BattleDataR_;
 
 	void ShowDebugValue();

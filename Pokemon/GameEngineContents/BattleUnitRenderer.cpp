@@ -27,7 +27,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, BattleDataR_(nullptr)
 	, Level_(nullptr)
 	, MyMoveTime(0.0f)
-	, MyTurnEnd(false)
+	, MyTurnEnd(true)
 	, Angle(0.0f)
 	, Fighting(false)
 	, MyWaterGunEffect(nullptr)
@@ -42,7 +42,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, Rock3(nullptr)
 	, Rock4(nullptr)
 	, X(nullptr)
-	, EnemyTurnEnd(false)
+	, EnemyTurnEnd(true)
 	, Rock1Pivot({ -220.f, -100.0f })
 	, Rock2Pivot({ -160.f,-100.0f })
 	, Rock3Pivot({ -280.f, -100.0f })
@@ -56,6 +56,8 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, CatchBallTime(0.0f)
 	, CatchBallOpen(nullptr)
 	, Alpha_Time(0.0f)
+	, MyCatchEnd(true)
+	, SkillName_(SkillName::None)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -69,7 +71,6 @@ void BattleUnitRenderer::Start()
 	SetPosition({ GameEngineWindow::GetScale().Half() });
 
 	//동원씨 도움
-	BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
 
 	{
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Player.bmp");
@@ -105,8 +106,45 @@ void BattleUnitRenderer::Start()
 void BattleUnitRenderer::Update()
 {
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
-	Opening();
+	if (FirstMove == true)
+	{
+		Opening();
+	}
 	Opening2();
+
+	if (SkillName_ != SkillName::None && (MyTurnEnd == false || EnemyTurnEnd == false))
+	{
+		Level_->DoingSkillAnimation_ = true;
+		switch (SkillName_)
+		{
+		case SkillName::Tackle:
+			Tackle();
+			break;
+		case SkillName::TailWhipMove:
+			TailWhipMove();
+			break;
+		case SkillName::WaterGun:
+			WaterGun();			
+			break;
+		case SkillName::ShellHide:
+			ShellHide();
+			break;
+		case SkillName::EnemyRock:
+			EnemyRock();
+			break;
+		case SkillName::EnemyTackle:
+			EnemyTackle();
+			break;
+		default:
+			break;
+		}
+
+		if (SkillName_ != SkillName::None && (MyTurnEnd == true && EnemyTurnEnd == true))
+		{
+			SkillName_ = SkillName::None;
+			Level_->DoingSkillAnimation_ = false;
+		}
+	}
 
 
 }
@@ -216,6 +254,11 @@ void BattleUnitRenderer::ShowDebugValue()
 
 void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+
+	if (BattleInter == nullptr)
+	{
+		BattleInter = dynamic_cast<BattleInterface*>(GetLevel()->FindActor("BattleInterface"));
+	}
 	FirstMove = true;
 	Fighting = false;
 	MoveSpeed = 900.0f;//원래는200
@@ -314,8 +357,10 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		MyTackleEffect->Off();
 		MyWaterGunEffect->Off();
 		MyMoveTime = 0.0f;
-		MyTurnEnd = false;
-		EnemyTurnEnd = false;
+		MyTurnEnd = true;
+		EnemyTurnEnd = true;
+		MyCatchEnd = false;
+		SkillName_ = SkillName::None;
 	}
 }
 
@@ -412,23 +457,22 @@ void BattleUnitRenderer::TailWhipMove()
 
 void BattleUnitRenderer::Opening()
 {
-	if (FirstMove == true)
+
+	TimeCheck = 0.0f;
+	PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
+	PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
+
+	PoeCurrentPokemon_->SetPivot({ -450 + PlayerTime_,-105 });
+
+	if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
 	{
-		TimeCheck = 0.0f;
-		PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
-		PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
-
-		PoeCurrentPokemon_->SetPivot({ -450 + PlayerTime_,-105 });
-
-		if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
-		{
-			PlayerRenderer_->SetPivot({ -200.0f, 31.0f });//플레이어 공식위치 고정
-			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });//적 푸키먼 공식위치 고정
-			MoveSpeed = 0.0f;
-			PlayerStop = true;
-			FirstMove = false;
-		}
+		PlayerRenderer_->SetPivot({ -200.0f, 31.0f });//플레이어 공식위치 고정
+		PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });//적 푸키먼 공식위치 고정
+		MoveSpeed = 0.0f;
+		PlayerStop = true;
+		FirstMove = false;
 	}
+
 }
 
 void BattleUnitRenderer::Opening2()
@@ -492,7 +536,7 @@ void BattleUnitRenderer::Opening2()
 					//ShellHide();
 					//EnemyRock();
 					//EnemyTackle();
-					Catch();
+					//Catch();
 					BattleInter->DoomChit();
 				}
 			}
@@ -764,7 +808,7 @@ void BattleUnitRenderer::Catch()
 	BallX += GameEngineTime::GetDeltaTime() * 600.0f;
 	BallY -= GameEngineTime::GetDeltaTime() * 150.0f;
 	CatchBallPivot = { BallX,BallY };
-	if (MyTurnEnd == false)
+	if (MyCatchEnd == false)
 	{
 		MonsterBall->SetPivot({ -480.0f,0.0f });
 		MonsterBall->On();
@@ -783,6 +827,7 @@ void BattleUnitRenderer::Catch()
 				MonsterBall->SetPivot({ 210.0f, -170.0f });
 				MonsterBall->ChangeAnimation("Ball");
 				MonsterBall->On();
+				MyCatchEnd = true;
 			}
 		}
 	}

@@ -140,7 +140,7 @@ void BattleInterface::Start()
 	//동원씨 도움 RegistActor=이미 만들어진 Actor를 Level에 등록
 	GetLevel()->RegistActor("BattleInterface", this);
 	//김예나:테스트 코드
-	BattleUnit = Level_->CreateActor<BattleUnitRenderer>();
+	BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	Fonts = Level_->CreateActor<GameEngineContentFont>(8);
 	Fonts->SetPosition({ 50, 485 });
 
@@ -351,7 +351,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 			break;
 		}
 
-	}
+		}
 	else if (GameEngineInput::GetInst()->IsDown("SCancel"))
 	{
 		BattleCommend->Off();
@@ -409,13 +409,17 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 
 bool BattleInterface::BattleKey()
 {
+	if (Level_->DoingSkillAnimation_ == true && (BattleUnit->GetMyAniTurn() == false || BattleUnit->GetPoeAniTurn() == false))
+	{
+		return false;
+	}
 	if (GameEngineInput::GetInst()->IsDown("SSelect") && BattleTimer_ > 0)
 	{
 		BattleTimer_ = 0;
-		if (BattleFont_->IsEnd())
+		if (BattleFont_->IsEnd() || !BattleFont_->IsRendererFont())
 		{
 			BattleFont_->EndFont();
-			Level_->EndFont_ = true;
+			//Level_->EndFont_ = true;
 			return true;
 		}
 	}
@@ -733,7 +737,12 @@ void BattleInterface::SelectOrder()
 
 void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
+	if (BattleUnit == nullptr)
+	{
+		BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
+	}
 	OneTalk = false;
+
 }
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)

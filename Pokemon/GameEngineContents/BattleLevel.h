@@ -76,6 +76,8 @@ public:
 	void StartBattleLevelByWild();
 	void StartBattleLevelByNPC(BattleNPCInterface* Opponent_);
 
+	bool DoingSkillAnimation_;
+
 
 protected:
 	void Loading() override;
@@ -106,7 +108,8 @@ private:
 
 	//전투시 폰트 출력
 	class GameEngineContentFont* Fonts;
-	class BattleUnitRenderer* PlayerStopCheck;
+	class BattleUnitRenderer* UnitRenderer;
+
 
 	bool OneTalk;
 
