@@ -71,7 +71,6 @@ void BattleInterface::Start()
 	BattleFont_ = Level_->CreateActor<GameEngineContentFont>(10);
 	BattleFont_->SetPosition({ 50, 485 });
 	{
-
 		GameEngineContentFont* index = nullptr;
 		index = Level_->CreateActor<GameEngineContentFont>(10);
 		index->SetPosition({ 50, 485 });
@@ -151,12 +150,6 @@ void BattleInterface::Start()
 	BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	Fonts = Level_->CreateActor<GameEngineContentFont>(8);
 	Fonts->SetPosition({ 50, 485 });
-
-	//HP정보 업데이트
-	PrevPlayerHp_ = 19;
-	PrevFoeHp_ = 19;
-	LerpFoeHp_ = 19.0f;
-	LerpPlayerHp_ = 19.0f;
 
 	PPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 	MaxPPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
@@ -939,6 +932,14 @@ void BattleInterface::HPChangeAnimation()
 		HpRenderTimer_ += GameEngineTime::GetDeltaTime();
 		LerpPlayerHp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevPlayerHp_), static_cast<float>(PlayerHP), HpRenderTimer_);
 
+		//HP폰트 업데이트
+		PlayerHP_->EndFont();
+		PlayerHP_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PlayerHP_->SetPosition({ 770 , 384 });
+		PlayerHP_->SetSize(0.75f);
+		PlayerHP_->ShowString(std::to_string(static_cast<int>(LerpPlayerHp_))
+			+ "/ " + std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp()), true);
+
 		//보간값이 변화된 적 HP와 같아지면 보간 종료
 		if (static_cast<int>(LerpPlayerHp_) == PlayerHP)
 		{
@@ -1013,18 +1014,8 @@ void BattleInterface::HPRenderUpdate()
 			ExpRatio = 1.0f;
 		}
 		float ExpXScale = GameEngineImageManager::GetInst()->Find("FriendlyHPExp4.bmp")->GetScale().x * ExpRatio;
-		//if (HpRatio > 0.5f)
-		//{
-		//	MyHP->SetImage("PoketmonMenu_Hp1.bmp");
-		//}
-		//else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
-		//{
-		//	MyHP->SetImage("PoketmonMenu_Hp2.bmp");
-		//}
-		//else
-		//{
-		//	MyHP->SetImage("PoketmonMenu_Hp3.bmp");
-		//}
 		EXP->SetScale({ ExpXScale ,EXP->GetScale().y });
 	}
+
+
 }
