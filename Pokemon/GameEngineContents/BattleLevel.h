@@ -35,6 +35,7 @@ class PokemonBattleState;
 class BattleLevel : public GameEngineLevel
 {
 	friend class BattleInterface;
+	friend class BattleUnitRenderer;
 	friend BattleManager;
 public:
 	//디폴트 생성자

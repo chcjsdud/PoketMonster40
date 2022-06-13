@@ -50,6 +50,9 @@ BattleInterface::BattleInterface()
 	, PPFont_(nullptr)
 	, MaxPPFont_(nullptr)
 	, TypeFont_(nullptr)
+	, PrevExp_(0)
+	, LerpExp_(0.0f)
+	, ExpRenderTimer_(0.0f)
 
 {
 
@@ -68,7 +71,6 @@ void BattleInterface::Start()
 	BattleFont_ = Level_->CreateActor<GameEngineContentFont>(10);
 	BattleFont_->SetPosition({ 50, 485 });
 	{
-
 		GameEngineContentFont* index = nullptr;
 		index = Level_->CreateActor<GameEngineContentFont>(10);
 		index->SetPosition({ 50, 485 });
@@ -110,6 +112,7 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 'H');
+	GameEngineInput::GetInst()->CreateKey("PokeBall", 'M');
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp", 6);
@@ -147,12 +150,6 @@ void BattleInterface::Start()
 	BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	Fonts = Level_->CreateActor<GameEngineContentFont>(8);
 	Fonts->SetPosition({ 50, 485 });
-
-	//HP정보 업데이트
-	PrevPlayerHp_ = 19;
-	PrevFoeHp_ = 19;
-	LerpFoeHp_ = 19.0f;
-	LerpPlayerHp_ = 19.0f;
 
 	PPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 	MaxPPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
@@ -196,7 +193,6 @@ void BattleInterface::Update()
 			PoeName_->ShowString(Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef() + (Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetGender() ? "[" : "]"), true);
 			PoeLevel_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
 		}
-		//MyHPUI->Is
 	}
 
 
@@ -345,6 +341,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 			Level_->StartBattlePage(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()
 				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()));
 
+			Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()->GetPP()--;
 			for (auto& Font : AllSkillFont_)
 			{
 				Font->ClearCurrentFonts();
@@ -530,6 +527,15 @@ void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv)
 	Level_->EndFont_ = false;
 }
 
+void BattleInterface::ShowRunaway()
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("Got away safely");
+	Level_->EndFont_ = false;
+}
+
+
+
 std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 {
 	switch (_Ability)
@@ -593,6 +599,10 @@ bool BattleInterface::MoveKey()
 {
 	if (ChildUI_ != nullptr)
 	{
+		if (GameEngineInput::GetInst()->IsDown("PokeBall"))
+		{
+			int a = 0;
+		}
 		return false;
 	}
 	if (BattleTimer_ <= 0.1f)
@@ -647,7 +657,6 @@ bool BattleInterface::MoveKey()
 			Select->SetPivot({ -190.0f,35.0f });
 		}
 
-
 		{
 			SelectOrder();
 			OrderCheck();
@@ -657,9 +666,16 @@ bool BattleInterface::MoveKey()
 	}
 
 	// 장중혁 : Debug
-	if (GameEngineInput::GetInst()->IsDown("StartBattlePage"))
+	if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 	{
-		return true;
+		BattleUnit->SetFighting(true);
+		CurOrder = BattleOrder::Run;
+		InterfaceImage->Off();
+		BattleCommend->Off();
+		Select->Off();
+		ShowRunaway();
+		Level_->BState_ = BattleState::Endding;
+		
 	}
 	return false;
 	//
@@ -744,13 +760,11 @@ void BattleInterface::SelectOrder()
 				ChildUI_->SetPosition(float4(0, 0) + GameEngineWindow::GetScale().Half());
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 				dynamic_cast<Bag*>(ChildUI_)->BagInit();
+
 			}
 		}
 
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-		{
-			CurOrder = BattleOrder::Run;
-		}
+
 	}
 }
 
@@ -761,6 +775,17 @@ void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	}
 	OneTalk = false;
+
+	//HP정보 업데이트
+	PrevPlayerHp_ = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetHp();
+	PrevFoeHp_ = Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetHp();
+	PrevExp_ = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp();
+
+	LerpFoeHp_ = static_cast<float>(PrevFoeHp_);
+	LerpPlayerHp_ = static_cast<float>(PrevPlayerHp_);
+	LerpExp_ = static_cast<float>(LerpExp_);
+	
+
 }
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
@@ -815,9 +840,9 @@ void BattleInterface::Reset()
 	Fonts->EndFont();
 
 
-	PPFont_->Death();
-	MaxPPFont_->Death();
-	TypeFont_->Death();
+	//PPFont_->Death();
+	//MaxPPFont_->Death();
+	//TypeFont_->Death();
 }
 
 void BattleInterface::UIUpdate()
@@ -907,11 +932,34 @@ void BattleInterface::HPChangeAnimation()
 		HpRenderTimer_ += GameEngineTime::GetDeltaTime();
 		LerpPlayerHp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevPlayerHp_), static_cast<float>(PlayerHP), HpRenderTimer_);
 
+		//HP폰트 업데이트
+		PlayerHP_->EndFont();
+		PlayerHP_ = Level_->CreateActor<GameEngineContentFont>(10);
+		PlayerHP_->SetPosition({ 770 , 384 });
+		PlayerHP_->SetSize(0.75f);
+		PlayerHP_->ShowString(std::to_string(static_cast<int>(LerpPlayerHp_))
+			+ "/ " + std::to_string(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp()), true);
+
 		//보간값이 변화된 적 HP와 같아지면 보간 종료
 		if (static_cast<int>(LerpPlayerHp_) == PlayerHP)
 		{
 			PrevPlayerHp_ = PlayerHP;
 			HpRenderTimer_ = 0.0f;
+		}
+	}
+
+	//경험치의 변화를 감지하고 경험치 보간 진행
+	int PlayerExp = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp();
+	if (PlayerExp != PrevExp_)
+	{
+		ExpRenderTimer_ += GameEngineTime::GetDeltaTime();
+		LerpExp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevExp_), static_cast<float>(PlayerExp), ExpRenderTimer_);
+
+		//보간값이 변화된 값과 같아지면 보간 종료
+		if (static_cast<int>(LerpExp_) == PlayerExp)
+		{
+			PrevExp_ = PlayerExp;
+			ExpRenderTimer_ = 0.0f;
 		}
 	}
 }
@@ -956,6 +1004,17 @@ void BattleInterface::HPRenderUpdate()
 			MyHP->SetImage("PoketmonMenu_Hp3.bmp");
 		}
 		MyHP->SetScale({ HpXScale ,MyHP->GetScale().y });
+	}
+	
+	//플레이여 경험치 렌더링
+	{
+		float ExpRatio =  LerpExp_ / static_cast<float>(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxExp());
+		if (ExpRatio >= 1.0f)
+		{
+			ExpRatio = 1.0f;
+		}
+		float ExpXScale = GameEngineImageManager::GetInst()->Find("FriendlyHPExp4.bmp")->GetScale().x * ExpRatio;
+		EXP->SetScale({ ExpXScale ,EXP->GetScale().y });
 	}
 
 

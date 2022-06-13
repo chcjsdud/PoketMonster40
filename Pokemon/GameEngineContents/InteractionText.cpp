@@ -1,10 +1,12 @@
 #include "InteractionText.h"
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <GameEngineBase/GameEngineInput.h>
+#include "ContentEnum.h"
 #include "PlayerRed.h"
 #include "NPCBase.h"
 #include "NPC6.h"
 #include "Oak.h"
+#include "Green.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
 #include "WorldMapLevel.h"
@@ -35,7 +37,7 @@ void InteractionText::AddText(const std::string& _Text)
 
 void InteractionText::Setting()
 {
-	UIRenderer_ = CreateRenderer("Npc_TextFrame.bmp");
+	UIRenderer_ = CreateRenderer("Npc_TextFrame.bmp", static_cast<int>(RenderOrder::UI));
 	UIRenderer_->SetPivot({ 0, 225 });
 
 	//ArrowRenderer_ = CreateRenderer("BottomArrow.bmp");
@@ -47,7 +49,7 @@ void InteractionText::Setting()
 		TmpString += TextVector_[i].c_str();
 		TmpString += "\\";
 	}
-	Fonts = GetLevel()->CreateActor<GameEngineContentFont>();
+	Fonts = GetLevel()->CreateActor<GameEngineContentFont>(static_cast<int>(RenderOrder::UI));
 	Fonts->SetPosition(GetPosition() + float4(-420, 160));
 	Fonts->ShowString(TmpString, false);
 	IsSetting_ = true;	
@@ -158,6 +160,11 @@ void InteractionText::Update()
 			if (true == NPCBase::NPC_->GetRoom4Enter())
 			{
 				//NPCBase::NPC_->SetOakFollow(false);
+			}
+
+			if (true == PlayerRed::MainRed_->GetGreenBattle())
+			{
+				Green::NPCGreen->SetGreenMove(true);
 			}
 			PlayerRed::MainRed_->SetInteraction(false);
 			NPCBase::NPC_->SetNPCInteraction(false);
