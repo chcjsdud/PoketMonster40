@@ -111,7 +111,7 @@ public:
 	{
 		return Exp_;
 	}
-
+		
 	inline void SetExp(int _Exp)
 	{
 		Exp_ = _Exp;

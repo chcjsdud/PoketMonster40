@@ -163,6 +163,7 @@ private:
 	GameEngineActor* ChildUI_;
 
 	void UIUpdate();
+	void ShowSkillInfo(int _Index);
 
 	void HPChangeAnimation();
 	void HPRenderUpdate(); //HP바의 렌더정보를 업데이트 하는 함수
@@ -173,7 +174,13 @@ private:
 	float LerpFoeHp_;//적의 HP보간값을 저장할 변수
 	float LerpPlayerHp_; //플레이어의 HP보간값을 저장할 변수
 
+	GameEngineContentFont* PPFont_;
+	GameEngineContentFont* MaxPPFont_;
+
+	GameEngineContentFont* TypeFont_;
+
 public:
+
 
 
 };

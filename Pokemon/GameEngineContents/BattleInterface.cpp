@@ -14,6 +14,7 @@
 #include <GameEngineBase/GameEngineWindow.h>
 #include "Bag.h"
 #include "PokemonMenu.h"
+#include "PokemonSkill.h"
 
 
 BattleInterface::BattleInterface()
@@ -46,6 +47,9 @@ BattleInterface::BattleInterface()
 	, PrevPlayerHp_(0)
 	, LerpFoeHp_(0)
 	, LerpPlayerHp_(0)
+	, PPFont_(nullptr)
+	, MaxPPFont_(nullptr)
+	, TypeFont_(nullptr)
 
 {
 
@@ -91,7 +95,7 @@ void BattleInterface::Start()
 		PlayerHP_->SetPosition({ 770 , 384 });
 		PlayerHP_->SetSize(0.75f);
 		PoeName_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PoeName_->SetPosition({ 85 , 56});
+		PoeName_->SetPosition({ 85 , 56 });
 		PoeName_->SetSize(0.85f);
 		PoeLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
 		PoeLevel_->SetPosition({ 380 , 56 });
@@ -115,11 +119,11 @@ void BattleInterface::Start()
 
 	EnemyHPUI = CreateRenderer("EnemyHPBackground4.bmp", 2);
 	EnemyHPUI->Off();
-	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3,RenderPivot::LeftTop);
+	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3, RenderPivot::LeftTop);
 	EnemyHP->Off();
 	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp", 2);
 	MyHPUI->Off();
-	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3,RenderPivot::LeftTop);
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3, RenderPivot::LeftTop);
 	MyHP->Off();
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
 	EXP->Off();
@@ -149,6 +153,10 @@ void BattleInterface::Start()
 	PrevFoeHp_ = 19;
 	LerpFoeHp_ = 19.0f;
 	LerpPlayerHp_ = 19.0f;
+
+	PPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
+	MaxPPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
+	TypeFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 }
 
 void BattleInterface::Render()
@@ -239,15 +247,19 @@ void BattleInterface::ShowAndCheckSkillPos()
 	switch (SkillUIPos_)
 	{
 	case 0:
+		ShowSkillInfo(0);
 		Select->SetPivot({ -680.0f,-30.0f });
 		break;
 	case 1:
+		ShowSkillInfo(1);
 		Select->SetPivot({ -380.0f,-30.0f });
 		break;
 	case 2:
+		ShowSkillInfo(2);
 		Select->SetPivot({ -680.0f,35.0f });
 		break;
 	case 3:
+		ShowSkillInfo(3);
 		Select->SetPivot({ -380.0f,35.0f });
 		break;
 	default:
@@ -351,13 +363,17 @@ void BattleInterface::ShowAndCheckSkillPos()
 			break;
 		}
 
-		}
+	}
 	else if (GameEngineInput::GetInst()->IsDown("SCancel"))
 	{
 		BattleCommend->Off();
 		Select->SetPivot({ -190.0f,-25.0f });
 		CurOrder = BattleOrder::None;
 		Level_->CurrentSelect_ = CurOrder;
+
+		PPFont_->Off();
+		MaxPPFont_->Off();
+		TypeFont_->Off();
 
 		for (auto& SkillFont : AllSkillFont_)
 		{
@@ -404,7 +420,6 @@ void BattleInterface::ShowPokemonSkill(Pokemon* _Pokemon)
 			}
 		}
 	}
-
 }
 
 bool BattleInterface::BattleKey()
@@ -435,6 +450,10 @@ void BattleInterface::ShowUsedSkillString(const std::string& _AttPokemon, const 
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_AttPokemon + " Used\\" + _AttSkill + "!");
 	Level_->EndFont_ = false;
+
+	PPFont_->Off();
+	MaxPPFont_->Off();
+	TypeFont_->Off();
 }
 
 void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
@@ -498,7 +517,7 @@ void BattleInterface::ShowGetEXP(const std::string& _PlayerPokemon, int _EXP)
 	BattleFont_->ShowString(_PlayerPokemon + "gained\\" + std::to_string(_EXP) + " EXP. Points!");
 	Level_->EndFont_ = false;
 }
-void BattleInterface::ShowChangePokemon(const std::string& _Poe,const std::string& _PoePokemon)
+void BattleInterface::ShowChangePokemon(const std::string& _Poe, const std::string& _PoePokemon)
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_Poe + " sent\\out " + _PoePokemon + "!");
@@ -655,7 +674,7 @@ void BattleInterface::DoomChit()
 		EXP->SetPivot({ 48.0f,-174.0f });
 		PlayerName_->SetPosition({ 570 ,  312 - 4 });
 		PlayerLevel_->SetPosition({ 865 , 312 - 4 });
-		PlayerHP_->SetPosition({ 770 , 384 - 4});
+		PlayerHP_->SetPosition({ 770 , 384 - 4 });
 
 	}
 
@@ -664,7 +683,7 @@ void BattleInterface::DoomChit()
 		MyHPUI->SetPivot({ 0.0f,-170.0f });
 		MyHP->SetPivot({ -16.0f, -180.0f });
 		EXP->SetPivot({ 48.0f,-170.0f });
-		PlayerName_->SetPosition({570 , 312 });
+		PlayerName_->SetPosition({ 570 , 312 });
 		PlayerLevel_->SetPosition({ 865 , 312 });
 		PlayerHP_->SetPosition({ 770 , 384 });
 	}
@@ -709,20 +728,20 @@ void BattleInterface::SelectOrder()
 			if (nullptr == ChildUI_)
 			{
 				ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-				ChildUI_->SetPosition(float4(0,0));
+				ChildUI_->SetPosition(float4(0, 0));
 				dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
 			}
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-		{	
+		{
 			//가방 선택
 			CurOrder = BattleOrder::Bag;
 
 			if (nullptr == ChildUI_)
 			{
 				ChildUI_ = GetLevel()->CreateActor<Bag>(50);
-				ChildUI_->SetPosition(float4(0,0)+GameEngineWindow::GetScale().Half());
+				ChildUI_->SetPosition(float4(0, 0) + GameEngineWindow::GetScale().Half());
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 				dynamic_cast<Bag*>(ChildUI_)->BagInit();
 			}
@@ -742,7 +761,6 @@ void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	}
 	OneTalk = false;
-
 }
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
@@ -789,12 +807,17 @@ void BattleInterface::Reset()
 
 
 	PlayerName_->EndFont();
-	 PlayerLevel_->EndFont();
-	 PlayerHP_->EndFont();
-	 PoeName_->EndFont();
-	 PoeLevel_->EndFont();
-	 BattleFont_->EndFont();
-		 Fonts->EndFont();
+	PlayerLevel_->EndFont();
+	PlayerHP_->EndFont();
+	PoeName_->EndFont();
+	PoeLevel_->EndFont();
+	BattleFont_->EndFont();
+	Fonts->EndFont();
+
+
+	PPFont_->Death();
+	MaxPPFont_->Death();
+	TypeFont_->Death();
 }
 
 void BattleInterface::UIUpdate()
@@ -806,6 +829,57 @@ void BattleInterface::UIUpdate()
 			ChildUI_->Death();
 			ChildUI_ = nullptr;
 		}
+	}
+}
+
+void BattleInterface::ShowSkillInfo(int _Index)
+{
+	if (false == PPFont_->IsUpdate())
+	{
+		PPFont_->On();
+		MaxPPFont_->On();
+		TypeFont_->On();
+	}
+
+	//PP
+	PPFont_->SetPosition(GameEngineWindow::GetScale().Half() + float4{ 300, 170 });
+
+	int PPCount = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[_Index]->GetInfo()->GetPP();
+
+	PPFont_->ClearCurrentFonts();
+	PPFont_->ShowString(std::to_string(PPCount), true);
+
+
+	//Max PP
+	MaxPPFont_->SetPosition(GameEngineWindow::GetScale().Half() + float4{ 390, 170 });
+
+	int MaxPPCount = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[_Index]->GetInfo()->GetMaxPP();
+
+	MaxPPFont_->ClearCurrentFonts();
+	MaxPPFont_->ShowString(std::to_string(MaxPPCount), true);
+
+
+	//타입 
+	TypeFont_->SetPosition(GameEngineWindow::GetScale().Half() + float4{ 290, 235 });
+
+	int TypeCount = (int)Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[_Index]->GetInfo()->GetType();
+
+	Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill();
+
+	switch (TypeCount)
+	{
+	case 0:
+		TypeFont_->ClearCurrentFonts();
+		TypeFont_->ShowString("NORMAL", true);
+		break;
+	case 2:
+		TypeFont_->ClearCurrentFonts();
+		TypeFont_->ShowString("WATER", true);
+		break;
+	default:
+		TypeFont_->ClearCurrentFonts();
+		TypeFont_->ShowString("NORMAL", true);
+		break;
 	}
 }
 
@@ -863,7 +937,7 @@ void BattleInterface::HPRenderUpdate()
 		}
 		EnemyHP->SetScale({ HpXScale ,EnemyHP->GetScale().y });
 	}
-	
+
 
 	//플레이어 HP 렌더링
 	{
@@ -883,6 +957,6 @@ void BattleInterface::HPRenderUpdate()
 		}
 		MyHP->SetScale({ HpXScale ,MyHP->GetScale().y });
 	}
-	
+
 
 }
