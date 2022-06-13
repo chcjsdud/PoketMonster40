@@ -269,6 +269,11 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	
 	// 장병문 : 처음 한번만 만들기 Start에서 하는게 더 좋아보이는데 PlayerCurrentPokemon_ 올리면 문제생겨서 일단 여기둠
 	// 추후에 수정필요할듯
+	if (PoeCurrentPokemon_ == nullptr)
+	{
+		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
+			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
+	}
 	if (nullptr == PlayerRenderer_)
 	{
 		//플레이어
@@ -279,8 +284,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		//푸키먼
 		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
 			, 3, RenderPivot::CENTER, PlayerPokemonPos_);
-		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
-			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
+
 
 		//볼
 		MonsterBall = CreateRenderer("MonsterBall4.bmp", 4);
@@ -351,7 +355,11 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		FirstMove = true;
 		BallLerp = 0.0f;
 		PlayerCurrentPokemon_->Off();
-		PoeCurrentPokemon_->Off();
+		if (PoeCurrentPokemon_ != nullptr)
+		{
+			PoeCurrentPokemon_->Death();
+			PoeCurrentPokemon_ = nullptr;
+		}
 		PlayerRenderer_->Off();
 		MonsterBall->Off();
 		MyTackleEffect->Off();
