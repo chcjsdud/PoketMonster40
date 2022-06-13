@@ -455,7 +455,7 @@ void BattleInterface::ShowPlayerFaintString(const std::string& _PlayerPokemon)
 void BattleInterface::ShowSupperEffectString()
 {
 	BattleFont_->EndFont();
-	BattleFont_->ShowString("It's Supe\\effective!");
+	BattleFont_->ShowString("It's Super\\effective!");
 	Level_->EndFont_ = false;
 }
 

@@ -251,6 +251,7 @@ void BattleLevel::EndBattlePage()
 
 	BState_ = BattleState::SelecetPage;
 	GameEngineInput::GetInst()->Reset();
+	EndAction_ = BattlePageEnd::None;
 }
 
 void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -313,6 +314,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 	WildBattle_ = false;
 	DoingSkillAnimation_ = false;
+	EndAction_ = BattlePageEnd::None;
 }
 
 void BattleLevel::LevelStartDebug()
@@ -807,11 +809,13 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				{
 					Level_->UnitRenderer->SkillName_ = SkillName::Tackle;
 					Level_->UnitRenderer->MyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
 				}
 				else if (SkillName == "WATERGUN")
 				{
 					Level_->UnitRenderer->SkillName_ = SkillName::WaterGun;
 					Level_->UnitRenderer->MyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
 				}
 			}
 			else if (PlayerFirst_ == false)
@@ -820,15 +824,16 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				{
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyTackle;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
 				}
 				else if (SkillName == "ROCKTOMB")
 				{
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyRock;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
 				}
 			}
 
-			Level_->DoingSkillAnimation_ = true;
 			CurrentFont_ = Battlefont::Wait;
 		}
 
@@ -837,15 +842,16 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		{
 			if (_Skill->GetNameConstRef() == "TAILWHIP")
 			{
+				Level_->UnitRenderer->SkillName_ = SkillName::TailWhipMove;
+				Level_->UnitRenderer->MyTurnEnd = false;
+				Level_->DoingSkillAnimation_ = true;
 				//TailWhipMove();
-				CurrentFont_ = Battlefont::Wait;
 			}
 			else if (_Skill->GetNameConstRef() == "GROWL")
 			{
 				//TailWhipMove();
-				CurrentFont_ = Battlefont::Wait;
 			}
-
+			CurrentFont_ = Battlefont::Wait;
 		}
 
 			// ²¿¸®Èçµé±â µî ÀÌÆåÆ® ±¸Çö, Æ÷ÄÏ¸ó¿¡°Ô ·©Å© Àû¿ë
@@ -874,6 +880,11 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			{
 				Interface_->ShowRankUpAndDown(_Def->Pokemon_->GetInfo()->GetNameConstRef(), PokemonAbility::Att, -1);
 				_Def->SetRank(PokemonAbility::Att, -1);
+			}
+			else if (_Skill->GetNameConstRef() == "WITHDRAW")
+			{
+				Interface_->ShowRankUpAndDown(_Def->Pokemon_->GetInfo()->GetNameConstRef(), PokemonAbility::Def, 1);
+				_Att->SetRank(PokemonAbility::Def, 1);
 			}
 			PlayerFirst_ = !PlayerFirst_;
 			CurrentFont_ = Battlefont::None;
