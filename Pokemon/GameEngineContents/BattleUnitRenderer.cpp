@@ -396,6 +396,7 @@ void BattleUnitRenderer::Tackle()
 			PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
 			//적 피격시 적 HPUI이미지 들썩
 			BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-440.0f });
+			BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-446.0f });
 		}
 
 		{	//적 푸키먼 피격 반짝반짝
@@ -404,12 +405,14 @@ void BattleUnitRenderer::Tackle()
 				PoeCurrentPokemon_->SetAlpha(55);
 				//적 HPUI이미지 아래로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-420.0f });
+				BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-426.0f });
 			}
 			if (MyMoveTime >= 0.3f)
 			{
 				PoeCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
+				BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-436.0f });
 				MyTackleEffect->Off();
 			}
 			if (MyMoveTime >= 0.4f)
@@ -567,6 +570,7 @@ void BattleUnitRenderer::WaterGun()
 			PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
 			//적 피격시 적 HPUI이미지 들썩
 			BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-440.0f });
+			BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-446.0f });
 		}
 
 		{	//적 푸키먼 피격 반짝반짝
@@ -576,6 +580,7 @@ void BattleUnitRenderer::WaterGun()
 				PoeCurrentPokemon_->SetPivot({ 220.0f,-105.0f });
 				//적 HPUI이미지 아래로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-420.0f });
+				BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-426.0f });
 			}
 			if (MyMoveTime >= 1.7f)
 			{
@@ -588,6 +593,7 @@ void BattleUnitRenderer::WaterGun()
 				PoeCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetEnemyHPUI()->SetPivot({ -450.0f,-430.0f });
+				BattleInter->GetEnemyHP()->SetPivot({ -502.0f,-436.0f });
 			}
 			if (MyMoveTime >= 2.0f)
 			{
@@ -769,6 +775,8 @@ void BattleUnitRenderer::EnemyTackle()
 			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
 			//나 피격시 적 HPUI이미지 들썩
 			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
+			BattleInter->GetMyHP()->SetPivot({ 0.0f,-200.0f });
+			BattleInter->GetEXP()->SetPivot({ -80.0f,-280.0f });
 		}
 
 		{	//내 푸키먼 피격 반짝반짝
@@ -777,12 +785,16 @@ void BattleUnitRenderer::EnemyTackle()
 				PlayerCurrentPokemon_ ->SetAlpha(55);
 				//내 HPUI이미지 아래로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
+				BattleInter->GetMyHP()->SetPivot({ 0.0f,-220.0f });
+				BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
 			}
 			if (MyMoveTime >= 0.3f)
 			{
 				PlayerCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+				BattleInter->GetMyHP()->SetPivot({ 0.0f,-180.0f });
+				BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
 				MyTackleEffect->Off();
 			}
 			if (MyMoveTime >= 0.4f)
