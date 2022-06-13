@@ -49,6 +49,7 @@ private:
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend; // ½ºÅ³
+	GameEngineRenderer* BattleStatus_;
 
 	BattleInterface* MainInterface;
 
@@ -135,7 +136,7 @@ public:
 	void ShowRankUpAndDown(const std::string& _Pokemon, PokemonAbility _Ability, int _Rank);
 	void ShowGetEXP(const std::string& _PlayerPokemon, int _EXP);
 	void ShowChangePokemon(const std::string& _Poe, const std::string& _PoePokemon);
-	void ShowLevelUp(const std::string& _PlayerPokemon, int _Lv);
+	void ShowLevelUp(const std::string& _PlayerPokemon, int _Lv, bool _Idx = false);
 	void ShowRunaway();
 
 	//
