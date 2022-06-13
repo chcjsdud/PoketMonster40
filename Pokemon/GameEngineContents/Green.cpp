@@ -10,13 +10,11 @@
 #include "RoomTileMap4.h"
 #include "InteractionText.h"
 
-// 테스트용
-#include <GameEngineBase/GameEngineInput.h>
-
 Green* Green::NPCGreen = nullptr;
 Green::Green() 
 	: IsRedSelectFinish_(false)
 	, IsGreenMove_(false)
+	, IsSelectDialog_(false)
 {
 	NPCGreen = this;
 }
@@ -27,8 +25,6 @@ Green::~Green()
 
 void Green::Start()
 {
-	GameEngineInput::GetInst()->CreateKey("Greentest", 'G');
-	
 	NPCCollision_ = CreateCollision("NPCColBox", { 60,60 });
 	NPCUpCollision_ = CreateCollision("GreenDirZColBox", { 20,5 }, { 0,-32 });
 	NPCDownCollision_ = CreateCollision("GreenDirZColBox", { 20,5 }, { 0,32 });
@@ -85,11 +81,6 @@ void Green::Update()
 	NPCMoveAnim();
 	RedSelectPokemonAfter();
 	RedGreenBattle();
-
-	if (true == GameEngineInput::GetInst()->IsPress("Greentest"))
-	{
-		IsRedSelectFinish_ = true;
-	}
 }
 
 void Green::RedSelectPokemonAfter()
@@ -124,6 +115,7 @@ void Green::RedSelectPokemonAfter()
 		if (false == IsStart_[4] && GetAccTime() >= NextDirMoveTimer_)
 		{
 			IsStart_[4] = true;
+			RoomTileMap4::GetInst()->Pokeball0->Off();
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 			TmpText->SetPosition(PlayerRed::MainRed_->GetPosition());
 			TmpText->AddText("GREEN: I'll take this one, then!");

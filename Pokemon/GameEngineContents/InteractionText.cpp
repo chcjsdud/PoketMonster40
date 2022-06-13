@@ -9,6 +9,7 @@
 #include "Green.h"
 #include "ShopChoiceOption.h"
 #include "CenterChoiceOption.h"
+#include "YesOrNo.h"
 #include "WorldMapLevel.h"
 
 bool InteractionText::IsCenterMove_ = false;
@@ -20,6 +21,7 @@ InteractionText::InteractionText()
 	, IsSetting_(false)
 	, IsShop_(false)
 	, IsCenter_(false)
+	, IsYesNo_(false)
 	, IsChoice_(false)
 	, IsBrock_(false)
 	, IsNPC5Start_(false)
@@ -67,6 +69,7 @@ void InteractionText::ChoiceEnd()
 	IsChoice_ = false;
 	IsCenter_ = false;
 	IsShop_ = false;
+	IsYesNo_ = false;
 
 	if (Fonts->IsWait())
 	{
@@ -119,6 +122,12 @@ void InteractionText::Update()
 	{
 		IsBrock_ = true;
 	}
+	else if (Fonts->GetCurrentString() == "the GRASS POKEMON BULBASAUR?" 
+		|| Fonts->GetCurrentString() == "WATER POKEMON SQUIRTLE?"
+		|| Fonts->GetCurrentString() == "FIRE POKEMON CHARMANDER?")
+	{
+		IsYesNo_ = true;
+	}
 	else if (Fonts->GetCurrentString() == "You came from PALLET TOWN?")
 	{
 		IsNPC5Start_ = true;
@@ -151,7 +160,6 @@ void InteractionText::Update()
 		// 대화가 끝났을 때 z 키누르면 종료
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
-			PlayerRed::MainRed_->PopUpPokemonPreview(3);
 			if (true == PlayerRed::MainRed_->GetStartEvent())
 			{
 				PlayerRed::MainRed_->SetOakCall(true);
@@ -167,6 +175,11 @@ void InteractionText::Update()
 				//NPCBase::NPC_->SetOakFollow(false);
 			}
 
+			if (true == Green::NPCGreen->GetSelectDialog())
+			{
+				Green::NPCGreen->SetRedSelectFinish(true);
+			}
+			
 			if (true == PlayerRed::MainRed_->GetGreenBattle())
 			{
 				Green::NPCGreen->SetGreenMove(true);
@@ -209,6 +222,14 @@ void InteractionText::MakeChoiceOption()
 	if (true == IsShop_)
 	{
 		ShopChoiceOption* TmpOption = GetLevel()->CreateActor<ShopChoiceOption>();
+		TmpOption->SetPosition(GetPosition());
+		TmpOption->SetParent(this);
+		IsChoice_ = true;
+		return;
+	}
+	if (true == IsYesNo_)
+	{
+		YesOrNo* TmpOption = GetLevel()->CreateActor<YesOrNo>();
 		TmpOption->SetPosition(GetPosition());
 		TmpOption->SetParent(this);
 		IsChoice_ = true;

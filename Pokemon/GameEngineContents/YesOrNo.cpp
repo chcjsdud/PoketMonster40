@@ -1,8 +1,16 @@
 #include "YesOrNo.h"
+#include "InteractionText.h"
+#include "PlayerRed.h"
+#include "Green.h"
+#include "RoomTileMap4.h"
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngineBase/GameEngineInput.h>
 
 YesOrNo::YesOrNo() 
+	: UIRenderer_(nullptr)
+	, ArrowRenderer_(nullptr)
+	, Dialog_(nullptr)
+	, Index_(0)
 {
 }
 
@@ -12,63 +20,76 @@ YesOrNo::~YesOrNo()
 
 void YesOrNo::Start()
 {
-	if (false == GameEngineInput::GetInst()->IsKey("YesOrNoSelect"))
-	{
-		GameEngineInput::GetInst()->CreateKey("YesOrNoUp", VK_UP);
-		GameEngineInput::GetInst()->CreateKey("YesOrNoDown", VK_DOWN);
-		GameEngineInput::GetInst()->CreateKey("YesOrNoClsoe", 'x');
-		GameEngineInput::GetInst()->CreateKey("YesOrNoSelect", 'Z');
-	}
+	UIRenderer_ = CreateRenderer("ChoiceOption1.bmp");
+	UIRenderer_->SetPivot({ 250, 30 });
+
+	ArrowRenderer_ = CreateRenderer("ChoiceOption_Arrow.bmp");
+	ArrowRenderer_->SetPivot({ 200, 0 });
+
+	ArrowPos_.push_back({ 200, 0 });
+	ArrowPos_.push_back({ 200, 60 });
 }
 
 void YesOrNo::Update()
 {
-	if (GameEngineInput::GetInst()->IsDown("YesOrNoUp"))
+	if (true == GameEngineInput::GetInst()->IsDown("Z"))
 	{
-		if (1 == Index_)
-		{
-			--Index_;
-		}
+		SelectIndex();
 	}
-	
-	else if (GameEngineInput::GetInst()->IsDown("YesOrNoDown"))
+	if (true == GameEngineInput::GetInst()->IsDown("Up"))
 	{
-		if (0 == Index_)
-		{
-			++Index_;
-		}
+		Index_ -= 1;
+	}
+	if (true == GameEngineInput::GetInst()->IsDown("Down"))
+	{
+		Index_ += 1;
 	}
 
-	else if (GameEngineInput::GetInst()->IsDown("YesOrNoClsoe"))
+	if (Index_ < 0)
 	{
-		Off();
+		Index_ = 0;
+	}
+	if (1 < Index_)
+	{
+		Index_ = 1;
 	}
 
-	else if (GameEngineInput::GetInst()->IsDown("YesOrNoSelect"))
-	{
-		Off();
-	}
-
-	ShowArrow();
+	ArrowRenderer_->SetPivot(ArrowPos_[Index_]);
 }
 
-
-void YesOrNo::Init()
+void YesOrNo::SelectIndex()
 {
-	Dialog_ = CreateRenderer("Yes.bmp");
-	Dialog_->SetPivot(float4{ 310, 50 });
+	switch (Index_)
+	{
+	case 0:
+	{
+		PlayerRed::MainRed_->PopUpPokemonPreview(3);
+		RoomTileMap4::GetInst()->Pokeball1->Off();
+		Green::NPCGreen->SetSelectDialog(true);
+		Dialog_->ClearText();
+		Dialog_->AddText("This POKEMON is really quite");
+		Dialog_->AddText("energetic!");
+		Dialog_->AddText("Red received the SQUIRTLE");
+		Dialog_->AddText("from PROF. OAK!");
+		Dialog_->Setting();
+		break;
+	}
+	break;
+	case 1:
+	{
+		PlayerRed::MainRed_->PopUpPokemonPreview(3);
+		break;
+	}
+	break;
+	default:
+		break;
+	}
+	Dialog_->ChoiceEnd();
+	Death();
 }
 
-void YesOrNo::ShowArrow()
+
+void YesOrNo::SetParent(InteractionText* _Parent)
 {
-	if (0 == Index_)
-	{
-		Dialog_->SetImage("Yes.bmp");
-	}
-
-	else if (1 == Index_)
-	{
-		Dialog_->SetImage("No.bmp");
-	}
+	Dialog_ = _Parent;
 }
-

@@ -1039,6 +1039,9 @@ void PlayerRed::InteractionUpdate()
 					RedCurrentIndex_.x = x;
 					if (false == IsGreenBattleCheck_)
 					{
+						RedRender_->ChangeAnimation("IdleUp");
+						Green::NPCGreen->NPCRender_->ChangeAnimation("IdleDown");
+						
 						InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 						TmpText->SetPosition(GetPosition());
 						TmpText->AddText("GREEN: Wait, Red!");
@@ -1251,13 +1254,13 @@ void PlayerRed::PopUpPokemonPreview(int _Index)
 		break;
 
 	case 1:
-		PokemonPreview_ = CreateRenderer("Select_Charmander.bmp");
+		PokemonPreview_ = CreateRenderer("Select_Squirtle.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);
 		PokemonPreview_->SetPivot({ 0,-80 });
 		break;
 
 	case 2:
-		PokemonPreview_ = CreateRenderer("Select_Squirtle.bmp");
+		PokemonPreview_ = CreateRenderer("Select_Charmander.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);
 		PokemonPreview_->SetPivot({ 0,-80 });
 		break;

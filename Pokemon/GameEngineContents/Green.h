@@ -20,16 +20,35 @@ public:
 	bool IsRedSelectFinish_;
 	bool IsGreenMove_;
 
+	inline void SetRedSelectFinish(const bool _Value)
+	{
+		IsRedSelectFinish_ = _Value;
+	}
+
 	inline void SetGreenMove(const bool _Value)
 	{
 		IsGreenMove_ = _Value;
 	}
 
+	inline void SetSelectDialog(const bool _Value)
+	{
+		IsSelectDialog_ = _Value;
+	}
+
+	inline bool GetRedSelectFinish()
+	{
+		return IsRedSelectFinish_;
+	}
+	
 	inline bool GetGreenMove()
 	{
 		return IsGreenMove_;
 	}
 
+	inline bool GetSelectDialog()
+	{
+		return IsSelectDialog_;
+	}
 protected:
 
 private:
@@ -37,6 +56,7 @@ private:
 	void Update() override;
 
 	std::vector<bool> IsStart_;
+	bool IsSelectDialog_;
 
 	// 레드 포켓몬 선택 이후 그린 포켓몬 선택 및 대화
 	void RedSelectPokemonAfter();

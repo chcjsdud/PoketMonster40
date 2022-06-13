@@ -1,5 +1,6 @@
 #pragma once
 #include "PokemonTileMap.h"
+#include "Room4Pokeball.h"
 
 // 설명 : 오박사 연구소
 class RoomTileMap4 : public PokemonTileMap
@@ -24,13 +25,13 @@ public:
 	RoomTileMap4& operator=(const RoomTileMap4& _Other) = delete;
 	RoomTileMap4& operator=(RoomTileMap4&& _Other) noexcept = delete;
 
+	Room4Pokeball* Pokeball0;	// 이상해씨
+	Room4Pokeball* Pokeball1;	// 꼬부기
+	Room4Pokeball* Pokeball2;	// 파이리
 protected:
 
 private:
 	void Start() override;
 
-	GameEngineRenderer* PokeballRender0_;	// 이상해씨
-	GameEngineRenderer* PokeballRender1_;	// 꼬부기
-	GameEngineRenderer* PokeballRender2_;	// 파이리
 };
 

@@ -37,6 +37,7 @@ private:
 	bool IsSetting_;
 	bool IsShop_;
 	bool IsCenter_;
+	bool IsYesNo_;
 	bool IsChoice_;
 	bool IsBrock_;
 	bool IsNPC5Start_;
