@@ -11,6 +11,7 @@
 #include "PokemonInfoManager.h"
 #include "FadeActor.h"
 #include "PlayerRed.h"
+#include <GameEngine/GameEngineImageManager.h>
 
 Bag::Bag()
 	: BagType_(ItemType::ITEM)
@@ -61,26 +62,8 @@ void Bag::Start()
 	}
 }
 
-float Time = 0;
-int Index = 0;
-
 void Bag::Update()
 {
-	Time += GameEngineTime::GetDeltaTime();
-
-	if (0.06f <= Time)
-	{
-		++Index;
-		Time = 0;
-
-		if (384 == Index)
-		{
-			Index = 0;
-		}
-
-		Title_->SetImage("TitleImage_" + std::to_string(Index) + ".bmp");
-	}
-
 	//자식 UI 체크
 	if (nullptr != ChildUI_ 
 		&& false == ChildUI_->IsUpdate())
@@ -887,8 +870,6 @@ void Bag::BagInit()
 	FadeActor_->SetPosition(GetPosition());
 
 	FadeActor_->FadeOut();
-
-	Title_ = CreateRenderer("TitleImage_0.bmp", 1000);
 }
 
 void Bag::UpFonts()

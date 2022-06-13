@@ -92,6 +92,16 @@ public:
 		return MyPokemonList_;
 	}
 
+	inline void AddPokemon(Pokemon* _Pokemon)
+	{
+		if (nullptr == _Pokemon)
+		{
+			return;
+		}
+
+		MyPokemonList_.push_back(_Pokemon);
+	}
+
 	inline std::vector<class Item*>& GetItemList()
 	{
 		return MyItemList_;

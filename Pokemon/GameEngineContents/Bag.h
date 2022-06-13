@@ -98,7 +98,6 @@ private:
 	class FadeActor* FadeActor_;
 
 	class GameEngineRenderer* BagRedrerer_;
-	GameEngineRenderer* Title_;
 	GameEngineRenderer* BagName_;
 	GameEngineRenderer* BagDialog_;
 	GameEngineRenderer* DialogBox_;
@@ -111,7 +110,7 @@ private:
 
 	GameEngineRenderer* SelectArrow_; //아이템 선택 화살표
 	int SelectIndex_;
-
+	
 	std::vector<Item*> ItemList_;
 	std::vector<Item*> KeyItemList_;
 	std::vector<Item*> BallList_;
