@@ -26,6 +26,7 @@
 #include "Bush.h"
 #include "NPCBase.h"
 #include "Oak.h"
+#include "Green.h"
 
 #include "Bag.h"
 #include "Shop.h"
@@ -66,6 +67,7 @@ PlayerRed::PlayerRed()
 	, IsRedMoveCheck_(false)
 	, IsRedMoveEndCheck_(false)
 	, IsControllOnCheck_(false)
+	, IsGreenBattleCheck_(false)
 	, NPC5Check_(false)
 	, LerpX_(0)
 	, LerpY_(0)
@@ -931,6 +933,30 @@ void PlayerRed::InteractionUpdate()
 					TmpText->AddText("OAK: Hey! Wait!");
 					TmpText->AddText("Don't go out!");
 					TmpText->Setting();
+				}
+			}
+		}
+
+		{
+			float4 NPCCheckPos = GetPosition() - RoomTileMap4::GetInst()->GetPosition();
+			TileIndex NPCCheckIndex = WorldTileMap1::GetInst()->GetTileMap().GetTileIndex(NPCCheckPos);
+
+			for (int x = 5; x <= 7; x++)
+			{
+				if (NPCCheckIndex.X == x && NPCCheckIndex.Y == 6 && true == Green::NPCGreen->IsRedSelectFinish_)
+				{
+					RedCurrentIndex_.x = x;
+					if (false == IsGreenBattleCheck_)
+					{
+						InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+						TmpText->SetPosition(GetPosition());
+						TmpText->AddText("GREEN: Wait, Red!");
+						TmpText->AddText("Let's check out our POKEMON!");
+						TmpText->AddText("Come on, I'll take you on!");
+						TmpText->Setting();
+
+						IsGreenBattleCheck_ = true;// 텍스트 끝나면 그린이 레드쪽으로 이동
+					}
 				}
 			}
 		}
