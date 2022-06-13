@@ -35,6 +35,8 @@ public:
 	static NPCBase* NPC_;
 	static bool IsTalk_;
 
+	GameEngineRenderer* NPCRender_;
+	
 	void Start() override;
 	void Update() override;
 	void Render() override;
@@ -76,7 +78,7 @@ protected:
 	void NPCInteractDir();
 	bool IsInside(float4 _LeftTop, float4 _RightBot);
 	PokemonTileMap*			CurrentTileMap_;
-	GameEngineRenderer*		NPCRender_;
+	//GameEngineRenderer*		NPCRender_;
 	GameEngineCollision*	NPCCollision_;
 	GameEngineCollision*	NPCUpCollision_;
 	GameEngineCollision*	NPCDownCollision_;

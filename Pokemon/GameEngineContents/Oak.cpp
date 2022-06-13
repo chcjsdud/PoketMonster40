@@ -8,6 +8,7 @@
 #include "WorldTileMap1.h"
 #include "RoomTileMap4.h"
 #include "PlayerRed.h"
+#include "Green.h"
 #include "InteractionText.h"
 
 Oak::Oak()
@@ -196,7 +197,6 @@ void Oak::OakFollow()
 			PlayerRed::MainRed_->RedMoveControll(RedDir::Left, 1);
 		}
 
-		// 살려줘...
 		if (false == IsStart_[10] && 21 == RedCurrentIndexX_ && GetAccTime() >= NextDirMoveTimer_)
 		{
 			IsStart_[10] = true;
@@ -286,7 +286,7 @@ void Oak::Room4Enter()
 			PlayerRed::MainRed_->SetRedMoveEnd(true);
 			PlayerRed::MainRed_->SetControllOn(false);
 
-			// 그린 뒤돌아
+			Green::NPCGreen->NPCRender_->ChangeAnimation("IdleUp");
 		}
 
 		if (false == IsStart_[19] && true == PlayerRed::MainRed_->GetRedMoveEnd())
