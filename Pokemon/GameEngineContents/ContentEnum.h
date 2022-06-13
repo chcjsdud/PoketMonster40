@@ -101,6 +101,7 @@ enum class WorldBackgroundSoundEnum
 	PewterCity,
 	OakLap,
 	Gym,
+	Battle,
 	Max
 };
 

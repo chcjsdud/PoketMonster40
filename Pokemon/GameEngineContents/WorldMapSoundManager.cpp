@@ -1,4 +1,5 @@
 #include "WorldMapSoundManager.h"
+#include "PlayerRed.h"
 
 WorldMapSoundManager* WorldMapSoundManager::Inst_;
 
@@ -96,10 +97,15 @@ void WorldMapSoundManager::PlayEffectSound(WorldSoundEffectEnum _Enum)
 
 void WorldMapSoundManager::ChangeSound(WorldBackgroundSoundEnum _Enum)
 {
+	if (true == PlayerRed::MainRed_->GetStartBattle())
+	{
+		return;
+	}
 	if (CurrentSoundState_ == _Enum || NextSoundState_ == _Enum)
 	{
 		return;
 	}
+
 	NextSoundState_ = _Enum;
 }
 

@@ -40,6 +40,12 @@ WorldMapLevel::~WorldMapLevel()
 
 void WorldMapLevel::StartBattleLevelByNPC(BattleNpcType _Type)
 {
+	BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
+	if (nullptr == TmpBattleLevel)
+	{
+		return;
+	}
+
 	switch (_Type)
 	{
 	case BattleNpcType::Brock:
@@ -49,8 +55,17 @@ void WorldMapLevel::StartBattleLevelByNPC(BattleNpcType _Type)
 		{
 			TmpBattleLevel->StartBattleLevelByNPC(NPCBrock::GetInst());
 		}
-	}
 		break;
+	}
+	case BattleNpcType::Rival:
+	{
+		BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
+		if (nullptr != TmpBattleLevel)
+		{
+			TmpBattleLevel->StartBattleLevelByNPC(NPCBrock::GetInst());
+		}
+		break;
+	}
 	default:
 		break;
 	}
@@ -68,7 +83,7 @@ void WorldMapLevel::StartBattleLevelByWildeToWorld()
 void WorldMapLevel::Loading()
 {
 	YSortOn(static_cast<int>(RenderOrder::Player));
-	
+
 	CreateActor<WorldMapSoundManager>();
 	CreateActor<WorldMapBackground>();
 	CreateActor<WorldTileMap1>();
@@ -96,10 +111,7 @@ void WorldMapLevel::Loading()
 
 void WorldMapLevel::Update()
 {
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
-	{
-		StartBattleLevelByWildeToWorld();
-	}
+	
 }
 
 void WorldMapLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)

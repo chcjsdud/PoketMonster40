@@ -119,7 +119,7 @@ void PokemonEngine::InitKey()
 	GameEngineInput::GetInst()->CreateKey("Teleport1", 0x31);
 	GameEngineInput::GetInst()->CreateKey("Teleport2", 0x32);
 	GameEngineInput::GetInst()->CreateKey("Teleport3", 0x33);
-	GameEngineInput::GetInst()->CreateKey("JBMTest2", 0x36);
+	GameEngineInput::GetInst()->CreateKey("ForcedBattle", 0x36);
 }
 
 

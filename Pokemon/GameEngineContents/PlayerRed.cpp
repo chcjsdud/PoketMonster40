@@ -28,6 +28,7 @@
 #include "NPCBase.h"
 #include "Oak.h"
 #include "Green.h"
+#include "BattleStartUI.h"
 
 #include "Bag.h"
 #include "Shop.h"
@@ -72,6 +73,7 @@ PlayerRed::PlayerRed()
 	, IsGreenBattleCheck_(false)
 	, NPC5Check_(false)
 	, IsClearNPC5_(false)
+	, IsStartBattle_(false)
 	, LerpX_(0)
 	, LerpY_(0)
 	, MoveTimer_(0.0f)
@@ -460,27 +462,33 @@ void PlayerRed::Update()
 	SoundTileCheck();
 
 
-	if (true == GameEngineInput::GetInst()->IsPress("Teleport1"))
+	if (true == GameEngineInput::GetInst()->IsDown("Teleport1"))
 	{
 		CurrentTileMap_ = WorldTileMap1::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(20, 95));
 	}
-	if (true == GameEngineInput::GetInst()->IsPress("Teleport2"))
+	if (true == GameEngineInput::GetInst()->IsDown("Teleport2"))
 	{
 		CurrentTileMap_ = WorldTileMap1::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(19, 33));
 	}
-	if (true == GameEngineInput::GetInst()->IsPress("Teleport3"))
+	if (true == GameEngineInput::GetInst()->IsDown("Teleport3"))
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(23, 36));
 	}
 
-	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
+	if (true == GameEngineInput::GetInst()->IsDown("JBMTest"))
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
 		IsClearNPC5_ = true;
+	}
+
+	if (true == GameEngineInput::GetInst()->IsDown("ForcedBattle"))
+	{
+		BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+		TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::None);
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("RTest"))
 	{
@@ -844,11 +852,8 @@ void PlayerRed::MoveAnim()
 				float RandomF = GameEngineRandom::GetInst_->RandomFloat(0.0f, 1.0f);
 				if (RandomF <= 0.1f)
 				{
-					WorldMapLevel* TmpWorldLevel = dynamic_cast<WorldMapLevel*>(GameEngine::GetInst().FindLevel("WorldMap"));
-					if (nullptr != TmpWorldLevel)
-					{
-						TmpWorldLevel->StartBattleLevelByWildeToWorld();
-					}
+					BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+					TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::None);
 				}
 			}
 

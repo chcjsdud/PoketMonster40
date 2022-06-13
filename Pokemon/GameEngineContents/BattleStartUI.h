@@ -1,6 +1,7 @@
 #pragma once
 #include <GameEngine/GameEngineActor.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <GameEngineBase/GameEngineSound.h>
 
 #include "WorldMapLevel.h"
 
@@ -24,11 +25,16 @@ protected:
 	void Start() override;
 	void Update() override;
 
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
 private:
+	GameEngineSoundPlayer BgmPlayer_;
 	GameEngineRenderer* Renderer_;
 	BattleNpcType Type_;
 	float AnimTimer_;
 	int Index_;
 
+	void StartBattle();
 };
 

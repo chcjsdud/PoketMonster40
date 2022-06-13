@@ -167,6 +167,15 @@ public:
 		ChildUI_ = _Child;
 	}
 
+	inline void SetStartBattle(bool _On)
+	{
+		IsStartBattle_ = _On;
+	}
+	inline bool GetStartBattle()
+	{
+		return IsStartBattle_;
+	}
+
 	void PopUpPokemonPreview(int _Index);
 
 protected:
@@ -201,6 +210,7 @@ private:
 	bool NPC5Check_;
 	bool IsClearNPC5_;
 	bool IsStartNPC5_;
+	bool IsStartBattle_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;

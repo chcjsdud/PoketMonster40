@@ -11,6 +11,7 @@
 #include "CenterChoiceOption.h"
 #include "YesOrNo.h"
 #include "WorldMapLevel.h"
+#include "BattleStartUI.h"
 
 bool InteractionText::IsCenterMove_ = false;
 bool InteractionText::IsCenterAnim_ = false;
@@ -194,11 +195,8 @@ void InteractionText::Update()
 
 			if (true == IsBrock_)
 			{
-				WorldMapLevel* CurrentLevel = dynamic_cast<WorldMapLevel*>(GetLevel());
-				if (nullptr != CurrentLevel)
-				{
-					CurrentLevel->StartBattleLevelByNPC(BattleNpcType::Brock);
-				}
+				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Brock);
 			}
 			if (true == PlayerRed::MainRed_->GetStartNPC5Event() && true == IsNPC5Start_)
 			{

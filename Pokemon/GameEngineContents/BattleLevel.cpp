@@ -259,8 +259,8 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	//김예나 : 이 브금은 실제론 월드맵에서 전투 걸렸을때부터 시작되야 합니다.
 	BState_ = BattleState::Openning;
-	BgmPlayer_ = GameEngineSound::SoundPlayControl("Wild_Battle.mp3");
-	BgmPlayer_.SetVolume(0.1f);
+	//BgmPlayer_ = GameEngineSound::SoundPlayControl("Wild_Battle.mp3");
+	//BgmPlayer_.SetVolume(0.1f);
 
 	if (PlayerRed_ == nullptr)
 	{
@@ -292,7 +292,7 @@ void BattleLevel::ShowOpenning()
 
 void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
-	BgmPlayer_.Stop();
+	BgmPlayer_.StopWithNullCheck();
 
 	OpenningEnd_ = false;
 	EnddingEnd_ = false;
