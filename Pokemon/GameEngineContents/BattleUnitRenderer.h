@@ -86,13 +86,15 @@ private:
 	float4 OpponentRenderer_Pos_;
 
 	float PlayerTime_;
+	float PlayerTime_2;
 	float MoveSpeed;
 	float RockSpeed;
 
 	bool PlayerStop;//김예나 : 일정 위치 도착하면 멈추도록 할 조건문
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
 	bool Fighting;//김예나 : 싸움 채팅중엔 꺼져야함
-	bool FallCheck;
+	bool FallCheck;//몬스터볼 던진후 바닥에 닿았는지
+	bool IsCatch;//잡힌애인지 안잡힌 애인지(푸키먼 잡힌 상태에 따른 On, Off용)
 
 	float TimeCheck;
 
@@ -123,6 +125,8 @@ private:
 public:
 	void Opening();
 	void Opening2();
+	void TrainerOpening1();
+	void TrainerOpening2();
 	void DoomChit();
 	bool GetPlayerStop() const
 	{

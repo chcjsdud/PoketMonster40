@@ -60,6 +60,8 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, SkillName_(SkillName::None)
 	, BallFall(-170.0f)
 	, FallCheck(false)
+	, PlayerTime_2(0.0f)
+	, IsCatch(false)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -115,9 +117,11 @@ void BattleUnitRenderer::Update()
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (FirstMove == true)
 	{
-		Opening();
+		//Opening();
+		TrainerOpening1();
 	}
-	Opening2();
+	//Opening2();
+	TrainerOpening2();
 
 	if (SkillName_ != SkillName::None && (MyTurnEnd == false || EnemyTurnEnd == false))
 	{
@@ -271,6 +275,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MoveSpeed = 900.0f;//원래는200
 	RockSpeed = 300.0f;
 	CatchBallTime = 0.0f;
+	IsCatch = false;
 
 	BattleDataR_ = Level_->GetBattleData();
 	
@@ -287,6 +292,10 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
 		PlayerRenderer_->CreateAnimation("Player.bmp", "Stop", 0, 0, 0.1f, false);
 		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
+
+		//상대 트레이너
+		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 야생 포켓몬처럼 다른 랜더러 뜨게 하면 될거같아요
+		OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
 
 		//푸키먼
 		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
@@ -341,6 +350,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MyTackleEffect->Off();
 	MyWaterGunEffect->Off();
 	MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
+	OpponentRenderer_->Off();
+	OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
 	EffectX = -105.0f;
 	EffectY = 20.0f;
 	Rock1->Off();
@@ -361,6 +372,7 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 	{
 		BattleDataR_ = nullptr;
 		PlayerTime_ = 0.0f;
+		PlayerTime_2 = 0.0f;
 		BattleInter->SetPlayerEnd(false);
 		PlayerStop = false;
 		FirstMove = true;
@@ -844,6 +856,7 @@ void BattleUnitRenderer::Catch()
 	CatchBallPivot = { BallX,BallY };
 	if (MyCatchEnd == false)
 	{
+		IsCatch = true;
 		MonsterBall->SetPivot({ -480.0f,0.0f });
 		MonsterBall->On();
 		MonsterBall->SetPivot({ CatchBallPivot });
@@ -851,12 +864,17 @@ void BattleUnitRenderer::Catch()
 		{	
 			Alpha_Time += GameEngineTime::GetDeltaTime() * 200.0f;
 			MonsterBall->Off();
+			CatchBallOpen->SetPivot({ 210.0f,-170.0f });
 			CatchBallOpen->On();
 			CatchBallOpen->ChangeAnimation("Open");
 			PoeCurrentPokemon_->SetAlpha((unsigned int)((float)255.0f - (Alpha_Time) < (float)0.0f ? (float)0.0f : (float)255.0f - (Alpha_Time)));
 			//삼항연산자 알파값이 0보다 크면 해당값, 아니라면 0고정
 			if (PoeCurrentPokemon_->GetAlpha() == 0)
 			{
+				if (IsCatch == true)
+				{
+					PoeCurrentPokemon_->Off();
+				}
 				BallFallTime += GameEngineTime::GetDeltaTime() * 200.0f;
 				CatchBallOpen->Off();
 				MonsterBall->ChangeAnimation("Ball");
@@ -882,3 +900,131 @@ void BattleUnitRenderer::Catch()
 	}
 }
 
+void BattleUnitRenderer::TrainerOpening1()
+{
+	OpponentRenderer_->On();
+	PoeCurrentPokemon_->Off();
+
+	TimeCheck = 0.0f;
+	PlayerTime_ += GameEngineTime::GetDeltaTime() * MoveSpeed;
+	PlayerRenderer_->SetPivot({ 480 - PlayerTime_, 31 });
+
+	OpponentRenderer_->SetPivot({ -450 + PlayerTime_,-155 });
+
+	if (PlayerRenderer_->GetPivot().x <= -200.0f)//float은 정확하게 딱맞아 떨어지지 않는다
+	{
+		PlayerRenderer_->SetPivot({ -200.0f, 31.0f });//플레이어 공식위치 고정
+		OpponentRenderer_->SetPivot({ 230.0f,-155.0f });//적 트레이너 공식위치 고정
+		MoveSpeed = 0.0f;
+		PlayerStop = true;
+		FirstMove = false;
+	}
+}
+
+void BattleUnitRenderer::TrainerOpening2()
+{
+	//김예나 : 트레이너가 먼저 포켓몬을 꺼내고 그 다음에"Go"애니메이션이 시작됨
+	{
+		float Move = PlayerRenderer_->GetPivot().x;
+		float BallMoveY = MonsterBall->GetPivot().y;
+		float BallMoveX = MonsterBall->GetPivot().x;
+
+		if (BattleInter->GetPlayerEnd() == true)
+		{
+			//김예나 : 트레이너가 나가면서 푸키먼을 꺼냄
+			//상대 트레이너는 포켓몬을 꺼냈다! 텍스트후
+
+			CatchBallOpen->SetPivot({ 210.0f,-70.0f });
+			CatchBallOpen->On();
+			CatchBallOpen->ChangeAnimation("Open");
+
+			MoveSpeed = 900.0f;
+			PlayerTime_2 += GameEngineTime::GetDeltaTime() * MoveSpeed;
+
+			if (IsCatch == false)
+			{
+				PoeCurrentPokemon_->On();
+			}
+			PoeCurrentPokemon_->SetAlpha(0 + (int)PlayerTime_2);
+			if (PoeCurrentPokemon_->GetAlpha() >= 255)
+			{	//알파값 255이상이면 255로 고정
+				PoeCurrentPokemon_->SetAlpha(255);
+				CatchBallOpen->Off();
+			}
+			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
+
+			OpponentRenderer_->SetPivot({ 230.0f + PlayerTime_2,-155.0f });
+			//여기까지가 상대가 포켓몬을 꺼내는 애니메이션///////////////////////
+
+
+			//여기부터 내가 포켓몬을 꺼내는 애니메이션//////////////////////////
+			//여기서 가랏! 꼬부기! 시작
+
+			PlayerRenderer_->ChangeAnimation("Go");
+
+			if (OpponentRenderer_->GetPivot().x >= 1000.0f)
+			{
+				//트레이너가 화면밖에 나가면 끄고 Go애니메이션 실행
+				OpponentRenderer_->Off();
+
+				if (PlayerRenderer_->GetPivot().x < -960.0f)
+				{
+					PlayerRenderer_->Off();
+				}
+			}
+
+
+			BallLerp += GameEngineTime::GetDeltaTime();
+			//플레이어 무빙
+			BattleUnitRenderer::PlayerRenderer_->SetPivot({ Move - (GameEngineTime::GetDeltaTime() * 900.0f),31.0f });
+			if (MonsterBall->IsUpdate() == false)
+			{
+				MonsterBall->On();
+				MonsterBall->ChangeAnimation("BallRoll");
+			}
+
+			{	//볼 던지기 무빙
+				if (BallLerp <= 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
+				}
+
+				if (BallLerp > 1.0f)
+				{
+					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
+					if (MonsterBall->GetPivot().y > 1000.0f)
+					{
+						MonsterBall->Off();
+					}
+				}
+
+				if (BallLerp > 2.0f)
+				{	//내 포켓몬 출현 + HPUI
+					PlayerCurrentPokemon_->On();
+					BattleInter->GetMyHPUI()->On();
+					BattleInter->GetMyHP()->On();
+					BattleInter->GetEXP()->On();
+
+				}
+
+				if (BallLerp > 3.0f && Fighting == false)
+				{	//명령창 ON + 둠칫효과 시작
+
+					BattleInter->GetInterfaceImage()->On();
+					BattleInter->GetSelect()->On();
+					DoomChit();
+					Level_->OpenningEnd_ = true;
+					//TailWhipMove();
+					//Tackle();
+					//WaterGun();
+					//ShellHide();
+					//EnemyRock();
+					//EnemyTackle();
+
+					Catch();
+					BattleInter->DoomChit();
+				}
+			}
+		}
+	}
+}
