@@ -15,7 +15,7 @@ enum class BattleState
 	BattlePage,
 	SelecetPage,
 	LastPage,
-	Endding
+	Endding,
 };
 
 enum class BattleTrun

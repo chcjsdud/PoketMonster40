@@ -278,15 +278,20 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	IsCatch = false;
 
 	BattleDataR_ = Level_->GetBattleData();
-	
-	// 장병문 : 처음 한번만 만들기 Start에서 하는게 더 좋아보이는데 PlayerCurrentPokemon_ 올리면 문제생겨서 일단 여기둠
-	// 추후에 수정필요할듯
+	if (nullptr == PlayerCurrentPokemon_)
+	{
+		//푸키먼
+		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
+			, 3, RenderPivot::CENTER, PlayerPokemonPos_);
+
+	}
 	if (PoeCurrentPokemon_ == nullptr)
 	{
 		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
 			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
 	}
-	if (nullptr == PlayerRenderer_)
+
+	if (PlayerRenderer_ == nullptr)
 	{
 		//플레이어
 		PlayerRenderer_ = CreateRenderer("Player.bmp", 4, RenderPivot::CENTER, PlayerRendererPos_);
@@ -309,13 +314,13 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MonsterBall->CreateAnimation("Catch4.bmp", "Catch", 0, 3, 0.2f, false);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 
-		CatchBallOpen = CreateRenderer("MonsterBall_Open4.bmp",4);
+		CatchBallOpen = CreateRenderer("MonsterBall_Open4.bmp", 4);
 		CatchBallOpen->CreateAnimation("MonsterBall_Open4.bmp", "Open", 0, 1, 0.3f, false);
 
 		MyWaterGunEffect = CreateRenderer("WaterGun4.bmp", 4);
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "WaterGun", 0, 2, 0.1f, false);
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "Water", 0, 0, 0.1f, false);
-		MyTackleEffect = CreateRenderer("Tackle4.bmp",4);
+		MyTackleEffect = CreateRenderer("Tackle4.bmp", 4);
 
 		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
 		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
@@ -336,6 +341,11 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		Rock4->SetPivot(Rock4Pivot);
 		X->SetPivot({ -200.0f,100.0f });
 	}
+	
+	// 장병문 : 처음 한번만 만들기 Start에서 하는게 더 좋아보이는데 PlayerCurrentPokemon_ 올리면 문제생겨서 일단 여기둠
+	// 추후에 수정필요할듯
+
+
 
 	PlayerRenderer_->On();
 	PlayerRenderer_->ChangeAnimation("Stop");
@@ -382,6 +392,11 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		{
 			PoeCurrentPokemon_->Death();
 			PoeCurrentPokemon_ = nullptr;
+		}
+		if (PlayerCurrentPokemon_ != nullptr)
+		{
+			PlayerCurrentPokemon_->Death();
+			PlayerCurrentPokemon_ = nullptr;
 		}
 		PlayerRenderer_->Off();
 		MonsterBall->Off();

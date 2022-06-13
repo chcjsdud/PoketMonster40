@@ -79,10 +79,10 @@ private:
 	std::vector<GameEngineRenderer*> PokemonFrontRenderer_;
 	std::vector< GameEngineRenderer*> PokemonTypeRenderer_;
 	std::vector<GameEngineRenderer*> GenderRenderer_;
-	std::vector<GameEngineRenderer*> PokemonSkillTypeRenderer_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineRenderer*> PokemonSkillTypeRenderer_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
 	std::vector<GameEngineRenderer*> PokemonSkillSelect_MiniPokemonRenderer_; // 포켓몬 아이콘 이미지 렌더러
 	std::vector<GameEngineRenderer*> PokemonSkillSelect_TypeRenderer_; // 포켓몬 타입 이미지
-	std::vector<GameEngineRenderer*> PokemonSkillSelect_SelectLineRenderer_; // 스킬 선택했을때 빨간 외곽선
+	std::vector<GameEngineRenderer*> PokemonSkillSelect_SelectLineRenderer_[6]; // 스킬 선택했을때 빨간 외곽선
 
 
 
@@ -104,12 +104,13 @@ private:
 	std::vector<GameEngineContentFont*> NextExpFonts_;
 	std::vector<GameEngineContentFont*> AbilityFonts_;
 	std::vector<GameEngineContentFont*> AbilityExplanationFonts_;
-	std::vector<GameEngineContentFont*> SkillNameFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
-	std::vector<GameEngineContentFont*> CurSkillPPFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
-	std::vector<GameEngineContentFont*> MaxSkillPPFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
-	std::vector<GameEngineContentFont*> SkillValueFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
-	std::vector<GameEngineContentFont*> SkillAccFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
-	std::vector<GameEngineContentFont*> SkillExplanationFonts_; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> SkillNameFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> CurSkillPPFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> MaxSkillPPFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> SkillValueFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> SkillAccFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+	std::vector<GameEngineContentFont*> SkillExplanationFonts_[6]; // 플레이어는 1개의 포켓몬만 가지니 벡터의 벡터 >> 그냥 벡터로 변경시켰음
+
 	GameEngineContentFont* Owner_; //레드 이름
 	GameEngineContentFont* IDNumber_;//ID 폰트
 	GameEngineContentFont* Item_; //아이템 폰트

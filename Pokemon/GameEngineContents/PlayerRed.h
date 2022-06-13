@@ -82,6 +82,11 @@ public:
 		IsControllOnCheck_ = _Value;
 	}
 
+	inline void SetGreenBattle(const bool _Value)
+	{
+		IsGreenBattleCheck_ = _Value;
+	}
+	
 	inline void SetCurrentTileMap(PokemonTileMap* _Value)
 	{
 		CurrentTileMap_ = _Value;
@@ -130,6 +135,11 @@ public:
 	inline bool GetRedMoveEnd()
 	{
 		return IsRedMoveEndCheck_;
+	}
+
+	inline bool GetGreenBattle()
+	{
+		return IsGreenBattleCheck_;
 	}
 
 	inline int GetMoney()
@@ -182,6 +192,7 @@ private:
 	bool IsRedMoveCheck_;
 	bool IsRedMoveEndCheck_;
 	bool IsControllOnCheck_;
+	bool IsGreenBattleCheck_;
 	bool NPC5Check_;
 	float LerpX_;
 	float LerpY_;
@@ -269,6 +280,8 @@ private:
 
 	void UIUpdate(); 
 	void InitMyPokemon();
+
+	bool YesOrNOpen_;
 
 	//void PopUpPokemonPreview(int _Index);
 };

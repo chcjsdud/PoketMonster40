@@ -160,6 +160,11 @@ protected:
 	void Start() override;
 	void Render() override {}
 
+	inline void LevelChangeEnd(GameEngineLevel* _PrevLevel)
+	{
+		ClearCurrentFonts();
+	}
+
 private:
 	float4 CurrentPivot_;
 	float OriginalWaitTime_;

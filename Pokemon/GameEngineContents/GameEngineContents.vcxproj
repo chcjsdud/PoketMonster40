@@ -216,6 +216,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Green.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="InteractionText.h">
       <SubType>
       </SubType>
@@ -400,6 +404,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="YesOrNo.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bag.cpp">
@@ -448,6 +456,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Flower.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Green.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -633,6 +645,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="WorldTileMap3.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="YesOrNo.cpp">
       <SubType>
       </SubType>
     </ClCompile>

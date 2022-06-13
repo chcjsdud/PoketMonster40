@@ -119,38 +119,40 @@ void BattleLevel::Update()
 			case BattlePageEnd::SetPokemon:
 				break;
 			case BattlePageEnd::LevelUp:
-				{
-					//
-					LevelUp(BattleData_->GetCurrentPlayerPokemon());
-
-					// ·¹º§¾÷ ¾îÂ¼±¸ »ðÀÔ
-					if (BattleData_->IsWild())
-					{
-						BState_ = BattleState::Endding;
-						return;
-						break;
-					}
-					else
-					{
-						const std::vector<PokemonBattleState*>& PoePokemonList = BattleData_->GetCurrentPoePokemonList();
-						for (auto Pokemon : PoePokemonList)
-						{
-							if (!Pokemon->GetPokemon()->GetInfo()->GetFaint())
-							{
-								BattleData_->SetCurrentPoePokemon(Pokemon);
-								EndAction_ = BattlePageEnd::ChangePokemon;
-								return;
-								break;
-							}
-						}
-						BState_ = BattleState::Endding;
-						return;
-						break;
-					}
-				}
-				BState_ = BattleState::Endding;
+			{
+				//
+				LevelUp(BattleData_->GetCurrentPlayerPokemon());
+				EndAction_ = BattlePageEnd::LevelUpState;
+				// ·¹º§¾÷ ¾îÂ¼±¸ »ðÀÔ
+			}
 				return;
 				break;
+			case BattlePageEnd::LevelUpState:
+			{
+				Interface_->ShowLevelUp(BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef(), BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel(), true);
+				if (BattleData_->IsWild())
+				{
+					BState_ = BattleState::Endding;
+					return;
+					break;
+				}
+				else
+				{
+					const std::vector<PokemonBattleState*>& PoePokemonList = BattleData_->GetCurrentPoePokemonList();
+					for (auto Pokemon : PoePokemonList)
+					{
+						if (!Pokemon->GetPokemon()->GetInfo()->GetFaint())
+						{
+							BattleData_->SetCurrentPoePokemon(Pokemon);
+							EndAction_ = BattlePageEnd::ChangePokemon;
+							return;
+							break;
+						}
+					}
+					BState_ = BattleState::Endding;
+				}
+			}
+			break;
 			default:
 				break;
 			}

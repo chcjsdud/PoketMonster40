@@ -53,6 +53,8 @@ BattleInterface::BattleInterface()
 	, PrevExp_(0)
 	, LerpExp_(0.0f)
 	, ExpRenderTimer_(0.0f)
+	, ChildUI_(nullptr)
+	, BattleStatus_(nullptr)
 
 {
 
@@ -154,6 +156,10 @@ void BattleInterface::Start()
 	PPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 	MaxPPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 	TypeFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
+
+	BattleStatus_ = CreateRenderer("BattleStatus.bmp", 8);
+	BattleStatus_->SetPivot({ 0 , 0 });
+	BattleStatus_->Off();
 }
 
 void BattleInterface::Render()
@@ -520,10 +526,10 @@ void BattleInterface::ShowChangePokemon(const std::string& _Poe, const std::stri
 	BattleFont_->ShowString(_Poe + " sent\\out " + _PoePokemon + "!");
 	Level_->EndFont_ = false;
 }
-void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv)
+void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv, bool _Idx)
 {
 	BattleFont_->EndFont();
-	BattleFont_->ShowString(_PlayerPokemon + "grew to\\LV. " + std::to_string(_Lv) + "!");
+	BattleFont_->ShowString(_PlayerPokemon + "grew to\\LV. " + std::to_string(_Lv) + "!", _Idx);
 	Level_->EndFont_ = false;
 }
 

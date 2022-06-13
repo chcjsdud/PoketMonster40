@@ -453,5 +453,6 @@ enum class BattlePageEnd
 	ChangePokemon,
 	EndPokemon,
 	LevelUp,
+	LevelUpState,
 	SetPokemon
 };
