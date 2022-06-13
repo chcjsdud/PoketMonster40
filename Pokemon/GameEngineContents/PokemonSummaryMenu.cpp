@@ -50,16 +50,22 @@ PokemonSummaryMenu::PokemonSummaryMenu() :
 	PokemonSkillSelect_MiniPokemonRenderer_.reserve(6);
 	TypeString_.reserve(6);
 	PokemonSkillSelect_TypeRenderer_.reserve(6);
-	PokemonSkillSelect_SelectLineRenderer_.reserve(6);
+	
 
 
-	SkillNameFonts_.reserve(4);
-	CurSkillPPFonts_.reserve(4);
-	MaxSkillPPFonts_.reserve(4);
-	PokemonSkillTypeRenderer_.reserve(4);
-	SkillValueFonts_.reserve(4);
-	SkillAccFonts_.reserve(4);
-	SkillExplanationFonts_.reserve(4);
+	for (size_t i = 0; i < 6; i++)
+	{
+		SkillNameFonts_[i].reserve(4);
+		CurSkillPPFonts_[i].reserve(4);
+		MaxSkillPPFonts_[i].reserve(4);
+		PokemonSkillTypeRenderer_[i].reserve(4);
+		SkillValueFonts_[i].reserve(4);
+		SkillAccFonts_[i].reserve(4);
+		SkillExplanationFonts_[i].reserve(4);
+		PokemonSkillSelect_SelectLineRenderer_[i].reserve(4);
+	}
+
+	
 
 }
 
@@ -161,24 +167,38 @@ void PokemonSummaryMenu::Render()
 		//======== Pokemon Skill ====================================
 		{
 			//스킬 타입 렌더러
-			for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				PokemonSkillTypeRenderer_[i]->Off();
+				for (size_t j = 0; j < PokemonSkillTypeRenderer_[i].size(); j++)
+				{
+					PokemonSkillTypeRenderer_[i][j]->Off();
+				}
 			}
 
-			for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				SkillNameFonts_[i]->Off();
+				for (size_t j = 0; j < SkillNameFonts_[i].size(); j++)
+				{
+					SkillNameFonts_[i][j]->Off();
+				}
 			}
 
-			for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				CurSkillPPFonts_[i]->Off();
+				for (size_t j = 0; j < CurSkillPPFonts_[i].size(); j++)
+				{
+					CurSkillPPFonts_[i][j]->Off();
+				}
 			}
-			for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				MaxSkillPPFonts_[i]->Off();
+				for (size_t j = 0; j < MaxSkillPPFonts_[i].size(); j++)
+				{
+					MaxSkillPPFonts_[i][j]->Off();
+				}
 			}
+
 		}
 		break;
 
@@ -244,23 +264,36 @@ void PokemonSummaryMenu::Render()
 		//======== Pokemon Skill ====================================
 		{
 			//스킬 타입 렌더러
-			for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				PokemonSkillTypeRenderer_[i]->Off();
+				for (size_t j = 0; j < PokemonSkillTypeRenderer_[i].size(); j++)
+				{
+					PokemonSkillTypeRenderer_[i][j]->Off();
+				}
 			}
 
-			for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				SkillNameFonts_[i]->Off();
+				for (size_t j = 0; j < SkillNameFonts_[i].size(); j++)
+				{
+					SkillNameFonts_[i][j]->Off();
+				}
 			}
 
-			for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				CurSkillPPFonts_[i]->Off();
+				for (size_t j = 0; j < CurSkillPPFonts_[i].size(); j++)
+				{
+					CurSkillPPFonts_[i][j]->Off();
+				}
 			}
-			for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 			{
-				MaxSkillPPFonts_[i]->Off();
+				for (size_t j = 0; j < MaxSkillPPFonts_[i].size(); j++)
+				{
+					MaxSkillPPFonts_[i][j]->Off();
+				}
 			}
 		}
 		break;
@@ -272,25 +305,62 @@ void PokemonSummaryMenu::Render()
 		PokemonSkillGreenBoxRenderer_->On();
 		PokemonFrameRenderer_->On();
 
-		//스킬 타입 렌더러
-		for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+
+		//처음 렌더러 끄는 부분
 		{
-			PokemonSkillTypeRenderer_[i]->On();
+			//스킬 타입 렌더러
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+			{
+				for (size_t j = 0; j < PokemonSkillTypeRenderer_[i].size(); j++)
+				{
+					PokemonSkillTypeRenderer_[i][j]->Off();
+				}
+			}
+
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+			{
+				for (size_t j = 0; j < SkillNameFonts_[i].size(); j++)
+				{
+					SkillNameFonts_[i][j]->Off();
+				}
+			}
+
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+			{
+				for (size_t j = 0; j < CurSkillPPFonts_[i].size(); j++)
+				{
+					CurSkillPPFonts_[i][j]->Off();
+				}
+			}
+
+			for (size_t i = 0; i < PokemonInfoList_.size(); i++)
+			{
+				for (size_t j = 0; j < MaxSkillPPFonts_[i].size(); j++)
+				{
+					MaxSkillPPFonts_[i][j]->Off();
+				}
+			}
+		}
+
+		//스킬 타입 렌더러
+		for (size_t i = 0; i < PokemonSkillTypeRenderer_[CurrentOrder_].size(); i++)
+		{
+			PokemonSkillTypeRenderer_[CurrentOrder_][i]->On();
 		}
 		//스킬 이름 렌더러
-		for (size_t i = 0; i < SkillNameFonts_.size(); i++)
+		for (size_t j = 0; j < SkillNameFonts_[CurrentOrder_].size(); j++)
 		{
-			SkillNameFonts_[i]->On();
+			SkillNameFonts_[CurrentOrder_][j]->On();
 		}
 		// 현재 pp
-		for (size_t i = 0; i < CurSkillPPFonts_.size(); i++)
+		for (size_t i = 0; i < CurSkillPPFonts_[CurrentOrder_].size(); i++)
 		{
-			CurSkillPPFonts_[i]->On();
+			CurSkillPPFonts_[CurrentOrder_][i]->On();
 		}
 		//Max PP
-		for (size_t i = 0; i < MaxSkillPPFonts_.size(); i++)
+		for (size_t i = 0; i < MaxSkillPPFonts_[CurrentOrder_].size(); i++)
 		{
-			MaxSkillPPFonts_[i]->On();
+			MaxSkillPPFonts_[CurrentOrder_][i]->On();
 		}
 
 		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
@@ -342,22 +412,38 @@ void PokemonSummaryMenu::Render()
 			
 		}
 
-		for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_)
+		
+		
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_[j])
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillValueFonts_)
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillValueFonts_[j])
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillAccFonts_)
+		
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillAccFonts_[j])
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillExplanationFonts_)
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillExplanationFonts_[j])
+			{
+				i->Off();
+			}
 		}
+		
 		break;
 
 
@@ -374,21 +460,35 @@ void PokemonSummaryMenu::Render()
 			PokemonSkillSelect_TypeRenderer_[i]->Off();
 
 		}
-		for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_) //옌 스킬갯수가 다른 인덱스랑 다르니 별도로
+		
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineRenderer* i : PokemonSkillSelect_SelectLineRenderer_[j]) //옌 스킬갯수가 다른 인덱스랑 다르니 별도로
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillValueFonts_)
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillValueFonts_[j])
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillAccFonts_)
+
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillAccFonts_[j])
+			{
+				i->Off();
+			}
 		}
-		for (GameEngineContentFont* i : SkillExplanationFonts_)
+		for (size_t j = 0; j < PokemonInfoList_.size(); j++)
 		{
-			i->Off();
+			for (GameEngineContentFont* i : SkillExplanationFonts_[j])
+			{
+				i->Off();
+			}
 		}
 	}
 
@@ -398,10 +498,10 @@ void PokemonSummaryMenu::Render()
 		PokemonSkillSelect_MiniPokemonRenderer_[CurrentOrder_]->On();
 		PokemonSkillSelect_TypeRenderer_[CurrentOrder_]->On();
 		PokemonSkillSelect_LeftGreenBox->On();
-		PokemonSkillSelect_SelectLineRenderer_[SkillSelect_CurrentOrder_]->On();
-		SkillValueFonts_[SkillSelect_CurrentOrder_]->On();
-		SkillAccFonts_[SkillSelect_CurrentOrder_]->On();
-		SkillExplanationFonts_[SkillSelect_CurrentOrder_]->On();
+		PokemonSkillSelect_SelectLineRenderer_[CurrentOrder_][SkillSelect_CurrentOrder_]->On();
+		SkillValueFonts_[CurrentOrder_][SkillSelect_CurrentOrder_]->On();
+		SkillAccFonts_[CurrentOrder_][SkillSelect_CurrentOrder_]->On();
+		SkillExplanationFonts_[CurrentOrder_][SkillSelect_CurrentOrder_]->On();
 
 	}
 		break;
@@ -548,9 +648,9 @@ void PokemonSummaryMenu::InitRenderer_()
 	//========================================================= 포켓몬 스킬========================================================================
 
 	//스킬 타입 렌더러
-	for (PokemonInfo* i : PokemonInfoList_)
+	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 	{
-		std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+		std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 		for (size_t j = 0; j<CurSkillList_.size();j++)
 		{
 			PokemonSkillInfo* CurSkillInfo = CurSkillList_[j]->GetInfo();
@@ -616,7 +716,7 @@ void PokemonSummaryMenu::InitRenderer_()
 
 			GameEngineRenderer* NewRenderer = CreateRenderer(TypeString + ".bmp", GetOrder(), RenderPivot::LeftTop, { 490,78+static_cast<float>(j*112  )});
 			NewRenderer->SetTransColor(RGB(255, 0, 255));
-			PokemonSkillTypeRenderer_.push_back(NewRenderer);
+			PokemonSkillTypeRenderer_[i].push_back(NewRenderer);
 		}
 	}
 
@@ -634,12 +734,16 @@ void PokemonSummaryMenu::InitRenderer_()
 
 	//PokemonSkillSelect_SelectLineRenderer_
 	//스킬 선택 빨간 외곽선
-	for (size_t i = 0; i < PokemonSkillTypeRenderer_.size(); i++)
+	for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 	{
-		GameEngineRenderer* NewRenderer = CreateRenderer("PokemonSkill_SelectFrame.bmp", GetOrder(), RenderPivot::LeftTop, { 480,72 +static_cast<float>(i*112)});
-		NewRenderer->SetTransColor(RGB(255, 0, 255));
-		NewRenderer->Off();
-		PokemonSkillSelect_SelectLineRenderer_.push_back(NewRenderer);
+		for (size_t j = 0; j < PokemonSkillTypeRenderer_[i].size(); j++)
+		{
+			GameEngineRenderer* NewRenderer = CreateRenderer("PokemonSkill_SelectFrame.bmp", GetOrder(), RenderPivot::LeftTop, { 480,72 + static_cast<float>(j * 112) });
+			NewRenderer->SetTransColor(RGB(255, 0, 255));
+			NewRenderer->Off();
+			PokemonSkillSelect_SelectLineRenderer_[i].push_back(NewRenderer);
+		}
+		
 	}
 
 
@@ -881,33 +985,34 @@ void PokemonSummaryMenu::InitFonts_()
 	//=================================================================== Pokemon Skill ==========================================================
 	//스킬 이름
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(640, 76 + static_cast<float>(j * 112)));
 				NewFonts->ShowString(CurSkillList_[j]->GetInfo()->GetNameCopy(), true);
 				NewFonts->Off();
-				SkillNameFonts_.push_back(NewFonts);
+				SkillNameFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
 	}
 
+
 	//스킬 현재 PP
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(700, 128 + static_cast<float>(j * 112)));
 				NewFonts->ShowString("PP" + std::to_string(CurSkillList_[j]->GetInfo()->GetPP())+" /", true);
 				NewFonts->Off();
-				CurSkillPPFonts_.push_back(NewFonts);
+				CurSkillPPFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
@@ -915,16 +1020,16 @@ void PokemonSummaryMenu::InitFonts_()
 
 	//스킬 맥스 PP
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(868, 128 + static_cast<float>(j * 112)));
 				NewFonts->ShowString(std::to_string(CurSkillList_[j]->GetInfo()->GetMaxPP()), true);
 				NewFonts->Off();
-				MaxSkillPPFonts_.push_back(NewFonts);
+				MaxSkillPPFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
@@ -933,16 +1038,16 @@ void PokemonSummaryMenu::InitFonts_()
 	//===================================== 포켓몬 스킬 셀렉트 ======================================================================================
 	//스킬의 벨류값(파워)
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(230, 228));
 				NewFonts->ShowString(std::to_string(CurSkillList_[j]->GetInfo()->GetValue()), true);
 				NewFonts->Off();
-				SkillValueFonts_.push_back(NewFonts);
+				SkillValueFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
@@ -950,16 +1055,16 @@ void PokemonSummaryMenu::InitFonts_()
 
 	//스킬의 정확도
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(230, 284));
 				NewFonts->ShowString("100", true);
 				NewFonts->Off();
-				SkillAccFonts_.push_back(NewFonts);
+				SkillAccFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
@@ -967,16 +1072,16 @@ void PokemonSummaryMenu::InitFonts_()
 
 	//스킬의 설명
 	{
-		for (PokemonInfo* i : PokemonInfoList_)
+		for (size_t i = 0; i < PokemonInfoList_.size(); i++)
 		{
-			std::vector<PokemonSkill*> CurSkillList_ = i->GetSkill();
+			std::vector<PokemonSkill*> CurSkillList_ = PokemonInfoList_[i]->GetSkill();
 			for (size_t j = 0; j < CurSkillList_.size(); j++)
 			{
 				GameEngineContentFont* NewFonts = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 				NewFonts->SetPosition(GetPosition() + float4(20, 390));
 				NewFonts->ShowString(CurSkillList_[j]->GetInfo()->GetDesc(), true);
 				NewFonts->Off();
-				SkillExplanationFonts_.push_back(NewFonts);
+				SkillExplanationFonts_[i].push_back(NewFonts);
 				AllFonts_.push_back(NewFonts);
 			}
 		}
@@ -1150,6 +1255,27 @@ void PokemonSummaryMenu::PokemonSkillUpdate()
 	{
 		DestroyPokemonSummaryMenu();
 		Off();
+		return;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Up") == true)
+	{
+		if (CurrentOrder_ <= 0)
+		{
+			return;
+		}
+		PokemonJumpStart();
+		CurrentOrder_--;
+	}
+
+	if (GameEngineInput::GetInst()->IsDown("Down") == true)
+	{
+		if (CurrentOrder_ >= PokemonInfoList_.size() - 1)
+		{
+			return;
+		}
+		PokemonJumpStart();
+		CurrentOrder_++;
 	}
 }
 
@@ -1163,6 +1289,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
 		ChangeState(PokemonSummaryMenuType::PokemonSkill);
+		SkillSelect_CurrentOrder_ = 0;
 		return;
 	}
 
@@ -1170,7 +1297,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 	{
 		if (SkillSelect_CurrentOrder_ <= 0)
 		{
-			SkillSelect_CurrentOrder_ = static_cast<int>(PokemonSkillTypeRenderer_.size()) - 1;
+			SkillSelect_CurrentOrder_ = static_cast<int>(PokemonSkillTypeRenderer_[CurrentOrder_].size()) - 1;
 			return;
 		}
 		SkillSelect_CurrentOrder_--;
@@ -1178,7 +1305,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
-		if (SkillSelect_CurrentOrder_ >= PokemonSkillTypeRenderer_.size() - 1)
+		if (SkillSelect_CurrentOrder_ >= PokemonSkillTypeRenderer_[CurrentOrder_].size() - 1)
 		{
 			SkillSelect_CurrentOrder_ = 0;
 			return;

@@ -1102,11 +1102,12 @@ void PlayerRed::UIUpdate()
 
 void PlayerRed::InitMyPokemon()
 {
+	/*Pokemon* Pidgey = PokemonInfoManager::GetInst().CreatePokemon("Pidgey");*/
 	Pokemon* Squirtle = PokemonInfoManager::GetInst().CreatePokemon("Squirtle");
 	//Squirtle->GetInfo()->PlusHp(-70);
 	//Squirtle->GetInfo()->SetMyLevel(4);
 	//Squirtle->GetInfo()->SetMaxHp(170);
-
+	/*AddPokemon(Pidgey);*/
 	AddPokemon(Squirtle);
 }
 
