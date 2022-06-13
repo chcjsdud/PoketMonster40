@@ -133,7 +133,7 @@ void BattleInterface::Start()
 	EnemyHPUI->SetPivot({ -450.0f,-430.0f });
 	EnemyHP->SetPivot({ -502.0f,-436.0f });
 	MyHP->SetPivot({ -16.0f, -180.0f });
-	EXP->SetPivot({ -80.0f,-260.0f });
+	EXP->SetPivot({ -80.0f,-256.0f });
 	BattleCommend->SetPivot({ -240.0f,0.0f });
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
 
