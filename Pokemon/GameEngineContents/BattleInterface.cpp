@@ -847,9 +847,9 @@ void BattleInterface::Reset()
 	Fonts->EndFont();
 
 
-	PPFont_->Death();
-	MaxPPFont_->Death();
-	TypeFont_->Death();
+	//PPFont_->Death();
+	//MaxPPFont_->Death();
+	//TypeFont_->Death();
 }
 
 void BattleInterface::UIUpdate()
