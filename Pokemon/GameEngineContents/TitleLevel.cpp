@@ -49,7 +49,7 @@ void TitleLevel::Update()
 
 	if (nullptr != TmpEngine)
 	{
-		if (true == GameEngineInput::GetInst()->IsDown("Z"))
+		if (true == GameEngineInput::GetInst()->IsDown("TitleConfirm") || true == GameEngineInput::GetInst()->IsDown("Z"))
 		{
 			TmpEngine->ChangeLevel("WorldMap");
 		}

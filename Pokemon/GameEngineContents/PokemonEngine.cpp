@@ -115,8 +115,11 @@ void PokemonEngine::InitKey()
 	
 	GameEngineInput::GetInst()->CreateKey("test", 'M'); // 충돌체 체크용 키
 
-	GameEngineInput::GetInst()->CreateKey("JBMTest2", 'I');
-	GameEngineInput::GetInst()->CreateKey("JBMTest3", 'O');
+	GameEngineInput::GetInst()->CreateKey("TitleConfirm", VK_RETURN);
+	GameEngineInput::GetInst()->CreateKey("Teleport1", 0x31);
+	GameEngineInput::GetInst()->CreateKey("Teleport2", 0x32);
+	GameEngineInput::GetInst()->CreateKey("Teleport3", 0x33);
+	GameEngineInput::GetInst()->CreateKey("JBMTest2", 0x36);
 }
 
 
@@ -218,6 +221,19 @@ void PokemonEngine::ResourcesLoad()
 		ResourcesDirectory.Move("Resources");
 		ResourcesDirectory.Move("NPC");
 		ResourcesDirectory.Move("Oak");
+		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
+		for (int i = 0; i < AllFileVec.size(); i++)
+		{
+			GameEngineImageManager::GetInst()->Load(AllFileVec[i].GetFullPath());
+		}
+	}
+
+	{
+		GameEngineDirectory ResourcesDirectory;
+		ResourcesDirectory.MoveParent("Pokemon");
+		ResourcesDirectory.Move("Resources");
+		ResourcesDirectory.Move("NPC");
+		ResourcesDirectory.Move("Ung");
 		std::vector<GameEngineFile> AllFileVec = ResourcesDirectory.GetAllFile();
 		for (int i = 0; i < AllFileVec.size(); i++)
 		{

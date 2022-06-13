@@ -571,18 +571,26 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	}
 	else if (RoomTileMap6::GetInst() == CurrentTileMap_) // 상점
 	{
-		if (_X == 4 && _Y == 6)
-		{
-			return true;
-		}
 		if (_X == 3 && _Y == 1)
 		{
-			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
-			TmpText->SetPosition(GetPosition());
-			TmpText->AddText("Hi, there!");
-			TmpText->AddText("May I help you?");
-			TmpText->Setting();
-			return true;
+			if (false == IsClearNPC5_)
+			{
+				InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+				TmpText->SetPosition(GetPosition());
+				TmpText->AddText("Okay, thaks! Please say hi to");
+				TmpText->AddText("PROF. OAK for me, too.");
+				TmpText->Setting();
+				return true;
+			}
+			else
+			{
+				InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+				TmpText->SetPosition(GetPosition());
+				TmpText->AddText("Hi, there!");
+				TmpText->AddText("May I help you?");
+				TmpText->Setting();
+				return true;
+			}
 		}
 	}
 	else if (WorldTileMap1::GetInst() == CurrentTileMap_)
@@ -1167,5 +1175,24 @@ void PlayerRed::SoundTileCheck()
 	{
 		WorldMapSoundManager::GetInst()->ChangeSound(WorldBackgroundSoundEnum::Gym);
 		RegionUI::GetInst()->NoneNamedRegion();
+	}
+}
+
+void PlayerRed::EventCheckWhenChangeTilemap()
+{
+	if (RoomTileMap6::GetInst() == CurrentTileMap_)
+	{
+		// 상점 이벤트 시작 지점
+		if (false == IsClearNPC5_ && false == GetStartNPC5Event())
+		{
+			IsStartNPC5_ = true;
+			IsInteraction_ = true;
+
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Hey!");
+			TmpText->AddText("You came from PALLET TOWN?");
+			TmpText->Setting();
+		}
 	}
 }

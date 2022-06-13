@@ -32,6 +32,7 @@ private:
 	void Update() override;
 
 	std::vector<bool> IsStart_;
+	std::vector<bool> IsStartShop_;
 	bool RedOutCheck_;
 	int OakCurrentIndexX_;
 	int OakCurrentIndexY_;
@@ -49,7 +50,7 @@ private:
 	// 그린과의 대전 이후 상호작용
 	//void OakIdle();
 	// 상점 이벤트
-	//void ShopEvent();
+	void ShopEvent();
 	// 상점 이벤트 이후 상호작용
 	//void ShopEventIdle();
 

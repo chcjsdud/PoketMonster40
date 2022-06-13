@@ -22,6 +22,7 @@ InteractionText::InteractionText()
 	, IsCenter_(false)
 	, IsChoice_(false)
 	, IsBrock_(false)
+	, IsNPC5Start_(false)
 	, ZIgnore_(false)
 {
 }
@@ -118,6 +119,10 @@ void InteractionText::Update()
 	{
 		IsBrock_ = true;
 	}
+	else if (Fonts->GetCurrentString() == "You came from PALLET TOWN?")
+	{
+		IsNPC5Start_ = true;
+	}
 
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
@@ -181,6 +186,11 @@ void InteractionText::Update()
 				{
 					CurrentLevel->StartBattleLevelByNPC(BattleNpcType::Brock);
 				}
+			}
+			if (true == PlayerRed::MainRed_->GetStartNPC5Event() && true == IsNPC5Start_)
+			{
+				IsNPC5Start_ = false;
+				PlayerRed::MainRed_->RedMoveControll(RedDir::Up, 4);
 			}
 		}
 	}

@@ -127,6 +127,11 @@ public:
 		return IsStartEvent_;
 	}
 
+	inline bool GetStartNPC5Event()
+	{
+		return IsStartNPC5_;
+	}
+
 	inline bool GetOakCall()
 	{
 		return IsOakCall_;
@@ -194,6 +199,8 @@ private:
 	bool IsControllOnCheck_;
 	bool IsGreenBattleCheck_;
 	bool NPC5Check_;
+	bool IsClearNPC5_;
+	bool IsStartNPC5_;
 	float LerpX_;
 	float LerpY_;
 	float LerpTime_;
@@ -218,6 +225,8 @@ private:
 
 	GameEngineRenderer* WMenuArrowRender_;
 	RedState CurrentState_;
+
+	void EventCheckWhenChangeTilemap();
 
 	//레드의 포켓몬과 아이템
 	std::vector<Pokemon*> MyPokemonList_;

@@ -56,7 +56,7 @@ void WorldMapLevel::StartBattleLevelByNPC(BattleNpcType _Type)
 	}
 }
 
-void WorldMapLevel::StartBattleLevelByWilde()
+void WorldMapLevel::StartBattleLevelByWildeToWorld()
 {
 	BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
 	if (nullptr != TmpBattleLevel)
@@ -98,12 +98,7 @@ void WorldMapLevel::Update()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("JBMTest2"))
 	{
-		StartBattleLevelByWilde();
-	}
-
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest3"))
-	{
-		StartBattleLevelByNPC(BattleNpcType::Brock);
+		StartBattleLevelByWildeToWorld();
 	}
 }
 

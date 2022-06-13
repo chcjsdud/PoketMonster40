@@ -193,6 +193,12 @@
     <ClCompile Include="CutableTree.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="Oak_Shop.cpp">
+      <Filter>NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleStartUI.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Green.cpp">
       <Filter>NPC</Filter>
     </ClCompile>
@@ -393,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="CutableTree.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleStartUI.h">
+      <Filter>WorldMap\UI</Filter>
     </ClInclude>
     <ClInclude Include="Green.h">
       <Filter>NPC</Filter>

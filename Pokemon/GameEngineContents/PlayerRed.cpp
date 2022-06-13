@@ -7,6 +7,7 @@
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
 #include <GameEngine/GameEngineCollision.h>
+#include <GameEngineBase/GameEngineRandom.h>
 
 #include "WorldMapLevel.h"
 #include "WorldMapSoundManager.h"
@@ -70,6 +71,7 @@ PlayerRed::PlayerRed()
 	, IsControllOnCheck_(false)
 	, IsGreenBattleCheck_(false)
 	, NPC5Check_(false)
+	, IsClearNPC5_(false)
 	, LerpX_(0)
 	, LerpY_(0)
 	, MoveTimer_(0.0f)
@@ -186,7 +188,7 @@ void PlayerRed::DirAnimationCheck()
 	if (CheckDir_ != CurrentDir_)
 	{
 		RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
-		CurrentDir_ = CheckDir_;
+ 		CurrentDir_ = CheckDir_;
 	}
 }
 
@@ -228,7 +230,6 @@ void PlayerRed::RedMoveControll(RedDir _Dir, int _Count)
 		CurrentDir_ = RedDir::Right;
 		RedMoveDir_ = float4::RIGHT;
 	}
-
 
 	if (GetAccTime() >= NextMoveTime_)
 	{
@@ -292,6 +293,8 @@ void PlayerRed::FadeIn()
 				BeforeTileMap_ = CurrentTileMap_;
 				CurrentTileMap_ = NextTileMap_;
 				SetPosition(CurrentTileMap_->GetWorldPostion(NextTilePos_.ix(), NextTilePos_.iy()));
+
+				EventCheckWhenChangeTilemap();
 
 				NextTileMap_ = nullptr;
 				NextTilePos_ = float4::ZERO;
@@ -423,7 +426,7 @@ void PlayerRed::Start()
 	CurrentState_ = RedState::Idle;
 
 	CurrentTileMap_ = RoomTileMap1::GetInst();
-	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));	
+	SetPosition(CurrentTileMap_->GetWorldPostion(5, 4));
 
 	//UI
 	InitMyPokemon();
@@ -456,10 +459,28 @@ void PlayerRed::Update()
 	OakCall();
 	SoundTileCheck();
 
+
+	if (true == GameEngineInput::GetInst()->IsPress("Teleport1"))
+	{
+		CurrentTileMap_ = WorldTileMap1::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(20, 95));
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("Teleport2"))
+	{
+		CurrentTileMap_ = WorldTileMap1::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(19, 33));
+	}
+	if (true == GameEngineInput::GetInst()->IsPress("Teleport3"))
+	{
+		CurrentTileMap_ = WorldTileMap3::GetInst();
+		SetPosition(CurrentTileMap_->GetWorldPostion(23, 36));
+	}
+
 	if (true == GameEngineInput::GetInst()->IsPress("JBMTest"))
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
+		IsClearNPC5_ = true;
 	}
 	if (true == GameEngineInput::GetInst()->IsPress("RTest"))
 	{
@@ -469,7 +490,6 @@ void PlayerRed::Update()
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
 		IsDebugRun_ = true;
-		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 	}
 	if (true == GameEngineInput::GetInst()->IsUp("JBMDebugRun"))
 	{
@@ -750,6 +770,47 @@ void PlayerRed::MoveAnim()
 			}
 			return;
 		}
+		else if (true == IsStartNPC5_ &&  Count_ > 0)
+		{
+			LerpTime_ += GameEngineTime::GetDeltaTime() * 3.0f;
+			LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
+			LerpY_ = GameEngineMath::LerpLimit(StartPos_.y, GoalPos_.y, LerpTime_);
+			SetPosition({ LerpX_,LerpY_ });
+
+			if (LerpTime_ > 1.0f)
+			{
+				LerpTime_ = 0.0f;
+				IsMove_ = false;
+				CurrentState_ = RedState::Idle;
+				AnimationName_ = "Idle";
+				RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
+
+				Count_ -= 1;
+				if (Count_ > 0)
+				{
+					RedMoveControll(CurrentDir_, Count_);
+				}
+				else if (true == GetStartNPC5Event())
+				{
+					SetControllOn(false);
+					RedRender_->ChangeAnimation("IdleLeft");
+
+					IsInteraction_ = true;
+					InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+					TmpText->SetPosition(GetPosition());
+					TmpText->AddText("You know PROF. OAK, right?");
+					TmpText->AddText(" ");
+					TmpText->AddText("His order came in.");
+					TmpText->AddText("Can I get you to take it to him?");
+					TmpText->AddText("RED received OAK'S PARCEL");
+					TmpText->AddText("from the POKEMON MART clerk.");
+					TmpText->AddText("RED put the OAK'S PARCEL");
+					TmpText->AddText("in the KEY ITEMS POCKET.");
+					TmpText->Setting();
+				}
+			}
+			return;
+		}
 
 		if (true == IsDebugRun_)
 		{
@@ -764,7 +825,7 @@ void PlayerRed::MoveAnim()
 		if (LerpTime_ >= 0.8f && true == IsBushEventReady_)
 		{
 			IsBushEventReady_ = false;
-			if (IsBush_)
+			if (true == IsBush_)
 			{
 				BushActor_->On();
 				BushActor_->SetPosition(GoalPos_);
@@ -778,6 +839,19 @@ void PlayerRed::MoveAnim()
 
 		if (LerpTime_ > 1.0f)
 		{
+			if (true == IsBush_)
+			{
+				float RandomF = GameEngineRandom::GetInst_->RandomFloat(0.0f, 1.0f);
+				if (RandomF <= 0.1f)
+				{
+					WorldMapLevel* TmpWorldLevel = dynamic_cast<WorldMapLevel*>(GameEngine::GetInst().FindLevel("WorldMap"));
+					if (nullptr != TmpWorldLevel)
+					{
+						TmpWorldLevel->StartBattleLevelByWildeToWorld();
+					}
+				}
+			}
+
 			LerpTime_ = 0.0f;
 			IsMove_ = false;
 		}
@@ -834,7 +908,7 @@ bool PlayerRed::CanMove()
 		true == IsFadeIn_ ||
 		true == IsInteraction_ ||
 		ChildUI_ != nullptr ||
-		false == WMenuUICheck_
+		false == WMenuUICheck_ 
 		)
 	{
 		return false;
@@ -886,6 +960,7 @@ void PlayerRed::InteractionUpdate()
 	}
 	else
 	{
+		if (false == IsClearNPC5_)
 		{
 			float4 NPCCheckPos = GetPosition() - WorldTileMap1::GetInst()->GetPosition();
 			TileIndex NPCCheckIndex = WorldTileMap1::GetInst()->GetTileMap().GetTileIndex(NPCCheckPos);
@@ -899,8 +974,24 @@ void PlayerRed::InteractionUpdate()
 				{
 					NPC5Check_ = false;
 				}
+				else if (17 == NPCCheckIndex.X && 16 == NPCCheckIndex.Y)
+				{
+					NPC5Check_ = false;
+				}
 			}
 			else if (false == NPC5Check_ && 19 == NPCCheckIndex.X && 15 == NPCCheckIndex.Y)
+			{
+				IsInteraction_ = true;
+				NPC5Check_ = true;
+
+				InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+				TmpText->SetPosition(GetPosition());
+				TmpText->AddText("I absolutely forbid you from");
+				TmpText->AddText("going through here!");
+				TmpText->AddText("This is private property!");
+				TmpText->Setting();
+			}
+			else if (false == NPC5Check_ && 17 == NPCCheckIndex.X && 15 == NPCCheckIndex.Y)
 			{
 				IsInteraction_ = true;
 				NPC5Check_ = true;
@@ -1027,6 +1118,38 @@ bool PlayerRed::InteractionNPC()
 
 		return true;
 	}
+
+	// 오박사 물건 전달
+	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPCOakDirZColBox", TmpVector))
+	{
+		//WMenuUICheck_ = false;
+		for (size_t i = 0; i < TmpVector.size(); i++)
+		{
+			NPCBase* Newnpc = dynamic_cast<NPCBase*>(TmpVector[i]->GetActor());
+			if (nullptr == Newnpc)
+			{
+				continue;
+			}
+
+			Newnpc->IsTalk_ = true;
+		}
+
+		InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+		TmpText->SetPosition(GetPosition());
+		TmpText->AddText("What's that?");
+		TmpText->AddText("You have something for me?");
+		TmpText->AddText("RED delivered OAK'S PARCEL.");
+		TmpText->AddText(" ");
+		TmpText->AddText("Ah!");
+		TmpText->AddText("It's the custom POKE BALL!");
+		TmpText->AddText("I had it on order.");
+		TmpText->AddText("Thank you!");
+		TmpText->AddText("GREEN: Gramps!");
+		TmpText->AddText(" ");
+		TmpText->Setting();
+
+		return true;
+	}
 	return false;
 }
 
@@ -1120,7 +1243,7 @@ void PlayerRed::PopUpPokemonPreview(int _Index)
 	}
 
 	switch (_Index)
-	{	
+	{
 	case 0:
 		PokemonPreview_ = CreateRenderer("Select_Bulbasaur.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);

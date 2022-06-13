@@ -26,15 +26,15 @@ void NPCBrock::Start()
 	NPCBase::NPCRightCollision_ = GameEngineActor::CreateCollision("NPCBrockDirZColBox", { 5,20 }, { 32,0 });
 	NPCBase::NPCLeftCollision_ = GameEngineActor::CreateCollision("NPCBrockDirZColBox", { 5,20 }, { -32,0 });
 	{
-		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("NPC4_.bmp");
-		Image->Cut({ 128,128 });
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Ungx4.bmp");
+		Image->CutCount(4, 1);
 	}
 
 	NPCRender_ = GameEngineActor::CreateRenderer(static_cast<int>(RenderOrder::Player));
-	NPCRender_->CreateAnimation("NPC4_.bmp", "IdleDown", 0, 0, 0.0f, false);
-	NPCRender_->CreateAnimation("NPC4_.bmp", "IdleLeft", 1, 1, 0.0f, false);
-	NPCRender_->CreateAnimation("NPC4_.bmp", "IdleRight", 2, 2, 0.0f, false);
-	NPCRender_->CreateAnimation("NPC4_.bmp", "IdleUp", 3, 3, 0.0f, false);
+	NPCRender_->CreateAnimation("Ungx4.bmp", "IdleDown", 0, 0, 0.0f, false);
+	NPCRender_->CreateAnimation("Ungx4.bmp", "IdleLeft", 2, 2, 0.0f, false);
+	NPCRender_->CreateAnimation("Ungx4.bmp", "IdleRight", 3, 3, 0.0f, false);
+	NPCRender_->CreateAnimation("Ungx4.bmp", "IdleUp", 1, 1, 0.0f, false);
 
 	NPCRender_->ChangeAnimation("IdleDown");
 	NPCRender_->SetPivot({ 0,-15 });

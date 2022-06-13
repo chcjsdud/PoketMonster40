@@ -39,6 +39,7 @@ private:
 	bool IsCenter_;
 	bool IsChoice_;
 	bool IsBrock_;
+	bool IsNPC5Start_;
 
 	void Start() override;
 	void Update() override;

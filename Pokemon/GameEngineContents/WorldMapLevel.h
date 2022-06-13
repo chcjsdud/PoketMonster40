@@ -5,6 +5,7 @@ enum class BattleNpcType
 {
 	None,
 	Brock,
+	Rival,
 	Max,
 };
 
@@ -23,7 +24,7 @@ public:
 	WorldMapLevel& operator=(WorldMapLevel&& _Other) noexcept = delete;
 
 	void StartBattleLevelByNPC(BattleNpcType _Type);
-	void StartBattleLevelByWilde();
+	void StartBattleLevelByWildeToWorld();
 
 protected:
 	void Loading() override;
