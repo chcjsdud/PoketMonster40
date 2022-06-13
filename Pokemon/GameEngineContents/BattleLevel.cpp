@@ -218,7 +218,7 @@ void BattleLevel::LevelUp(PokemonBattleState* _PlayerPokemon)
 {
 	int CurrentEXP = _PlayerPokemon->GetPokemon()->GetInfo()->GetExp();
 	int MaxEXP = _PlayerPokemon->GetPokemon()->GetInfo()->GetMaxExp();
-	CurrentEXP = MaxEXP - CurrentEXP;
+	CurrentEXP = CurrentEXP - MaxEXP;
 	_PlayerPokemon->GetPokemon()->GetInfo()->SetExp(CurrentEXP);
 	int CurrntLevel = _PlayerPokemon->GetPokemon()->GetInfo()->GetMyLevel();
 	++CurrntLevel;
