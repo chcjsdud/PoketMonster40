@@ -50,6 +50,9 @@ BattleInterface::BattleInterface()
 	, PPFont_(nullptr)
 	, MaxPPFont_(nullptr)
 	, TypeFont_(nullptr)
+	, PrevExp_(0)
+	, LerpExp_(0.0f)
+	, ExpRenderTimer_(0.0f)
 
 {
 
@@ -761,6 +764,17 @@ void BattleInterface::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		BattleUnit = dynamic_cast<BattleUnitRenderer*>(Level_->FindActor("BattleUnitRenderer"));
 	}
 	OneTalk = false;
+
+	//HP정보 업데이트
+	PrevPlayerHp_ = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetHp();
+	PrevFoeHp_ = Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetHp();
+	PrevExp_ = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp();
+
+	LerpFoeHp_ = static_cast<float>(PrevFoeHp_);
+	LerpPlayerHp_ = static_cast<float>(PrevPlayerHp_);
+	LerpExp_ = static_cast<float>(LerpExp_);
+	
+
 }
 
 void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
@@ -914,6 +928,21 @@ void BattleInterface::HPChangeAnimation()
 			HpRenderTimer_ = 0.0f;
 		}
 	}
+
+	//경험치의 변화를 감지하고 경험치 보간 진행
+	int PlayerExp = Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp();
+	if (PlayerExp != PrevExp_)
+	{
+		ExpRenderTimer_ += GameEngineTime::GetDeltaTime();
+		LerpExp_ = GameEngineMath::LerpLimit(static_cast<float>(PrevExp_), static_cast<float>(PlayerExp), ExpRenderTimer_);
+
+		//보간값이 변화된 값과 같아지면 보간 종료
+		if (static_cast<int>(LerpExp_) == PlayerExp)
+		{
+			PrevExp_ = PlayerExp;
+			ExpRenderTimer_ = 0.0f;
+		}
+	}
 }
 
 void BattleInterface::HPRenderUpdate()
@@ -957,6 +986,27 @@ void BattleInterface::HPRenderUpdate()
 		}
 		MyHP->SetScale({ HpXScale ,MyHP->GetScale().y });
 	}
-
-
+	
+	//플레이여 경험치 렌더링
+	{
+		float ExpRatio =  LerpExp_ / static_cast<float>(Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxExp());
+		if (ExpRatio >= 1.0f)
+		{
+			ExpRatio = 1.0f;
+		}
+		float ExpXScale = GameEngineImageManager::GetInst()->Find("FriendlyHPExp4.bmp")->GetScale().x * ExpRatio;
+		//if (HpRatio > 0.5f)
+		//{
+		//	MyHP->SetImage("PoketmonMenu_Hp1.bmp");
+		//}
+		//else if (HpRatio >= 0.2f && HpRatio <= 0.5f)
+		//{
+		//	MyHP->SetImage("PoketmonMenu_Hp2.bmp");
+		//}
+		//else
+		//{
+		//	MyHP->SetImage("PoketmonMenu_Hp3.bmp");
+		//}
+		EXP->SetScale({ ExpXScale ,EXP->GetScale().y });
+	}
 }
