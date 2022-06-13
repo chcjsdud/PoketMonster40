@@ -9,8 +9,6 @@ enum class BagState
 	ListMenu,
 	DialogMenu,
 	ItemUse,
-	ItemGive,
-	ItemToss
 };
 
 class Bag : public GameEngineActor

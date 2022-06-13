@@ -270,7 +270,7 @@ void Shop::ArrowUpdate()
 
 		else if (true == GameEngineInput::GetInst()->IsDown("DownArrowShop"))
 		{
-			if (1 >= ItemCount_)
+			if (1 == ItemCount_)
 			{
 				ItemCount_ = 1;
 				return;

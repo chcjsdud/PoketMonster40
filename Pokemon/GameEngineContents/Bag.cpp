@@ -64,7 +64,6 @@ void Bag::Start()
 
 void Bag::Update()
 {
-	//자식 UI 체크
 	if (nullptr != ChildUI_ 
 		&& false == ChildUI_->IsUpdate())
 	{
@@ -78,6 +77,7 @@ void Bag::Update()
 	{
 		return;
 	}
+
 
 	switch (BagState_)
 	{
@@ -111,25 +111,6 @@ void Bag::Update()
 		MoveDialog();
 		break;
 
-	case BagState::ItemGive:
-		BagState_ = BagState::DialogMenu;
-		//if (nullptr == ChildUI_)
-		//{
-		//	FadeActor_->FadeOut();
-		//	ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
-		//	ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
-		//	dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
-		//}
-		// 
-		//잠정 미구현
-		//CurrentPokemon_->GetInfo()->SetMyItem(ItemList_[SelectIndex_]);
-		//Item* NewItem = ItemList_.back();
-		//delete NewItem;
-		//NewItem = nullptr;
-		//ItemList_.pop_back();
-		//ShowFonts(ItemList_);
-		break;
-
 	case BagState::ItemUse:
 		if (nullptr == ChildUI_)
 		{
@@ -138,9 +119,6 @@ void Bag::Update()
 			ChildUI_->SetPosition(GetPosition() - GameEngineWindow::GetScale().Half());
 			dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu(CurrentItem_);
 		}
-		break;
-
-	case BagState::ItemToss:
 		break;
 	}
 }
@@ -665,6 +643,7 @@ void Bag::SelectDialog()
 			Give(BallList_);
 
 		}
+
 		break;
 	case 1:
 		if ("BattleLevel" == GetLevel()->GetNameConstRef())
@@ -685,6 +664,7 @@ void Bag::SelectDialog()
 		{
 			Toss(BallList_);
 		}
+
 		break;
 	case 2:
 		CloseDialog();
@@ -1087,9 +1067,8 @@ void Bag::Give(std::vector<Item*>& _List)
 	//스탯창 가기
 	if (ChildUI_ == nullptr)
 	{
-		BagState_ = BagState::ItemGive;
-	}
 
+	}
 }
 
 void Bag::Toss(std::vector<Item*>& _List)
@@ -1115,6 +1094,8 @@ void Bag::Toss(std::vector<Item*>& _List)
 			return;
 		}
 	}
+
+	BagState_ = BagState::DialogMenu;
 }
 
 
