@@ -23,6 +23,11 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _NextLevel) override;
 
 private:
+	class GameEngineRenderer* TitleIntro_;
+
 	class GameEngineContentFont* Fonts;
 	GameEngineSoundPlayer BgmPlayer;
+
+	float Time_;
+	int Index_;
 };
