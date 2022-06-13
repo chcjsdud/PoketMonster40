@@ -77,6 +77,8 @@ private:
 	float CatchBallTime;
 	float4 CatchBallPivot;
 	float Alpha_Time;
+	float BallFall;
+	float BallFallTime;
 
 	float4 PlayerPokemonPos_;
 	float4 OpponentPokemonPos_;
@@ -90,6 +92,7 @@ private:
 	bool PlayerStop;//김예나 : 일정 위치 도착하면 멈추도록 할 조건문
 	bool FirstMove;//김예나 : PlayerStop계속 들어오지 않도록 조건문용 bool
 	bool Fighting;//김예나 : 싸움 채팅중엔 꺼져야함
+	bool FallCheck;
 
 	float TimeCheck;
 

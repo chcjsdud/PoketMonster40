@@ -58,6 +58,8 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, Alpha_Time(0.0f)
 	, MyCatchEnd(true)
 	, SkillName_(SkillName::None)
+	, BallFall(-170.0f)
+	, FallCheck(false)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -100,7 +102,12 @@ void BattleUnitRenderer::Start()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("MonsterBall_Open4.bmp");
 		Image->CutCount(2, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Catch4.bmp");
+		Image->CutCount(4, 1);
+	}
 
+	MyCatchEnd = false;
 }
 
 void BattleUnitRenderer::Update()
@@ -290,6 +297,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MonsterBall = CreateRenderer("MonsterBall4.bmp", 4);
 		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
 		MonsterBall->CreateAnimation("BallRoll.bmp", "Ball", 0, 0, 0.05f, false);
+		MonsterBall->CreateAnimation("Catch4.bmp", "Catch", 0, 3, 0.2f, false);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 
 		CatchBallOpen = CreateRenderer("MonsterBall_Open4.bmp",4);
@@ -343,6 +351,9 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	BallX = -480.0f;
 	BallY = 0.0f;
 	PoeCurrentPokemon_->SetAlpha(255);
+	BallFall = -170.0f;
+	BallFallTime = 0.0f;
+	Alpha_Time = 0.0f;
 }
 void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 {
@@ -549,8 +560,8 @@ void BattleUnitRenderer::Opening2()
 					//ShellHide();
 					//EnemyRock();
 					//EnemyTackle();
-					MyCatchEnd = false;
-					//Catch();
+
+					Catch();
 					BattleInter->DoomChit();
 				}
 			}
@@ -846,13 +857,28 @@ void BattleUnitRenderer::Catch()
 			//삼항연산자 알파값이 0보다 크면 해당값, 아니라면 0고정
 			if (PoeCurrentPokemon_->GetAlpha() == 0)
 			{
+				BallFallTime += GameEngineTime::GetDeltaTime() * 200.0f;
 				CatchBallOpen->Off();
-				MonsterBall->SetPivot({ 210.0f, -170.0f });
 				MonsterBall->ChangeAnimation("Ball");
 				MonsterBall->On();
-				MyCatchEnd = true;
+				MonsterBall->SetPivot({ 210.0f, BallFall + BallFallTime });
+				if (MonsterBall->GetPivot().y >= -70.0f)
+				{
+					MonsterBall->SetPivot({ 210.0f,-70.0f });
+					FallCheck = true;
+				}
+				if (FallCheck == true && MyCatchEnd == false)
+				{
+					MonsterBall->ChangeAnimation("Catch");
+					MyCatchEnd = true;
+				}
 			}
 		}
+	}
+	if (MyCatchEnd == true)
+	{
+		FallCheck = false;
+		MonsterBall->SetPivot({ 210.0f,-70.0f });
 	}
 }
 
