@@ -136,6 +136,7 @@ public:
 	void ShowGetEXP(const std::string& _PlayerPokemon, int _EXP);
 	void ShowChangePokemon(const std::string& _Poe, const std::string& _PoePokemon);
 	void ShowLevelUp(const std::string& _PlayerPokemon, int _Lv);
+	void ShowRunaway();
 
 	//
 	std::vector<GameEngineContentFont*> AllSkillFont_;

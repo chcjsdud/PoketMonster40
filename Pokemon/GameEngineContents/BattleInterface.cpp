@@ -113,6 +113,7 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 'H');
+	GameEngineInput::GetInst()->CreateKey("PokeBall", 'M');
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp", 6);
@@ -199,7 +200,6 @@ void BattleInterface::Update()
 			PoeName_->ShowString(Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef() + (Level_->PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetGender() ? "[" : "]"), true);
 			PoeLevel_->ShowString(std::to_string(Level_->BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyLevel()), true);
 		}
-		//MyHPUI->Is
 	}
 
 
@@ -348,6 +348,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 			Level_->StartBattlePage(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()
 				, RandomPoeSkill(Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()));
 
+			Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill()[SkillUIPos_]->GetInfo()->GetPP()--;
 			for (auto& Font : AllSkillFont_)
 			{
 				Font->ClearCurrentFonts();
@@ -533,6 +534,15 @@ void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv)
 	Level_->EndFont_ = false;
 }
 
+void BattleInterface::ShowRunaway()
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("Got away safely");
+	Level_->EndFont_ = false;
+}
+
+
+
 std::string BattleInterface::AbilityString(PokemonAbility _Ability)
 {
 	switch (_Ability)
@@ -596,6 +606,10 @@ bool BattleInterface::MoveKey()
 {
 	if (ChildUI_ != nullptr)
 	{
+		if (GameEngineInput::GetInst()->IsDown("PokeBall"))
+		{
+			int a = 0;
+		}
 		return false;
 	}
 	if (BattleTimer_ <= 0.1f)
@@ -650,7 +664,6 @@ bool BattleInterface::MoveKey()
 			Select->SetPivot({ -190.0f,35.0f });
 		}
 
-
 		{
 			SelectOrder();
 			OrderCheck();
@@ -660,9 +673,16 @@ bool BattleInterface::MoveKey()
 	}
 
 	// ÀåÁßÇõ : Debug
-	if (GameEngineInput::GetInst()->IsDown("StartBattlePage"))
+	if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 	{
-		return true;
+		BattleUnit->SetFighting(true);
+		CurOrder = BattleOrder::Run;
+		InterfaceImage->Off();
+		BattleCommend->Off();
+		Select->Off();
+		ShowRunaway();
+		Level_->BState_ = BattleState::Endding;
+		
 	}
 	return false;
 	//
@@ -747,13 +767,11 @@ void BattleInterface::SelectOrder()
 				ChildUI_->SetPosition(float4(0, 0) + GameEngineWindow::GetScale().Half());
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());
 				dynamic_cast<Bag*>(ChildUI_)->BagInit();
+
 			}
 		}
 
-		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
-		{
-			CurOrder = BattleOrder::Run;
-		}
+
 	}
 }
 

@@ -100,7 +100,6 @@ void BattleLevel::Update()
 	case BattleState::SelecetPage:
 		if (Interface_->MoveKey() == true)
 		{
-			//StartBattlePage("Scratch", "Scratch");
 		}
 		break;
 	case BattleState::BattlePage:
@@ -257,6 +256,7 @@ void BattleLevel::EndBattlePage()
 void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 {
 	//김예나 : 이 브금은 실제론 월드맵에서 전투 걸렸을때부터 시작되야 합니다.
+	BState_ = BattleState::Openning;
 	BgmPlayer_ = GameEngineSound::SoundPlayControl("Wild_Battle.mp3");
 	BgmPlayer_.SetVolume(0.1f);
 
@@ -267,7 +267,7 @@ void BattleLevel::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 	//BState_ = BattleState::Openning
 	{
-		BState_ = BattleState::SelecetPage;
+		//BState_ = BattleState::SelecetPage;
 		OpenningEnd_ = false;
 		EnddingEnd_ = false;
 		ShowOpenning();
