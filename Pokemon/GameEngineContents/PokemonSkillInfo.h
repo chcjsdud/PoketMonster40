@@ -45,7 +45,7 @@ public:
 		SkillType_ = _SkillType;
 	}
 
-	inline int GetPP()
+	inline int& GetPP()
 	{
 		return PP_;
 	}

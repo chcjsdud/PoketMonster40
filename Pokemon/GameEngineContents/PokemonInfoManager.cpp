@@ -149,11 +149,11 @@ void PokemonInfoManager::Reset()
 		BulbasaurInfo->AddMySkill(CreatePokemonSkill("Growl"));
 
 		//Pidgey: 구구
-		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 3, 45, 40, 35, 35, 56, 40);
+		PokemonInfo* PidgeyInfo = CreatePokemonInfo("Pidgey", PokemonType::FLYING, 3, 5, 40, 35, 35, 5, 20);
 		PidgeyInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 
 		//Rattata: 꼬렛
-		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 3, 56, 35, 25, 35, 72, 30);
+		PokemonInfo* RattataInfo = CreatePokemonInfo("Rattata", PokemonType::NORMAL, 3, 5, 35, 25, 5, 5, 20);
 		RattataInfo->AddMySkill(CreatePokemonSkill("Tackle"));
 		RattataInfo->AddMySkill(CreatePokemonSkill("TailWhip"));
 

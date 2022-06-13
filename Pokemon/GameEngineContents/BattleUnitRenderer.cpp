@@ -536,6 +536,7 @@ void BattleUnitRenderer::Opening2()
 					BattleInter->GetMyHPUI()->On();
 					BattleInter->GetMyHP()->On();
 					BattleInter->GetEXP()->On();
+
 				}
 
 				if (BallLerp > 3.0f && Fighting==false)
@@ -544,6 +545,7 @@ void BattleUnitRenderer::Opening2()
 					BattleInter->GetInterfaceImage()->On();
 					BattleInter->GetSelect()->On();
 					DoomChit();
+					Level_->OpenningEnd_ = true;
 					//TailWhipMove();
 					//Tackle();
 					//WaterGun();
