@@ -270,5 +270,7 @@ private:
 	void UIUpdate(); 
 	void InitMyPokemon();
 
+	bool YesOrNOpen_;
+
 	//void PopUpPokemonPreview(int _Index);
 };

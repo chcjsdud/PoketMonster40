@@ -32,6 +32,7 @@
 #include "PokemonMenu.h"
 #include "MenuUI.h"
 #include "FadeActor.h"
+#include "YesOrNo.h"
 
 #include "PokemonInfoManager.h"
 #include "PokemonInfo.h"
@@ -427,7 +428,6 @@ void PlayerRed::Start()
 
 	FadeActor_ = GetLevel()->CreateActor<FadeActor>();
 	FadeActor_->SetPosition(GetPosition());
-
 
 	//플레이어 아이템
 	MyItemList_.push_back(PokemonInfoManager::GetInst().CreateItem("Potion"));
@@ -1070,6 +1070,7 @@ void PlayerRed::UIUpdate()
 
 			WMenuUICheck_ = !WMenuUICheck_;
 		}
+
 	}
 }
 

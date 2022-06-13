@@ -193,6 +193,9 @@
     <ClCompile Include="CutableTree.cpp">
       <Filter>WorldMap</Filter>
     </ClCompile>
+    <ClCompile Include="YesOrNo.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -387,6 +390,9 @@
     </ClInclude>
     <ClInclude Include="CutableTree.h">
       <Filter>WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="YesOrNo.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

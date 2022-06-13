@@ -16,6 +16,7 @@
 #include "WorldMapSoundManager.h"
 #include "RegionUI.h"
 #include "WorldMapLevel.h"
+#include "YesOrNo.h"
 
 bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 {
@@ -437,6 +438,15 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->AddText("So, Red, you want to go with");
 			TmpText->AddText("the GRASS POKEMON BULBASAUR?");
 			TmpText->Setting();
+
+			ChildUI_ = GetLevel()->CreateActor<YesOrNo>(60, "YesOrNo");
+			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<YesOrNo*>(ChildUI_)->Init();
+
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+			ChangeState(RedState::Idle);
+
+			WMenuUICheck_ = !WMenuUICheck_;
 			return true;
 		}
 		if (_X == 9 && (_Y == 2 || _Y == 3))
@@ -449,6 +459,15 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->AddText("So, Red, you've decided on the");
 			TmpText->AddText("WATER POKEMON SQUIRTLE?");
 			TmpText->Setting();
+
+			ChildUI_ = GetLevel()->CreateActor<YesOrNo>(60, "YesOrNo");
+			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<YesOrNo*>(ChildUI_)->Init();
+
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+			ChangeState(RedState::Idle);
+
+			WMenuUICheck_ = !WMenuUICheck_;
 			return true;
 		}
 		if (_X == 10 && (_Y == 2 || _Y == 3))
@@ -461,6 +480,15 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->AddText("So, Red, you're claiming the");
 			TmpText->AddText("FIRE POKEMON CHARMANDER?");
 			TmpText->Setting();
+
+			ChildUI_ = GetLevel()->CreateActor<YesOrNo>(60, "YesOrNo");
+			ChildUI_->SetPosition(GetPosition());
+			dynamic_cast<YesOrNo*>(ChildUI_)->Init();
+
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Menu);
+			ChangeState(RedState::Idle);
+
+			WMenuUICheck_ = !WMenuUICheck_;
 			return true;
 		}
 		for (int x = 9; x <= 12; x++)
