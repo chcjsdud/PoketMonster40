@@ -3,6 +3,7 @@
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
 
+#include "ContentEnum.h"
 #include "NPCBase.h"
 #include "WorldTileMap1.h"
 #include "RoomTileMap4.h"
@@ -28,8 +29,8 @@ void Oak::Start()
 	NPCLeftCollision_ = CreateCollision("OakDirZColBox", { 5,20 }, { -32,0 });
 	{
 		GameEngineImage*
-			// Idle
-			Image = GameEngineImageManager::GetInst()->Find("Oak_Idle_Up.bmp");
+		// Idle
+		Image = GameEngineImageManager::GetInst()->Find("Oak_Idle_Up.bmp");
 		Image->Cut({ 56,80 });
 		Image = GameEngineImageManager::GetInst()->Find("Oak_Idle_Down.bmp");
 		Image->Cut({ 56,80 });
@@ -49,7 +50,7 @@ void Oak::Start()
 		Image->CutCount(3, 1);
 	}
 
-	NPCRender_ = CreateRenderer();
+	NPCRender_ = CreateRenderer(static_cast<int>(RenderOrder::Player));
 	NPCRender_->CreateAnimation("Oak_Idle_Up.bmp", "IdleUp", 0, 0, 0.0f, false);
 	NPCRender_->CreateAnimation("Oak_Idle_Down.bmp", "IdleDown", 0, 0, 0.0f, false);
 	NPCRender_->CreateAnimation("Oak_Idle_Right.bmp", "IdleRight", 0, 0, 0.0f, false);

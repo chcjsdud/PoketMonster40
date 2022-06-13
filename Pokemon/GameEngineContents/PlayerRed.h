@@ -152,6 +152,8 @@ public:
 		ChildUI_ = _Child;
 	}
 
+	void PopUpPokemonPreview(int _Index);
+
 protected:
 
 private:
@@ -268,5 +270,5 @@ private:
 	void UIUpdate(); 
 	void InitMyPokemon();
 
-	void PopUpPokemonPreview(int _Index);
+	//void PopUpPokemonPreview(int _Index);
 };

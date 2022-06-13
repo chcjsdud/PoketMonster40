@@ -144,6 +144,7 @@ void InteractionText::Update()
 		// 대화가 끝났을 때 z 키누르면 종료
 		if (GameEngineInput::GetInst()->IsDown("Z") == true)
 		{
+			PlayerRed::MainRed_->PopUpPokemonPreview(3);
 			if (true == PlayerRed::MainRed_->GetStartEvent())
 			{
 				PlayerRed::MainRed_->SetOakCall(true);

@@ -1087,6 +1087,7 @@ void PlayerRed::PopUpPokemonPreview(int _Index)
 {
 	if (3 <= _Index)
 	{
+		PokemonPreview_->Off();
 		return;
 	}
 
@@ -1095,16 +1096,19 @@ void PlayerRed::PopUpPokemonPreview(int _Index)
 	case 0:
 		PokemonPreview_ = CreateRenderer("Select_Bulbasaur.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);
+		PokemonPreview_->SetPivot({ 0,-80 });
 		break;
 
 	case 1:
 		PokemonPreview_ = CreateRenderer("Select_Charmander.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);
+		PokemonPreview_->SetPivot({ 0,-80 });
 		break;
 
 	case 2:
 		PokemonPreview_ = CreateRenderer("Select_Squirtle.bmp");
 		PokemonPreview_->SetOrder(GetOrder() + 10);
+		PokemonPreview_->SetPivot({ 0,-80 });
 		break;
 	}
 }

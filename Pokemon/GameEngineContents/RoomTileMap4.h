@@ -28,5 +28,9 @@ protected:
 
 private:
 	void Start() override;
+
+	GameEngineRenderer* PokeballRender0_;	// 이상해씨
+	GameEngineRenderer* PokeballRender1_;	// 꼬부기
+	GameEngineRenderer* PokeballRender2_;	// 파이리
 };
 
