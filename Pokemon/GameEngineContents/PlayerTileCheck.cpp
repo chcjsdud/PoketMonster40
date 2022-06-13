@@ -426,6 +426,43 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 			TmpText->Setting();
 			return true;
 		}
+		
+		if (_X == 8 && (_Y == 2 || _Y == 3))
+		{
+			PopUpPokemonPreview(0);
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("I see! BULBASAUR is your choice.");
+			TmpText->AddText("It's very easy to raise.");
+			TmpText->AddText("So, Red, you want to go with");
+			TmpText->AddText("the GRASS POKEMON BULBASAUR?");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 9 && (_Y == 2 || _Y == 3))
+		{
+			PopUpPokemonPreview(1);
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Hm! SQUIRTLE is your choice.");
+			TmpText->AddText("It's one worth raising.");
+			TmpText->AddText("So, Red, you've decided on the");
+			TmpText->AddText("WATER POKEMON SQUIRTLE?");
+			TmpText->Setting();
+			return true;
+		}
+		if (_X == 10 && (_Y == 2 || _Y == 3))
+		{
+			PopUpPokemonPreview(2);
+			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
+			TmpText->SetPosition(GetPosition());
+			TmpText->AddText("Ah! CHARMANDER is your choice.");
+			TmpText->AddText("You should raise it patiently.");
+			TmpText->AddText("So, Red, you're claiming the");
+			TmpText->AddText("FIRE POKEMON CHARMANDER?");
+			TmpText->Setting();
+			return true;
+		}
 		for (int x = 9; x <= 12; x++)
 		{
 			if (_X == x && _Y == -1)

@@ -125,7 +125,7 @@ void BattleInterface::Start()
 	MyHPUI->Off();
 	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3, RenderPivot::LeftTop);
 	MyHP->Off();
-	EXP = CreateRenderer("FriendlyHPExp4.bmp", 3);
+	EXP = CreateRenderer("FriendlyHPExp4.bmp", 99,RenderPivot::LeftTop);
 	EXP->Off();
 	BattleCommend = CreateRenderer("BattleCommend4.bmp", 7);
 	//Player = CreateRenderer("Player.bmp",0);
@@ -137,7 +137,7 @@ void BattleInterface::Start()
 	EnemyHPUI->SetPivot({ -450.0f,-430.0f });
 	EnemyHP->SetPivot({ -502.0f,-436.0f });
 	MyHP->SetPivot({ -16.0f, -180.0f });
-	EXP->SetPivot({ 48.0f,-170.0f });
+	EXP->SetPivot({ -80.0f,-256.0f });
 	BattleCommend->SetPivot({ -240.0f,0.0f });
 	BattleCommend->Off();//배틀커맨드는 Fight상태일때만
 
@@ -474,7 +474,7 @@ void BattleInterface::ShowPlayerFaintString(const std::string& _PlayerPokemon)
 void BattleInterface::ShowSupperEffectString()
 {
 	BattleFont_->EndFont();
-	BattleFont_->ShowString("It's Supe\\effective!");
+	BattleFont_->ShowString("It's Super\\effective!");
 	Level_->EndFont_ = false;
 }
 
@@ -671,7 +671,7 @@ void BattleInterface::DoomChit()
 	{
 		MyHPUI->SetPivot({ 0.0f,-174.0f });
 		MyHP->SetPivot({ -16.0f, -184.0f });
-		EXP->SetPivot({ 48.0f,-174.0f });
+		EXP->SetPivot({ -80.0f,-260.0f });
 		PlayerName_->SetPosition({ 570 ,  312 - 4 });
 		PlayerLevel_->SetPosition({ 865 , 312 - 4 });
 		PlayerHP_->SetPosition({ 770 , 384 - 4 });
@@ -682,8 +682,8 @@ void BattleInterface::DoomChit()
 	{
 		MyHPUI->SetPivot({ 0.0f,-170.0f });
 		MyHP->SetPivot({ -16.0f, -180.0f });
-		EXP->SetPivot({ 48.0f,-170.0f });
-		PlayerName_->SetPosition({ 570 , 312 });
+		EXP->SetPivot({ -80.0f,-256.0f });
+		PlayerName_->SetPosition({570 , 312 });
 		PlayerLevel_->SetPosition({ 865 , 312 });
 		PlayerHP_->SetPosition({ 770 , 384 });
 	}

@@ -97,6 +97,10 @@ public:
 	{
 		return EnemyHPUI;
 	}
+	GameEngineRenderer* GetEnemyHP() const
+	{
+		return EnemyHP;
+	}
 	GameEngineRenderer* GetMyHPUI() const
 	{
 		return MyHPUI;
