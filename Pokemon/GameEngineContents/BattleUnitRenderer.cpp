@@ -122,7 +122,7 @@ void BattleUnitRenderer::Update()
 	//Opening2();
 	TrainerOpening2();
 
-	if (SkillName_ != SkillName::None && (MyTurnEnd == false || EnemyTurnEnd == false))
+	if (SkillName_ != SkillName::None && (MyTurnEnd == false || EnemyTurnEnd == false || MyCatchEnd == false))
 	{
 		Level_->DoingSkillAnimation_ = true;
 		switch (SkillName_)
@@ -145,11 +145,14 @@ void BattleUnitRenderer::Update()
 		case SkillName::EnemyTackle:
 			EnemyTackle();
 			break;
+		case SkillName::Catch:
+			Catch();
+			break;
 		default:
 			break;
 		}
 
-		if (SkillName_ != SkillName::None && (MyTurnEnd == true && EnemyTurnEnd == true))
+		if (SkillName_ != SkillName::None && (MyTurnEnd == true && EnemyTurnEnd == true && MyCatchEnd == true))
 		{
 			SkillName_ = SkillName::None;
 			Level_->DoingSkillAnimation_ = false;
@@ -300,11 +303,6 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		//상대 트레이너
 		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 야생 포켓몬처럼 다른 랜더러 뜨게 하면 될거같아요
 		OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
-
-		//푸키먼
-		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
-			, 3, RenderPivot::CENTER, PlayerPokemonPos_);
-
 
 		//볼
 		MonsterBallOP = CreateRenderer("MonsterBall4.bmp", 4);
@@ -898,7 +896,6 @@ void BattleUnitRenderer::Catch()
 				{
 					PoeCurrentPokemon_->Off();
 				}
-				BallFallTime += GameEngineTime::GetDeltaTime() * 200.0f;
 				CatchBallOpen->Off();
 				MonsterBallCH->ChangeAnimation("Ball");
 				MonsterBallCH->On();

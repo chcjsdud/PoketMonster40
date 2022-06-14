@@ -138,6 +138,8 @@ public:
 	void ShowChangePokemon(const std::string& _Poe, const std::string& _PoePokemon);
 	void ShowLevelUp(const std::string& _PlayerPokemon, int _Lv, bool _Idx = false);
 	void ShowRunaway();
+	void ShowUsePokeball();
+	void ShowGotPokemonByBall(const std::string& _WildPokemon);
 
 	//
 	std::vector<GameEngineContentFont*> AllSkillFont_;
