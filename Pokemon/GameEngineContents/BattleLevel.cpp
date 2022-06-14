@@ -112,6 +112,10 @@ void BattleLevel::Update()
 			{
 			case BattlePageEnd::None:
 				break;
+			case BattlePageEnd::GoEnd:
+				BState_ = BattleState::Endding;
+				return;
+				break;
 			case BattlePageEnd::ChangePokemon:
 				Interface_->ShowChangePokemon(Opponent_->GetActor()->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
 				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
@@ -122,7 +126,9 @@ void BattleLevel::Update()
 				break;
 			case BattlePageEnd::CatchPokeBall:
 				Interface_->ShowGotPokemonByBall(BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
-				BState_ = BattleState::Endding;
+				PlayerRed_->AddPokemon(PoeCurrentPokemon_->GetPokemon());
+				EndAction_ = BattlePageEnd::GoEnd;
+				return;
 				break;
 			case BattlePageEnd::LevelUp:
 			{
@@ -255,7 +261,7 @@ void BattleLevel::StartBattlePage()
 
 	BattleManager_ = new BattleManager("PokeBall", this);
 	BState_ = BattleState::BattlePage;
-	BattleManager_->Update();
+	//BattleManager_->Update();
 }
 
 void BattleLevel::EndBattlePage()
@@ -730,11 +736,15 @@ InBattle BattleManager::Update()
 {
 	if (UsePokemonBall_ == true)
 	{
+		if (Level_->DoingSkillAnimation_ == true || Level_->EndAction_ == BattlePageEnd::CatchPokeBall)
+		{
+			return InBattle::Wait;
+		}
 		Interface_->ShowUsePokeball(); 
 		Level_->UnitRenderer->SkillName_ = SkillName::Catch;
 		Level_->UnitRenderer->MyCatchEnd = false;
 		Level_->DoingSkillAnimation_ = true;
-		return InBattle::Wait;
+		return InBattle::Pokeball;
 	}
 	PokemonBattleState* CurrentTurn = PlayerFirst_ == true ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
 	PokemonSkillInfo* CurrentPokemonSkill = PlayerFirst_ == true ? PlayerSkill_ : PoeSkill_;

@@ -892,6 +892,10 @@ void BattleInterface::Reset()
 	{
 		Iter->ClearCurrentFonts();
 	}
+	for (auto Iter : AllLevelUpFont_)
+	{
+		Iter->ClearCurrentFonts();
+	}
 
 	Level_->CurrentSelect_ = BattleOrder::None;
 	CurOrder = Level_->CurrentSelect_;
@@ -1094,4 +1098,8 @@ void BattleInterface::HPRenderUpdate()
 void BattleInterface::LevelStatu()
 {
 	BattleStatus_->On();
+	//for (size_t i = 0; i < length; i++)
+	//{
+
+	//}
 }

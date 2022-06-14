@@ -464,5 +464,6 @@ enum class BattlePageEnd
 	LevelUp,
 	LevelUpState,
 	SetPokemon,
-	CatchPokeBall
+	CatchPokeBall,
+	GoEnd
 };
