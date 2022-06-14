@@ -33,5 +33,6 @@ enum class SkillName
 	ShellHide,
 	EnemyRock,
 	EnemyTackle,
+	Catch
 
 };

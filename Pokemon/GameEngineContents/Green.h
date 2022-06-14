@@ -1,8 +1,9 @@
 #pragma once
 #include "NPCBase.h"
+#include "BattleNPCInterface.h"
 
 // Ό³Έν :
-class Green : public NPCBase
+class Green : public NPCBase, public BattleNPCInterface
 {
 public:
 	// constrcuter destructer
@@ -16,7 +17,11 @@ public:
 	Green& operator=(Green&& _Other) noexcept = delete;
 
 	static Green* NPCGreen;
-
+	static Green* GetInst()
+	{
+		return NPCGreen;
+	}
+	
 	bool IsRedSelectFinish_;
 	bool IsGreenMove_;
 

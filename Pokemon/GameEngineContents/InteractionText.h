@@ -32,7 +32,6 @@ protected:
 private:
 	std::vector<std::string> TextVector_;
 	GameEngineRenderer* UIRenderer_;
-	GameEngineRenderer* ArrowRenderer_;
 	class GameEngineContentFont* Fonts;
 	bool IsSetting_;
 	bool IsShop_;
@@ -40,7 +39,8 @@ private:
 	bool IsYesNo_;
 	bool IsChoice_;
 	bool IsBrock_;
-	bool IsNPC5Start_;
+	bool IsShopStart_;
+	bool IsShopGreen_;
 
 	void Start() override;
 	void Update() override;

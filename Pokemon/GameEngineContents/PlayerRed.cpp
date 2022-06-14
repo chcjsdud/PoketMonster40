@@ -72,7 +72,9 @@ PlayerRed::PlayerRed()
 	, IsControllOnCheck_(false)
 	, IsGreenBattleCheck_(false)
 	, NPC5Check_(false)
-	, IsClearNPC5_(false)
+	, IsStartShop_(false)
+	, IsStartShopOak_(false)
+	, IsClearShop_(false)
 	, IsStartBattle_(false)
 	, LerpX_(0)
 	, LerpY_(0)
@@ -482,7 +484,7 @@ void PlayerRed::Update()
 	{
 		CurrentTileMap_ = WorldTileMap3::GetInst();
 		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
-		IsClearNPC5_ = true;
+		IsClearShop_ = true;
 	}
 
 	if (true == GameEngineInput::GetInst()->IsDown("ForcedBattle"))
@@ -778,7 +780,7 @@ void PlayerRed::MoveAnim()
 			}
 			return;
 		}
-		else if (true == IsStartNPC5_ &&  Count_ > 0)
+		else if (true == GetStartShopEvent() && Count_ > 0)
 		{
 			LerpTime_ += GameEngineTime::GetDeltaTime() * 3.0f;
 			LerpX_ = GameEngineMath::LerpLimit(StartPos_.x, GoalPos_.x, LerpTime_);
@@ -798,7 +800,7 @@ void PlayerRed::MoveAnim()
 				{
 					RedMoveControll(CurrentDir_, Count_);
 				}
-				else if (true == GetStartNPC5Event())
+				else if (true == GetStartShopEvent())
 				{
 					SetControllOn(false);
 					RedRender_->ChangeAnimation("IdleLeft");
@@ -913,7 +915,8 @@ bool PlayerRed::CanMove()
 		true == IsFadeIn_ ||
 		true == IsInteraction_ ||
 		ChildUI_ != nullptr ||
-		false == WMenuUICheck_ 
+		false == WMenuUICheck_ ||
+		true == IsStartBattle_
 		)
 	{
 		return false;
@@ -965,7 +968,7 @@ void PlayerRed::InteractionUpdate()
 	}
 	else
 	{
-		if (false == IsClearNPC5_)
+		if (false == GetClearShopEvent())
 		{
 			float4 NPCCheckPos = GetPosition() - WorldTileMap1::GetInst()->GetPosition();
 			TileIndex NPCCheckIndex = WorldTileMap1::GetInst()->GetTileMap().GetTileIndex(NPCCheckPos);
@@ -1021,8 +1024,8 @@ void PlayerRed::InteractionUpdate()
 					IsInteraction_ = true;
 
 					IsStartEvent_ = true;
-					RedCurrentIndex_.x = NPCCheckIndex.X;
-					RedCurrentIndex_.y = NPCCheckIndex.Y;
+					RedCurrentIndex_.x = (float)(NPCCheckIndex.X);
+					RedCurrentIndex_.y = (float)(NPCCheckIndex.Y);
 
 					InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 					TmpText->SetPosition(GetPosition() + float4(0, -30));
@@ -1041,7 +1044,7 @@ void PlayerRed::InteractionUpdate()
 			{
 				if (NPCCheckIndex.X == x && NPCCheckIndex.Y == 6 && true == Green::NPCGreen->IsRedSelectFinish_)
 				{
-					RedCurrentIndex_.x = x;
+					RedCurrentIndex_.x = (float)(x);
 					if (false == IsGreenBattleCheck_)
 					{
 						RedRender_->ChangeAnimation("IdleUp");
@@ -1065,8 +1068,13 @@ void PlayerRed::InteractionUpdate()
 
 bool PlayerRed::InteractionNPC()
 {
+	if (false == GameEngineInput::GetInst()->IsPress("Z"))
+	{
+		return false;
+	}
+
 	std::vector<GameEngineCollision*> TmpVector;
-	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPC4DirZColBox", TmpVector))
+	if (true == RedCollision_->CollisionResult("NPC4DirZColBox", TmpVector))
 	{
 		//WMenuUICheck_ = false;
 		for (size_t i = 0; i < TmpVector.size(); i++)
@@ -1092,7 +1100,7 @@ bool PlayerRed::InteractionNPC()
 	}
 
 	// 체육관
-	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPCBrockDirZColBox", TmpVector))
+	if (true == RedCollision_->CollisionResult("NPCBrockDirZColBox", TmpVector))
 	{
 		//WMenuUICheck_ = false;
 		for (size_t i = 0; i < TmpVector.size(); i++)
@@ -1128,7 +1136,7 @@ bool PlayerRed::InteractionNPC()
 	}
 
 	// 오박사 물건 전달
-	if (true == GameEngineInput::GetInst()->IsPress("Z") && RedCollision_->CollisionResult("NPCOakDirZColBox", TmpVector))
+	if (false == GetClearShopEvent() && true == PlayerRed::MainRed_->GetStartShopEvent() && true == RedCollision_->CollisionResult("OakDirZColBox", TmpVector))
 	{
 		//WMenuUICheck_ = false;
 		for (size_t i = 0; i < TmpVector.size(); i++)
@@ -1141,6 +1149,8 @@ bool PlayerRed::InteractionNPC()
 
 			Newnpc->IsTalk_ = true;
 		}
+
+		IsClearShop_ = true;
 
 		InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 		TmpText->SetPosition(GetPosition());

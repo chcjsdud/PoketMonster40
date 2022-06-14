@@ -7,8 +7,10 @@
 #include "PlayerRed.h"
 #include "NPCBase.h"
 #include "Oak.h"
+#include "PokemonInfoManager.h"
 #include "RoomTileMap4.h"
 #include "InteractionText.h"
+#include "BattleStartUI.h"
 
 Green* Green::NPCGreen = nullptr;
 Green::Green() 
@@ -25,6 +27,9 @@ Green::~Green()
 
 void Green::Start()
 {
+	SetBattleNPC(true);
+	PushPokemon(PokemonInfoManager::GetInst().CreatePokemon("Bulbasaur"));
+	
 	NPCCollision_ = CreateCollision("NPCColBox", { 60,60 });
 	NPCUpCollision_ = CreateCollision("GreenDirZColBox", { 20,5 }, { 0,-32 });
 	NPCDownCollision_ = CreateCollision("GreenDirZColBox", { 20,5 }, { 0,32 });
@@ -147,9 +152,15 @@ void Green::RedGreenBattle()
 				IsStart_[6] = true;
 				NPCMoveDir(NPCDir::Down, 1);
 
-				IsGreenMove_ = false;
+				IsGreenMove_ = false;				
+			}
 
-				// 레드 그린 배틀 시작
+			if (false == IsStart_[7] && false == IsGreenMove_)
+			{
+				IsStart_[7] = true;
+
+				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Rival);
 			}
 		}
 
@@ -167,8 +178,14 @@ void Green::RedGreenBattle()
 				NPCMoveDir(NPCDir::Down, 1);
 
 				IsGreenMove_ = false;
+			}
 
-				// 레드 그린 배틀 시작
+			if (false == IsStart_[7] && false == IsGreenMove_)
+			{
+				IsStart_[7] = true;
+
+				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Rival);
 			}
 		}
 
@@ -186,8 +203,14 @@ void Green::RedGreenBattle()
 				NPCMoveDir(NPCDir::Down, 1);
 
 				IsGreenMove_ = false;
+			}
 
-				// 레드 그린 배틀 시작
+			if (false == IsStart_[7] && false == IsGreenMove_)
+			{
+				IsStart_[7] = true;
+
+				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Rival);
 			}
 		}
 	}

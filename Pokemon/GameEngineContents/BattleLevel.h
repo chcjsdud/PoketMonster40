@@ -134,6 +134,7 @@ private:
 	bool EndFont_;
 
 	void StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _PoeSkill);
+	void StartBattlePage();
 
 
 	void EndBattlePage();
@@ -340,6 +341,7 @@ class BattleManager
 private:
 	BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo*  _PoeSkill, BattleLevel* _Level);
 	//BattleManager(const std::string& _PlayerItem, const std::string& _PoeSkill);
+	BattleManager(const std::string& _PlayerItem, BattleLevel* _Level);
 	~BattleManager()
 	{
 		if (FristTurn_ != nullptr)
@@ -384,7 +386,7 @@ private:
 	void PoePokemonDead();
 
 	bool DeadSwitch_;
-
+	const bool UsePokemonBall_;
 private:
 	// 설명: 결과물 저장
 	class BattleTurn
@@ -445,6 +447,7 @@ enum class InBattle
 	BattleEnd,
 	BattleEndByPlayerDeath,
 	BattleEndByPoeDeath,
+	Pokeball
 };
 
 enum class BattlePageEnd
@@ -454,5 +457,6 @@ enum class BattlePageEnd
 	EndPokemon,
 	LevelUp,
 	LevelUpState,
-	SetPokemon
+	SetPokemon,
+	CatchPokeBall
 };

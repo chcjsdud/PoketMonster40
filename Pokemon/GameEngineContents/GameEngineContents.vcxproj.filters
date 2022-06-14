@@ -205,6 +205,9 @@
     <ClCompile Include="YesOrNo.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="CenterAnimationUI.cpp">
+      <Filter>WorldMap\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PokemonEngine.h" />
@@ -408,6 +411,9 @@
     </ClInclude>
     <ClInclude Include="YesOrNo.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CenterAnimationUI.h">
+      <Filter>WorldMap\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

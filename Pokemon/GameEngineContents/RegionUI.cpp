@@ -2,6 +2,7 @@
 #include <GameEngineContentsCore/GameEngineContentFont.h>
 #include <GameEngineBase/GameEngineInput.h>
 #include "PlayerRed.h"
+#include "ContentEnum.h"
 
 RegionUI* RegionUI::Inst_;
 
@@ -40,7 +41,8 @@ void RegionUI::NoneNamedRegion()
 void RegionUI::Start()
 {
 	Fonts_ = GetLevel()->CreateActor<GameEngineContentFont>();
-	Renderer_ = CreateRenderer("AreaUI.bmp");
+	Fonts_->SetOrder(static_cast<int>(RenderOrder::UI));
+	Renderer_ = CreateRenderer("AreaUI.bmp", static_cast<int>(RenderOrder::UI));
 	DisappearPos_ = { -220, -365 };
 	AppearPos_ = {-220, -285};
 	
