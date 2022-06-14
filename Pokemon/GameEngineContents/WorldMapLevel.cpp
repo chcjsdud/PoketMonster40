@@ -62,7 +62,7 @@ void WorldMapLevel::StartBattleLevelByNPC(BattleNpcType _Type)
 		BattleLevel* TmpBattleLevel = dynamic_cast<BattleLevel*>(GameEngine::GetInst().FindLevel("Battle"));
 		if (nullptr != TmpBattleLevel)
 		{
-			TmpBattleLevel->StartBattleLevelByNPC(NPCBrock::GetInst());
+			TmpBattleLevel->StartBattleLevelByNPC(Green::GetInst());
 		}
 		break;
 	}

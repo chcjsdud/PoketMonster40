@@ -52,6 +52,11 @@ public:
 	float NextDirMoveTimer_;
 	int Count_;
 	
+	inline void SetFadeOut(const bool _Value)
+	{
+		IsFadeOut_ = _Value;
+	}
+
 	inline void SetInteraction(const bool _Value)
 	{
 		IsInteraction_ = _Value;
@@ -122,6 +127,11 @@ public:
 		return CurrentTilePos_;
 	}
 
+	inline bool GetFadeOut()
+	{
+		return IsFadeOut_;
+	}
+	
 	inline bool GetStartEvent()
 	{
 		return IsStartEvent_;
