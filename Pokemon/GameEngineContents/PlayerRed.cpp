@@ -1021,8 +1021,8 @@ void PlayerRed::InteractionUpdate()
 					IsInteraction_ = true;
 
 					IsStartEvent_ = true;
-					RedCurrentIndex_.x = NPCCheckIndex.X;
-					RedCurrentIndex_.y = NPCCheckIndex.Y;
+					RedCurrentIndex_.x = (float)(NPCCheckIndex.X);
+					RedCurrentIndex_.y = (float)(NPCCheckIndex.Y);
 
 					InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 					TmpText->SetPosition(GetPosition() + float4(0, -30));
@@ -1041,7 +1041,7 @@ void PlayerRed::InteractionUpdate()
 			{
 				if (NPCCheckIndex.X == x && NPCCheckIndex.Y == 6 && true == Green::NPCGreen->IsRedSelectFinish_)
 				{
-					RedCurrentIndex_.x = x;
+					RedCurrentIndex_.x = (float)(x);
 					if (false == IsGreenBattleCheck_)
 					{
 						RedRender_->ChangeAnimation("IdleUp");

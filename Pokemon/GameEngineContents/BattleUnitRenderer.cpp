@@ -62,6 +62,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, FallCheck(false)
 	, PlayerTime_2(0.0f)
 	, IsCatch(false)
+	, MonsterBallCH(nullptr)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
