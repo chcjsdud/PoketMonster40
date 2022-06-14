@@ -135,7 +135,7 @@ void Oak::RedCatch()
 			IsStart_[5] = true;
 			RedCatchEndCheck_ = true;
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
-			TmpText->SetPosition(GetPosition() + float4(0, -65));
+			TmpText->SetPosition(PlayerRed::MainRed_->GetPosition());
 			TmpText->AddText("OAK: It's unsafe!");
 			TmpText->AddText("Wild POKEMON live in tall grass!");
 			TmpText->AddText("You need your own POKEMON for");
@@ -240,7 +240,7 @@ void Oak::OakFollow()
 		}
 
 
-		if (false == IsStart_[15] && GetAccTime() >= NextDirMoveTimer_)
+		if (false == IsStart_[15] && GetAccTime() >= NextDirMoveTimer_ && true == PlayerRed::MainRed_->GetFadeOut())
 		{
 			IsStart_[15] = true;
 			PlayerRed::MainRed_->SetCurrentTileMap(RoomTileMap4::GetInst());
@@ -260,6 +260,7 @@ void Oak::Room4Enter()
 {
 	if (true == Room4EnterCheck_)
 	{
+		//PlayerRed::MainRed_->SetInteraction(true);
 		if (false == IsStart_[16])
 		{
 			IsStart_[16] = true;
@@ -294,7 +295,7 @@ void Oak::Room4Enter()
 			IsStart_[19] = true;
 
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
-			TmpText->SetPosition(GetPosition() + float4(0, 60));
+			TmpText->SetPosition(PlayerRed::MainRed_->GetPosition() + float4(0, -60));
 			TmpText->AddText("GREEN: Gramps!");
 			TmpText->AddText("I'm fed up with waiting!");
 			TmpText->AddText("OAK: GREEN?");
