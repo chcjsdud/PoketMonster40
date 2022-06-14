@@ -1003,6 +1003,7 @@ void BattleUnitRenderer::TrainerOpening2()
 			if (MonsterBallOP->IsUpdate() == false)
 			{
 				MonsterBallOP->On();
+				MonsterBallOP->ChangeAnimation("BallRoll");
 			}
 
 			{	//볼 던지기 무빙
@@ -1014,8 +1015,7 @@ void BattleUnitRenderer::TrainerOpening2()
 				if (BallLerp > 1.0f)
 				{
 					MonsterBallOP->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
-					//MonsterBall->SetPivot({ 100.f,100.f }); //현재 여기서 몬스터볼 문제가 생김
-					//CatchBallOpen->SetPivot({ 100.f,100.f });
+
 					if (MonsterBallOP->GetPivot().y > 1000.0f)
 					{
 						MonsterBallOP->Off();
@@ -1045,7 +1045,7 @@ void BattleUnitRenderer::TrainerOpening2()
 					//EnemyRock();
 					//EnemyTackle();
 
-					Catch();
+					//Catch();
 					BattleInter->DoomChit();
 				}
 			}
