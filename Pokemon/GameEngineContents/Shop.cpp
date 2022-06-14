@@ -336,8 +336,8 @@ void Shop::Start()
 {
 	if (false == GameEngineInput::GetInst()->IsKey("SelectShop"))
 	{
-		GameEngineInput::GetInst()->CreateKey("SelectShop", 'z');
-		GameEngineInput::GetInst()->CreateKey("ExitShop", 'x');
+		GameEngineInput::GetInst()->CreateKey("SelectShop", 'Z');
+		GameEngineInput::GetInst()->CreateKey("ExitShop", 'X');
 
 		GameEngineInput::GetInst()->CreateKey("DownArrowShop", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrowShop", VK_UP);
@@ -444,6 +444,15 @@ void Shop::Update()
 			ShopState_ = ShopState::SelectBuy;
 			InBag_->SetOrder(-1);
 			CountDialog_->SetOrder(-1);
+
+			if (0 == ArrowIndex_)
+			{
+				Price_ += 200;
+			}
+			else if (1 == ArrowIndex_)
+			{
+				Price_ += 300;
+			}
 
 			InBagCount_->Off();
 			DestroyInBagFont();
