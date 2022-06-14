@@ -11,10 +11,13 @@
 #include "Green.h"
 #include "InteractionText.h"
 
+Oak* Oak::MainOak_ = nullptr;
+
 Oak::Oak()
 	: IsStart_(false)
 	, RedOutCheck_(false)
 {
+	MainOak_ = this;
 }
 
 Oak::~Oak()

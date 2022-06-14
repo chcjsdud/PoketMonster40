@@ -15,6 +15,8 @@ public:
 	Oak& operator=(const Oak& _Other) = delete;
 	Oak& operator=(Oak&& _Other) noexcept = delete;
 
+	static Oak* MainOak_;
+
 	inline void SetRedOut(bool _bRedOutCheck)
 	{
 		RedOutCheck_ = _bRedOutCheck;
@@ -23,6 +25,11 @@ public:
 	inline bool GetRedOut()
 	{
 		return RedOutCheck_;
+	}
+
+	inline void SetStartShop(int _Index, bool _On)
+	{
+		IsStartShop_[_Index] = _On;
 	}
 
 protected:

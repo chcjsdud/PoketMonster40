@@ -25,6 +25,8 @@ InteractionText::InteractionText()
 	, IsChoice_(false)
 	, IsBrock_(false)
 	, IsShopStart_(false)
+	, IsShopGreen_(false)
+	, IsShopOakEnd_(false)
 	, ZIgnore_(false)
 {
 }
@@ -136,6 +138,10 @@ void InteractionText::Update()
 	{
 		IsShopGreen_ = true;
 	}
+	else if (Fonts->GetCurrentString() == "Leave it all to me!")
+	{
+		IsShopOakEnd_ = true;
+	}
 
 	// 폰트 출력이 완료되고 키입력 대기
 	if (Fonts->IsWait())
@@ -210,6 +216,11 @@ void InteractionText::Update()
 			{
 				IsShopGreen_ = false;
 				PlayerRed::MainRed_->SetStartShopOakEvent(true);
+			}
+			if (true == IsShopOakEnd_)
+			{
+				IsShopOakEnd_ = false;
+				Oak::MainOak_->SetStartShop(2, true);
 			}
 		}
 	}
