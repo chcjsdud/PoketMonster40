@@ -41,6 +41,7 @@ private:
 	bool IsBrock_;
 	bool IsShopStart_;
 	bool IsShopGreen_;
+	bool IsShopOakEnd_;
 
 	void Start() override;
 	void Update() override;

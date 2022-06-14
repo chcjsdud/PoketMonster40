@@ -37,7 +37,7 @@ void BattleStartUI::Update()
 	SetPosition(PlayerRed::MainRed_->GetPosition());
 	AnimTimer_ += GameEngineTime::GetDeltaTime();
 
-	if (0.1f <= AnimTimer_)
+	if (0.07f <= AnimTimer_)
 	{
 		AnimTimer_ = 0.f;
 		Index_ += 1;
