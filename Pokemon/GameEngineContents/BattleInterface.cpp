@@ -108,33 +108,39 @@ void BattleInterface::Start()
 	}
 	// 레벨업 폰트
 	{
-		//GameEngineContentFont* index = nullptr;
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 });
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+", true);
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 + 60});
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+", true);
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 + 60 * 2});
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+", true);
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 + 60 * 3 });
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+", true);
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 + 60 * 4 });
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+ 2", true);
-		//index = Level_->CreateActor<GameEngineContentFont>(10);
-		//index->SetPosition({ 820, 262 + 60 * 5 });
-		//AllLevelUpFont_.push_back(index);
-		//index->ShowString("+ 13", true);
+		GameEngineContentFont* index = nullptr;
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 });
+		index->Off();
+		AllLevelUpFont_.push_back(index);
 
-		BattleStatus_ = CreateRenderer("BattleStatus.bmp", 8);
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 + 60});
+		index->Off();
+		AllLevelUpFont_.push_back(index);
+
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 + 60 * 2});
+		index->Off();
+		AllLevelUpFont_.push_back(index);
+
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 + 60 * 3 });
+		index->Off();
+		AllLevelUpFont_.push_back(index);
+
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 + 60 * 4 });
+		index->Off();
+		AllLevelUpFont_.push_back(index);
+
+		index = Level_->CreateActor<GameEngineContentFont>(12);
+		index->SetPosition({ 820, 262 + 60 * 5 });
+		index->Off();
+		AllLevelUpFont_.push_back(index);
+
+
+		BattleStatus_ = CreateRenderer("BattleStatus.bmp", 11);
 		BattleStatus_->SetPivot({ 59 , -108 });
 		BattleStatus_->Off();
 	}
@@ -941,6 +947,19 @@ void BattleInterface::UIUpdate()
 
 void BattleInterface::ShowSkillInfo(int _Index)
 {
+	if (Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill().size() <= _Index)
+	{
+		PPFont_->ClearCurrentFonts();
+		PPFont_->ShowString("-", true);
+
+		MaxPPFont_->ClearCurrentFonts();
+		MaxPPFont_->ShowString("-", true);
+
+		TypeFont_->ClearCurrentFonts();
+		TypeFont_->ShowString("-", true);
+		return;
+	}
+
 	if (false == PPFont_->IsUpdate())
 	{
 		PPFont_->On();
@@ -1105,9 +1124,35 @@ void BattleInterface::HPRenderUpdate()
 
 void BattleInterface::LevelStatu()
 {
-	BattleStatus_->On();
-	//for (size_t i = 0; i < length; i++)
-	//{
 
-	//}
+	std::queue<int> AA;
+	BattleStatus_->On();
+	int Idx = 0;
+	for (auto Iter : AllLevelUpFont_)
+	{
+		AA.push(0);
+		Iter->ClearCurrentFonts();
+		Iter->On();
+	}
+	AA;
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[0]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetMaxHp(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp() + Idx);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetHp(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp());
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[1]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetAtt(Idx);
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[2]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetAtt(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetAtt() + Idx);
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[3]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetDef(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetDef() + Idx);
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[4]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetSpAtt(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSpAtt() + Idx);
+	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
+	AllLevelUpFont_[5]->ShowString("+ " + std::to_string(Idx), true);
+	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetSpDef(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSpDef() + Idx);
+
 }

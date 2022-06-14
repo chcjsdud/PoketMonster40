@@ -134,6 +134,7 @@ void BattleLevel::Update()
 			{
 				//
 				LevelUp(BattleData_->GetCurrentPlayerPokemon());
+				Interface_->LevelStatu();
 				EndAction_ = BattlePageEnd::LevelUpState;
 				// 레벨업 어쩌구 삽입
 			}
