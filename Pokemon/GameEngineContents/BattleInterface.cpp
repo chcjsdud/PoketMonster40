@@ -872,6 +872,14 @@ void BattleInterface::StartNPCTalk()
 		+ Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "!", false);
 }
 
+//김예나 : 6월14일 Test추가 함수
+void BattleInterface::NextNPCTalk()
+{
+	Fonts->ClearCurrentFonts();
+	Fonts->ShowString(Level_->GetBattleData()->GetNameString() + "\\Send\\"
+		+ Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "!", false);
+}
+
 void BattleInterface::Reset()
 {
 	OneTalk = true;

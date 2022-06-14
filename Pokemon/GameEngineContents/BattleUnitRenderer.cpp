@@ -631,7 +631,7 @@ void BattleUnitRenderer::Opening2()
 					//ShellHide();
 					//EnemyRock();
 					//EnemyTackle();
-
+					NextPokemonAppear();
 					//Catch();
 					BattleInter->DoomChit();
 				}
@@ -1094,5 +1094,49 @@ void BattleUnitRenderer::TrainerOpening2()
 void BattleUnitRenderer::NextPokemonAppear()
 {
 	//지금 포켓몬이던 다음 포켓몬이던 랜더러 변수는 PoeCurrentPokemon_로 재탕한다
+	PoeCurrentPokemon_->Off();
+	PoeCurrentPokemon_->SetAlpha(0);
 
+	//"NPC가 다음 포켓몬을 꺼냈다!"텍스트 출력
+	BattleInter->NextNPCTalk();
+
+	{
+		if (/*무언가 조건이 걸려야함 NextBattleCheck같은bool하나 있어야할듯*/true)
+		{
+			//다음 푸키먼 등장(몬스터볼 오픈)
+
+			CatchBallOpen->SetPivot({ 210.0f,-70.0f });
+			CatchBallOpen->On();
+			CatchBallOpen->ChangeAnimation("Open");
+
+			MoveSpeed = 900.0f;//푸키먼 알파값 도는 속도
+			PlayerTime_2 += GameEngineTime::GetDeltaTime() * MoveSpeed;
+
+			if (IsCatch == false)
+			{
+				PoeCurrentPokemon_->On();
+			}
+			PoeCurrentPokemon_->SetAlpha(0 + (int)PlayerTime_2);
+			if (PoeCurrentPokemon_->GetAlpha() >= 255)
+			{	//알파값 255이상이면 255로 고정
+				PoeCurrentPokemon_->SetAlpha(255);
+				CatchBallOpen->Off();//몬스터볼 꺼짐
+			}
+			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });//푸키먼 위치 고정
+			//여기까지가 상대가 포켓몬을 꺼내는 애니메이션///////////////////////
+
+			BallLerp += GameEngineTime::GetDeltaTime();			
+
+			if (BallLerp > 3.0f && Fighting == false)
+			{	//명령창 ON + 둠칫효과 시작
+
+				BattleInter->GetInterfaceImage()->On();
+				BattleInter->GetSelect()->On();
+				DoomChit();
+				Level_->OpenningEnd_ = true;
+				BattleInter->DoomChit();
+			}
+			
+		}
+	}
 }

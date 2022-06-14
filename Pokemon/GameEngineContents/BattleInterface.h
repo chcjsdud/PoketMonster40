@@ -124,6 +124,8 @@ public:
 	}
 	void StartWildTalk();
 	void StartNPCTalk();
+	//±è¿¹³ª : test
+	void NextNPCTalk();
 
 	// ÀåÁßÇõ : test
 	bool BattleKey();
