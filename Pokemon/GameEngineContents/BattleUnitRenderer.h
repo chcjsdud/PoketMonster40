@@ -150,5 +150,6 @@ public:
 	void EnemyRock();
 	void EnemyTackle();
 	void Catch();
+	void NextPokemonAppear();
 };
 

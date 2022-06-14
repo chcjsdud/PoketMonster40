@@ -109,6 +109,14 @@ void BattleUnitRenderer::Start()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Catch4.bmp");
 		Image->CutCount(4, 1);
 	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Rival_Battle.bmp");
+		Image->CutCount(1, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Ung_Battle.bmp");
+		Image->CutCount(1, 1);
+	}
 
 }
 
@@ -302,8 +310,10 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
 
 		//상대 트레이너
-		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 야생 포켓몬처럼 다른 랜더러 뜨게 하면 될거같아요
+		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 ChangeAnimation 하면 될거같아요
 		OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
+		OpponentRenderer_->CreateAnimation("Rival_Battle.bmp", "Rival", 0, 0, 1.0f, false);
+		OpponentRenderer_->CreateAnimation("Ung_Battle.bmp", "Ung", 0, 0, 1.0f, false);
 
 		//볼
 		MonsterBallOP = CreateRenderer("MonsterBall4.bmp", 4);
@@ -1051,4 +1061,10 @@ void BattleUnitRenderer::TrainerOpening2()
 			}
 		}
 	}
+}
+
+void BattleUnitRenderer::NextPokemonAppear()
+{
+	//지금 포켓몬이던 다음 포켓몬이던 랜더러 변수는 PoeCurrentPokemon_로 재탕한다
+
 }
