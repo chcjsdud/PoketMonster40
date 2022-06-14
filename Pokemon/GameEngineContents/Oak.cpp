@@ -69,6 +69,7 @@ void Oak::Start()
 	for (int i = 0; i < 20; i++)
 	{
 		IsStart_.push_back(false);
+		IsStartShop_.push_back(false);
 	}
 	//CurrentTileMap_ = RoomTileMap4::GetInst();
 	//SetPosition(RoomTileMap4::GetInst()->GetWorldPostion(6, 1));
@@ -80,6 +81,8 @@ void Oak::Update()
 	RedCatch();
 	OakFollow();
 	Room4Enter();
+
+	ShopEvent();
 }
 
 void Oak::OakMoveIndexPos(int _X, int _Y)

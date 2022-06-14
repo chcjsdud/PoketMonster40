@@ -563,7 +563,7 @@ bool PlayerRed::InteractTileCheck(int _X, int _Y, RedDir _Dir)
 	{
 		if (_X == 3 && _Y == 1)
 		{
-			if (false == IsClearNPC5_)
+			if (false == GetClearShopEvent())
 			{
 				InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();
 				TmpText->SetPosition(GetPosition());
@@ -1173,9 +1173,9 @@ void PlayerRed::EventCheckWhenChangeTilemap()
 	if (RoomTileMap6::GetInst() == CurrentTileMap_)
 	{
 		// 상점 이벤트 시작 지점
-		if (false == IsClearNPC5_ && false == GetStartNPC5Event())
+		if (false == GetClearShopEvent() && false == GetStartShopEvent())
 		{
-			IsStartNPC5_ = true;
+			IsStartShop_ = true;
 			IsInteraction_ = true;
 
 			InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();

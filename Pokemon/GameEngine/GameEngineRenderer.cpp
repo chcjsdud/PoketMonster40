@@ -97,7 +97,6 @@ void GameEngineRenderer::Render()
 		RenderPos -= GetActor()->GetLevel()->GetCameraPos();
 	}
 
-
 	switch (PivotType_)
 	{
 	case RenderPivot::LeftTop:

@@ -7,6 +7,7 @@
 #include "RoomTileMap5.h"
 #include "InteractionText.h"
 #include "ContentEnum.h"
+#include "WorldMapSoundManager.h"
 
 bool NPC6::InteractionMove_ = false;
 bool NPC6::InteractionAnim_ = false;

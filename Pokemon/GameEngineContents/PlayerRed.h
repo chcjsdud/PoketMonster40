@@ -137,9 +137,21 @@ public:
 		return IsStartEvent_;
 	}
 
-	inline bool GetStartNPC5Event()
+	inline bool GetStartShopEvent()
 	{
-		return IsStartNPC5_;
+		return IsStartShop_;
+	}
+	inline bool GetClearShopEvent()
+	{
+		return IsClearShop_;
+	}
+	inline void SetStartShopOakEvent(bool _On)
+	{
+		IsStartShopOak_ = _On;
+	}
+	inline bool GetStartShopOakEvent()
+	{
+		return IsStartShopOak_;
 	}
 
 	inline bool GetOakCall()
@@ -218,8 +230,9 @@ private:
 	bool IsControllOnCheck_;
 	bool IsGreenBattleCheck_;
 	bool NPC5Check_;
-	bool IsClearNPC5_;
-	bool IsStartNPC5_;
+	bool IsClearShop_;
+	bool IsStartShop_;
+	bool IsStartShopOak_;
 	bool IsStartBattle_;
 	float LerpX_;
 	float LerpY_;

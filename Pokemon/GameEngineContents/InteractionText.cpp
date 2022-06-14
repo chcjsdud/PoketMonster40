@@ -17,7 +17,6 @@ bool InteractionText::IsCenterMove_ = false;
 bool InteractionText::IsCenterAnim_ = false;
 InteractionText::InteractionText() 
 	: UIRenderer_(nullptr)
-	, ArrowRenderer_(nullptr)
 	, Fonts(nullptr)
 	, IsSetting_(false)
 	, IsShop_(false)
@@ -25,7 +24,7 @@ InteractionText::InteractionText()
 	, IsYesNo_(false)
 	, IsChoice_(false)
 	, IsBrock_(false)
-	, IsNPC5Start_(false)
+	, IsShopStart_(false)
 	, ZIgnore_(false)
 {
 }
@@ -43,9 +42,6 @@ void InteractionText::Setting()
 {
 	UIRenderer_ = CreateRenderer("Npc_TextFrame.bmp", static_cast<int>(RenderOrder::UI));
 	UIRenderer_->SetPivot({ 0, 225 });
-
-	//ArrowRenderer_ = CreateRenderer("BottomArrow.bmp");
-	//ArrowRenderer_->SetPivot({ 0, 225 });
 
 	std::string TmpString = "";
 	for (int i = 0; i < TextVector_.size(); i++)
@@ -92,6 +88,9 @@ void InteractionText::Start()
 
 void InteractionText::Update()
 {
+	SetPosition(PlayerRed::MainRed_->GetPosition());
+	Fonts->SetPosition(GetPosition() + float4(-420, 160));
+
 	if (false == IsSetting_ || true == IsChoice_)
 	{
 		return;
@@ -131,7 +130,11 @@ void InteractionText::Update()
 	}
 	else if (Fonts->GetCurrentString() == "You came from PALLET TOWN?")
 	{
-		IsNPC5Start_ = true;
+		IsShopStart_ = true;
+	}
+	else if (true == PlayerRed::MainRed_->GetClearShopEvent() && Fonts->GetCurrentString() == "GREEN: Gramps!")
+	{
+		IsShopGreen_ = true;
 	}
 
 	// 폰트 출력이 완료되고 키입력 대기
@@ -198,10 +201,15 @@ void InteractionText::Update()
 				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
 				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Brock);
 			}
-			if (true == PlayerRed::MainRed_->GetStartNPC5Event() && true == IsNPC5Start_)
+			if (true == PlayerRed::MainRed_->GetStartShopEvent() && true == IsShopStart_)
 			{
-				IsNPC5Start_ = false;
+				IsShopStart_ = false;
 				PlayerRed::MainRed_->RedMoveControll(RedDir::Up, 4);
+			}
+			if (true == IsShopGreen_)
+			{
+				IsShopGreen_ = false;
+				PlayerRed::MainRed_->SetStartShopOakEvent(true);
 			}
 		}
 	}

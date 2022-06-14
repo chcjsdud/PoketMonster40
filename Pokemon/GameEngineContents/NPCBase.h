@@ -40,6 +40,7 @@ public:
 	void Start() override;
 	void Update() override;
 	void Render() override;
+	void NPCMoveDir(NPCDir _Dir, int _Count);
 
 	inline void SetNPCInteraction(const bool _Value)
 	{
@@ -71,9 +72,13 @@ public:
 		return Room4EnterCheck_;
 	}
 
+	inline bool CanDirMoveTime()
+	{
+		return GetAccTime() >= NextDirMoveTimer_;
+	}
+
 protected:
 	void NPCMove();
-	void NPCMoveDir(NPCDir _Dir, int _Count);
 	void NPCMoveAnim();
 	void NPCInteractDir();
 	bool IsInside(float4 _LeftTop, float4 _RightBot);

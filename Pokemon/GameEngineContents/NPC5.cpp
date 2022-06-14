@@ -5,6 +5,7 @@
 #include "NPCBase.h"
 #include "WorldTileMap1.h"
 #include "ContentEnum.h"
+#include "PlayerRed.h"
 
 NPC5::NPC5() 
 {
@@ -62,5 +63,9 @@ void NPC5::Start()
 
 void NPC5::Update()
 {
+	if (true == PlayerRed::MainRed_->GetClearShopEvent())
+	{
+		Death();
+	}
 }
 
