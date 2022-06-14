@@ -1160,11 +1160,10 @@ void BattleUnitRenderer::TrainerOpening2()
 void BattleUnitRenderer::NextPokemonAppear()
 {
 	//지금 포켓몬이던 다음 포켓몬이던 랜더러 변수는 PoeCurrentPokemon_로 재탕한다
-	PoeCurrentPokemon_->Off();
 	PoeCurrentPokemon_->SetAlpha(0);
 
 	//"NPC가 다음 포켓몬을 꺼냈다!"텍스트 출력
-	//BattleInter->NextNPCTalk();//문제의 함수
+	//BattleInter->NextNPCTalk();//문제의 함수//////////////////////////////////
 
 	{
 		if (/*무언가 조건이 걸려야함 NextBattleCheck같은bool하나 있어야할듯*/true)

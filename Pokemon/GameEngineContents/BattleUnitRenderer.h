@@ -159,5 +159,9 @@ public:
 	void EnemyTackle();
 	void Catch();
 	void NextPokemonAppear();
+	GameEngineRenderer* GetPoeCurrentPokemonRender()
+	{
+		return PoeCurrentPokemon_;
+	}
 };
 
