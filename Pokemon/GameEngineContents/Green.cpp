@@ -2,6 +2,7 @@
 #include <GameEngine/GameEngineImage.h>
 #include <GameEngine/GameEngineImageManager.h>
 #include <GameEngine/GameEngineRenderer.h>
+#include <GameEngine/GameEngineCollision.h>
 
 #include "ContentEnum.h"
 #include "PlayerRed.h"
@@ -17,6 +18,7 @@ Green::Green()
 	: IsRedSelectFinish_(false)
 	, IsGreenMove_(false)
 	, IsSelectDialog_(false)
+	, IsBattleEnd_(false)
 {
 	NPCGreen = this;
 }
@@ -75,7 +77,7 @@ void Green::Start()
 	CurrentTileMap_ = RoomTileMap4::GetInst();
 	SetPosition(CurrentTileMap_->GetWorldPostion(5, 2));
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		IsStart_.push_back(false);
 	}
@@ -86,6 +88,32 @@ void Green::Update()
 	NPCMoveAnim();
 	RedSelectPokemonAfter();
 	RedGreenBattle();
+	BattleAfter();
+}
+
+void Green::LevelChangeStart(GameEngineLevel* _PrevLevel)
+{
+	if (nullptr != dynamic_cast<WorldMapLevel*>(GetLevel()))
+	{
+		if (true == IsStart_[7])
+		{
+			// 나가는 모션 + 출구쪽 사라지게 
+			if (false == IsBattleEnd_)
+			{
+				IsBattleEnd_ = true;
+			}
+		}
+
+		if (true == IsStart_[11])
+		{
+			SetPosition(CurrentTileMap_->GetWorldPostion(5, 2));
+			NPCRender_->On();
+		}
+	}
+}
+
+void Green::LevelChangeEnd(GameEngineLevel* _NextLevel)
+{
 }
 
 void Green::RedSelectPokemonAfter()
@@ -211,6 +239,109 @@ void Green::RedGreenBattle()
 
 				BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
 				TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Rival);
+			}
+		}
+	}
+}
+
+void Green::BattleAfter()
+{
+	if (true == IsBattleEnd_)
+	{
+		if (5 == PlayerRed::MainRed_->GetRedCurrentIndex().x)
+		{
+			if (false == IsStart_[8])
+			{
+				IsStart_[8] = true;
+				NPCMoveDir(NPCDir::Right, 1);
+			}
+
+			if (false == IsStart_[9] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[9] = true;
+				NPCMoveDir(NPCDir::Down, 3);
+			}
+
+			if (false == IsStart_[10] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[10] = true;
+
+				NPCMoveDir(NPCDir::Down, 2);
+			}
+
+			if (false == IsStart_[11] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[11] = true;
+
+				NPCRender_->Off();
+				NPCCollision_->Off();
+			}
+		}
+
+		if (6 == PlayerRed::MainRed_->GetRedCurrentIndex().x)
+		{
+			if (false == IsStart_[8])
+			{
+				IsStart_[8] = true;
+				NPCMoveDir(NPCDir::Right, 1);
+			}
+
+			if (false == IsStart_[9] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[9] = true;
+				NPCMoveDir(NPCDir::Down, 3);
+			}
+
+			if (false == IsStart_[10] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[10] = true;
+
+				NPCMoveDir(NPCDir::Left, 1);
+			}
+
+			if (false == IsStart_[11] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[11] = true;
+
+				NPCMoveDir(NPCDir::Down, 2);
+			}
+
+			if (false == IsStart_[12] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[12] = true;
+
+				NPCRender_->Off();
+				NPCCollision_->Off();
+			}
+		}
+
+		if (7 == PlayerRed::MainRed_->GetRedCurrentIndex().x)
+		{
+			if (false == IsStart_[8])
+			{
+				IsStart_[8] = true;
+				NPCMoveDir(NPCDir::Left, 1);
+			}
+
+			if (false == IsStart_[9] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[9] = true;
+				NPCMoveDir(NPCDir::Down, 3);
+			}
+
+			if (false == IsStart_[10] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[10] = true;
+
+				NPCMoveDir(NPCDir::Down, 2);
+			}
+
+			if (false == IsStart_[11] && GetAccTime() >= NextDirMoveTimer_)
+			{
+				IsStart_[11] = true;
+
+				NPCRender_->Off();
+				NPCCollision_->Off();
 			}
 		}
 	}

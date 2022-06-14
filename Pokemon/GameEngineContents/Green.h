@@ -54,19 +54,32 @@ public:
 	{
 		return IsSelectDialog_;
 	}
+
+	inline bool GetBattleEnd()
+	{
+		return IsBattleEnd_;
+	}
 protected:
 
 private:
 	void Start() override;
 	void Update() override;
 
+
+	void LevelChangeStart(GameEngineLevel* _PrevLevel) override;
+	void LevelChangeEnd(GameEngineLevel* _NextLevel) override;
+
 	std::vector<bool> IsStart_;
 	bool IsSelectDialog_;
+	bool IsBattleEnd_;
 
 	// 레드 포켓몬 선택 이후 그린 포켓몬 선택 및 대화
 	void RedSelectPokemonAfter();
 
 	// 레드와 그린 배틀 시작을 위한 움직임
 	void RedGreenBattle();
+
+	// 레드 그린 배틀 이후 그린 움직임
+	void BattleAfter();
 };
 

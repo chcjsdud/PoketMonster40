@@ -138,6 +138,13 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 		{
 			NextTileMap_ = RoomTileMap4::GetInst();
 			NextTilePos_ = { 6,10 };
+
+			if (true == Green::NPCGreen->GetBattleEnd())
+			{
+				Green::NPCGreen->SetPosition(NextTileMap_->GetWorldPostion(5, 2));
+				Green::NPCGreen->NPCRender_->On();
+				// 충돌체 on 시키면 끝
+			}
 			return true;
 		}
 		if (_X == 23 && _Y == 30) // 치료소
