@@ -56,9 +56,9 @@ void Bag::Start()
 		GameEngineInput::GetInst()->CreateKey("RightArrow", VK_RIGHT);
 		GameEngineInput::GetInst()->CreateKey("DownArrow", VK_DOWN);
 		GameEngineInput::GetInst()->CreateKey("UpArrow", VK_UP);
-		GameEngineInput::GetInst()->CreateKey("DialogOn", 'z');
-		GameEngineInput::GetInst()->CreateKey("SelectBag", 'z');
-		GameEngineInput::GetInst()->CreateKey("CloseBag", 'x');
+		GameEngineInput::GetInst()->CreateKey("DialogOn", 'Z');
+		GameEngineInput::GetInst()->CreateKey("SelectBag", 'Z');
+		GameEngineInput::GetInst()->CreateKey("CloseBag", 'X');
 	}
 }
 

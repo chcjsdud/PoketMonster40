@@ -12,6 +12,8 @@
 #include "WildPokemonNPC.h"
 #include "PokemonInfoManager.h"
 #include <GameEngine/GameEngine.h>
+#include "Green.h"
+#include "NPCBrock.h"
 
 
 
@@ -110,6 +112,10 @@ void BattleLevel::Update()
 			{
 			case BattlePageEnd::None:
 				break;
+			case BattlePageEnd::GoEnd:
+				BState_ = BattleState::Endding;
+				return;
+				break;
 			case BattlePageEnd::ChangePokemon:
 				Interface_->ShowChangePokemon(Opponent_->GetActor()->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
 				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
@@ -120,7 +126,9 @@ void BattleLevel::Update()
 				break;
 			case BattlePageEnd::CatchPokeBall:
 				Interface_->ShowGotPokemonByBall(BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
-				BState_ = BattleState::Endding;
+				PlayerRed_->AddPokemon(PoeCurrentPokemon_->GetPokemon());
+				EndAction_ = BattlePageEnd::GoEnd;
+				return;
 				break;
 			case BattlePageEnd::LevelUp:
 			{
@@ -134,7 +142,6 @@ void BattleLevel::Update()
 			case BattlePageEnd::LevelUpState:
 			{
 				Interface_->ShowLevelUp(BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef(), BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel(), true);
-
 				if (BattleData_->IsWild())
 				{
 					BState_ = BattleState::Endding;
@@ -254,7 +261,7 @@ void BattleLevel::StartBattlePage()
 
 	BattleManager_ = new BattleManager("PokeBall", this);
 	BState_ = BattleState::BattlePage;
-	BattleManager_->Update();
+	//BattleManager_->Update();
 }
 
 void BattleLevel::EndBattlePage()
@@ -358,11 +365,7 @@ void BattleLevel::LevelEndDebug()
 
 void BattleLevel::StartBattleLevelByWild()
 {
-	if (Opponent_ != nullptr)
-	{
-		delete Opponent_;
-		Opponent_ = nullptr;
-	}
+
 	if (PlayerRed_ == nullptr)
 	{
 		PlayerRed_ = PlayerRed::MainRed_;
@@ -386,7 +389,6 @@ void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
 	{
 		PlayerRed_ = PlayerRed::MainRed_;
 	}
-
 	Opponent_ = _Opponent;
 	DebugMode_ = false;
 	WildBattle_ = false;
@@ -416,6 +418,7 @@ BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel
 	, PlayerPokemonList_(_Player->GetPokemonList())
 	, PoePokemonList_(_Poe->GetPokemonList())
 	, WildBattle_(false)
+	, PoeNPCName_("")
 {
 	{
 		// Player
@@ -432,6 +435,15 @@ BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel
 		{
 			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
 		}
+	}
+
+	if (dynamic_cast<Green*>(PoeNPC_) != nullptr)
+	{
+		PoeNPCName_ = "Green";
+	}
+	else if (dynamic_cast<NPCBrock*>(PoeNPC_) != nullptr)
+	{
+		PoeNPCName_ = "Brock";
 	}
 
 	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
@@ -724,11 +736,15 @@ InBattle BattleManager::Update()
 {
 	if (UsePokemonBall_ == true)
 	{
+		if (Level_->DoingSkillAnimation_ == true || Level_->EndAction_ == BattlePageEnd::CatchPokeBall)
+		{
+			return InBattle::Wait;
+		}
 		Interface_->ShowUsePokeball(); 
 		Level_->UnitRenderer->SkillName_ = SkillName::Catch;
 		Level_->UnitRenderer->MyCatchEnd = false;
 		Level_->DoingSkillAnimation_ = true;
-		return InBattle::Wait;
+		return InBattle::Pokeball;
 	}
 	PokemonBattleState* CurrentTurn = PlayerFirst_ == true ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
 	PokemonSkillInfo* CurrentPokemonSkill = PlayerFirst_ == true ? PlayerSkill_ : PoeSkill_;

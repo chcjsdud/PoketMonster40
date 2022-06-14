@@ -10,6 +10,10 @@
 #include "ContentEnum.h"
 #include "WorldMapSoundManager.h"
 
+#include "Pokemon.h"
+#include "PokemonInfo.h"
+#include "PokemonSkill.h"
+#include "PokemonSkillInfo.h"
 bool NPC6::InteractionMove_ = false;
 bool NPC6::InteractionAnim_ = false;
 InteractionText* NPC6::Text_ = nullptr;
@@ -63,7 +67,17 @@ void NPC6::InteractionMove()
 			PokemonCenterBallEffect->Off();
 
 			// 포켓몬 체력 회복
-			PlayerRed::MainRed_->GetPokemonList();
+			std::vector<Pokemon*> MyPokemonList = PlayerRed::MainRed_->GetPokemonList();
+			for (Pokemon* i : MyPokemonList)
+			{
+				i->GetInfo()->PlusHp(9999);
+				//스킬 PP회복
+				std::vector<PokemonSkill*> Skills = i->GetInfo()->GetSkill();
+				for(PokemonSkill* j : Skills)
+				{
+					j->GetInfo()->SetPP(j->GetInfo()->GetMaxPP());
+				}
+			}
 
 			return;
 		}

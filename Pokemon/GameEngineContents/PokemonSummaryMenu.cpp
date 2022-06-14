@@ -8,6 +8,8 @@
 #include "PlayerRed.h"
 #include "Pokemon.h"
 #include "PokemonInfo.h"
+#include "WorldMapSoundManager.h"
+#include "ContentEnum.h"
 
 PokemonSummaryMenu::PokemonSummaryMenu() :
 	TopMenuRenderer_(nullptr),
@@ -1153,6 +1155,7 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		DestroyPokemonSummaryMenu();
 		Off();
 	}
@@ -1163,6 +1166,7 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_--;
 	}
@@ -1173,6 +1177,7 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_++;
 	}
@@ -1180,6 +1185,7 @@ void PokemonSummaryMenu::PokemonInfoUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Right") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonAbility);
 		return;
 	}
@@ -1199,6 +1205,7 @@ void PokemonSummaryMenu::PokemonAbilityUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_--;
 	}
@@ -1209,6 +1216,7 @@ void PokemonSummaryMenu::PokemonAbilityUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_++;
 	}
@@ -1216,18 +1224,21 @@ void PokemonSummaryMenu::PokemonAbilityUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Left") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonInfo);
 		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("Right") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonSkill);
 		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		DestroyPokemonSummaryMenu();
 		Off();
 	}
@@ -1241,18 +1252,21 @@ void PokemonSummaryMenu::PokemonSkillUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("Left") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonAbility);
 		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonSkillSelect);
 		return;
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		DestroyPokemonSummaryMenu();
 		Off();
 		return;
@@ -1264,6 +1278,7 @@ void PokemonSummaryMenu::PokemonSkillUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_--;
 	}
@@ -1274,6 +1289,7 @@ void PokemonSummaryMenu::PokemonSkillUpdate()
 		{
 			return;
 		}
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		PokemonJumpStart();
 		CurrentOrder_++;
 	}
@@ -1288,6 +1304,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonSummaryMenuType::PokemonSkill);
 		SkillSelect_CurrentOrder_ = 0;
 		return;
@@ -1295,6 +1312,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (SkillSelect_CurrentOrder_ <= 0)
 		{
 			SkillSelect_CurrentOrder_ = static_cast<int>(PokemonSkillTypeRenderer_[CurrentOrder_].size()) - 1;
@@ -1305,6 +1323,7 @@ void PokemonSummaryMenu::PokemonSkillSelectUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (SkillSelect_CurrentOrder_ >= PokemonSkillTypeRenderer_[CurrentOrder_].size() - 1)
 		{
 			SkillSelect_CurrentOrder_ = 0;

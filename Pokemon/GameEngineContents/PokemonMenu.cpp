@@ -13,6 +13,8 @@
 #include "FadeActor.h"
 #include "Item.h"
 #include "Potion.h"
+#include "WorldMapSoundManager.h"
+#include "ContentEnum.h"
 
 //렌더오더 설정 나중에 해주기
 
@@ -371,6 +373,7 @@ void PokemonMenu::SelectPokemonUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ >= PokemonNumber_)
 		{
 			CurrentOrder_ = 0;
@@ -383,6 +386,7 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ <= 0)
 		{
 			CurrentOrder_ = PokemonNumber_;
@@ -397,6 +401,7 @@ void PokemonMenu::SelectPokemonUpdate()
 	{
 		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 			RememberOrder_ = CurrentOrder_;
 			CurrentOrder_ = 0;
 		}
@@ -406,6 +411,7 @@ void PokemonMenu::SelectPokemonUpdate()
 	{
 		if (CurrentOrder_ == 0)
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 			if (RememberOrder_ == 0)
 			{
 				RememberOrder_ = 1;
@@ -416,6 +422,7 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true && MenuTime_>0)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ < PokemonNumber_) //일반 포켓몬 버튼
 		{
 			if (IsItemMode_ == false)
@@ -440,6 +447,7 @@ void PokemonMenu::SelectPokemonUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		DestroyPokemonMenu();
 		return;
 	}
@@ -469,6 +477,7 @@ void PokemonMenu::SelectActionUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonMenuType::SelectPokemon);
 		//퀘스쳔 폰트 제거
 		{
@@ -480,6 +489,7 @@ void PokemonMenu::SelectActionUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		switch (SelectActionOrder_)
 		{
 		case 0:
@@ -517,6 +527,7 @@ void PokemonMenu::SelectActionUpdate()
 	//위 아래 조작
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (SelectActionOrder_ >= 3)
 		{
 			SelectActionOrder_ = 0;
@@ -529,6 +540,7 @@ void PokemonMenu::SelectActionUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (SelectActionOrder_ <= 0)
 		{
 			SelectActionOrder_ = 3;
@@ -559,6 +571,7 @@ void PokemonMenu::SelectSwitchUpdate()
 {
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ >= PokemonNumber_)
 		{
 			CurrentOrder_ = 0;
@@ -571,6 +584,7 @@ void PokemonMenu::SelectSwitchUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ <= 0)
 		{
 			CurrentOrder_ = PokemonNumber_;
@@ -585,6 +599,7 @@ void PokemonMenu::SelectSwitchUpdate()
 	{
 		if (CurrentOrder_ != PokemonNumber_ && CurrentOrder_ != 0)
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 			RememberOrder_ = CurrentOrder_;
 			CurrentOrder_ = 0;
 		}
@@ -598,6 +613,7 @@ void PokemonMenu::SelectSwitchUpdate()
 			{
 				RememberOrder_ = 1;
 			}
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 			CurrentOrder_ = RememberOrder_;
 		}
 	}
@@ -607,6 +623,7 @@ void PokemonMenu::SelectSwitchUpdate()
 		//현재 캔슬 버튼 위치면, ChangeState
 		if (CurrentOrder_ == PokemonNumber_)
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 			ChangeState(PokemonMenuType::SelectPokemon);
 			return;
 		}
@@ -615,6 +632,7 @@ void PokemonMenu::SelectSwitchUpdate()
 			ChangePokemonNumber_2 = CurrentOrder_;
 			if (ChangePokemonNumber_1 != ChangePokemonNumber_2)
 			{
+				WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 				ChangeState(PokemonMenuType::Switching);
 				return;
 			}
@@ -632,6 +650,7 @@ void PokemonMenu::SelectSwitchUpdate()
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		ChangeState(PokemonMenuType::SelectPokemon);
 		return;
 	}
@@ -872,6 +891,7 @@ void PokemonMenu::UsingPotionUpdate()
 			//탈출
 			if (GameEngineInput::GetInst()->IsDown("Z") == true || GameEngineInput::GetInst()->IsDown("X") == true)
 			{
+				WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 				DestroyPokemonMenu();
 				return;
 			}

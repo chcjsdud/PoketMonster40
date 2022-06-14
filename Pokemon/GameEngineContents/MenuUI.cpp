@@ -9,6 +9,8 @@
 #include "FadeActor.h"
 #include "PokemonMenu.h"
 #include "Bag.h"
+#include "WorldMapSoundManager.h"
+#include "ContentEnum.h"
 
 MenuUI::MenuUI():
 	CurrentOrder_(0),
@@ -73,6 +75,7 @@ void MenuUI::Update()
 	if (GameEngineInput::GetInst()->IsDown("Down") == true)
 	{
 		CurrentOrder_++;
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ > 5)
 		{
 			CurrentOrder_ = 0;
@@ -83,6 +86,7 @@ void MenuUI::Update()
 	if (GameEngineInput::GetInst()->IsDown("Up") == true)
 	{
 		CurrentOrder_--;
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		if (CurrentOrder_ < 0)
 		{
 			CurrentOrder_ = 5;
@@ -92,11 +96,14 @@ void MenuUI::Update()
 
 	if (GameEngineInput::GetInst()->IsDown("X") == true && MenuUITimer_ > 0)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		Off();
 	}
 
 	if (GameEngineInput::GetInst()->IsDown("Z") == true && MenuUITimer_ > 0)
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		switch (CurrentOrder_)
 		{
 		case 0: //포켓몬 메뉴

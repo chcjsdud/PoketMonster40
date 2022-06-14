@@ -109,14 +109,6 @@ void BattleUnitRenderer::Start()
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Catch4.bmp");
 		Image->CutCount(4, 1);
 	}
-	{
-		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Rival_Battle.bmp");
-		Image->CutCount(1, 1);
-	}
-	{
-		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Ung_Battle.bmp");
-		Image->CutCount(1, 1);
-	}
 
 }
 
@@ -125,11 +117,24 @@ void BattleUnitRenderer::Update()
 	TimeCheck += (GameEngineTime::GetDeltaTime() * 2.0f);
 	if (FirstMove == true)
 	{
-		//Opening();
-		TrainerOpening1();
+		if (BattleDataR_->IsWild())
+		{
+			Opening();
+		}
+		else
+		{
+			TrainerOpening1();
+		}
 	}
-	//Opening2();
-	TrainerOpening2();
+	if (BattleDataR_->IsWild())
+	{
+		Opening2();
+	}
+	else
+	{
+		TrainerOpening2();
+	}
+
 
 	if (SkillName_ != SkillName::None && (MyTurnEnd == false || EnemyTurnEnd == false || MyCatchEnd == false))
 	{
@@ -310,10 +315,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		PlayerRenderer_->CreateAnimation("PlayerAnimation.bmp", "Go", 0, 4, 0.1f, false);
 
 		//상대 트레이너
-		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 ChangeAnimation 하면 될거같아요
-		OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
-		OpponentRenderer_->CreateAnimation("Rival_Battle.bmp", "Rival", 0, 0, 1.0f, false);
-		OpponentRenderer_->CreateAnimation("Ung_Battle.bmp", "Ung", 0, 0, 1.0f, false);
+		//김예나 : 임시로 라이벌 이미지를 넣었어요 상황에 따라 야생 포켓몬처럼 다른 랜더러 뜨게 하면 될거같아요
+
 
 		//볼
 		MonsterBallOP = CreateRenderer("MonsterBall4.bmp", 4);
@@ -354,6 +357,27 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		Rock4->SetPivot(Rock4Pivot);
 		X->SetPivot({ -200.0f,100.0f });
 	}
+
+	if (BattleDataR_->IsWild() == true) // 여기서 야생전투인지 구분하는곳
+	{
+
+	}
+	else if(OpponentRenderer_ == nullptr)
+	{
+		if (BattleDataR_->GetNameString() == "Green")
+		{
+			OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
+			OpponentRenderer_->Off();
+			OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
+		}
+		else if (BattleDataR_->GetNameString() == "Brock")
+		{
+			OpponentRenderer_ = CreateRenderer("Ung_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
+			OpponentRenderer_->Off();
+			OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
+		}
+	
+	}
 	
 	// 장병문 : 처음 한번만 만들기 Start에서 하는게 더 좋아보이는데 PlayerCurrentPokemon_ 올리면 문제생겨서 일단 여기둠
 	// 추후에 수정필요할듯
@@ -375,8 +399,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MyTackleEffect->Off();
 	MyWaterGunEffect->Off();
 	MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
-	OpponentRenderer_->Off();
-	OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
+
 	EffectX = -105.0f;
 	EffectY = 20.0f;
 	Rock1->Off();
@@ -412,6 +435,11 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 		{
 			PlayerCurrentPokemon_->Death();
 			PlayerCurrentPokemon_ = nullptr;
+		}
+		if (OpponentRenderer_ != nullptr)
+		{
+			OpponentRenderer_->Death();
+			OpponentRenderer_ = nullptr;
 		}
 		PlayerRenderer_->Off();
 		MonsterBallOP->Off();
