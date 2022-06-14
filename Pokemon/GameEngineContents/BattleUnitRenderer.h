@@ -61,6 +61,8 @@ private:
 	GameEngineRenderer* Rock4;
 	GameEngineRenderer* X;
 	GameEngineRenderer* CatchBallOpen;
+	GameEngineRenderer* MonsterBallOP;
+	GameEngineRenderer* MonsterBallCH;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -68,7 +70,6 @@ private:
 	//김예나 : 5월28일 옮기기용 포인터///////////////////////
 	class BattleInterface* BattleInter;
 
-	GameEngineRenderer* MonsterBall;
 	float BallLerp;
 	//////////////////////////////////////////////////////
 

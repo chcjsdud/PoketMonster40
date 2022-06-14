@@ -22,7 +22,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, MoveSpeed(900.0f)//원래는200
 	, PlayerStop(false)
 	, TimeCheck(0.0f)
-	, MonsterBall(nullptr)
+	, MonsterBallOP(nullptr)
 	, MyTackleEffect(nullptr)
 	, BattleDataR_(nullptr)
 	, Level_(nullptr)
@@ -109,7 +109,6 @@ void BattleUnitRenderer::Start()
 		Image->CutCount(4, 1);
 	}
 
-	MyCatchEnd = false;
 }
 
 void BattleUnitRenderer::Update()
@@ -308,10 +307,15 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 
 		//볼
-		MonsterBall = CreateRenderer("MonsterBall4.bmp", 4);
-		MonsterBall->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
-		MonsterBall->CreateAnimation("BallRoll.bmp", "Ball", 0, 0, 0.05f, false);
-		MonsterBall->CreateAnimation("Catch4.bmp", "Catch", 0, 3, 0.2f, false);
+		MonsterBallOP = CreateRenderer("MonsterBall4.bmp", 4);
+		MonsterBallOP->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
+		MonsterBallOP->CreateAnimation("BallRoll.bmp", "Ball", 0, 0, 0.05f, false);
+		MonsterBallOP->CreateAnimation("Catch4.bmp", "Catch", 0, 3, 0.2f, false);
+
+		MonsterBallCH = CreateRenderer("MonsterBall4.bmp", 4);
+		MonsterBallCH->CreateAnimation("BallRoll.bmp", "BallRoll", 0, 5, 0.05f, true);
+		MonsterBallCH->CreateAnimation("BallRoll.bmp", "Ball", 0, 0, 0.05f, false);
+		MonsterBallCH->CreateAnimation("Catch4.bmp", "Catch", 0, 3, 0.2f, false);
 		// 볼 그냥 도는걸로 했는데 초반에 안도는거 하고싶으면 위에 플레이어 처럼 따로 생성필요
 
 		CatchBallOpen = CreateRenderer("MonsterBall_Open4.bmp", 4);
@@ -352,8 +356,10 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	PlayerCurrentPokemon_->Off();
 	PlayerCurrentPokemon_->SetPivot(PlayerPokemonPos_);
 	PoeCurrentPokemon_->On();
-	MonsterBall->Off();
-	MonsterBall->SetPivot({ -220.0f,-30.0f });
+	MonsterBallOP->Off();
+	MonsterBallOP->SetPivot({ -220.0f,-30.0f });
+	MonsterBallCH->Off();
+	MonsterBallCH->SetPivot({ -220.0f,-30.0f });
 	CatchBallOpen->Off();
 	CatchBallOpen->SetPivot({ 210.0f,-170.0f });
 	MyTackleEffect->SetPivot({ 210.0f,-90.0f });
@@ -399,13 +405,14 @@ void BattleUnitRenderer::LevelChangeEnd(GameEngineLevel* _NextLevel)
 			PlayerCurrentPokemon_ = nullptr;
 		}
 		PlayerRenderer_->Off();
-		MonsterBall->Off();
+		MonsterBallOP->Off();
+		MonsterBallCH->Off();
 		MyTackleEffect->Off();
 		MyWaterGunEffect->Off();
 		MyMoveTime = 0.0f;
 		MyTurnEnd = true;
 		EnemyTurnEnd = true;
-		MyCatchEnd = false;
+		MyCatchEnd = true;
 		SkillName_ = SkillName::None;
 	}
 }
@@ -529,8 +536,8 @@ void BattleUnitRenderer::Opening2()
 	//김예나 : 28일 추가 내용
 	{
 		float Move = PlayerRenderer_->GetPivot().x;
-		float BallMoveY = MonsterBall->GetPivot().y;
-		float BallMoveX = MonsterBall->GetPivot().x;
+		float BallMoveY = MonsterBallOP->GetPivot().y;
+		float BallMoveX = MonsterBallOP->GetPivot().x;
 
 		if (BattleInter->GetPlayerEnd() == true)
 		{
@@ -544,24 +551,24 @@ void BattleUnitRenderer::Opening2()
 			BallLerp += GameEngineTime::GetDeltaTime();
 			//플레이어 무빙
 			BattleUnitRenderer::PlayerRenderer_->SetPivot({ Move - (GameEngineTime::GetDeltaTime() * 900.0f),31.0f });
-			if (MonsterBall->IsUpdate() == false)
+			if (MonsterBallOP->IsUpdate() == false)
 			{
-				MonsterBall->On();
-				MonsterBall->ChangeAnimation("BallRoll");
+				MonsterBallOP->On();
+				MonsterBallOP->ChangeAnimation("BallRoll");
 			}
 
 			{	//볼 던지기 무빙
 				if (BallLerp <= 1.0f)
 				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
+					MonsterBallOP->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
 				}
 
 				if (BallLerp > 1.0f)
 				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
-					if (MonsterBall->GetPivot().y > 1000.0f)
+					MonsterBallOP->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
+					if (MonsterBallOP->GetPivot().y > 1000.0f)
 					{
-						MonsterBall->Off();
+						MonsterBallOP->Off();
 					}
 				}
 
@@ -588,7 +595,7 @@ void BattleUnitRenderer::Opening2()
 					//EnemyRock();
 					//EnemyTackle();
 
-					Catch();
+					//Catch();
 					BattleInter->DoomChit();
 				}
 			}
@@ -872,13 +879,14 @@ void BattleUnitRenderer::Catch()
 	if (MyCatchEnd == false)
 	{
 		IsCatch = true;
-		MonsterBall->SetPivot({ -480.0f,0.0f });
-		MonsterBall->On();
-		MonsterBall->SetPivot({ CatchBallPivot });
+		MonsterBallCH->SetPivot({ -480.0f,0.0f });
+		MonsterBallCH->On();
+		MonsterBallCH->ChangeAnimation("BallRoll");
+		MonsterBallCH->SetPivot({ CatchBallPivot });
 		if (CatchBallTime >= 1.1f)
 		{	
 			Alpha_Time += GameEngineTime::GetDeltaTime() * 200.0f;
-			MonsterBall->Off();
+			MonsterBallCH->Off();
 			CatchBallOpen->SetPivot({ 210.0f,-170.0f });
 			CatchBallOpen->On();
 			CatchBallOpen->ChangeAnimation("Open");
@@ -892,17 +900,17 @@ void BattleUnitRenderer::Catch()
 				}
 				BallFallTime += GameEngineTime::GetDeltaTime() * 200.0f;
 				CatchBallOpen->Off();
-				MonsterBall->ChangeAnimation("Ball");
-				MonsterBall->On();
-				MonsterBall->SetPivot({ 210.0f, BallFall + BallFallTime });
-				if (MonsterBall->GetPivot().y >= -70.0f)
+				MonsterBallCH->ChangeAnimation("Ball");
+				MonsterBallCH->On();
+				MonsterBallCH->SetPivot({ 210.0f, BallFall + BallFallTime });
+				if (MonsterBallCH->GetPivot().y >= -70.0f)
 				{
-					MonsterBall->SetPivot({ 210.0f,-70.0f });
+					MonsterBallCH->SetPivot({ 210.0f,-70.0f });
 					FallCheck = true;
 				}
 				if (FallCheck == true && MyCatchEnd == false)
 				{
-					MonsterBall->ChangeAnimation("Catch");
+					MonsterBallCH->ChangeAnimation("Catch");
 					MyCatchEnd = true;
 				}
 			}
@@ -911,7 +919,7 @@ void BattleUnitRenderer::Catch()
 	if (MyCatchEnd == true)
 	{
 		FallCheck = false;
-		MonsterBall->SetPivot({ 210.0f,-70.0f });
+		MonsterBallCH->SetPivot({ 210.0f,-70.0f });
 	}
 }
 
@@ -941,8 +949,8 @@ void BattleUnitRenderer::TrainerOpening2()
 	//김예나 : 트레이너가 먼저 포켓몬을 꺼내고 그 다음에"Go"애니메이션이 시작됨
 	{
 		float Move = PlayerRenderer_->GetPivot().x;
-		float BallMoveY = MonsterBall->GetPivot().y;
-		float BallMoveX = MonsterBall->GetPivot().x;
+		float BallMoveY = MonsterBallOP->GetPivot().y;
+		float BallMoveX = MonsterBallOP->GetPivot().x;
 
 		if (BattleInter->GetPlayerEnd() == true)
 		{
@@ -992,24 +1000,25 @@ void BattleUnitRenderer::TrainerOpening2()
 			BallLerp += GameEngineTime::GetDeltaTime();
 			//플레이어 무빙
 			BattleUnitRenderer::PlayerRenderer_->SetPivot({ Move - (GameEngineTime::GetDeltaTime() * 900.0f),31.0f });
-			if (MonsterBall->IsUpdate() == false)
+			if (MonsterBallOP->IsUpdate() == false)
 			{
-				MonsterBall->On();
-				MonsterBall->ChangeAnimation("BallRoll");
+				MonsterBallOP->On();
 			}
 
 			{	//볼 던지기 무빙
 				if (BallLerp <= 1.0f)
 				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
+					MonsterBallOP->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 20.0f),BallMoveY - (GameEngineTime::GetDeltaTime() * 100.0f) });
 				}
 
 				if (BallLerp > 1.0f)
 				{
-					MonsterBall->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
-					if (MonsterBall->GetPivot().y > 1000.0f)
+					MonsterBallOP->SetPivot({ BallMoveX + (GameEngineTime::GetDeltaTime() * 10.0f),BallMoveY + (GameEngineTime::GetDeltaTime() * 500.0f) });
+					//MonsterBall->SetPivot({ 100.f,100.f }); //현재 여기서 몬스터볼 문제가 생김
+					//CatchBallOpen->SetPivot({ 100.f,100.f });
+					if (MonsterBallOP->GetPivot().y > 1000.0f)
 					{
-						MonsterBall->Off();
+						MonsterBallOP->Off();
 					}
 				}
 
