@@ -4,6 +4,7 @@
 #include <GameEngine/GameEngineImageManager.h>
 
 #include "NPCBase.h"
+#include "PlayerRed.h"
 #include "RoomTileMap5.h"
 #include "InteractionText.h"
 #include "ContentEnum.h"
@@ -14,7 +15,8 @@ bool NPC6::InteractionAnim_ = false;
 InteractionText* NPC6::Text_ = nullptr;
 
 NPC6::NPC6() 
-	: InteractionTime_(0.0f)
+	: PokeBallEffect_(false)
+	, InteractionTime_(0.0f)
 {
 }
 
@@ -30,7 +32,18 @@ void NPC6::InteractionMove()
 
 		if (false == NPCRender_->IsAnimationName("IdleLeft"))
 		{
+			PokemonCenterBall->On();
+			
 			NPCRender_->ChangeAnimation("IdleLeft");
+		}
+
+		if (true == NPCRender_->IsAnimationName("IdleLeft") && 0.5f <= InteractionTime_)
+		{
+			if (false == PokeBallEffect_)
+			{
+				PokeBallEffect_ = true;
+				PokemonCenterBallEffect->On();
+			}
 		}
 
 		if (2.0f <= InteractionTime_)
@@ -45,6 +58,13 @@ void NPC6::InteractionMove()
 			Text_->Setting();
 			Text_->ZIgnore_ = false;
 			InteractionText::IsCenterMove_ = false;
+			PokeBallEffect_ = false;
+			PokemonCenterBall->Off();
+			PokemonCenterBallEffect->Off();
+
+			// 포켓몬 체력 회복
+			PlayerRed::MainRed_->GetPokemonList();
+
 			return;
 		}
 	}
@@ -96,6 +116,9 @@ void NPC6::Start()
 
 		Image = GameEngineImageManager::GetInst()->Find("NPC6_Anim.bmp");
 		Image->Cut({ 128,128 });
+		
+		Image = GameEngineImageManager::GetInst()->Find("PokemonCenter_Anim.bmp");
+		Image->Cut({ 128,128 });
 		// Walk
 		//Image = GameEngineImageManager::GetInst()->Find("NPC4_walk_up.bmp");
 		//Image->CutCount(3, 1);
@@ -122,6 +145,18 @@ void NPC6::Start()
 	NPCRender_->ChangeAnimation("IdleDown");
 	NPCRender_->SetPivot({ 0,-12 });
 
+	PokemonCenterBall = CreateRenderer(static_cast<int>(RenderOrder::UI));
+	PokemonCenterBall->CreateAnimation("PokemonCenter_Anim.bmp", "PokemonCenterBall1", 5, 5, 0.0f, false);
+	PokemonCenterBall->ChangeAnimation("PokemonCenterBall1");
+	PokemonCenterBall->SetPivot({ float4(-99,-32) });
+	PokemonCenterBall->Off();
+
+	PokemonCenterBallEffect = CreateRenderer(static_cast<int>(RenderOrder::UI));
+	PokemonCenterBallEffect->CreateAnimation("PokemonCenter_Anim.bmp", "PokemonCenterBallEffect", 0, 4, 0.1f, true);
+	PokemonCenterBallEffect->ChangeAnimation("PokemonCenterBallEffect");
+	PokemonCenterBallEffect->SetPivot({ float4(-111,-48) });
+	PokemonCenterBallEffect->Off();
+	
 	//NPCBase::InSideLeftTop_ = { 16,96 };
 	//NPCBase::InSideRightBot_ = { 30,102 };
 

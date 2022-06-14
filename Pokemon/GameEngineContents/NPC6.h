@@ -29,6 +29,9 @@ private:
 	void Start() override;
 	void Update() override;
 
+	GameEngineRenderer* PokemonCenterBall;
+	GameEngineRenderer* PokemonCenterBallEffect;
+	bool PokeBallEffect_;
 	float InteractionTime_;
 };
 
