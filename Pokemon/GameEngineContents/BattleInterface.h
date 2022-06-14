@@ -49,7 +49,7 @@ private:
 	GameEngineRenderer* EnemyHP;
 	GameEngineRenderer* EXP;
 	GameEngineRenderer* BattleCommend; // 스킬
-	GameEngineRenderer* BattleStatus_;
+
 
 	BattleInterface* MainInterface;
 
@@ -122,7 +122,8 @@ public:
 	{
 		return Select;
 	}
-	void StartTalk();
+	void StartWildTalk();
+	void StartNPCTalk();
 
 	// 장중혁 : test
 	bool BattleKey();
@@ -145,6 +146,12 @@ public:
 	std::vector<GameEngineContentFont*> AllSkillFont_;
 	void ShowPokemonSkill(Pokemon* _Pokemon);
 	void ShowAndCheckSkillPos();
+
+
+	// 레벨업 폰트 밑 함수
+	void LevelStatu();
+	std::vector<GameEngineContentFont*> AllLevelUpFont_;
+	GameEngineRenderer* BattleStatus_;
 	//
 
 	std::string AbilityString(PokemonAbility _Ability);

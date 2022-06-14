@@ -186,6 +186,11 @@ public:
 		return WildBattle_;
 	}
 
+	inline const std::string& GetNameString() const
+	{
+		return PoeNPCName_;
+	}
+
 
 private:
 
@@ -197,6 +202,7 @@ private:
 private:
 	PlayerRed* Player_;
 	BattleNPCInterface* PoeNPC_;
+	std::string PoeNPCName_;
 
 	// Data Ãâ·Â
 

@@ -106,6 +106,38 @@ void BattleInterface::Start()
 		PoeLevel_->SetSize(0.85f);
 
 	}
+	// 레벨업 폰트
+	{
+		//GameEngineContentFont* index = nullptr;
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 });
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+", true);
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 + 60});
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+", true);
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 + 60 * 2});
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+", true);
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 + 60 * 3 });
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+", true);
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 + 60 * 4 });
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+ 2", true);
+		//index = Level_->CreateActor<GameEngineContentFont>(10);
+		//index->SetPosition({ 820, 262 + 60 * 5 });
+		//AllLevelUpFont_.push_back(index);
+		//index->ShowString("+ 13", true);
+
+		BattleStatus_ = CreateRenderer("BattleStatus.bmp", 8);
+		BattleStatus_->SetPivot({ 59 , -108 });
+		BattleStatus_->Off();
+	}
 	// 키 생성
 	GameEngineInput::GetInst()->CreateKey("SLeft", VK_LEFT);
 	GameEngineInput::GetInst()->CreateKey("SRight", VK_RIGHT);
@@ -157,9 +189,7 @@ void BattleInterface::Start()
 	MaxPPFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 	TypeFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 
-	BattleStatus_ = CreateRenderer("BattleStatus.bmp", 8);
-	BattleStatus_->SetPivot({ 59 , -108 });
-	BattleStatus_->Off();
+
 }
 
 void BattleInterface::Render()
@@ -207,7 +237,15 @@ void BattleInterface::Update()
 	{
 		//김예나:플레이어 멈출시 폰트출력 테스트
 		//Fonts->ShowString("Wild NAME\\is appear!!\\Go!!\\NAME!!", false);
-		StartTalk();
+		if (Level_->GetBattleData()->IsWild())
+		{
+			StartWildTalk();
+		}
+		else
+		{
+			StartNPCTalk();
+		}
+	
 		OneTalk = true;
 		//그 다음에 추가 폰트로 "가라 꼬부기!" 출력후 꼬부기 출현 + 배틀커맨드 이때 출현
 	}
@@ -820,13 +858,19 @@ void BattleInterface::LevelChangeEnd(GameEngineLevel* _NextLevel)
 
 }
 
-void BattleInterface::StartTalk()
+void BattleInterface::StartWildTalk()
 {
 	Fonts->ClearCurrentFonts();
 	Fonts->ShowString("Wild " + Level_->GetBattleData()->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "\\is appear!!\\Go!!\\"
 		+ Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "!!", false);
 }
 
+void BattleInterface::StartNPCTalk()
+{
+	Fonts->ClearCurrentFonts();
+	Fonts->ShowString(Level_->GetBattleData()->GetNameString() + "\\would like to battle!\\Go!\\"
+		+ Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef() + "!", false);
+}
 
 void BattleInterface::Reset()
 {
@@ -843,6 +887,7 @@ void BattleInterface::Reset()
 	EXP->Off();
 	BattleFont_->ClearCurrentFonts();
 	Fonts->ClearCurrentFonts();
+	BattleStatus_->Off();
 	for (auto Iter : AllSkillFont_)
 	{
 		Iter->ClearCurrentFonts();
@@ -1043,4 +1088,10 @@ void BattleInterface::HPRenderUpdate()
 	}
 
 
+}
+
+
+void BattleInterface::LevelStatu()
+{
+	BattleStatus_->On();
 }

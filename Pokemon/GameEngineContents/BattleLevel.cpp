@@ -12,6 +12,8 @@
 #include "WildPokemonNPC.h"
 #include "PokemonInfoManager.h"
 #include <GameEngine/GameEngine.h>
+#include "Green.h"
+#include "NPCBrock.h"
 
 
 
@@ -134,7 +136,6 @@ void BattleLevel::Update()
 			case BattlePageEnd::LevelUpState:
 			{
 				Interface_->ShowLevelUp(BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef(), BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel(), true);
-
 				if (BattleData_->IsWild())
 				{
 					BState_ = BattleState::Endding;
@@ -358,11 +359,7 @@ void BattleLevel::LevelEndDebug()
 
 void BattleLevel::StartBattleLevelByWild()
 {
-	if (Opponent_ != nullptr)
-	{
-		delete Opponent_;
-		Opponent_ = nullptr;
-	}
+
 	if (PlayerRed_ == nullptr)
 	{
 		PlayerRed_ = PlayerRed::MainRed_;
@@ -386,7 +383,6 @@ void BattleLevel::StartBattleLevelByNPC(BattleNPCInterface* _Opponent)
 	{
 		PlayerRed_ = PlayerRed::MainRed_;
 	}
-
 	Opponent_ = _Opponent;
 	DebugMode_ = false;
 	WildBattle_ = false;
@@ -416,6 +412,7 @@ BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel
 	, PlayerPokemonList_(_Player->GetPokemonList())
 	, PoePokemonList_(_Poe->GetPokemonList())
 	, WildBattle_(false)
+	, PoeNPCName_("")
 {
 	{
 		// Player
@@ -432,6 +429,15 @@ BattleData::BattleData(PlayerRed* _Player, BattleNPCInterface* _Poe, BattleLevel
 		{
 			PeoPokemonsInBattle_.push_back(CreatePokemonState(PoePokemonList_[i]));
 		}
+	}
+
+	if (dynamic_cast<Green*>(PoeNPC_) != nullptr)
+	{
+		PoeNPCName_ = "Green";
+	}
+	else if (dynamic_cast<NPCBrock*>(PoeNPC_) != nullptr)
+	{
+		PoeNPCName_ = "Brock";
 	}
 
 	PlayerCurrentPokemonInBattle_ = PlayerPokemonsInBattle_.front();
