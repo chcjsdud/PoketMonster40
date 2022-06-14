@@ -61,8 +61,17 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, BallFall(-170.0f)
 	, FallCheck(false)
 	, PlayerTime_2(0.0f)
+	, BallFallTime(0.0f)
+	, BallX(0.0f)
+	, BallY(0.0f)
 	, IsCatch(false)
 	, MonsterBallCH(nullptr)
+	, MyGrowl1(nullptr)
+	, MyGrowl2(nullptr)
+	, MyGrowl3(nullptr)
+	, EnemyGrowl1(nullptr)
+	, EnemyGrowl2(nullptr)
+	, EnemyGrowl3(nullptr)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -108,6 +117,30 @@ void BattleUnitRenderer::Start()
 	{
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Catch4.bmp");
 		Image->CutCount(4, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Growl1x4.bmp");
+		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Growl2x4.bmp");
+		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Growl3x4.bmp");
+		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("EGrowl1x4.bmp");
+		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("EGrowl2x4.bmp");
+		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("EGrowl3x4.bmp");
+		Image->CutCount(2, 1);
 	}
 
 }
@@ -338,6 +371,20 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		MyWaterGunEffect->CreateAnimation("WaterGun4.bmp", "Water", 0, 0, 0.1f, false);
 		MyTackleEffect = CreateRenderer("Tackle4.bmp", 4);
 
+		MyGrowl1 = CreateRenderer("Growl1x4.bmp", 4);
+		MyGrowl1->CreateAnimation("Growl1x4.bmp", "Growl1", 0, 1, 0.2f, true);
+		MyGrowl2 = CreateRenderer("Growl2x4.bmp", 4);
+		MyGrowl2->CreateAnimation("Growl2x4.bmp", "Growl2", 0, 1, 0.2f, true);
+		MyGrowl3 = CreateRenderer("Growl3x4.bmp", 4);
+		MyGrowl3->CreateAnimation("Growl3x4.bmp", "Growl3", 0, 1, 0.2f, true);
+
+		EnemyGrowl1 = CreateRenderer("EGrowl1x4.bmp", 4);
+		EnemyGrowl1->CreateAnimation("EGrowl1x4.bmp", "Growl1", 0, 1, 0.2f, true);
+		EnemyGrowl2 = CreateRenderer("EGrowl2x4.bmp", 4);
+		EnemyGrowl2->CreateAnimation("EGrowl2x4.bmp", "Growl2", 0, 1, 0.2f, true);
+		EnemyGrowl3 = CreateRenderer("EGrowl3x4.bmp", 4);
+		EnemyGrowl3->CreateAnimation("EGrowl3x4.bmp", "Growl3", 0, 1, 0.2f, true);
+
 		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
 		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
 
@@ -399,6 +446,24 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	MyTackleEffect->Off();
 	MyWaterGunEffect->Off();
 	MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
+	MyGrowl1->SetPivot({ -120.0f,-30.0f });
+	MyGrowl1->Off();
+	MyGrowl1->ChangeAnimation("Growl1");
+	MyGrowl2->SetPivot({ -120.0f,20.0f });
+	MyGrowl2->ChangeAnimation("Growl2");
+	MyGrowl2->Off();
+	MyGrowl3->SetPivot({ -120.0f,70.0f });
+	MyGrowl3->ChangeAnimation("Growl3");
+	MyGrowl3->Off();
+	EnemyGrowl1->SetPivot({ 110.0f,-90.0f });
+	EnemyGrowl1->ChangeAnimation("Growl1");
+	EnemyGrowl1->Off();
+	EnemyGrowl2->SetPivot({ 110.0f,-140.0f });
+	EnemyGrowl2->ChangeAnimation("Growl2");
+	EnemyGrowl2->Off();
+	EnemyGrowl3->SetPivot({ 110.0f,-180.0f });
+	EnemyGrowl3->ChangeAnimation("Growl3");
+	EnemyGrowl3->Off();
 
 	EffectX = -105.0f;
 	EffectY = 20.0f;
@@ -631,6 +696,8 @@ void BattleUnitRenderer::Opening2()
 					//ShellHide();
 					//EnemyRock();
 					//EnemyTackle();
+					//MyGrowl();
+					//EnemyGrowl();
 					NextPokemonAppear();
 					//Catch();
 					BattleInter->DoomChit();
@@ -1082,7 +1149,6 @@ void BattleUnitRenderer::TrainerOpening2()
 					//ShellHide();
 					//EnemyRock();
 					//EnemyTackle();
-
 					//Catch();
 					BattleInter->DoomChit();
 				}
@@ -1137,5 +1203,57 @@ void BattleUnitRenderer::NextPokemonAppear()
 			}
 			
 		}
+	}
+}
+
+void BattleUnitRenderer::MyGrowl()
+{
+	//울음소리
+	if (MyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+		if (MyMoveTime <= 1.5f)
+		{
+			MyGrowl1->On();
+			MyGrowl2->On();
+			MyGrowl3->On();
+		}
+		if (MyMoveTime > 1.5f)
+		{
+			MyGrowl1->Off();
+			MyGrowl2->Off();
+			MyGrowl3->Off();
+			MyTurnEnd = true;
+		}
+	}
+	if (MyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
+	}
+}
+
+void BattleUnitRenderer::EnemyGrowl()
+{
+	//적 울음소리
+	if (EnemyTurnEnd == false)
+	{
+		AnimationEndTime += GameEngineTime::GetDeltaTime();
+		if (AnimationEndTime <= 1.5f)
+		{
+			EnemyGrowl1->On();
+			EnemyGrowl2->On();
+			EnemyGrowl3->On();
+		}
+		if (AnimationEndTime > 1.5f)
+		{
+			EnemyGrowl1->Off();
+			EnemyGrowl2->Off();
+			EnemyGrowl3->Off();
+			EnemyTurnEnd = true;
+		}
+	}
+	if (EnemyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		AnimationEndTime = 0.0f;
 	}
 }

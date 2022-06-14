@@ -63,6 +63,12 @@ private:
 	GameEngineRenderer* CatchBallOpen;
 	GameEngineRenderer* MonsterBallOP;
 	GameEngineRenderer* MonsterBallCH;
+	GameEngineRenderer* MyGrowl1;
+	GameEngineRenderer* MyGrowl2;
+	GameEngineRenderer* MyGrowl3;
+	GameEngineRenderer* EnemyGrowl1;
+	GameEngineRenderer* EnemyGrowl2;
+	GameEngineRenderer* EnemyGrowl3;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -142,6 +148,8 @@ public:
 	void WaterGun();
 	void TailWhipMove();
 	void ShellHide();
+	void MyGrowl();
+	void EnemyGrowl();
 	void SetFighting(bool Value)
 	{
 		Fighting = Value;
