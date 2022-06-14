@@ -158,7 +158,7 @@ void BattleInterface::Start()
 	TypeFont_ = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder() + 50);
 
 	BattleStatus_ = CreateRenderer("BattleStatus.bmp", 8);
-	BattleStatus_->SetPivot({ 0 , 0 });
+	BattleStatus_->SetPivot({ 59 , -108 });
 	BattleStatus_->Off();
 }
 
