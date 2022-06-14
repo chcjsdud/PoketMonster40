@@ -939,6 +939,19 @@ void BattleInterface::UIUpdate()
 
 void BattleInterface::ShowSkillInfo(int _Index)
 {
+	if (Level_->BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSkill().size() <= _Index)
+	{
+		PPFont_->ClearCurrentFonts();
+		PPFont_->ShowString("-", true);
+
+		MaxPPFont_->ClearCurrentFonts();
+		MaxPPFont_->ShowString("-", true);
+
+		TypeFont_->ClearCurrentFonts();
+		TypeFont_->ShowString("-", true);
+		return;
+	}
+
 	if (false == PPFont_->IsUpdate())
 	{
 		PPFont_->On();
