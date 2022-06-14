@@ -118,6 +118,10 @@ void BattleLevel::Update()
 				break;
 			case BattlePageEnd::SetPokemon:
 				break;
+			case BattlePageEnd::CatchPokeBall:
+				Interface_->ShowGotPokemonByBall(BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
+				BState_ = BattleState::Endding;
+				break;
 			case BattlePageEnd::LevelUp:
 			{
 				//
@@ -130,6 +134,7 @@ void BattleLevel::Update()
 			case BattlePageEnd::LevelUpState:
 			{
 				Interface_->ShowLevelUp(BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetNameConstRef(), BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyLevel(), true);
+
 				if (BattleData_->IsWild())
 				{
 					BState_ = BattleState::Endding;
@@ -164,6 +169,9 @@ void BattleLevel::Update()
 				EndBattlePage();
 				break;
 			case InBattle::BattleEndByPlayerDeath:
+				break;
+			case InBattle::Pokeball:
+				EndAction_ = BattlePageEnd::CatchPokeBall;
 				break;
 			case InBattle::BattleEndByPoeDeath:
 				if (BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxExp() <= BattleData_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetExp())
@@ -236,6 +244,15 @@ void BattleLevel::StartBattlePage(PokemonSkillInfo* _PlayerSkill, PokemonSkillIn
 
 
 	BattleManager_ = new BattleManager(_PlayerSkill, _PoeSkill, this);
+	BState_ = BattleState::BattlePage;
+	BattleManager_->Update();
+}
+
+void BattleLevel::StartBattlePage()
+{
+	RefreshPokemon();
+
+	BattleManager_ = new BattleManager("PokeBall", this);
 	BState_ = BattleState::BattlePage;
 	BattleManager_->Update();
 }
@@ -648,6 +665,7 @@ BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _
 	, FristTurn_(nullptr)
 	, SecondTurn_(nullptr)
 	, DeadSwitch_(false)
+	, UsePokemonBall_(false)
 {
 
 	switch (Select_)
@@ -668,6 +686,25 @@ BattleManager::BattleManager(PokemonSkillInfo* _PlayerSkill, PokemonSkillInfo* _
 
 }
 
+BattleManager::BattleManager(const std::string& _PlayerItem, BattleLevel* _Level)
+	: PlayerSkill_(nullptr)
+	, PoeSkill_(nullptr)
+	, Level_(_Level)
+	, PlayCurrentPokemon_(_Level->BattleData_->GetCurrentPlayerPokemon())
+	, PoeCurrentPokemon_(_Level->BattleData_->GetCurrentPoePokemon())
+	, Select_(BattleOrder::Bag)
+	, CurrentBattlePage_(BattlePage::FirstBattle)
+	, PlayerFirst_(true)
+	, Interface_(_Level->Interface_)
+	, CurrentFont_(Battlefont::None)
+	, FristTurn_(nullptr)
+	, SecondTurn_(nullptr)
+	, DeadSwitch_(false)
+	, UsePokemonBall_(true)
+{
+
+}
+
 
 void BattleManager::PlayerPokemonDead()
 {
@@ -685,6 +722,14 @@ void BattleManager::PoePokemonDead()
 
 InBattle BattleManager::Update()
 {
+	if (UsePokemonBall_ == true)
+	{
+		Interface_->ShowUsePokeball(); 
+		Level_->UnitRenderer->SkillName_ = SkillName::Catch;
+		Level_->UnitRenderer->MyCatchEnd = false;
+		Level_->DoingSkillAnimation_ = true;
+		return InBattle::Wait;
+	}
 	PokemonBattleState* CurrentTurn = PlayerFirst_ == true ? PlayCurrentPokemon_ : PoeCurrentPokemon_;
 	PokemonSkillInfo* CurrentPokemonSkill = PlayerFirst_ == true ? PlayerSkill_ : PoeSkill_;
 

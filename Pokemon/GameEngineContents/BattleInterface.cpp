@@ -114,7 +114,7 @@ void BattleInterface::Start()
 	GameEngineInput::GetInst()->CreateKey("SSelect", 'Z');
 	GameEngineInput::GetInst()->CreateKey("SCancel", 'X');
 	GameEngineInput::GetInst()->CreateKey("StartBattlePage", 'H');
-	GameEngineInput::GetInst()->CreateKey("PokeBall", 'M');
+	GameEngineInput::GetInst()->CreateKey("PokeBall", VK_ADD);
 	//
 
 	InterfaceImage = CreateRenderer("Battle_Select.bmp", 6);
@@ -536,7 +536,20 @@ void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv, bo
 void BattleInterface::ShowRunaway()
 {
 	BattleFont_->EndFont();
-	BattleFont_->ShowString("Got away safely");
+	BattleFont_->ShowString("Got away safely!");
+	Level_->EndFont_ = false;
+}
+
+void BattleInterface::ShowUsePokeball()
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("Red used\\POKe BALL!");
+	Level_->EndFont_ = false;
+}
+void BattleInterface::ShowGotPokemonByBall(const std::string& _WildPokemon)
+{
+	BattleFont_->EndFont();
+	BattleFont_->ShowString("Gotcha!\\" + _WildPokemon + " was caught!");
 	Level_->EndFont_ = false;
 }
 
@@ -607,7 +620,13 @@ bool BattleInterface::MoveKey()
 	{
 		if (GameEngineInput::GetInst()->IsDown("PokeBall"))
 		{
-			int a = 0;
+			BattleUnit->SetFighting(true);
+			InterfaceImage->Off();
+			BattleCommend->Off();
+			Select->Off();
+			dynamic_cast<Bag*>(ChildUI_)->DestroyBag();
+			ChildUI_->Off();
+			Level_->StartBattlePage();
 		}
 		return false;
 	}

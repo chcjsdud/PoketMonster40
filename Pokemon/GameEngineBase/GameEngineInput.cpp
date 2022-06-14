@@ -81,10 +81,10 @@ void GameEngineInput::CreateKey(const std::string& _Name, int _Key)
 		return;
 	}
 
-	if ('a' <= _Key && 'z' >= _Key)
-	{
-		_Key = std::toupper(_Key);
-	}
+	//if ('a' <= _Key && 'z' >= _Key)
+	//{
+	//	_Key = std::toupper(_Key);
+	//}
 
 	AllInputKey_.insert(std::make_pair(UpperKey, GameEngineKey()));
 	AllInputKey_[UpperKey].Key_ = _Key;
