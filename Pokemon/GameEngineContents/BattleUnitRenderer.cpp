@@ -898,9 +898,11 @@ void BattleUnitRenderer::Catch()
 					PoeCurrentPokemon_->Off();
 				}
 				CatchBallOpen->Off();
+				BallFallTime += GameEngineTime::GetDeltaTime() * 200.0f;
 				MonsterBallCH->ChangeAnimation("Ball");
 				MonsterBallCH->On();
 				MonsterBallCH->SetPivot({ 210.0f, BallFall + BallFallTime });
+				int a = 0;
 				if (MonsterBallCH->GetPivot().y >= -70.0f)
 				{
 					MonsterBallCH->SetPivot({ 210.0f,-70.0f });
