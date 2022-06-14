@@ -1098,7 +1098,7 @@ void BattleUnitRenderer::NextPokemonAppear()
 	PoeCurrentPokemon_->SetAlpha(0);
 
 	//"NPC가 다음 포켓몬을 꺼냈다!"텍스트 출력
-	//BattleInter->NextNPCTalk();
+	//BattleInter->NextNPCTalk();//문제의 함수
 
 	{
 		if (/*무언가 조건이 걸려야함 NextBattleCheck같은bool하나 있어야할듯*/true)
@@ -1133,7 +1133,6 @@ void BattleUnitRenderer::NextPokemonAppear()
 				BattleInter->GetInterfaceImage()->On();
 				BattleInter->GetSelect()->On();
 				DoomChit();
-				Level_->OpenningEnd_ = true;
 				BattleInter->DoomChit();
 			}
 			
