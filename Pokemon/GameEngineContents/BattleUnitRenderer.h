@@ -69,6 +69,7 @@ private:
 	GameEngineRenderer* EnemyGrowl1;
 	GameEngineRenderer* EnemyGrowl2;
 	GameEngineRenderer* EnemyGrowl3;
+	GameEngineRenderer* EnemyScratchEffect;
 
 	//병문씨가 도움주신 변수
 	GameEngineRenderer* OpponentRenderer_;
@@ -158,6 +159,7 @@ public:
 	
 	void EnemyRock();
 	void EnemyTackle();
+	void EnemyScratch();
 	void Catch();
 	void NextPokemonAppear();
 	GameEngineRenderer* GetPoeCurrentPokemonRender()

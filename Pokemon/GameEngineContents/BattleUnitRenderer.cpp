@@ -73,6 +73,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, EnemyGrowl2(nullptr)
 	, EnemyGrowl3(nullptr)
 	, Debug_(false)
+	, EnemyScratchEffect(nullptr)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -141,6 +142,10 @@ void BattleUnitRenderer::Start()
 	{
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("EGrowl3x4.bmp");
 		Image->CutCount(2, 1);
+	}
+	{
+		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Scratch4.bmp");
+		Image->CutCount(5, 1);
 	}
 
 }
@@ -395,7 +400,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		EnemyGrowl3 = CreateRenderer("EGrowl3x4.bmp", 4);
 		EnemyGrowl3->CreateAnimation("EGrowl3x4.bmp", "Growl3", 0, 1, 0.2f, true);
 
-		
+		EnemyScratchEffect = CreateRenderer("Scratch4.bmp",4);
+		EnemyScratchEffect->CreateAnimation("Scratch4.bmp", "Scratch", 0, 4, 0.2f, false);
 
 		Rock2 = CreateRenderer("Rock4.bmp", 4);
 		Rock3 = CreateRenderer("Rock4.bmp", 4);
@@ -473,6 +479,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	EnemyGrowl3->SetPivot({ 110.0f,-180.0f });
 	EnemyGrowl3->ChangeAnimation("Growl3");
 	EnemyGrowl3->Off();
+	EnemyScratchEffect->Off();
 
 	EffectX = -105.0f;
 	EffectY = 20.0f;
@@ -707,6 +714,7 @@ void BattleUnitRenderer::Opening2()
 					//EnemyTackle();
 					//MyGrowl();
 					//EnemyGrowl();
+					EnemyScratch();
 					NextPokemonAppear();
 					//Catch();
 					BattleInter->DoomChit();
@@ -1174,7 +1182,7 @@ void BattleUnitRenderer::NextPokemonAppear()
 	//BattleInter->NextNPCTalk();//문제의 함수//////////////////////////////////
 
 	{
-		if (/*무언가 조건이 걸려야함 NextBattleCheck같은bool하나 있어야할듯*/true)
+		if (MyTurnEnd==false)
 		{
 			//다음 푸키먼 등장(몬스터볼 오픈)
 			IsCatch = false;
@@ -1204,10 +1212,11 @@ void BattleUnitRenderer::NextPokemonAppear()
 			if (BallLerp > 3.0f && Fighting == false)
 			{	//명령창 ON + 둠칫효과 시작
 				//이때도 텍스트출력되면서 꺼져있으니 켜지는게 맞나?
-				BattleInter->GetInterfaceImage()->On();
-				BattleInter->GetSelect()->On();
-				DoomChit();
-				BattleInter->DoomChit();
+				//BattleInter->GetInterfaceImage()->On();
+				//BattleInter->GetSelect()->On();
+				//DoomChit();
+				//BattleInter->DoomChit();
+				MyTurnEnd = true;
 			}
 			
 		}
@@ -1263,5 +1272,65 @@ void BattleUnitRenderer::EnemyGrowl()
 	if (EnemyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
 		AnimationEndTime = 0.0f;
+	}
+}
+
+void BattleUnitRenderer::EnemyScratch()
+{
+	float X = PoeCurrentPokemon_->GetPivot().x;
+
+	if (EnemyTurnEnd == false)
+	{
+		MyMoveTime += GameEngineTime::GetDeltaTime();
+
+		if (MyMoveTime <= 0.3f)
+		{
+			PoeCurrentPokemon_->SetPivot({ X - (MyMoveTime * 50.0f),-105.0f });
+
+			EnemyScratchEffect->SetPivot({ -200.0f,100.0f });
+			EnemyScratchEffect->On();
+			EnemyScratchEffect->ChangeAnimation("Scratch");
+		}
+		if (MyMoveTime >= 0.3f)
+		{
+			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
+			//나 피격시 적 HPUI이미지 들썩
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
+			BattleInter->GetMyHP()->SetPivot({ 0.0f,-200.0f });
+			BattleInter->GetEXP()->SetPivot({ -80.0f,-280.0f });
+		}
+
+		{	//내 푸키먼 피격 반짝반짝
+			if (MyMoveTime >= 1.0f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(55);
+				//내 HPUI이미지 아래로
+				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
+				BattleInter->GetMyHP()->SetPivot({ 0.0f,-220.0f });
+				BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
+			}
+			if (MyMoveTime >= 1.1f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(255);
+				//적 HPUI 제자리로
+				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+				BattleInter->GetMyHP()->SetPivot({ 0.0f,-180.0f });
+				BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
+				EnemyScratchEffect->Off();
+			}
+			if (MyMoveTime >= 1.2f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(55);
+			}
+			if (MyMoveTime >= 1.3f)
+			{
+				PlayerCurrentPokemon_->SetAlpha(255);
+				EnemyTurnEnd = true;
+			}
+		}
+	}
+	if (EnemyTurnEnd == true)
+	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+		MyMoveTime = 0.0f;
 	}
 }
