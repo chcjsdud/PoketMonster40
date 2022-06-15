@@ -102,9 +102,8 @@ void BattleInterface::Start()
 		PoeName_->SetPosition({ 85 , 56 });
 		PoeName_->SetSize(0.85f);
 		PoeLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PoeLevel_->SetPosition({ 380 , 56 });
+		PoeLevel_->SetPosition({ 360 , 56 });
 		PoeLevel_->SetSize(0.85f);
-
 	}
 	// 레벨업 폰트
 	{
