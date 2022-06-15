@@ -975,7 +975,7 @@ void BattleUnitRenderer::EnemyTackle()
 			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
 			//나 피격시 적 HPUI이미지 들썩
 			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
-			BattleInter->GetMyHP()->SetPivot({ 0.0f,-200.0f });
+			BattleInter->GetMyHP()->SetPivot({ -16.0f,-200.0f });
 			BattleInter->GetEXP()->SetPivot({ -80.0f,-280.0f });
 		}
 
@@ -985,7 +985,7 @@ void BattleUnitRenderer::EnemyTackle()
 				PlayerCurrentPokemon_ ->SetAlpha(55);
 				//내 HPUI이미지 아래로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
-				BattleInter->GetMyHP()->SetPivot({ 0.0f,-220.0f });
+				BattleInter->GetMyHP()->SetPivot({ -16.0f,-220.0f });
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
 			}
 			if (MyMoveTime >= 0.3f)
@@ -993,7 +993,7 @@ void BattleUnitRenderer::EnemyTackle()
 				PlayerCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
-				BattleInter->GetMyHP()->SetPivot({ 0.0f,-180.0f });
+				BattleInter->GetMyHP()->SetPivot({ -16.0f,-180.0f });
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
 				MyTackleEffect->Off();
 			}
@@ -1330,7 +1330,7 @@ void BattleUnitRenderer::EnemyScratch()
 				PlayerCurrentPokemon_->SetAlpha(55);
 				//내 HPUI이미지 아래로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
-				BattleInter->GetMyHP()->SetPivot({ 0.0f,-220.0f });
+				BattleInter->GetMyHP()->SetPivot({ -16.0f,-220.0f });
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
 			}
 			if (AnimationEndTime >= 1.1f)
@@ -1338,7 +1338,7 @@ void BattleUnitRenderer::EnemyScratch()
 				PlayerCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
 				BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
-				BattleInter->GetMyHP()->SetPivot({ 0.0f,-180.0f });
+				BattleInter->GetMyHP()->SetPivot({ -16.0f,-180.0f });
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
 				EnemyScratchEffect->Off();
 			}
