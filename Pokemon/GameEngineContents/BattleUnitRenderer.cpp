@@ -542,7 +542,7 @@ void BattleUnitRenderer::Tackle()
 
 		if (MyMoveTime <= 0.3f)
 		{
-			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 900.0f),63.0f });
+			PlayerCurrentPokemon_->SetPivot({ X + (MyMoveTime * 70.0f), 63.0f });
 			MyTackleEffect->SetPivot({ 210.0f,-90.0f });
 			MyTackleEffect->On();
 		}
