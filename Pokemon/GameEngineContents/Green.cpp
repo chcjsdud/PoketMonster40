@@ -106,8 +106,8 @@ void Green::LevelChangeStart(GameEngineLevel* _PrevLevel)
 
 		if (true == IsStart_[11])
 		{
-			SetPosition(CurrentTileMap_->GetWorldPostion(5, 2));
-			NPCRender_->On();
+			//SetPosition(CurrentTileMap_->GetWorldPostion(5, 2));
+			//NPCRender_->On();
 		}
 	}
 }
@@ -273,8 +273,9 @@ void Green::BattleAfter()
 			{
 				IsStart_[11] = true;
 
-				NPCRender_->Off();
-				NPCCollision_->Off();
+				SetPosition({ -6500, -7000 });
+				//NPCRender_->Off();
+				//NPCCollision_->Off();
 			}
 		}
 
@@ -310,8 +311,9 @@ void Green::BattleAfter()
 			{
 				IsStart_[12] = true;
 
-				NPCRender_->Off();
-				NPCCollision_->Off();
+				SetPosition({ -6500, -7000 });
+				//NPCRender_->Off();
+				//NPCCollision_->Off();
 			}
 		}
 
@@ -340,8 +342,9 @@ void Green::BattleAfter()
 			{
 				IsStart_[11] = true;
 
-				NPCRender_->Off();
-				NPCCollision_->Off();
+				SetPosition({ -6500, -7000 });
+				//NPCRender_->Off();
+				//NPCCollision_->Off();
 			}
 		}
 	}

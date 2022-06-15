@@ -509,15 +509,15 @@ void PlayerRed::Update()
 
 void PlayerRed::Render()
 {
-	{
-		char Text[30] = { 0 };
-		sprintf_s(Text, "pos : %d , %d", CurrentTilePos_.ix(), CurrentTilePos_.iy());
-		TextOut(GameEngine::BackBufferDC(),
-			100,
-			100,
-			Text,
-			static_cast<int>(strlen(Text)));
-	}
+	//{
+	//	char Text[30] = { 0 };
+	//	sprintf_s(Text, "pos : %d , %d", CurrentTilePos_.ix(), CurrentTilePos_.iy());
+	//	TextOut(GameEngine::BackBufferDC(),
+	//		100,
+	//		100,
+	//		Text,
+	//		static_cast<int>(strlen(Text)));
+	//}
 }
 
 void PlayerRed::LevelChangeStart(GameEngineLevel* _PrevLevel)
