@@ -1194,7 +1194,7 @@ void BattleUnitRenderer::NextPokemonAppear()
 
 			if (BallLerp > 3.0f && Fighting == false)
 			{	//명령창 ON + 둠칫효과 시작
-
+				//이때도 텍스트출력되면서 꺼져있으니 켜지는게 맞나?
 				BattleInter->GetInterfaceImage()->On();
 				BattleInter->GetSelect()->On();
 				DoomChit();
