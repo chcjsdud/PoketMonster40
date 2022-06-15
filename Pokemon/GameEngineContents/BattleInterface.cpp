@@ -168,7 +168,7 @@ void BattleInterface::Start()
 	MyHPUI->Off();
 	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3, RenderPivot::LeftTop);
 	MyHP->Off();
-	EXP = CreateRenderer("FriendlyHPExp4.bmp", 99,RenderPivot::LeftTop);
+	EXP = CreateRenderer("FriendlyHPExp4.bmp", 9,RenderPivot::LeftTop);
 	EXP->Off();
 	BattleCommend = CreateRenderer("BattleCommend4.bmp", 7);
 	//Player = CreateRenderer("Player.bmp",0);
@@ -666,12 +666,22 @@ bool BattleInterface::MoveKey()
 {
 	if (ChildUI_ != nullptr)
 	{
-		if (GameEngineInput::GetInst()->IsDown("PokeBall"))
+		if (nullptr == dynamic_cast<Bag*>(ChildUI_))
 		{
+			return false;
+		}
+
+		bool Use = dynamic_cast<Bag*>(ChildUI_)->GetMonsterBallUse();
+
+		if (Use)
+		{
+			dynamic_cast<Bag*>(ChildUI_)->SetMonsterBallUse(false);
+
 			BattleUnit->SetFighting(true);
 			InterfaceImage->Off();
 			BattleCommend->Off();
 			Select->Off();
+			dynamic_cast<Bag*>(ChildUI_)->MonsterBallUse();
 			dynamic_cast<Bag*>(ChildUI_)->DestroyBag();
 			ChildUI_->Off();
 			Level_->StartBattlePage();

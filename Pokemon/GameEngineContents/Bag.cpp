@@ -652,9 +652,15 @@ void Bag::SelectDialog()
 	switch (DialogIndex_)
 	{
 	case 0:
-		if ("BattleLevel" == GetLevel()->GetNameConstRef())
+		if ("Battle" == GetLevel()->GetNameConstRef())
 		{
 			//Use ±¸ÇöºÎ
+			if (ItemType::BALL == BagType_)
+			{
+				MonsterBallUse();
+				break;
+			}
+			
 			Use(ItemList_);
 			break;
 		}
@@ -1063,6 +1069,25 @@ void Bag::DestroyDialogFonts()
 	}
 
 	DialogFonts_.clear();
+}
+
+void Bag::MonsterBallUse()
+{
+	PlayerRed::MainRed_->GetItemList();
+
+	std::vector<Item*>::iterator StartIter = PlayerRed::MainRed_->GetItemList().begin();
+	std::vector<Item*>::iterator EndIter = PlayerRed::MainRed_->GetItemList().end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if ("POKEBALL" == (*StartIter)->GetInfo()->GetNameCopy())
+		{
+			PlayerRed::MainRed_->GetItemList().erase(StartIter);
+			MonsterBallUse_ = true;
+
+			return;
+		}
+	}
 }
 
 
