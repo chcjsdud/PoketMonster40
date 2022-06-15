@@ -423,7 +423,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		EnemyGrowl3->CreateAnimation("EGrowl3x4.bmp", "Growl3", 0, 1, 0.2f, true);
 
 		EnemyScratchEffect = CreateRenderer("Scratch4.bmp",4);
-		EnemyScratchEffect->CreateAnimation("Scratch4.bmp", "Scratch", 0, 4, 0.2f, false);
+		EnemyScratchEffect->CreateAnimation("Scratch4.bmp", "Scratch", 0, 4, 0.1f, false);
+		EnemyScratchEffect->CreateAnimation("Scratch4.bmp", "ScratchStart", 0, 0, 0.2f, false);
 
 		Rock2 = CreateRenderer("Rock4.bmp", 4);
 		Rock3 = CreateRenderer("Rock4.bmp", 4);
@@ -736,8 +737,8 @@ void BattleUnitRenderer::Opening2()
 					//EnemyTackle();
 					//MyGrowl();
 					//EnemyGrowl();
-					EnemyScratch();
-					NextPokemonAppear();
+					//EnemyScratch();
+					//NextPokemonAppear();
 					//Catch();
 					BattleInter->DoomChit();
 				}
@@ -811,6 +812,7 @@ void BattleUnitRenderer::WaterGun()
 	if (MyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
 		MyMoveTime = 0.0f;
+		MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
 	}
 }
 
@@ -1303,17 +1305,17 @@ void BattleUnitRenderer::EnemyScratch()
 
 	if (EnemyTurnEnd == false)
 	{
-		MyMoveTime += GameEngineTime::GetDeltaTime();
+		AnimationEndTime += GameEngineTime::GetDeltaTime();
 
-		if (MyMoveTime <= 0.3f)
+		if (AnimationEndTime <= 0.2f)
 		{
-			PoeCurrentPokemon_->SetPivot({ X - (MyMoveTime * 50.0f),-105.0f });
+			PoeCurrentPokemon_->SetPivot({ X - (AnimationEndTime * 20.0f),-105.0f });
 
 			EnemyScratchEffect->SetPivot({ -200.0f,100.0f });
 			EnemyScratchEffect->On();
 			EnemyScratchEffect->ChangeAnimation("Scratch");
 		}
-		if (MyMoveTime >= 0.3f)
+		if (AnimationEndTime > 0.2f)
 		{
 			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
 			//나 피격시 적 HPUI이미지 들썩
@@ -1323,7 +1325,7 @@ void BattleUnitRenderer::EnemyScratch()
 		}
 
 		{	//내 푸키먼 피격 반짝반짝
-			if (MyMoveTime >= 1.0f)
+			if (AnimationEndTime >= 1.0f)
 			{
 				PlayerCurrentPokemon_->SetAlpha(55);
 				//내 HPUI이미지 아래로
@@ -1331,7 +1333,7 @@ void BattleUnitRenderer::EnemyScratch()
 				BattleInter->GetMyHP()->SetPivot({ 0.0f,-220.0f });
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
 			}
-			if (MyMoveTime >= 1.1f)
+			if (AnimationEndTime >= 1.1f)
 			{
 				PlayerCurrentPokemon_->SetAlpha(255);
 				//적 HPUI 제자리로
@@ -1340,19 +1342,21 @@ void BattleUnitRenderer::EnemyScratch()
 				BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
 				EnemyScratchEffect->Off();
 			}
-			if (MyMoveTime >= 1.2f)
+			if (AnimationEndTime >= 1.2f)
 			{
 				PlayerCurrentPokemon_->SetAlpha(55);
 			}
-			if (MyMoveTime >= 1.3f)
+			if (AnimationEndTime >= 1.3f)
 			{
 				PlayerCurrentPokemon_->SetAlpha(255);
 				EnemyTurnEnd = true;
 			}
 		}
 	}
+
 	if (EnemyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
-		MyMoveTime = 0.0f;
+		AnimationEndTime = 0.0f;
+		EnemyScratchEffect->ChangeAnimation("ScratchStart");
 	}
 }
