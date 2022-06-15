@@ -129,6 +129,7 @@ private:
 	class BattleData* BattleDataR_;
 
 	void ShowDebugValue();
+	bool Debug_;
 public:
 	void Opening();
 	void Opening2();

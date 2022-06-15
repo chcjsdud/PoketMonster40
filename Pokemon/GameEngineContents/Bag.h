@@ -50,7 +50,9 @@ public:
 	void DestroyNameFonts(); //아이템 이름 삭제
 	void DestroyDescFonts(); //아이템 내용 삭제
 	void DestroyOverlapFonts(); //아이템 중복 삭제
-	void DestroyDialogFonts(); //다이얼로그 삭제
+	void DestroyDialogFonts(); //다이얼로그 삭제s
+
+	void MonsterBallUse();
 
 	void Use(std::vector<Item*>& _List);
 	void Give(std::vector<Item*>& _List);
@@ -81,6 +83,17 @@ public:
 			}
 		}
 	}
+
+	inline bool GetMonsterBallUse()
+	{
+		return MonsterBallUse_;
+	}
+
+	inline void SetMonsterBallUse(bool _Use)
+	{
+		MonsterBallUse_ = _Use;
+	}
+
 
 protected:
 	void Start() override;
@@ -140,5 +153,7 @@ private:
 
 	//입력 대기 시간 
 	float InputTime_;
+
+	bool MonsterBallUse_;
 };
 

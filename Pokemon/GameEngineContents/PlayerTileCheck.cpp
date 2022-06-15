@@ -141,8 +141,8 @@ bool PlayerRed::PlayerMoveTileCheck(int _X, int _Y)
 
 			if (true == Green::NPCGreen->GetBattleEnd())
 			{
-				Green::NPCGreen->SetPosition(NextTileMap_->GetWorldPostion(5, 2));
-				Green::NPCGreen->NPCRender_->On();
+				//Green::NPCGreen->SetPosition(NextTileMap_->GetWorldPostion(5, 2));
+				//Green::NPCGreen->NPCRender_->On();
 				// 충돌체 on 시키면 끝
 			}
 			return true;

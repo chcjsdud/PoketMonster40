@@ -31,6 +31,7 @@
 #include <GameEngineBase/GameEngineInput.h>
 
 WorldMapLevel::WorldMapLevel()
+	: EndingImage_(nullptr)
 {
 }
 
@@ -107,11 +108,22 @@ void WorldMapLevel::Loading()
 	CreateActor<Green>();
 	CreateActor<NPCBrock>();
 	CreateActor<RegionUI>();
+
+	EndingImage_ = PlayerRed::MainRed_->CreateRenderer("Ending.bmp");
+	EndingImage_->SetOrder(-1);
+
+	if (false == GameEngineInput::GetInst()->IsKey("Ending"))
+	{
+		GameEngineInput::GetInst()->CreateKey("Ending", 0x34);
+	}
 }
 
 void WorldMapLevel::Update()
 {
-	
+	if (GameEngineInput::GetInst()->IsDown("Ending"))
+	{
+		EndingImage_->SetOrder(999999);
+	}
 }
 
 void WorldMapLevel::LevelChangeEnd(GameEngineLevel* _PrevLevel)
