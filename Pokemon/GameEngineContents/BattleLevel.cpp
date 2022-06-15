@@ -116,10 +116,29 @@ void BattleLevel::Update()
 				BState_ = BattleState::Endding;
 				return;
 				break;
+			case BattlePageEnd::GoSelecet:
+				BState_ = BattleState::SelecetPage;
+				UnitRenderer->SetFighting(false);
+				Interface_->GetSelect()->SetPivot({-190.0f, -25.0f});
+				EndAction_ = BattlePageEnd::None;
+				return;
+				break;
 			case BattlePageEnd::ChangePokemon:
+				Interface_->BattleStatus_->Off();
+				for (auto Iter : Interface_->AllLevelUpFont_)
+				{
+					Iter->EndFont();
+				}
 				Interface_->ShowChangePokemon(BattleData_->GetNameString(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
 				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
 				BattleData_->GetCurrentPoePokemon()->ResetRank();
+				UnitRenderer->SetPoeRenderer();
+				if (BattleManager_ != nullptr)
+				{
+					delete BattleManager_;
+					BattleManager_ = nullptr;
+				}
+				EndAction_ = BattlePageEnd::GoSelecet;
 				return;
 				break;
 			case BattlePageEnd::SetPokemon:
@@ -715,6 +734,7 @@ BattleManager::BattleManager(const std::string& _PlayerItem, BattleLevel* _Level
 	, SecondTurn_(nullptr)
 	, DeadSwitch_(false)
 	, UsePokemonBall_(true)
+	, GetExp_(false)
 {
 
 }
@@ -769,19 +789,20 @@ InBattle BattleManager::Update()
 	}
 	else if (PoeCurrentPokemon_->GetPokemon()->GetInfo()->GetHp() <= 0)
 	{
-		if (DeadSwitch_ == true)
+		if (DeadSwitch_ == true && GetExp_ == false)
 		{
 			int EXP = GameEngineRandom::GetInst_->RandomInt(80, 100);
 			Interface_->ShowGetEXP(PlayCurrentPokemon_->GetPokemon()->GetInfo()->GetNameConstRef(), EXP);
 			PlayCurrentPokemon_->GetPokemon()->GetInfo()->PlusExp(EXP);
+			GetExp_ = true;
 			return InBattle::BattleEndByPoeDeath;
 		}
-		else
+		else if (DeadSwitch_ == false)
 		{
 			PoePokemonDead();
 			return InBattle::Wait;
 		}
-
+		return InBattle::BattleEndByPoeDeath;
 	}
 
 	switch (CurrentBattlePage_)
@@ -937,7 +958,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				if (_Skill->GetNameConstRef() == "GROWL")
 				{
 				Level_->UnitRenderer->SkillName_ = SkillName::EnemyGrowl;
-				Level_->UnitRenderer->MyTurnEnd = false;
+				Level_->UnitRenderer->EnemyTurnEnd = false;
 				Level_->DoingSkillAnimation_ = true;
 				}
 			}
