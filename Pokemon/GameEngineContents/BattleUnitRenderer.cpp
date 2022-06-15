@@ -451,13 +451,13 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 	{
 		if (BattleDataR_->GetNameString() == "Green")
 		{
-			OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
+			OpponentRenderer_ = CreateRenderer("Rival_Battle.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
 			OpponentRenderer_->Off();
 			OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
 		}
 		else if (BattleDataR_->GetNameString() == "Brock")
 		{
-			OpponentRenderer_ = CreateRenderer("Ung_Battle.bmp", 4, RenderPivot::CENTER, OpponentPokemonPos_);
+			OpponentRenderer_ = CreateRenderer("Ung_Battle.bmp", 3, RenderPivot::CENTER, OpponentPokemonPos_);
 			OpponentRenderer_->Off();
 			OpponentRenderer_->SetPivot({ -450.0f,-155.0f });
 		}
