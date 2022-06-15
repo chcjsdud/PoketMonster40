@@ -34,5 +34,6 @@ protected:
 	void LevelChangeStart(GameEngineLevel* _NextLevel) override;
 
 private:
+	class GameEngineRenderer* EndingImage_;
 };
 
