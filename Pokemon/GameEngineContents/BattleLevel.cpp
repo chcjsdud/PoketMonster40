@@ -342,6 +342,7 @@ void BattleLevel::LevelChangeEnd(GameEngineLevel* _NextLevel)
 	WildBattle_ = false;
 	DoingSkillAnimation_ = false;
 	EndAction_ = BattlePageEnd::None;
+	DebugMode_ = true;
 }
 
 void BattleLevel::LevelStartDebug()
