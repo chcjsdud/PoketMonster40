@@ -480,44 +480,30 @@ void PlayerRed::Update()
 		SetPosition(CurrentTileMap_->GetWorldPostion(23, 36));
 	}
 
-	if (true == GameEngineInput::GetInst()->IsDown("JBMTest"))
-	{
-		CurrentTileMap_ = WorldTileMap3::GetInst();
-		SetPosition(CurrentTileMap_->GetWorldPostion(15, 45));
-		IsClearShop_ = true;
-	}
-
 	if (true == GameEngineInput::GetInst()->IsDown("ForcedBattle"))
 	{
 		BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
 		TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::None);
 	}
-	if (true == GameEngineInput::GetInst()->IsPress("RTest"))
-	{
-		CurrentTileMap_ = WorldTileMap1::GetInst();
-		SetPosition(CurrentTileMap_->GetWorldPostion(22, 90));
-	}
+
 	if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
 	{
-		IsDebugRun_ = true;
+		BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
+		TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::Brock);
 	}
-	if (true == GameEngineInput::GetInst()->IsUp("JBMDebugRun"))
-	{
-		IsDebugRun_ = false;
-	}
+
+	//if (true == GameEngineInput::GetInst()->IsDown("JBMDebugRun"))
+	//{
+	//	IsDebugRun_ = true;
+	//}
+	//if (true == GameEngineInput::GetInst()->IsUp("JBMDebugRun"))
+	//{
+	//	IsDebugRun_ = false;
+	//}
 }
 
 void PlayerRed::Render()
 {
-	//{
-	//	char Text[30] = { 0 };
-	//	sprintf_s(Text, "pos : %d , %d", CurrentTilePos_.ix(), CurrentTilePos_.iy());
-	//	TextOut(GameEngine::BackBufferDC(),
-	//		100,
-	//		100,
-	//		Text,
-	//		static_cast<int>(strlen(Text)));
-	//}
 }
 
 void PlayerRed::LevelChangeStart(GameEngineLevel* _PrevLevel)
@@ -742,14 +728,13 @@ bool PlayerRed::IsMoveKey()
 {
 	if (false == GameEngineInput::GetInst()->IsPress("Up") &&
 		false == GameEngineInput::GetInst()->IsPress("Down") &&
-		false == GameEngineInput::GetInst()->IsPress("Left") &&
+		//false == GameEngineInput::GetInst()->IsPress("Left") &&
 		false == GameEngineInput::GetInst()->IsPress("Right"))
 	{
 		return false;
 	}
 	return true;
 }
-
 
 void PlayerRed::MoveAnim()
 {
@@ -923,7 +908,8 @@ bool PlayerRed::CanMove()
 		true == IsInteraction_ ||
 		ChildUI_ != nullptr ||
 		false == WMenuUICheck_ ||
-		true == IsStartBattle_
+		true == IsStartBattle_ ||
+		true == IsControllOnCheck_
 		)
 	{
 		return false;
