@@ -175,5 +175,7 @@ public:
 	{
 		return IsCatch;
 	}
+
+	void SetPoeRenderer();
 };
 

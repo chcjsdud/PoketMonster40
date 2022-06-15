@@ -167,7 +167,7 @@ public:
 
 	inline void SetCurrentPoePokemon(PokemonBattleState* _Pokemon)
 	{
-		PlayerCurrentPokemonInBattle_ = _Pokemon;
+		PoeCurrentPokemonInBattle_ = _Pokemon;
 	}
 
 
@@ -392,6 +392,7 @@ private:
 	void PoePokemonDead();
 
 	bool DeadSwitch_;
+	bool GetExp_;
 	const bool UsePokemonBall_;
 private:
 	// 설명: 결과물 저장
@@ -465,5 +466,6 @@ enum class BattlePageEnd
 	LevelUpState,
 	SetPokemon,
 	CatchPokeBall,
-	GoEnd
+	GoEnd,
+	GoSelecet
 };

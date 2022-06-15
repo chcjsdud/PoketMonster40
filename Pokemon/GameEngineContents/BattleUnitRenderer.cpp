@@ -200,6 +200,12 @@ void BattleUnitRenderer::Update()
 		case SkillName::Catch:
 			Catch();
 			break;
+		case SkillName::EnemyGrowl:
+			EnemyGrowl();
+			break;
+		case SkillName::MyGrowl:
+			MyGrowl();
+			break;
 		default:
 			break;
 		}
@@ -218,6 +224,8 @@ void BattleUnitRenderer::Update()
 
 
 }
+
+
 
 void BattleUnitRenderer::Render()
 {
@@ -277,50 +285,64 @@ void BattleUnitRenderer::ShowDebugValue()
 
 
 
-	// Poe Hp
+	if (PoeCurrentPokemon_ != nullptr)
 	{
-		char Text[10] = { 0 };
-		if (PoePokemon->GetInfo()->GetHp() >= 0)
+		// Poe Hp
 		{
-			sprintf_s(Text, "HP : %d", PoePokemon->GetInfo()->GetHp());
-			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-				, PoeCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+			char Text[10] = { 0 };
+			if (PoePokemon->GetInfo()->GetHp() >= 0)
+			{
+				sprintf_s(Text, "HP : %d", PoePokemon->GetInfo()->GetHp());
+				TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+					, PoeCurrentPokemon_->GetSortingPivot().iy(), Text, static_cast<int>(strlen(Text)));
+			}
+
 		}
-
-	}
-	// Poe Att
-	{
-		char Text[10] = { 0 };
-		sprintf_s(Text, "Att : %d", PoePokemon->GetInfo()->GetAtt());
-		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-			, PoeCurrentPokemon_->GetSortingPivot().iy() + 15, Text, static_cast<int>(strlen(Text)));
-	}
-	// Poe Def
-	{
-		char Text[10] = { 0 };
-		sprintf_s(Text, "Def : %d", PoePokemon->GetInfo()->GetDef());
-		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-			, PoeCurrentPokemon_->GetSortingPivot().iy() + 30, Text, static_cast<int>(strlen(Text)));
-	}
-	// Poe Speed
-	{
-		char Text[15] = { 0 };
-		sprintf_s(Text, "Speed : %d", PoePokemon->GetInfo()->GetSpeed());
-		TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-			, PoeCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
-	}
-
-	for (int i = 0; i < 6; i++)
-	{
-		int Rank = BattleDataR_->GetCurrentPoePokemon()->CurrentRank_[(static_cast<PokemonAbility>(i))];
-		std::string RankStr = BattleInter->AbilityString(static_cast<PokemonAbility>(i));
-		if (Rank != 0)
+		// Poe Att
+		{
+			char Text[10] = { 0 };
+			sprintf_s(Text, "Att : %d", PoePokemon->GetInfo()->GetAtt());
+			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+				, PoeCurrentPokemon_->GetSortingPivot().iy() + 15, Text, static_cast<int>(strlen(Text)));
+		}
+		// Poe Def
+		{
+			char Text[10] = { 0 };
+			sprintf_s(Text, "Def : %d", PoePokemon->GetInfo()->GetDef());
+			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+				, PoeCurrentPokemon_->GetSortingPivot().iy() + 30, Text, static_cast<int>(strlen(Text)));
+		}
+		// Poe Speed
 		{
 			char Text[15] = { 0 };
-			sprintf_s(Text, "%c%c%c : %d", RankStr[0], RankStr[1], RankStr[2], Rank);
+			sprintf_s(Text, "Speed : %d", PoePokemon->GetInfo()->GetSpeed());
 			TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
-				, PoeCurrentPokemon_->GetSortingPivot().iy() + 60 + (15 * i), Text, static_cast<int>(strlen(Text)));
+				, PoeCurrentPokemon_->GetSortingPivot().iy() + 45, Text, static_cast<int>(strlen(Text)));
 		}
+
+		for (int i = 0; i < 6; i++)
+		{
+			int Rank = BattleDataR_->GetCurrentPoePokemon()->CurrentRank_[(static_cast<PokemonAbility>(i))];
+			std::string RankStr = BattleInter->AbilityString(static_cast<PokemonAbility>(i));
+			if (Rank != 0)
+			{
+				char Text[15] = { 0 };
+				sprintf_s(Text, "%c%c%c : %d", RankStr[0], RankStr[1], RankStr[2], Rank);
+				TextOut(GameEngine::BackBufferDC(), PoeCurrentPokemon_->GetSortingPivot().ix()
+					, PoeCurrentPokemon_->GetSortingPivot().iy() + 60 + (15 * i), Text, static_cast<int>(strlen(Text)));
+			}
+		}
+	}
+
+}
+
+void BattleUnitRenderer::SetPoeRenderer()
+{
+	BattleDataR_ = Level_->GetBattleData();
+	if (PoeCurrentPokemon_ == nullptr)
+	{
+		PoeCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetMyBattleFront()
+			, 3, RenderPivot::CENTER, OpponentPokemonPos_);
 	}
 }
 
