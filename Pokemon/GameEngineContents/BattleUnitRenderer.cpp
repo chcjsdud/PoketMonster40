@@ -340,6 +340,8 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		//ÇªÅ°¸Õ
 		PlayerCurrentPokemon_ = CreateRenderer(BattleDataR_->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMyBattleBack()
 			, 3, RenderPivot::CENTER, PlayerPokemonPos_);
+		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
+		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
 
 	}
 	if (PoeCurrentPokemon_ == nullptr)
@@ -393,8 +395,7 @@ void BattleUnitRenderer::LevelChangeStart(GameEngineLevel* _PrevLevel)
 		EnemyGrowl3 = CreateRenderer("EGrowl3x4.bmp", 4);
 		EnemyGrowl3->CreateAnimation("EGrowl3x4.bmp", "Growl3", 0, 1, 0.2f, true);
 
-		PlayerCurrentPokemon_->CreateAnimation("SquirtleB.bmp", "Idle", 0, 0, 0.0f, false);
-		PlayerCurrentPokemon_->CreateAnimation("ShellHide.bmp", "ShellHide", 0, 7, 0.1f, false);
+		
 
 		Rock2 = CreateRenderer("Rock4.bmp", 4);
 		Rock3 = CreateRenderer("Rock4.bmp", 4);
