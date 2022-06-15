@@ -11,6 +11,7 @@
 #include "PokemonInfoManager.h"
 #include "FadeActor.h"
 #include "PlayerRed.h"
+#include "WorldMapSoundManager.h"
 #include <GameEngine/GameEngineImageManager.h>
 
 Bag::Bag()
@@ -102,6 +103,8 @@ void Bag::Update()
 
 		if (true == GameEngineInput::GetInst()->IsDown("CloseBag"))
 		{
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 			DestroyBag();
 			Off();
 		}
@@ -137,6 +140,8 @@ void Bag::MoveBag()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("LeftArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if (0 < BagIndex_)
 		{
 			IsMove_ = true;
@@ -152,6 +157,8 @@ void Bag::MoveBag()
 
 	else if (true == GameEngineInput::GetInst()->IsDown("RightArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if (2 > BagIndex_)
 		{
 			IsMove_ = true;
@@ -239,6 +246,8 @@ void Bag::MoveItem()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		switch (BagType_)
 		{
 		case ItemType::ITEM:
@@ -276,6 +285,8 @@ void Bag::MoveItem()
 
 	else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		switch (BagType_)
 		{
 		case ItemType::ITEM:
@@ -309,6 +320,8 @@ void Bag::MoveItem()
 
 	else if (true == GameEngineInput::GetInst()->IsDown("SelectBag"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if (0 == SelectIndex_ && ItemNameFonts_.size() == 1
 			|| SelectIndex_ == ItemNameFonts_.size() - 1)
 		{
@@ -405,6 +418,8 @@ void Bag::ActiveDialog()
 		 
 	if (true == GameEngineInput::GetInst()->IsDown("DialogOn"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if (ItemType::ITEM == BagType_)
 		{
 			if (0 == ItemList_.size())
@@ -487,7 +502,9 @@ void Bag::OnDialog()
 
 	DialogFonts_.push_back(SelcetFont);
 
-	if ("BattleLevel" != GetLevel()->GetNameConstRef())
+	std::string Name = GetLevel()->GetNameConstRef();
+
+	if ("Battle" != GetLevel()->GetNameConstRef())
 	{
 		GameEngineContentFont* Give = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
 		Give->SetPosition(GetPosition() + float4{250, 100});
@@ -505,18 +522,23 @@ void Bag::OnDialog()
 		DialogFonts_.push_back(Cancle);
 	}
 
-	else if ("BattleLevel" == GetLevel()->GetNameConstRef())
+	else if ("Battle" == GetLevel()->GetNameConstRef())
 	{
-		BagDialog_->SetImage("DialogBox_Bag_Battle.bmp");
-		BagDialog_->SetPivot({ 335, 215 });
+		//BagDialog_->SetImage("DialogBox_Bag_Battle.bmp");
+		//BagDialog_->SetPivot({ 335, 215 });
 
 		GameEngineContentFont* Use = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
-		Use->SetPosition(GetPosition() + float4{ 250, 130 });
+		Use->SetPosition(GetPosition() + float4{ 250, 100 });
 		Use->ShowString("USE", true);
 		DialogFonts_.push_back(Use);
 
+		GameEngineContentFont* Toss = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
+		Toss->SetPosition(GetPosition() + float4{ 250, 160 });
+		Toss->ShowString("TOSS", true);
+		DialogFonts_.push_back(Toss);
+
 		GameEngineContentFont* Cancle = GetLevel()->CreateActor<GameEngineContentFont>(GetOrder());
-		Cancle->SetPosition(GetPosition() + float4{ 250, 190 });
+		Cancle->SetPosition(GetPosition() + float4{ 250, 220 });
 		Cancle->ShowString("CANCLE", true);
 		DialogFonts_.push_back(Cancle);
 	}
@@ -531,6 +553,8 @@ void Bag::MoveDialog()
 {
 	if (true == GameEngineInput::GetInst()->IsDown("DownArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if ("BattleLevel" == GetLevel()->GetNameConstRef()
 			&& DialogIndex_ >= 1)
 		{
@@ -566,6 +590,8 @@ void Bag::MoveDialog()
 
 	else if (true == GameEngineInput::GetInst()->IsDown("UpArrow"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		if (0 == DialogIndex_)
 		{
 			return;
@@ -599,17 +625,23 @@ void Bag::MoveDialog()
 
 	else if (true == GameEngineInput::GetInst()->IsDown("SelectBag"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		SelectDialog();
 	}
 
 	else if (true == GameEngineInput::GetInst()->IsDown("DialogOn"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		CloseDialog();
 		BagState_ = BagState::ListMenu;
 	}
 
 	else if(true == GameEngineInput::GetInst()->IsDown("CloseBag"))
 	{
+		WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
+
 		CloseDialog();
 		BagState_ = BagState::ListMenu;
 	}
