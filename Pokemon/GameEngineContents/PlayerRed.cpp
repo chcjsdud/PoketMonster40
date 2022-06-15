@@ -803,7 +803,14 @@ void PlayerRed::MoveAnim()
 				else if (true == GetStartShopEvent())
 				{
 					SetControllOn(false);
-					RedRender_->ChangeAnimation("IdleLeft");
+
+					CurrentDir_ = RedDir::Left;
+					CurrentState_ = RedState::Idle;
+					AnimationName_ = "Idle";
+					ChangeDirText_ = "Left";
+					RedFrontCollision_->SetScale({ 5,20 });
+					RedFrontCollision_->SetPivot({ -32,0 });
+					RedRender_->ChangeAnimation(AnimationName_ + ChangeDirText_);
 
 					IsInteraction_ = true;
 					InteractionText* TmpText = GetLevel()->CreateActor<InteractionText>();

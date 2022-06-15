@@ -1,6 +1,7 @@
 #pragma once
 #include "PokemonTileMap.h"
 #include "Room4Pokeball.h"
+#include <GameEngine/GameEngineRenderer.h>
 
 // 설명 : 오박사 연구소
 class RoomTileMap4 : public PokemonTileMap
@@ -31,6 +32,7 @@ public:
 protected:
 
 private:
+	GameEngineRenderer* FrontRenderer_;
 	void Start() override;
 
 };

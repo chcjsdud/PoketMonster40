@@ -1,9 +1,14 @@
 #include "RoomTileMap4.h"
 #include "Room4Pokeball.h"
+#include "ContentEnum.h"
 
 RoomTileMap4* RoomTileMap4::Inst_ = nullptr;
 
 RoomTileMap4::RoomTileMap4()
+	: Pokeball0(nullptr)
+	, Pokeball1(nullptr)
+	, Pokeball2(nullptr)
+	, FrontRenderer_(nullptr)
 {
 }
 
@@ -26,6 +31,9 @@ void RoomTileMap4::Start()
 
 	Pokeball2 = GetLevel()->CreateActor<Room4Pokeball>();
 	Pokeball2->SetPosition(GetWorldPostion(10, 2));
+
+	FrontRenderer_ = CreateRenderer("Room4FrontUI.bmp", static_cast<int>(RenderOrder::FrontPlayer));
+	FrontRenderer_->SetPivot(GetWorldPostion(10, 5) - GetPosition() + float4(0, 32));
 
 	//for (int y = 0; y < 11; y++)
 	//{

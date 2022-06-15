@@ -47,6 +47,19 @@ void Oak::ShopEvent()
 	if (true == IsStartShop_[2] && true == Green::NPCGreen->CanDirMoveTime())
 	{
 		IsStartShop_[2] = false;
+		IsStartShop_[3] = true;
 		Green::NPCGreen->NPCMoveDir(NPCDir::Down, 8);
+	}
+	
+	if (true == IsStartShop_[3] && false == IsStartShop_[4] && true == Green::NPCGreen->CanDirMoveTime())
+	{
+		IsStartShop_[4] = true;
+		Green::NPCGreen->NPCMoveDir(NPCDir::Right, 1);
+	}
+	
+	if (true == IsStartShop_[4] && false == IsStartShop_[5] && true == Green::NPCGreen->CanDirMoveTime())
+	{
+		IsStartShop_[5] = true;
+		Green::NPCGreen->SetPosition({ -6500, -7000 });
 	}
 }

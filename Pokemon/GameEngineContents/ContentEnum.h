@@ -86,6 +86,7 @@ enum class RenderOrder
 {
 	Background,
 	Player = 1,
+	FrontPlayer,
 	UI = 15
 };
 
