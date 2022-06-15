@@ -728,7 +728,7 @@ bool PlayerRed::IsMoveKey()
 {
 	if (false == GameEngineInput::GetInst()->IsPress("Up") &&
 		false == GameEngineInput::GetInst()->IsPress("Down") &&
-		//false == GameEngineInput::GetInst()->IsPress("Left") &&
+		false == GameEngineInput::GetInst()->IsPress("Left") &&
 		false == GameEngineInput::GetInst()->IsPress("Right"))
 	{
 		return false;
