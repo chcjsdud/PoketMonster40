@@ -169,5 +169,9 @@ public:
 	{
 		return PlayerCurrentPokemon_;
 	}
+	bool IsCatchBack()
+	{
+		return IsCatch;
+	}
 };
 

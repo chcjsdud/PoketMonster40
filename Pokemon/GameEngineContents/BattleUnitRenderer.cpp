@@ -789,13 +789,12 @@ void BattleUnitRenderer::ShellHide()
 	if (MyTurnEnd == false)
 	{
 		PlayerCurrentPokemon_->ChangeAnimation("ShellHide");
-		MyTurnEnd = true;
-	}
-	if (MyTurnEnd == true)
-	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
+
+		//적 턴도 끝나면 다시 false로 초기화 한다..?
 		if (PlayerCurrentPokemon_->IsEndAnimation() == true)
 		{
 			PlayerCurrentPokemon_->ChangeAnimation("Idle");
+			MyTurnEnd = true;
 		}
 		MyMoveTime = 0.0f;
 	}
@@ -1078,7 +1077,7 @@ void BattleUnitRenderer::TrainerOpening2()
 			MoveSpeed = 900.0f;
 			PlayerTime_2 += GameEngineTime::GetDeltaTime() * MoveSpeed;
 
-			if (IsCatch == false)
+			if (IsCatch == false && Level_->GetBattleData()->GetCurrentPoePokemon()->Pokemon_->GetInfo()->GetFaint() == false)
 			{
 				PoeCurrentPokemon_->On();
 			}
@@ -1178,7 +1177,7 @@ void BattleUnitRenderer::NextPokemonAppear()
 		if (/*무언가 조건이 걸려야함 NextBattleCheck같은bool하나 있어야할듯*/true)
 		{
 			//다음 푸키먼 등장(몬스터볼 오픈)
-
+			IsCatch = false;
 			CatchBallOpen->SetPivot({ 210.0f,-70.0f });
 			CatchBallOpen->On();
 			CatchBallOpen->ChangeAnimation("Open");
