@@ -749,13 +749,12 @@ void BattleUnitRenderer::Opening2()
 
 void BattleUnitRenderer::WaterGun()
 {
-
 	float X = PlayerCurrentPokemon_->GetPivot().x;
-	EffectX += GameEngineTime::GetDeltaTime() * 200.0f;
-	EffectY -= GameEngineTime::GetDeltaTime() * 100.0f;
 
 	if (MyTurnEnd == false)
 	{
+		EffectX += GameEngineTime::GetDeltaTime() * 200.0f;
+		EffectY -= GameEngineTime::GetDeltaTime() * 100.0f;
 		MyMoveTime += GameEngineTime::GetDeltaTime();
 
 		if (MyMoveTime <= 1.5f)
@@ -812,7 +811,9 @@ void BattleUnitRenderer::WaterGun()
 	if (MyTurnEnd == true)
 	{	//적 턴도 끝나면 다시 false로 초기화 한다..?
 		MyMoveTime = 0.0f;
-		MyWaterGunEffect->SetPivot({ 210.0f,-90.0f });
+		MyWaterGunEffect->SetPivot({ -105.0f,20.0f });
+		EffectX = -105.0f;
+		EffectY = 20.0f;
 	}
 }
 
@@ -909,18 +910,27 @@ void BattleUnitRenderer::EnemyRock()
 		}
 		//피격 반짝반짝
 		if (AnimationEndTime >= 1.6f)
-		{
-			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-200.0f });
+		{	//HP UI들썪
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
+			BattleInter->GetMyHP()->SetPivot({ -16.0f,-200.0f });
+			BattleInter->GetEXP()->SetPivot({ -80.0f,-280.0f });
 
 			PlayerCurrentPokemon_->SetAlpha(55);
 		}
 		if (AnimationEndTime >= 1.7f)
-		{
-			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+		{	//HP UI 밑으로
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-210.0f });
+			BattleInter->GetMyHP()->SetPivot({ -16.0f,-220.0f });
+			BattleInter->GetEXP()->SetPivot({ -80.0f,-300.0f });
+
 			PlayerCurrentPokemon_->SetAlpha(255);
 		}
 		if (AnimationEndTime >= 1.8f)
-		{
+		{	//HP UI 제자리로
+			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-170.0f });
+			BattleInter->GetMyHP()->SetPivot({ -16.0f,-180.0f });
+			BattleInter->GetEXP()->SetPivot({ -80.0f,-260.0f });
+
 			PlayerCurrentPokemon_->SetAlpha(55);
 		}
 		if (AnimationEndTime >= 1.9f)
@@ -1320,7 +1330,7 @@ void BattleUnitRenderer::EnemyScratch()
 			PoeCurrentPokemon_->SetPivot({ 230.0f,-105.0f });
 			//나 피격시 적 HPUI이미지 들썩
 			BattleInter->GetMyHPUI()->SetPivot({ 0.0f,-190.0f });
-			BattleInter->GetMyHP()->SetPivot({ 0.0f,-200.0f });
+			BattleInter->GetMyHP()->SetPivot({ -16.0f,-200.0f });
 			BattleInter->GetEXP()->SetPivot({ -80.0f,-280.0f });
 		}
 

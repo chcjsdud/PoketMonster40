@@ -163,9 +163,9 @@ void BattleInterface::Start()
 	EnemyHPUI->Off();
 	EnemyHP = CreateRenderer("EnemyHPBar4.bmp", 3, RenderPivot::LeftTop);
 	EnemyHP->Off();
-	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp", 2);
+	MyHPUI = CreateRenderer("FriendlyHPBackground4.bmp", 7);
 	MyHPUI->Off();
-	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 3, RenderPivot::LeftTop);
+	MyHP = CreateRenderer("FriendlyHPBar4.bmp", 8, RenderPivot::LeftTop);
 	MyHP->Off();
 	EXP = CreateRenderer("FriendlyHPExp4.bmp", 9,RenderPivot::LeftTop);
 	EXP->Off();
