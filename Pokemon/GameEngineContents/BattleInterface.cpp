@@ -518,7 +518,7 @@ void BattleInterface::ShowPlayerFaintString(const std::string& _PlayerPokemon)
 	BattleFont_->ShowString(_PlayerPokemon + " is\\fainted!");
 	Level_->EndFont_ = false;
 	//±è¿¹³ª : Ãß°¡¡é
-	BattleUnit->GetPoeCurrentPokemonRender()->Off();
+	BattleUnit->GetPlayerCurrentPokemonRender()->Off();
 }
 
 

@@ -164,5 +164,10 @@ public:
 	{
 		return PoeCurrentPokemon_;
 	}
+
+	GameEngineRenderer* GetPlayerCurrentPokemonRender()
+	{
+		return PlayerCurrentPokemon_;
+	}
 };
 
