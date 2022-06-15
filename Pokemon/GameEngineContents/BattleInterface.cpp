@@ -509,7 +509,9 @@ void BattleInterface::ShowPoeFaintString(const std::string& _PoePokemon)
 	BattleFont_->ShowString("Poe " + _PoePokemon + "\\fainted!");
 	Level_->EndFont_ = false;
 	//±è¿¹³ª : Ãß°¡¡é
-	BattleUnit->GetPoeCurrentPokemonRender()->Off();
+	//BattleUnit->GetPoeCurrentPokemonRender()->Off();
+	BattleUnit->GetPoeCurrentPokemonRender()->Death();
+	BattleUnit->PoeCurrentPokemon_ =nullptr;
 }
 
 void BattleInterface::ShowPlayerFaintString(const std::string& _PlayerPokemon)

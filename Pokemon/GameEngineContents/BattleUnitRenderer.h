@@ -37,6 +37,7 @@ public:
 	static GameEngineRenderer* PlayerRenderer_;
 
 	SkillName SkillName_;
+	GameEngineRenderer* PoeCurrentPokemon_;
 
 
 protected:
@@ -51,7 +52,6 @@ protected:
 
 private:
 	GameEngineRenderer* PlayerCurrentPokemon_;
-	GameEngineRenderer* PoeCurrentPokemon_;
 	GameEngineRenderer* MyTackleEffect;//±è¿¹³ª : 6¿ù 3ÀÏ ¸öÅë¹ÚÄ¡±â ÀÌÆÑÆ® ·»´õ·¯ Ãß°¡
 	GameEngineRenderer* MyWaterGunEffect;
 	GameEngineRenderer* EnemyTackleEffect;

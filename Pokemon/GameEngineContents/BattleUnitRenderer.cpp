@@ -1065,7 +1065,7 @@ void BattleUnitRenderer::TrainerOpening2()
 		float BallMoveY = MonsterBallOP->GetPivot().y;
 		float BallMoveX = MonsterBallOP->GetPivot().x;
 
-		if (BattleInter->GetPlayerEnd() == true)
+		if (BattleInter->GetPlayerEnd() == true && PoeCurrentPokemon_ != nullptr)
 		{
 			//김예나 : 트레이너가 나가면서 푸키먼을 꺼냄
 			//상대 트레이너는 포켓몬을 꺼냈다! 텍스트후
@@ -1082,7 +1082,7 @@ void BattleUnitRenderer::TrainerOpening2()
 				PoeCurrentPokemon_->On();
 			}
 			PoeCurrentPokemon_->SetAlpha(0 + (int)PlayerTime_2);
-			if (PoeCurrentPokemon_->GetAlpha() >= 255)
+			if (PoeCurrentPokemon_->GetAlpha() >= 255 )
 			{	//알파값 255이상이면 255로 고정
 				PoeCurrentPokemon_->SetAlpha(255);
 				CatchBallOpen->Off();
@@ -1179,6 +1179,7 @@ void BattleUnitRenderer::NextPokemonAppear()
 			//다음 푸키먼 등장(몬스터볼 오픈)
 			IsCatch = false;
 			CatchBallOpen->SetPivot({ 210.0f,-70.0f });
+
 			CatchBallOpen->On();
 			CatchBallOpen->ChangeAnimation("Open");
 
