@@ -12,6 +12,7 @@
 #include "YesOrNo.h"
 #include "WorldMapLevel.h"
 #include "BattleStartUI.h"
+#include "WorldMapSoundManager.h"
 
 bool InteractionText::IsCenterMove_ = false;
 bool InteractionText::IsCenterAnim_ = false;
@@ -55,6 +56,7 @@ void InteractionText::Setting()
 	Fonts->SetPosition(GetPosition() + float4(-420, 160));
 	Fonts->ShowString(TmpString, false);
 	IsSetting_ = true;	
+	WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 }
 
 void InteractionText::ClearText()
@@ -154,6 +156,7 @@ void InteractionText::Update()
 			Fonts->NextString();
 			IsCenterMove_ = false;
 			//IsCenterAnim_ = false;
+			WorldMapSoundManager::GetInst()->PlayEffectSound(WorldSoundEffectEnum::Click);
 		}
 	}
 	// 다음 문장이 없을 때 == 끝났을 때
