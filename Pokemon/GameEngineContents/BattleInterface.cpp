@@ -93,7 +93,7 @@ void BattleInterface::Start()
 		PlayerName_->SetPosition({ 570 , 312 });
 		PlayerName_->SetSize(0.85f);
 		PlayerLevel_ = Level_->CreateActor<GameEngineContentFont>(10);
-		PlayerLevel_->SetPosition({ 865 , 312 });
+		PlayerLevel_->SetPosition({ 850 , 312 });
 		PlayerLevel_->SetSize(0.85f);
 		PlayerHP_ = Level_->CreateActor<GameEngineContentFont>(10);
 		PlayerHP_->SetPosition({ 770 , 384 });
@@ -784,7 +784,7 @@ void BattleInterface::DoomChit()
 		MyHP->SetPivot({ -16.0f, -184.0f });
 		EXP->SetPivot({ -80.0f,-260.0f });
 		PlayerName_->SetPosition({ 570 ,  312 - 4 });
-		PlayerLevel_->SetPosition({ 865 , 312 - 4 });
+		PlayerLevel_->SetPosition({ 850 , 312 - 4 });
 		PlayerHP_->SetPosition({ 770 , 384 - 4 });
 
 	}
@@ -795,7 +795,7 @@ void BattleInterface::DoomChit()
 		MyHP->SetPivot({ -16.0f, -180.0f });
 		EXP->SetPivot({ -80.0f,-256.0f });
 		PlayerName_->SetPosition({570 , 312 });
-		PlayerLevel_->SetPosition({ 865 , 312 });
+		PlayerLevel_->SetPosition({ 850 , 312 });
 		PlayerHP_->SetPosition({ 770 , 384 });
 	}
 }
