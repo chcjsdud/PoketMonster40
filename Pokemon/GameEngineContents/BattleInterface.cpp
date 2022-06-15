@@ -264,6 +264,7 @@ void BattleInterface::Update()
 			{
 				EnemyHPUI->On();
 				EnemyHP->On();
+
 				// 다음 문장 출력 함수
 				Fonts->NextString();
 			}
@@ -567,12 +568,23 @@ void BattleInterface::ShowGetEXP(const std::string& _PlayerPokemon, int _EXP)
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_PlayerPokemon + "gained\\" + std::to_string(_EXP) + " EXP. Points!");
 	Level_->EndFont_ = false;
+
+	//김예나 : 추가↓
+	EnemyHP->Off();
+	EnemyHPUI->Off();
+	PoeName_->Off();
+	PoeLevel_->Off();
 }
 void BattleInterface::ShowChangePokemon(const std::string& _Poe, const std::string& _PoePokemon)
 {
 	BattleFont_->EndFont();
 	BattleFont_->ShowString(_Poe + " sent\\out " + _PoePokemon + "!");
 	Level_->EndFont_ = false;
+	//김예나 : 추가↓
+	EnemyHP->On();
+	EnemyHPUI->On();
+	PoeName_->On();
+	PoeLevel_->On();
 }
 void BattleInterface::ShowLevelUp(const std::string& _PlayerPokemon, int _Lv, bool _Idx)
 {
