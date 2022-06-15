@@ -4,7 +4,6 @@
 #include <GameEngine/GameEngineRenderer.h>
 
 #include "NPCBase.h"
-//#include "RoomTileMap1.h"
 #include "WorldTileMap1.h"
 #include "ContentEnum.h"
 
@@ -53,12 +52,9 @@ void NPC4::Start()
 
 	NPCRender_->ChangeAnimation("IdleDown");
 	NPCRender_->SetPivot({ 0,-15 });
-	//SetPosition(RoomTileMap1::GetInst()->GetWorldPostion(8, 4));
 	
-	NPCBase::InSideLeftTop_ = { 16,96 };
+	NPCBase::InSideLeftTop_ = { 16,99 };
 	NPCBase::InSideRightBot_ = { 30,102 };
-	//NPCBase::InSideLeftTop_ = { 3,3 };
-	//NPCBase::InSideRightBot_ = { 8,6 };
 
 	CurrentTileMap_ = WorldTileMap1::GetInst();
 	SetPosition(WorldTileMap1::GetInst()->GetWorldPostion(22, 101));

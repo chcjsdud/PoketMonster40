@@ -1,4 +1,5 @@
 #include "YesOrNo.h"
+#include "ContentEnum.h"
 #include "InteractionText.h"
 #include "PlayerRed.h"
 #include "Green.h"
@@ -20,10 +21,10 @@ YesOrNo::~YesOrNo()
 
 void YesOrNo::Start()
 {
-	UIRenderer_ = CreateRenderer("ChoiceOption1.bmp");
+	UIRenderer_ = CreateRenderer("ChoiceOption1.bmp", static_cast<int>(RenderOrder::UI));
 	UIRenderer_->SetPivot({ 250, 30 });
 
-	ArrowRenderer_ = CreateRenderer("ChoiceOption_Arrow.bmp");
+	ArrowRenderer_ = CreateRenderer("ChoiceOption_Arrow.bmp", static_cast<int>(RenderOrder::UI));
 	ArrowRenderer_->SetPivot({ 200, 0 });
 
 	ArrowPos_.push_back({ 200, 0 });
