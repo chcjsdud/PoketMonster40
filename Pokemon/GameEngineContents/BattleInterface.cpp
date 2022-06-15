@@ -1155,18 +1155,15 @@ void BattleInterface::LevelStatu()
 	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetHp(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetMaxHp());
 	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
 	AllLevelUpFont_[1]->ShowString("+ " + std::to_string(Idx), true);
-	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetAtt(Idx);
-	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
-	AllLevelUpFont_[2]->ShowString("+ " + std::to_string(Idx), true);
 	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetAtt(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetAtt() + Idx);
 	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
-	AllLevelUpFont_[3]->ShowString("+ " + std::to_string(Idx), true);
+	AllLevelUpFont_[2]->ShowString("+ " + std::to_string(Idx), true);
 	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetDef(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetDef() + Idx);
 	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
-	AllLevelUpFont_[4]->ShowString("+ " + std::to_string(Idx), true);
+	AllLevelUpFont_[3]->ShowString("+ " + std::to_string(Idx), true);
 	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetSpAtt(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSpAtt() + Idx);
 	Idx = GameEngineRandom::GetInst_->RandomInt(1, 3);
-	AllLevelUpFont_[5]->ShowString("+ " + std::to_string(Idx), true);
+	AllLevelUpFont_[4]->ShowString("+ " + std::to_string(Idx), true);
 	Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->SetSpDef(Level_->GetBattleData()->GetCurrentPlayerPokemon()->GetPokemon()->GetInfo()->GetSpDef() + Idx);
 
 }

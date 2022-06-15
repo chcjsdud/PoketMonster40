@@ -881,6 +881,10 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
+				//else if (SkillName == )
+				//{
+
+				//}
 			}
 			else if (PlayerFirst_ == false)
 			{
@@ -904,16 +908,37 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 		break;
 		case SkillType::Status:
 		{
-			if (_Skill->GetNameConstRef() == "TAILWHIP")
+			if (PlayerFirst_ == true)
 			{
-				Level_->UnitRenderer->SkillName_ = SkillName::TailWhipMove;
+				if (_Skill->GetNameConstRef() == "TAILWHIP")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::TailWhipMove;
+					Level_->UnitRenderer->MyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
+					//TailWhipMove();
+				}
+				else if (_Skill->GetNameConstRef() == "GROWL")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::MyGrowl;
+					Level_->UnitRenderer->MyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
+				}
+				else if (_Skill->GetNameConstRef() == "WITHDRAW")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::ShellHide;
+					Level_->UnitRenderer->MyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
+					
+				}
+			}
+			else
+			{
+				if (_Skill->GetNameConstRef() == "GROWL")
+				{
+				Level_->UnitRenderer->SkillName_ = SkillName::EnemyGrowl;
 				Level_->UnitRenderer->MyTurnEnd = false;
 				Level_->DoingSkillAnimation_ = true;
-				//TailWhipMove();
-			}
-			else if (_Skill->GetNameConstRef() == "GROWL")
-			{
-				//TailWhipMove();
+				}
 			}
 			CurrentFont_ = Battlefont::Wait;
 		}
