@@ -117,7 +117,7 @@ void BattleLevel::Update()
 				return;
 				break;
 			case BattlePageEnd::ChangePokemon:
-				Interface_->ShowChangePokemon(Opponent_->GetActor()->GetNameConstRef(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
+				Interface_->ShowChangePokemon(BattleData_->GetNameString(), BattleData_->GetCurrentPoePokemon()->GetPokemon()->GetInfo()->GetNameConstRef());
 				BattleData_->GetCurrentPlayerPokemon()->ResetRank();
 				BattleData_->GetCurrentPoePokemon()->ResetRank();
 				return;

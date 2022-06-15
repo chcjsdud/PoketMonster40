@@ -15,6 +15,7 @@ enum class FightString;
 class GameEngineImage;
 class BattleInterface : public GameEngineActor
 {
+	friend class BattleUnitRenderer;
 public:
 	//디폴트 생성자
 	BattleInterface();
@@ -122,6 +123,7 @@ public:
 	{
 		return Select;
 	}
+
 	void StartWildTalk();
 	void StartNPCTalk();
 	//김예나 : test

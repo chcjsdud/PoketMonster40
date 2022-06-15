@@ -5,7 +5,7 @@
 #include "BattleLevel.h"
 #include <tchar.h>
 #include <GameEngine/GameEngine.h>
-
+#include <GameEngineBase/GameEngineInput.h>
 #include "BattleInterface.h"
 
 GameEngineRenderer* BattleUnitRenderer::PlayerRenderer_ = nullptr;
@@ -72,6 +72,7 @@ BattleUnitRenderer::BattleUnitRenderer()
 	, EnemyGrowl1(nullptr)
 	, EnemyGrowl2(nullptr)
 	, EnemyGrowl3(nullptr)
+	, Debug_(false)
 {
 }	
 BattleUnitRenderer::~BattleUnitRenderer() 
@@ -84,8 +85,7 @@ void BattleUnitRenderer::Start()
 
 	SetPosition({ GameEngineWindow::GetScale().Half() });
 
-	//µ¿¿ø¾¾ µµ¿ò
-
+	GameEngineInput::GetInst()->CreateKey("BattleStatuDebug", VK_NUMPAD8);
 	{
 		GameEngineImage* Image = GameEngineImageManager::GetInst()->Find("Player.bmp");
 		Image->CutCount(1, 1);
@@ -206,12 +206,20 @@ void BattleUnitRenderer::Update()
 		}
 	}
 
+	if (GameEngineInput::GetInst()->IsDown("BattleStatuDebug"))
+	{
+		Debug_ = !Debug_;
+	}
+
 
 }
 
 void BattleUnitRenderer::Render()
 {
-	ShowDebugValue();
+	if (BattleInter->ChildUI_ == nullptr && Debug_ == true)
+	{
+		ShowDebugValue();
+	}
 }
 
 void BattleUnitRenderer::ShowDebugValue()
