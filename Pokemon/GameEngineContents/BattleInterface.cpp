@@ -316,6 +316,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 	{
 		switch (SkillUIPos_)
 		{
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		case 0:
 			SkillUIPos_ = 2;
 			break;
@@ -329,6 +330,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 
 	if (GameEngineInput::GetInst()->IsDown("SUp"))
 	{
+		GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		switch (SkillUIPos_)
 		{
 		case 2:
@@ -344,6 +346,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 
 	if (GameEngineInput::GetInst()->IsDown("SLeft"))
 	{
+		GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		switch (SkillUIPos_)
 		{
 		case 1:
@@ -359,6 +362,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 
 	if (GameEngineInput::GetInst()->IsDown("SRight"))
 	{
+		GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		switch (SkillUIPos_)
 		{
 		case 0:
@@ -375,10 +379,12 @@ void BattleInterface::ShowAndCheckSkillPos()
 	Level_->CurrentSelect_ = CurOrder;
 	if (GameEngineInput::GetInst()->IsDown("SSelect"))
 	{
+
 		switch (CurOrder)
 		{
 		case BattleOrder::Fight:
 		{
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 			BattleUnit->SetFighting(true);
 			InterfaceImage->Off();
 			BattleCommend->Off();
@@ -413,6 +419,7 @@ void BattleInterface::ShowAndCheckSkillPos()
 	}
 	else if (GameEngineInput::GetInst()->IsDown("SCancel"))
 	{
+		GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		BattleCommend->Off();
 		Select->SetPivot({ -190.0f,-25.0f });
 		CurOrder = BattleOrder::None;
@@ -715,41 +722,49 @@ bool BattleInterface::MoveKey()
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
 		{	//Fight에서 Pokemon으로
 			Select->SetPivot({ -190.0f,35.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
 		{	//Pokemon에서 Fight로
 			Select->SetPivot({ -190.0f,-25.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
 		{	//Fight에서 Bag으로
 			Select->SetPivot({ 30.0f,-25.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
 		{	//Bag에서 Fight로
 			Select->SetPivot({ -190.0f,-25.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SDown"))
 		{	//Bag에서 Run으로
 			Select->SetPivot({ 30.0f,35.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SUp"))
 		{	//Run에서 Bag으로
 			Select->SetPivot({ 30.0f,-25.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SRight"))
 		{	//Pokemon에서 Run으로
 			Select->SetPivot({ 30.0f,35.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		if ((Select->GetPivot().x == 30.0f && Select->GetPivot().y == 35.0f) && true == GameEngineInput::GetInst()->IsDown("SLeft"))
 		{	//Run에서 Pokemon으로
 			Select->SetPivot({ -190.0f,35.0f });
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		}
 
 		{
@@ -770,6 +785,7 @@ bool BattleInterface::MoveKey()
 		Select->Off();
 		ShowRunaway();
 		Level_->BState_ = BattleState::Endding;
+		GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 		
 	}
 	return false;
@@ -828,7 +844,7 @@ void BattleInterface::SelectOrder()
 	{
 		if ((Select->GetPivot().x == -190.0f && Select->GetPivot().y == -25.0f) && true == GameEngineInput::GetInst()->IsDown("SSelect"))
 		{	//싸우다 선택
-
+			GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 			CurOrder = BattleOrder::Fight;
 		}
 
@@ -838,6 +854,7 @@ void BattleInterface::SelectOrder()
 
 			if (nullptr == ChildUI_)
 			{
+				GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 				ChildUI_ = GetLevel()->CreateActor<PokemonMenu>(60, "PokemonMenu");
 				ChildUI_->SetPosition(float4(0, 0));
 				dynamic_cast<PokemonMenu*>(ChildUI_)->InitPokemonMenu();
@@ -851,6 +868,7 @@ void BattleInterface::SelectOrder()
 
 			if (nullptr == ChildUI_)
 			{
+				GameEngineSound::SoundPlayOneShotWithVolume("World_Click.wav", 0.5f);
 				ChildUI_ = GetLevel()->CreateActor<Bag>(50);
 				ChildUI_->SetPosition(float4(0, 0) + GameEngineWindow::GetScale().Half());
 				dynamic_cast<Bag*>(ChildUI_)->SetPlayerItemList(PlayerRed::MainRed_->GetItemList());

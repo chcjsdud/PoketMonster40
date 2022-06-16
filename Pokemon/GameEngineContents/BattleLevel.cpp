@@ -893,12 +893,14 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			{
 				if (SkillName == "TACKLE")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Tackle.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::Tackle;
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
 				else if (SkillName == "WATERGUN")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Water_Gun.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::WaterGun;
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
@@ -909,18 +911,21 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			{
 				if (SkillName == "TACKLE")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Tackle.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyTackle;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
-				else if (SkillName == "ROCKTOMB")
+				else if (SkillName == "ROCKTOMB")	
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Rock_Tomb.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyRock;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
 				else if (SkillName == "SCRATCH")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Scratch.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyScratch;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
@@ -937,6 +942,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			{
 				if (_Skill->GetNameConstRef() == "TAILWHIP")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Tail_Whip.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::TailWhipMove;
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
@@ -944,12 +950,14 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				}
 				else if (_Skill->GetNameConstRef() == "GROWL")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Growl.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::MyGrowl;
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
 				else if (_Skill->GetNameConstRef() == "WITHDRAW")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Withdraw.mp3", 0.5f);
 					Level_->UnitRenderer->SkillName_ = SkillName::ShellHide;
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
@@ -960,6 +968,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 			{
 				if (_Skill->GetNameConstRef() == "GROWL")
 				{
+					GameEngineSound::SoundPlayOneShotWithVolume("Growl.mp3", 0.5f);
 				Level_->UnitRenderer->SkillName_ = SkillName::EnemyGrowl;
 				Level_->UnitRenderer->EnemyTurnEnd = false;
 				Level_->DoingSkillAnimation_ = true;
@@ -1019,11 +1028,14 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 					switch (_Turn->DamageType_)
 					{
 					case DamageType::Nomal:
+						GameEngineSound::SoundPlayOneShotWithVolume("Hit_Normal_Damage.mp3", 0.5f);
 						break;
 					case DamageType::Great:
+						GameEngineSound::SoundPlayOneShotWithVolume("Hit_Super_Effective.mp3", 0.5f);
 						Interface_->ShowSupperEffectString();
 						break;
 					case DamageType::Bad:
+						GameEngineSound::SoundPlayOneShotWithVolume("Hit_Weak_Not_Very_Effective.mp3", 0.5f);
 						Interface_->ShowNotEffective();
 						break;
 					case DamageType::Nothing:
