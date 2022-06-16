@@ -206,6 +206,9 @@ void BattleUnitRenderer::Update()
 		case SkillName::MyGrowl:
 			MyGrowl();
 			break;
+		case SkillName::EnemyScratch:
+			EnemyScratch();
+			break;
 		default:
 			break;
 		}

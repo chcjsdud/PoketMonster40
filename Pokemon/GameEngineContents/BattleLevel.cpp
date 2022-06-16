@@ -903,10 +903,7 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 					Level_->UnitRenderer->MyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}
-				//else if (SkillName == )
-				//{
 
-				//}
 			}
 			else if (PlayerFirst_ == false)
 			{
@@ -919,6 +916,12 @@ bool BattleManager::CheckBattle(PokemonBattleState* _Att, PokemonBattleState* _D
 				else if (SkillName == "ROCKTOMB")
 				{
 					Level_->UnitRenderer->SkillName_ = SkillName::EnemyRock;
+					Level_->UnitRenderer->EnemyTurnEnd = false;
+					Level_->DoingSkillAnimation_ = true;
+				}
+				else if (SkillName == "SCRATCH")
+				{
+					Level_->UnitRenderer->SkillName_ = SkillName::EnemyScratch;
 					Level_->UnitRenderer->EnemyTurnEnd = false;
 					Level_->DoingSkillAnimation_ = true;
 				}

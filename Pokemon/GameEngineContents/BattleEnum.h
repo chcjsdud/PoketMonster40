@@ -35,6 +35,7 @@ enum class SkillName
 	EnemyTackle,
 	EnemyGrowl,
 	MyGrowl,
+	EnemyScratch,
 	Catch
 
 };
