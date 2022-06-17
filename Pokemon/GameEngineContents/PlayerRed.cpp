@@ -844,7 +844,7 @@ void PlayerRed::MoveAnim()
 			if (true == IsBush_)
 			{
 				float RandomF = GameEngineRandom::GetInst_->RandomFloat(0.0f, 1.0f);
-				if (RandomF <= 0.1f)
+				if (RandomF <= 0.05f)
 				{
 					BattleStartUI* TmpBattleStartUI = GetLevel()->CreateActor<BattleStartUI>();
 					TmpBattleStartUI->ChangeToBattleLevel(BattleNpcType::None);
